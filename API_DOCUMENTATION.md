@@ -2,6 +2,13 @@
 
 CampusPulse AI provides a modular RESTful API built on Django REST Framework (DRF). All API endpoints return JSON responses with standard HTTP status codes (`200 OK`, `201 Created`, `400 Bad Request`, `401 Unauthorized`, `403 Forbidden`, `404 Not Found`).
 
+> [!TIP]
+> **Testing in Windows PowerShell**:
+> The `GET` and `POST` keywords in this document indicate HTTP methods, not command-line executables.
+> - To test GET endpoints in PowerShell: `Invoke-RestMethod "http://127.0.0.1:8000/transport/api/live-telemetry/"`
+> - To check page responses in PowerShell: `Invoke-WebRequest "http://127.0.0.1:8000/canteen/dashboard/"`
+> - To launch dashboards in your default browser: `Start-Process "http://127.0.0.1:8000/canteen/dashboard/"`
+
 ---
 
 ## 1. Authentication & Session Endpoints
