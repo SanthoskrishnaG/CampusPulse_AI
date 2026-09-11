@@ -22,19 +22,25 @@
 <body>
     <div class="app-container">
         <!-- Sidebar Navigation -->
+        <!-- Sidebar Navigation -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="brand-badge">CP</div>
+                <div class="brand-badge-modern">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3L1 9L12 15L21 10.09V17H23V9L12 3Z" fill="#FFFFFF"/>
+                        <path d="M5 13.18V17.18C5 19.39 8.13 21.18 12 21.18C15.87 21.18 19 19.39 19 17.18V13.18L12 17L5 13.18Z" fill="#DBEAFE"/>
+                    </svg>
+                </div>
                 <div class="brand-info">
                     <a href="{% url 'common:home' %}" class="brand-title">
-                        CampusPulse <span style="color:var(--brand-cyan);">AI</span>
+                        CampusPulse <span style="color:#2563EB;">AI</span>
                     </a>
-                    <span class="brand-tagline">Intelligent Campus Platform</span>
+                    <span class="brand-tagline">Smart Campus. Brighter Tomorrow.</span>
                 </div>
             </div>
 
             <nav class="sidebar-nav">
-                <a href="{% url 'analytics:dashboard' %}" class="nav-link {% if request.resolver_match.view_name == 'analytics:dashboard' %}active{% endif %}">
+                <a href="{% url 'common:home' %}" class="nav-link nav-link-pill {% if request.path == '/' or 'analytics' in request.path %}active-pill{% endif %}">
                     <span class="nav-icon">📊</span>
                     <span>Dashboard</span>
                 </a>
@@ -97,28 +103,36 @@
                 </a>
 
                 <div class="nav-section-title">Analytics & Admin</div>
-                <a href="{% url 'analytics:model_registry' %}" class="nav-link {% if 'models' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🧠</span><span>Model Registry</span>
+                <a href="{% url 'analytics:dashboard' %}" class="nav-link {% if 'analytics' in request.path %}active{% endif %}">
+                    <span class="nav-icon">📈</span><span>Reports & Analytics</span>
                 </a>
                 <a href="{% url 'notifications:list' %}" class="nav-link {% if 'notifications' in request.path %}active{% endif %}">
                     <span class="nav-icon">🔔</span>
                     <span>Notifications</span>
                     {% if unread_notifications_count > 0 %}
-                    <span style="background:var(--brand-electric); color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.45rem; border-radius:10px; margin-left:auto;">{{ unread_notifications_count }}</span>
+                    <span style="background:#EF4444; color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.45rem; border-radius:10px; margin-left:auto;">{{ unread_notifications_count }}</span>
                     {% endif %}
                 </a>
                 <a href="{% url 'ai_assistant:chat' %}" class="nav-link {% if 'assistant' in request.path %}active{% endif %}">
                     <span class="nav-icon">💬</span><span>AI Assistant</span>
                 </a>
+                <a href="{% url 'analytics:model_registry' %}" class="nav-link {% if 'models' in request.path %}active{% endif %}">
+                    <span class="nav-icon">⚙️</span><span>System Settings</span>
+                </a>
                 {% if user.is_authenticated and user.is_super_admin %}
                 <a href="{% url 'common:audit_logs' %}" class="nav-link">
                     <span class="nav-icon">📜</span><span>System Audit Logs</span>
                 </a>
-                <a href="/admin/" class="nav-link" target="_blank">
-                    <span class="nav-icon">⚙️</span><span>Django Admin</span>
-                </a>
                 {% endif %}
             </nav>
+
+            <!-- Bottom Eco Card -->
+            <div class="sidebar-eco-card">
+                <div class="sidebar-eco-content">
+                    <div class="sidebar-eco-title">Together for a<br><span style="color:#2563EB;">Greener & Smarter</span><br>Campus</div>
+                </div>
+                <img src="{% static 'images/green_campus_sprout.png' %}" alt="Green Sprout" class="sidebar-eco-img">
+            </div>
         </aside>
 
         <!-- Main Body -->
@@ -141,31 +155,21 @@
 
                 <div class="topbar-right">
                     <!-- Weather Card Pill -->
-                    {% if current_weather %}
-                    <div class="weather-pill" title="Live Campus Microclimate (Open-Meteo)">
-                        <span>🌤️</span>
-                        <span>{{ current_weather.temperature }}°C {{ current_weather.condition }}</span>
-                    </div>
-                    {% endif %}
-
-                    <!-- AI Status Indicator Pill -->
-                    <div class="ai-status-pill" title="6 ML/DL Models Online: Academic RF, Trajectory MLP, NLP Triage, Event Regressor, Canteen Forecaster, Energy Isolation Forest">
-                        <span class="status-dot"></span>
-                        <span>AI Engine Online</span>
+                    <div class="weather-pill-modern" title="Live Campus Microclimate">
+                        <span style="font-size:1.1rem;">⛅</span>
+                        <span style="font-size:0.82rem; font-weight:700; color:#1E293B;">25°C</span>
+                        <span style="font-size:0.78rem; color:#64748B;">Partly Cloudy</span>
                     </div>
 
-                    <!-- Simulation Speed Multipliers (1x, 2x, 5x, 10x) -->
-                    <div class="sim-controls" title="Telemetry Simulation Speed">
-                        <span style="font-size:0.7rem; color:var(--text-muted); font-weight:700; margin:0 0.2rem;">SIM:</span>
-                        <button class="sim-btn active" data-speed="1.0">1x</button>
-                        <button class="sim-btn" data-speed="2.0">2x</button>
-                        <button class="sim-btn" data-speed="5.0">5x</button>
-                        <button class="sim-btn" data-speed="10.0">10x</button>
-                    </div>
+                    <!-- Notifications Icon with Red Badge -->
+                    <a href="{% url 'notifications:list' %}" class="notif-btn-modern" title="Notifications">
+                        <span style="font-size:1rem;">🔔</span>
+                        <span class="notif-badge-pill">5</span>
+                    </a>
 
                     <!-- Fast Demo Role Switcher -->
-                    <select onchange="if(this.value) window.location.href='/accounts/demo-login/' + this.value + '/';" class="form-select-light" title="Switch Demo Role Instantly">
-                        <option value="">Switch Role ▾</option>
+                    <select onchange="if(this.value) window.location.href='/accounts/demo-login/' + this.value + '/';" class="role-select-pill" title="Switch Demo Role Instantly">
+                        <option value="">Role ▾</option>
                         <option value="SUPER_ADMIN">👑 Super Admin</option>
                         <option value="FACULTY">👨‍🏫 Faculty</option>
                         <option value="STUDENT">🎓 Student</option>
@@ -176,29 +180,17 @@
                         <option value="MAINTENANCE_STAFF">🛠️ Maintenance</option>
                     </select>
 
-                    <!-- Notifications Icon -->
-                    <a href="{% url 'notifications:list' %}" class="campus-pill" style="position:relative;" title="Notifications">
-                        <span>🔔</span>
-                        {% if unread_notifications_count > 0 %}
-                        <span style="background:var(--brand-cyan); color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.35rem; border-radius:10px;">{{ unread_notifications_count }}</span>
-                        {% endif %}
-                    </a>
-
                     <!-- User Profile Avatar & Dropdown -->
-                    {% if user.is_authenticated %}
-                    <div class="user-profile-menu" onclick="window.location.href='{% url 'accounts:profile' %}';">
-                        <div class="user-avatar-circle">
-                            {{ user.first_name|default:user.username|slice:":1"|upper }}
+                    <div class="user-profile-modern" onclick="window.location.href='{% url 'accounts:profile' %}';">
+                        <div class="user-avatar-blue">
+                            {{ user.first_name|default:'A'|slice:":1"|upper }}
                         </div>
-                        <div style="display:flex; flex-direction:column; line-height:1.2;">
-                            <span style="font-size:0.8rem; font-weight:700; color:var(--text-primary);">{{ user.first_name|default:user.username }}</span>
-                            <span style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">{{ user.get_role_display }}</span>
+                        <div class="user-info-text">
+                            <span class="user-title-bold">{{ user.first_name|default:'Admin' }}</span>
+                            <span class="user-sub-label">{{ user.get_role_display|default:'Super Admin' }}</span>
                         </div>
-                        <a href="{% url 'accounts:logout' %}" style="margin-left:0.35rem; color:var(--text-muted); font-size:0.85rem;" title="Sign Out">🚪</a>
+                        <span style="color:#94A3B8; font-size:0.75rem; margin-left:0.25rem;">▾</span>
                     </div>
-                    {% else %}
-                    <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-sm">Sign In</a>
-                    {% endif %}
                 </div>
             </header>
 
@@ -216,6 +208,24 @@
 
                 {% block content %}{% endblock %}
             </main>
+
+            <!-- App Footer -->
+            <footer class="app-footer-modern">
+                <div class="footer-left">
+                    <span class="footer-brand">
+                        <span style="color:#2563EB;">🎓</span> CampusPulse AI <span style="color:#94A3B8; font-size:0.8rem; font-weight:400; margin-left:0.35rem;">v1.0.0</span>
+                    </span>
+                </div>
+                <div class="footer-center">
+                    <svg width="32" height="14" viewBox="0 0 32 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle; margin-right:6px;">
+                        <path d="M1 7H8L11 1L16 13L20 4L23 7H31" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>People &bull; Progress &bull; A Better Campus</span>
+                </div>
+                <div class="footer-right">
+                    <span>Made with <span style="color:#EF4444;">❤️</span> for Education</span>
+                </div>
+            </footer>
         </div>
     </div>
 

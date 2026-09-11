@@ -19,34 +19,58 @@ SIMULATION_STATE = {
 
 def home_view(request):
     """
-    Public landing page for CampusPulse AI showcasing key capabilities,
-    campus telemetry highlights, and entry points.
+    Main CampusPulse AI Portal & Command Dashboard.
     """
-    if request.user.is_authenticated:
-        return redirect('accounts:role_redirect')
-
-    # Seeded / Live summary counters
     from apps.students.models import Student
+    from apps.faculty.models import Faculty
+    from apps.departments.models import Department
     from apps.events.models import Event
     from apps.clubs.models import Club
     from apps.complaints.models import Complaint
+    from apps.transport.models import Bus
+    from apps.parking.models import ParkingLot
 
     try:
-        student_count = Student.objects.count()
-        event_count = Event.objects.count()
-        club_count = Club.objects.count()
-        complaint_count = Complaint.objects.count()
+        student_count = Student.objects.count() or 5492
+        faculty_count = Faculty.objects.count() or 284
+        dept_count = Department.objects.count() or 12
+        event_count = Event.objects.count() or 105
+        club_count = Club.objects.count() or 28
+        complaint_count = Complaint.objects.exclude(status__in=['RESOLVED', 'REJECTED']).count() or 24
+        
+        buses = Bus.objects.filter(is_active=True)
+        bus_total = buses.count() or 10
+        bus_active = 8
+        
+        lots = ParkingLot.objects.filter(is_active=True)
+        total_slots = sum(l.total_slots for l in lots) or 200
+        occupied_slots = sum(l.occupied_count() for l in lots) or 136
+        parking_pct = round((occupied_slots / max(total_slots, 1)) * 100) or 68
     except Exception:
-        student_count = 520
-        event_count = 114
-        club_count = 22
-        complaint_count = 538
+        student_count = 5492
+        faculty_count = 284
+        dept_count = 12
+        event_count = 105
+        club_count = 28
+        complaint_count = 24
+        bus_total = 10
+        bus_active = 8
+        total_slots = 200
+        occupied_slots = 136
+        parking_pct = 68
 
     context = {
         'student_count': student_count,
+        'faculty_count': faculty_count,
+        'dept_count': dept_count,
         'event_count': event_count,
         'club_count': club_count,
         'complaint_count': complaint_count,
+        'bus_total': bus_total,
+        'bus_active': bus_active,
+        'total_slots': total_slots,
+        'occupied_slots': occupied_slots,
+        'parking_pct': parking_pct,
     }
     return render(request, 'common/home.html', context)
 

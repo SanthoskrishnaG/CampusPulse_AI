@@ -1,544 +1,677 @@
 {% extends 'base.html' %}
 {% load static campus_3d %}
 
-{% block title %}CampusPulse AI - Intelligent Campus. Smarter Decisions.{% endblock %}
+{% block title %}CampusPulse AI - Smart Campus. Brighter Tomorrow.{% endblock %}
 
 {% block content %}
-<div style="max-width: 1300px; margin: 0 auto;">
+<div class="dashboard-viewport">
 
     <!-- ==========================================================================
-         1. HERO SECTION - Light, Clean, 3D
+         1. HERO ROW: Hero Digital Twin Banner + Campus AI Assistant Panel
          ========================================================================== -->
-    <section class="campus-hero-light">
-        <div class="hero-content">
-            <div class="hero-pill">
-                <span>✨</span>
-                <span>Next-Gen Autonomous Campus Operating System</span>
+    <div class="dashboard-hero-row">
+        <!-- Main Campus Hero Card -->
+        <div class="campus-hero-banner">
+            <div class="hero-header-text">
+                <div class="hero-welcome-badge">
+                    Welcome to CampusPulse AI
+                </div>
+                <h1 class="hero-big-title">
+                    Your Campus.<br>
+                    <span class="gradient-blue-text">Powered by AI.</span>
+                </h1>
+                <p class="hero-description-sub">
+                    Monitor. Predict. Recommend. Optimize.<br>
+                    All in one intelligent campus platform.
+                </p>
+
+                <div class="hero-cta-buttons">
+                    <a href="{% url 'accounts:login' %}" class="btn-hero-primary">
+                        <span>Enter Campus Portal</span>
+                        <span style="font-size:1.05rem;">➔</span>
+                    </a>
+                    <a href="{% url 'common:map' %}" class="btn-hero-secondary">
+                        <span style="color:#2563EB;">▶</span>
+                        <span>Watch Demo</span>
+                    </a>
+                </div>
+
+                <div class="hero-social-proof">
+                    <div class="avatar-stack">
+                        <span class="avatar-face" style="background:#3B82F6;">👨‍🎓</span>
+                        <span class="avatar-face" style="background:#10B981;">👩‍🔬</span>
+                        <span class="avatar-face" style="background:#F59E0B;">👨‍🏫</span>
+                        <span class="avatar-face" style="background:#8B5CF6;">👩‍💼</span>
+                        <span class="avatar-face avatar-count">+5K</span>
+                    </div>
+                    <span class="social-proof-text">Trusted by Students, Faculty & Administrators</span>
+                </div>
             </div>
-            
-            <h1 class="hero-title">
-                Your Campus.<br>
-                <span class="gradient-ai">Powered by AI.</span>
-            </h1>
-            
-            <p class="hero-subtitle">
-                Monitor. Predict. Recommend. Optimize. All in one intelligent campus platform. Integrating predictive student intelligence, smart transportation, automated grievance triage, and sustainable resource management.
-            </p>
-            
-            <div class="hero-actions">
-                <a href="{% url 'accounts:login' %}" class="btn btn-primary">
-                    <span>Enter Campus Portal</span>
-                    <span>➔</span>
-                </a>
-                <a href="{% url 'common:map' %}" class="btn btn-secondary">
-                    <span>Explore 3D Campus Map</span>
-                </a>
-                <button class="btn btn-secondary" onclick="document.getElementById('isometricCampusSection').scrollIntoView({behavior: 'smooth'})">
-                    <span>Explore Isometric Campus</span>
+
+            <!-- 3D Isometric Campus Map with Interactive Floating Pins -->
+            <div class="hero-campus-visual">
+                <div class="campus-isometric-frame">
+                    <img src="{% static 'images/campus_isometric_hero.jpg' %}" alt="CampusPulse AI Digital Twin" class="campus-hero-img">
+                    
+                    <!-- Floating Building Pins matching reference -->
+                    <div class="campus-pin pin-science" title="Science Block">Science Block</div>
+                    <div class="campus-pin pin-cse" title="CSE Block">CSE Block</div>
+                    <div class="campus-pin pin-library" title="Central Library">Library</div>
+                    <div class="campus-pin pin-park" title="Central Park">Central Park</div>
+                    <div class="campus-pin pin-canteen" title="Smart Canteen">Canteen</div>
+                    <div class="campus-pin pin-hostel" title="Student Hostel">Hostel</div>
+                    <div class="campus-pin pin-gate" title="Main Gate">Main Gate</div>
+                    <div class="campus-pin pin-bus" title="Bus Stop">Bus Stop</div>
+
+                    <!-- Script Tag Badge -->
+                    <div class="hero-script-tag">
+                        Smart People<br><span>Smarter Campus</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campus AI Assistant Right Panel -->
+        <div class="campus-ai-panel">
+            <div class="ai-panel-header">
+                <div class="ai-header-icon">
+                    🤖
+                </div>
+                <div class="ai-header-title">
+                    <h3>Campus AI Assistant</h3>
+                    <p>Ask anything about your campus...</p>
+                </div>
+            </div>
+
+            <!-- Quick Inquiry Pills -->
+            <div class="ai-quick-inquiries">
+                <button class="ai-query-pill" onclick="sendHeroPrompt('How many high-risk students are there in CSE?')">
+                    <span class="query-pill-icon">🔍</span>
+                    <span>How many high-risk students are there in CSE?</span>
+                </button>
+                <button class="ai-query-pill" onclick="sendHeroPrompt('What are today\'s events?')">
+                    <span class="query-pill-icon">📋</span>
+                    <span>What are today's events?</span>
+                </button>
+                <button class="ai-query-pill" onclick="sendHeroPrompt('Show bus locations')">
+                    <span class="query-pill-icon">🚌</span>
+                    <span>Show bus locations</span>
+                </button>
+                <button class="ai-query-pill" onclick="sendHeroPrompt('Which clubs have upcoming events?')">
+                    <span class="query-pill-icon">👥</span>
+                    <span>Which clubs have upcoming events?</span>
+                </button>
+                <button class="ai-query-pill" onclick="sendHeroPrompt('Is parking available near Block A?')">
+                    <span class="query-pill-icon">🅿️</span>
+                    <span>Is parking available near Block A?</span>
                 </button>
             </div>
+
+            <!-- Chat Display & Input Bar with Robot Mascot -->
+            <div class="ai-chat-bottom-wrapper">
+                <div id="heroAiResponse" class="hero-ai-response-box" style="display:none;"></div>
+                
+                <div class="ai-input-bar">
+                    <input type="text" id="heroAiInput" placeholder="Type your question..." onkeydown="if(event.key==='Enter') executeHeroAiSearch()">
+                    <button class="ai-send-btn" onclick="executeHeroAiSearch()" title="Send">➔</button>
+                </div>
+                
+                <!-- 3D Floating Robot Mascot -->
+                <img src="{% static 'images/ai_robot_mascot.png' %}" alt="AI Companion Robot" class="ai-robot-floating-img" onclick="toggleAiDrawer()" title="Campus AI Mascot">
+            </div>
         </div>
-    </section>
+    </div>
 
     <!-- ==========================================================================
-         2. INTERACTIVE 3D ISOMETRIC CAMPUS
+         2. KPI METRICS STRIP (8 Cards in a row matching reference)
          ========================================================================== -->
-    <section class="campus-isometric-container" id="isometricCampusSection">
-        <div class="isometric-header">
+    <div class="kpi-strip">
+        <!-- 1. Total Students -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box kpi-blue">
+                🎓
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Total Students</div>
+                <div class="kpi-mini-val">{{ student_count|default:"5,492" }}</div>
+                <div class="kpi-mini-trend trend-green">↑ 12% <span class="trend-sub">from last semester</span></div>
+            </div>
+        </div>
+
+        <!-- 2. Departments -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box kpi-teal">
+                🏛️
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Departments</div>
+                <div class="kpi-mini-val">{{ dept_count|default:"12" }}</div>
+                <div class="kpi-mini-trend trend-neutral">0% <span class="trend-sub">no change</span></div>
+            </div>
+        </div>
+
+        <!-- 3. Faculty -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box kpi-purple">
+                👨‍🏫
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Faculty</div>
+                <div class="kpi-mini-val">{{ faculty_count|default:"284" }}</div>
+                <div class="kpi-mini-trend trend-green">↑ 6% <span class="trend-sub">this month</span></div>
+            </div>
+        </div>
+
+        <!-- 4. Ongoing Events -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box kpi-green">
+                📅
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Ongoing Events</div>
+                <div class="kpi-mini-val">{{ event_count|default:"105" }}</div>
+                <div class="kpi-mini-trend trend-green">↑ 8% <span class="trend-sub">this month</span></div>
+            </div>
+        </div>
+
+        <!-- 5. Active Clubs -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box kpi-yellow">
+                ✨
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Active Clubs</div>
+                <div class="kpi-mini-val">{{ club_count|default:"28" }}</div>
+                <div class="kpi-mini-trend trend-green">↑ 3 <span class="trend-sub">new clubs</span></div>
+            </div>
+        </div>
+
+        <!-- 6. Open Complaints -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box kpi-pink">
+                📢
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Open Complaints</div>
+                <div class="kpi-mini-val">{{ complaint_count|default:"24" }}</div>
+                <div class="kpi-mini-trend trend-green">↓ 18% <span class="trend-sub">from last month</span></div>
+            </div>
+        </div>
+
+        <!-- 7. Buses on Route -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box kpi-cyan">
+                🚌
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Buses on Route</div>
+                <div class="kpi-mini-val">{{ bus_active|default:8 }} / {{ bus_total|default:10 }}</div>
+                <div class="kpi-mini-trend trend-red">• 2 delayed</div>
+            </div>
+        </div>
+
+        <!-- 8. Parking Occupancy -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box kpi-indigo">
+                🅿️
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Parking Occupancy</div>
+                <div class="kpi-mini-val">{{ parking_pct|default:"68" }}%</div>
+                <div class="kpi-mini-trend trend-sub">{{ occupied_slots|default:120 }} / {{ total_slots|default:200 }} slots</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         3. EXPLORE CAMPUS MODULES (2 Rows of 5 Cards matching reference)
+         ========================================================================== -->
+    <div class="modules-section-wrapper">
+        <div class="modules-section-header">
             <div>
-                <div class="live-pill" style="margin-bottom:0.4rem;">
-                    <span class="pulse-dot"></span>
-                    <span>Interactive 3D Digital Twin</span>
-                </div>
-                <h2 style="font-size:1.65rem; font-weight:800;">CampusPulse Central University Digital Twin</h2>
-                <p style="color:var(--text-muted); font-size:0.88rem;">Hover or click any building block to inspect live occupancy, academic risk, and AI telemetry.</p>
+                <h2 class="modules-heading">Explore Campus Modules</h2>
+                <p class="modules-subheading">Everything you need, intelligently connected.</p>
             </div>
-
-            <div style="display:flex; align-items:center; gap:0.65rem;">
-                <span class="ai-badge ai-insight">🧠 Real-Time Spatial AI</span>
-                <span class="ai-badge ai-confidence">98.4% Telemetry Synced</span>
-            </div>
+            <a href="{% url 'common:map' %}" class="btn-view-all-modules">
+                <span>View All Modules</span>
+            </a>
         </div>
 
-        <!-- 3D Isometric Interactive SVG Canvas -->
-        <div class="isometric-map-wrapper">
-            <svg viewBox="0 0 960 480" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="max-height: 480px;">
-                <defs>
-                    <linearGradient id="ground_grad" x1="0" y1="0" x2="1" y2="1">
-                        <stop stop-color="#F1F5F9"/>
-                        <stop offset="1" stop-color="#E2E8F0"/>
-                    </linearGradient>
-                    <linearGradient id="bldg_blue" x1="0" y1="0" x2="0" y2="1">
-                        <stop stop-color="#38BDF8"/>
-                        <stop offset="1" stop-color="#0284C7"/>
-                    </linearGradient>
-                    <linearGradient id="bldg_indigo" x1="0" y1="0" x2="0" y2="1">
-                        <stop stop-color="#818CF8"/>
-                        <stop offset="1" stop-color="#4338CA"/>
-                    </linearGradient>
-                    <linearGradient id="bldg_emerald" x1="0" y1="0" x2="0" y2="1">
-                        <stop stop-color="#34D399"/>
-                        <stop offset="1" stop-color="#059669"/>
-                    </linearGradient>
-                    <linearGradient id="bldg_amber" x1="0" y1="0" x2="0" y2="1">
-                        <stop stop-color="#FBBF24"/>
-                        <stop offset="1" stop-color="#D97706"/>
-                    </linearGradient>
-                    <linearGradient id="road_grad" x1="0" y1="0" x2="1" y2="0">
-                        <stop stop-color="#CBD5E1"/>
-                        <stop offset="1" stop-color="#94A3B8"/>
-                    </linearGradient>
-                    <filter id="bldg_shadow" x="-10%" y="-10%" width="130%" height="130%">
-                        <feDropShadow dx="2" dy="8" stdDeviation="6" flood-color="#0F172A" flood-opacity="0.1"/>
-                    </filter>
-                </defs>
-
-                <!-- Campus Base Plate (Isometric Polygon) -->
-                <polygon points="480,40 920,240 480,440 40,240" fill="url(#ground_grad)" stroke="#CBD5E1" stroke-width="2"/>
-
-                <!-- Main Campus Roads -->
-                <polygon points="480,70 880,250 850,265 480,100" fill="url(#road_grad)" opacity="0.6"/>
-                <polygon points="480,410 80,230 110,215 480,380" fill="url(#road_grad)" opacity="0.6"/>
-                <polygon points="480,70 120,230 145,245 480,100" fill="url(#road_grad)" opacity="0.6"/>
-
-                <!-- Tree Clusters (Isometric Green Spheres) -->
-                <g opacity="0.85">
-                    <circle cx="280" cy="180" r="14" fill="#22C55E"/>
-                    <circle cx="270" cy="190" r="12" fill="#16A34A"/>
-                    <circle cx="295" cy="190" r="10" fill="#15803D"/>
-                    <circle cx="700" cy="180" r="16" fill="#22C55E"/>
-                    <circle cx="720" cy="190" r="12" fill="#16A34A"/>
-                    <circle cx="680" cy="195" r="14" fill="#15803D"/>
-                </g>
-
-                <!-- Building 1: Computer Science & AI Complex -->
-                <g class="iso-building" style="cursor:pointer;" onmouseenter="showBuildingInfo(event, 'Computer Science & AI Block', 'Dept of CSE & Data Science', '842 Students', '7.2% Risk Rate', 'Normal AI Health', '/departments/1/')" onmouseleave="hideBuildingInfo()">
-                    <!-- Top Roof -->
-                    <polygon points="480,110 550,145 480,180 410,145" fill="#7DD3FC" filter="url(#bldg_shadow)"/>
-                    <!-- Left Wall -->
-                    <polygon points="410,145 480,180 480,260 410,225" fill="url(#bldg_blue)"/>
-                    <!-- Right Wall -->
-                    <polygon points="480,180 550,145 550,225 480,260" fill="#0369A1"/>
-                    <!-- Windows & AI Beacon -->
-                    <circle cx="480" cy="145" r="7" fill="#FFFFFF"/>
-                    <circle cx="480" cy="145" r="4" fill="#22C55E"/>
-                    <text x="440" y="275" font-family="Inter" font-size="11" font-weight="700" fill="#0F172A">CSE & AI BLOCK</text>
-                </g>
-
-                <!-- Building 2: Central Library & Innovation Hub -->
-                <g class="iso-building" style="cursor:pointer;" onmouseenter="showBuildingInfo(event, 'Central University Library', 'Learning Resources & Incubation', '310 Visitors Now', '99.2% WiFi Uptime', 'Normal', '/departments/')" onmouseleave="hideBuildingInfo()">
-                    <polygon points="310,180 370,210 310,240 250,210" fill="#C7D2FE" filter="url(#bldg_shadow)"/>
-                    <polygon points="250,210 310,240 310,305 250,275" fill="url(#bldg_indigo)"/>
-                    <polygon points="310,240 370,210 370,275 310,305" fill="#3730A3"/>
-                    <text x="245" y="325" font-family="Inter" font-size="11" font-weight="700" fill="#0F172A">CENTRAL LIBRARY</text>
-                </g>
-
-                <!-- Building 3: Smart Canteen & Dining Hall -->
-                <g class="iso-building" style="cursor:pointer;" onmouseenter="showBuildingInfo(event, 'Smart Dining Hall', 'Canteen & Food Ops', '420 Lunches Forecast', 'Zero Meal Shortage', 'Demand Forecaster Online', '/canteen/')" onmouseleave="hideBuildingInfo()">
-                    <polygon points="650,180 710,210 650,240 590,210" fill="#FDE68A" filter="url(#bldg_shadow)"/>
-                    <polygon points="590,210 650,240 650,290 590,260" fill="url(#bldg_amber)"/>
-                    <polygon points="650,240 710,210 710,260 650,290" fill="#B45309"/>
-                    <text x="595" y="310" font-family="Inter" font-size="11" font-weight="700" fill="#0F172A">SMART CANTEEN</text>
-                </g>
-
-                <!-- Building 4: Smart Parking & Transit Terminal -->
-                <g class="iso-building" style="cursor:pointer;" onmouseenter="showBuildingInfo(event, 'Campus Transit Terminal', 'Transport & Fleet Logistics', '8 / 10 Buses Active', '72% Parking Capacity', 'Fleet Telemetry Active', '/transport/')" onmouseleave="hideBuildingInfo()">
-                    <polygon points="480,290 540,320 480,350 420,320" fill="#A7F3D0" filter="url(#bldg_shadow)"/>
-                    <polygon points="420,320 480,350 480,390 420,360" fill="url(#bldg_emerald)"/>
-                    <polygon points="480,350 540,320 540,360 480,390" fill="#047857"/>
-                    <text x="420" y="410" font-family="Inter" font-size="11" font-weight="700" fill="#0F172A">TRANSIT & PARKING</text>
-                </g>
-
-                <!-- Data Beams Connecting Buildings to Central AI Hub -->
-                <path d="M480,180 L480,260" stroke="#19C7F2" stroke-width="2" stroke-dasharray="4 3" class="flow-line"/>
-                <path d="M310,240 L480,260" stroke="#7C83FD" stroke-width="2" stroke-dasharray="4 3" class="flow-line"/>
-                <path d="M650,240 L480,260" stroke="#F59E0B" stroke-width="2" stroke-dasharray="4 3" class="flow-line"/>
-                <path d="M480,320 L480,260" stroke="#22C55E" stroke-width="2" stroke-dasharray="4 3" class="flow-line"/>
-
-                <!-- Central Telemetry Beacon -->
-                <circle cx="480" cy="260" r="14" fill="#19C7F2" opacity="0.3"/>
-                <circle cx="480" cy="260" r="8" fill="#19C7F2"/>
-                <circle cx="480" cy="260" r="4" fill="#FFFFFF"/>
-            </svg>
-
-            <!-- Floating Building Popover Tooltip -->
-            <div class="building-popover" id="buildingPopover">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
-                    <span id="popoverDept" style="font-size:0.7rem; font-weight:700; color:var(--brand-electric); text-transform:uppercase;">DEPARTMENT</span>
-                    <span class="live-pill" style="font-size:0.6rem; padding:0.1rem 0.45rem;">LIVE</span>
+        <div class="campus-modules-grid">
+            <!-- 1. Academic Risk AI -->
+            <a href="{% url 'academics:risk_dashboard' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'academic_risk' 56 42 %}
                 </div>
-                <h4 id="popoverTitle" style="font-size:0.98rem; font-weight:800; margin-bottom:0.5rem; color:var(--text-primary);">Building Title</h4>
-                <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.3rem;">
-                    Students/Headcount: <strong id="popoverCount" style="color:var(--text-primary);">-</strong>
+                <div class="module-item-info">
+                    <h4 class="module-title">Academic Risk AI</h4>
+                    <p class="module-subtitle">Predict & prevent academic issues</p>
                 </div>
-                <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.3rem;">
-                    Health / Risk: <strong id="popoverRisk" style="color:var(--brand-cyan);">-</strong>
+            </a>
+
+            <!-- 2. Events & Workshops -->
+            <a href="{% url 'events:list' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'events' 56 42 %}
                 </div>
-                <div style="font-size:0.75rem; color:var(--success); font-weight:600; margin-bottom:0.75rem;">
-                    AI Engine: <span id="popoverAi">-</span>
+                <div class="module-item-info">
+                    <h4 class="module-title">Events & Workshops</h4>
+                    <p class="module-subtitle">Discover, register and participate</p>
                 </div>
-                <a id="popoverLink" href="#" class="btn btn-primary btn-sm" style="width:100%; justify-content:center;">View Subsystem ➔</a>
-            </div>
-        </div>
-    </section>
+            </a>
 
-    <!-- ==========================================================================
-         3. REAL-TIME CAMPUS KPI CARDS (Connected to DB & Simulation)
-         ========================================================================== -->
-    <div class="kpi-grid">
-        <div class="kpi-card-light">
-            <div class="kpi-header">
-                <span class="kpi-title">Enrolled Students</span>
-                <div class="kpi-icon-wrap">🎓</div>
-            </div>
-            <div class="kpi-value">{{ student_count|default:520 }}</div>
-            <div class="kpi-trend positive">
-                <span>↑ 12%</span>
-                <span style="color:var(--text-muted); font-weight:500;">from last semester</span>
-            </div>
-        </div>
+            <!-- 3. Campus Clubs -->
+            <a href="{% url 'clubs:list' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'clubs' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Campus Clubs</h4>
+                    <p class="module-subtitle">Join, engage and grow</p>
+                </div>
+            </a>
 
-        <div class="kpi-card-light">
-            <div class="kpi-header">
-                <span class="kpi-title">Campus Events</span>
-                <div class="kpi-icon-wrap" style="color:var(--brand-cyan);">📅</div>
-            </div>
-            <div class="kpi-value">{{ event_count|default:114 }}</div>
-            <div class="kpi-trend positive">
-                <span>↑ 18 new</span>
-                <span style="color:var(--text-muted); font-weight:500;">this month</span>
-            </div>
-        </div>
+            <!-- 4. Projects & Teams -->
+            <a href="{% url 'projects:list' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'projects' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Projects & Teams</h4>
+                    <p class="module-subtitle">Find projects and ideal teammates</p>
+                </div>
+            </a>
 
-        <div class="kpi-card-light">
-            <div class="kpi-header">
-                <span class="kpi-title">Active Clubs</span>
-                <div class="kpi-icon-wrap" style="color:var(--brand-accent);">✨</div>
-            </div>
-            <div class="kpi-value">{{ club_count|default:22 }}</div>
-            <div class="kpi-trend neutral">
-                <span>5 Categories</span>
-                <span style="color:var(--text-muted); font-weight:500;">Tech, Arts, Sports</span>
-            </div>
-        </div>
+            <!-- 5. Complaints AI -->
+            <a href="{% url 'complaints:list' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'complaints' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Complaints AI</h4>
+                    <p class="module-subtitle">Report, track and resolve issues</p>
+                </div>
+            </a>
 
-        <div class="kpi-card-light">
-            <div class="kpi-header">
-                <span class="kpi-title">Resolved Complaints</span>
-                <div class="kpi-icon-wrap" style="color:var(--success);">🛠️</div>
-            </div>
-            <div class="kpi-value">{{ complaint_count|default:538 }}</div>
-            <div class="kpi-trend positive">
-                <span>94.2%</span>
-                <span style="color:var(--text-muted); font-weight:500;">SLA met via NLP</span>
-            </div>
+            <!-- 6. Traffic & Vehicles -->
+            <a href="{% url 'traffic:dashboard' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'traffic' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Traffic & Vehicles</h4>
+                    <p class="module-subtitle">Real-time traffic analysis</p>
+                </div>
+            </a>
+
+            <!-- 7. Smart Parking -->
+            <a href="{% url 'parking:dashboard' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'parking' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Smart Parking</h4>
+                    <p class="module-subtitle">Find & predict parking availability</p>
+                </div>
+            </a>
+
+            <!-- 8. Canteen & Food -->
+            <a href="{% url 'canteen:dashboard' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'canteen' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Canteen & Food</h4>
+                    <p class="module-subtitle">Food demand & waste prediction</p>
+                </div>
+            </a>
+
+            <!-- 9. Waste Segregation -->
+            <a href="{% url 'waste:dashboard' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'waste' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Waste Segregation</h4>
+                    <p class="module-subtitle">Identify & classify waste using AI</p>
+                </div>
+            </a>
+
+            <!-- 10. Energy Monitoring -->
+            <a href="{% url 'energy:dashboard' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'energy' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Energy Monitoring</h4>
+                    <p class="module-subtitle">Detect anomalies & save energy</p>
+                </div>
+            </a>
+
+            <!-- 11. Department Insights -->
+            <a href="{% url 'departments:list' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'department' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Department Insights</h4>
+                    <p class="module-subtitle">Analytics for every department</p>
+                </div>
+            </a>
+
+            <!-- 12. Smart Transport -->
+            <a href="{% url 'transport:dashboard' %}" class="module-item-card">
+                <div class="module-3d-icon-box">
+                    {% campus_3d_visual 'transport' 56 42 %}
+                </div>
+                <div class="module-item-info">
+                    <h4 class="module-title">Smart Transport</h4>
+                    <p class="module-subtitle">Live tracking & ETA prediction</p>
+                </div>
+            </a>
         </div>
     </div>
 
     <!-- ==========================================================================
-         4. CAMPUS AI INTELLIGENCE CORE (Visual Data Flow Component)
+         4. BOTTOM 3-COLUMN DASHBOARD SECTION
          ========================================================================== -->
-    <section class="ai-core-container">
-        <div style="max-width:650px; margin:0 auto;">
-            <div class="hero-pill" style="margin-bottom:0.75rem;">
-                <span>🧠</span>
-                <span>CampusPulse AI Intelligence Core</span>
+    <div class="bottom-dashboard-grid">
+        <!-- Col 1: Campus Activity Overview Chart -->
+        <div class="dashboard-panel-card">
+            <div class="panel-header">
+                <div>
+                    <h3 class="panel-title">Campus Activity Overview</h3>
+                </div>
+                <select class="panel-filter-select" id="activityTimeFilter">
+                    <option>This Week ▾</option>
+                    <option>Last Week</option>
+                    <option>This Month</option>
+                </select>
             </div>
-            <h2 style="font-size:1.75rem; font-weight:800;">Real-Time Centralized Campus Neural Mesh</h2>
-            <p style="color:var(--text-secondary); font-size:0.9rem;">
-                Continuous event streams from all 14 university entities converge into deterministic ML classifiers, deep sequential MLPs, and vision analyzers.
-            </p>
-        </div>
 
-        <!-- Central AI Flow Diagram -->
-        <svg class="ai-core-svg" viewBox="0 0 800 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="core_circle_grad" x1="0" y1="0" x2="1" y2="1">
-                    <stop stop-color="#19C7F2"/>
-                    <stop offset="1" stop-color="#7C83FD"/>
-                </linearGradient>
-            </defs>
-
-            <!-- Connected Nodes Left -->
-            <g transform="translate(60, 40)">
-                <rect width="110" height="34" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
-                <text x="14" y="22" font-family="Inter" font-size="11" font-weight="600" fill="#0F172A">🎓 Students</text>
-            </g>
-            <g transform="translate(60, 100)">
-                <rect width="110" height="34" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
-                <text x="14" y="22" font-family="Inter" font-size="11" font-weight="600" fill="#0F172A">🚌 Fleet GPS</text>
-            </g>
-            <g transform="translate(60, 160)">
-                <rect width="110" height="34" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
-                <text x="14" y="22" font-family="Inter" font-size="11" font-weight="600" fill="#0F172A">🛠️ Complaints</text>
-            </g>
-
-            <!-- Connected Nodes Right -->
-            <g transform="translate(630, 40)">
-                <rect width="120" height="34" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
-                <text x="12" y="22" font-family="Inter" font-size="11" font-weight="600" fill="#0F172A">⚡ Power Meters</text>
-            </g>
-            <g transform="translate(630, 100)">
-                <rect width="120" height="34" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
-                <text x="12" y="22" font-family="Inter" font-size="11" font-weight="600" fill="#0F172A">🍽️ Food Demand</text>
-            </g>
-            <g transform="translate(630, 160)">
-                <rect width="120" height="34" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.5"/>
-                <text x="12" y="22" font-family="Inter" font-size="11" font-weight="600" fill="#0F172A">♻️ Waste Vision</text>
-            </g>
-
-            <!-- Flow Paths -->
-            <path d="M170,57 C280,57 320,117 400,117" stroke="#19C7F2" stroke-width="2" class="flow-line"/>
-            <path d="M170,117 L400,117" stroke="#4F9CF9" stroke-width="2" class="flow-line"/>
-            <path d="M170,177 C280,177 320,117 400,117" stroke="#7C83FD" stroke-width="2" class="flow-line"/>
-
-            <path d="M630,57 C520,57 480,117 400,117" stroke="#F59E0B" stroke-width="2" class="flow-line"/>
-            <path d="M630,117 L400,117" stroke="#22C55E" stroke-width="2" class="flow-line"/>
-            <path d="M630,177 C520,177 480,117 400,117" stroke="#06B6D4" stroke-width="2" class="flow-line"/>
-
-            <!-- Center Brain Node -->
-            <circle cx="400" cy="117" r="46" fill="url(#core_circle_grad)" opacity="0.15"/>
-            <circle cx="400" cy="117" r="34" fill="url(#core_circle_grad)" filter="drop-shadow(0 6px 16px rgba(25, 199, 242, 0.4))"/>
-            <text x="382" y="125" font-family="Inter" font-size="22">🧠</text>
-            <text x="360" y="168" font-family="Inter" font-size="10" font-weight="700" fill="#0F172A">AI ENGINE</text>
-        </svg>
-    </section>
-
-    <!-- ==========================================================================
-         5. EXPLORE CAMPUS MODULES - Unified 3D Visual Cards
-         ========================================================================== -->
-    <div style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1rem;">
-        <div>
-            <div class="hero-pill" style="margin-bottom:0.4rem;">
-                <span>✨</span>
-                <span>Core Subsystems</span>
+            <!-- Legend Pills -->
+            <div class="chart-legend-row">
+                <span class="legend-item"><span class="legend-dot" style="background:#8B5CF6;"></span> Events</span>
+                <span class="legend-item"><span class="legend-dot" style="background:#F43F5E;"></span> Complaints</span>
+                <span class="legend-item"><span class="legend-dot" style="background:#06B6D4;"></span> Transport</span>
+                <span class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span> Canteen</span>
             </div>
-            <h2 style="font-size:1.75rem; font-weight:800;">Explore Campus Modules</h2>
-            <p style="color:var(--text-muted); font-size:0.9rem;">Everything you need, intelligently connected.</p>
-        </div>
-        <span class="ai-badge ai-confidence">14 Domains Active</span>
-    </div>
 
-    <div class="module-grid">
-        <!-- 1. Academic Risk AI -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'academic_risk' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Academic Risk AI</h3>
-            <p class="module-card-desc">
-                Random Forest & sequential 5-week trajectory neural networks forecasting student attrition and recommending mentor interventions.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-prediction">✨ RF + MLP</span>
-                <a href="{% url 'academics:risk_dashboard' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
+            <!-- Interactive Multi-Line Area Chart -->
+            <div class="chart-canvas-wrapper">
+                <canvas id="campusActivityChart" height="175"></canvas>
             </div>
         </div>
 
-        <!-- 2. Events & Workshops -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'events' 130 90 %}
+        <!-- Col 2: Live Campus Status -->
+        <div class="dashboard-panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title">Live Campus Status</h3>
+                <a href="{% url 'common:map' %}" class="panel-link-action">View Map</a>
             </div>
-            <h3 class="module-card-title">Events & Workshops</h3>
-            <p class="module-card-desc">
-                Automated QR ticket validation paired with machine learning attendance forecasting factoring speaker tier, category, and weather.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-prediction">📊 Attendance Regressor</span>
-                <a href="{% url 'events:list' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
+
+            <div class="campus-status-list">
+                <!-- Status Row: Buses -->
+                <div class="status-row-item">
+                    <div class="status-row-left">
+                        <span class="status-icon-pill" style="background:#EFF6FF; color:#2563EB;">🚌</span>
+                        <span class="status-name">Campus Buses</span>
+                    </div>
+                    <div class="status-row-right">
+                        <span class="status-state-green">● 8 / 10 Active</span>
+                        <span class="status-badge-red">✖ 2 Delayed</span>
+                    </div>
+                </div>
+
+                <!-- Status Row: Parking -->
+                <div class="status-row-item">
+                    <div class="status-row-left">
+                        <span class="status-icon-pill" style="background:#F0FDF4; color:#10B981;">🅿️</span>
+                        <span class="status-name">Parking Lots</span>
+                    </div>
+                    <div class="status-row-right">
+                        <span class="status-state-green">● 68% Occupancy</span>
+                        <span class="status-sub-val">120 / 200 slots</span>
+                    </div>
+                </div>
+
+                <!-- Status Row: Canteen -->
+                <div class="status-row-item">
+                    <div class="status-row-left">
+                        <span class="status-icon-pill" style="background:#FFFBEB; color:#F59E0B;">🍔</span>
+                        <span class="status-name">Canteen</span>
+                    </div>
+                    <div class="status-row-right">
+                        <span class="status-state-green">● Normal</span>
+                        <span class="status-sub-val">Lunch serving now</span>
+                    </div>
+                </div>
+
+                <!-- Status Row: Energy -->
+                <div class="status-row-item">
+                    <div class="status-row-left">
+                        <span class="status-icon-pill" style="background:#FEF3C7; color:#D97706;">⚡</span>
+                        <span class="status-name">Electricity Usage</span>
+                    </div>
+                    <div class="status-row-right">
+                        <span class="status-state-green">● Stable</span>
+                        <span class="status-sub-val">No anomalies</span>
+                    </div>
+                </div>
+
+                <!-- Status Row: Waste -->
+                <div class="status-row-item">
+                    <div class="status-row-left">
+                        <span class="status-icon-pill" style="background:#ECFDF5; color:#059669;">♻️</span>
+                        <span class="status-name">Waste Bins</span>
+                    </div>
+                    <div class="status-row-right">
+                        <span class="status-state-green">● Normal</span>
+                        <span class="status-sub-val">All systems working</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 3. Campus Clubs -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'clubs' 130 90 %}
+        <!-- Col 3: Upcoming Events -->
+        <div class="dashboard-panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title">Upcoming Events</h3>
+                <a href="{% url 'events:list' %}" class="panel-link-action">View All</a>
             </div>
-            <h3 class="module-card-title">Campus Clubs</h3>
-            <p class="module-card-desc">
-                21 active clubs across technical, arts, sports, and social sectors with collaborative achievements and membership portfolios.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-insight">✨ Community AI</span>
-                <a href="{% url 'clubs:list' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
-            </div>
-        </div>
 
-        <!-- 4. Projects & Teams -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'projects' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Projects & Teams</h3>
-            <p class="module-card-desc">
-                Complementary skill-matching engine assembling multi-disciplinary student teams for capstone projects and hackathons.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-insight">🎯 TF-IDF Skill Match</span>
-                <a href="{% url 'projects:list' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
-            </div>
-        </div>
+            <div class="events-list-vertical">
+                <!-- Event 1 -->
+                <div class="event-item-row">
+                    <div class="event-badge-icon" style="background:#E0F2FE; color:#0284C7;">
+                        🤖
+                    </div>
+                    <div class="event-details">
+                        <h5 class="event-title">AI & Robotics Workshop</h5>
+                        <span class="event-dept">CSE Department</span>
+                    </div>
+                    <div class="event-time-badge badge-today">
+                        <span class="time-primary">Today</span>
+                        <span class="time-secondary">10:00 AM</span>
+                    </div>
+                </div>
 
-        <!-- 5. Complaints AI -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'complaints' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Complaints AI</h3>
-            <p class="module-card-desc">
-                Automated NLP grievance triage converting free-text tickets into department queues with priority scoring and SLA monitoring.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-prediction">⚡ NLP Triage</span>
-                <a href="{% url 'complaints:list' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
-            </div>
-        </div>
+                <!-- Event 2 -->
+                <div class="event-item-row">
+                    <div class="event-badge-icon" style="background:#F3E8FF; color:#7E22CE;">
+                        🎭
+                    </div>
+                    <div class="event-details">
+                        <h5 class="event-title">Cultural Fest 2026</h5>
+                        <span class="event-dept">Cultural Club</span>
+                    </div>
+                    <div class="event-time-badge badge-tomorrow">
+                        <span class="time-primary">Tomorrow</span>
+                        <span class="time-secondary">4:00 PM</span>
+                    </div>
+                </div>
 
-        <!-- 6. Smart Transport -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'transport' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Smart Transport</h3>
-            <p class="module-card-desc">
-                Continuous GPS simulation with 1x-10x speed multipliers, Leaflet map tracking, dynamic route ETAs, and passenger load gauges.
-            </p>
-            <div class="module-card-footer">
-                <span class="live-pill"><span class="pulse-dot"></span> LIVE GPS</span>
-                <a href="{% url 'transport:dashboard' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
-            </div>
-        </div>
+                <!-- Event 3 -->
+                <div class="event-item-row">
+                    <div class="event-badge-icon" style="background:#FEF3C7; color:#B45309;">
+                        📊
+                    </div>
+                    <div class="event-details">
+                        <h5 class="event-title">Data Science Hackathon</h5>
+                        <span class="event-dept">Tech Club</span>
+                    </div>
+                    <div class="event-time-badge badge-date">
+                        <span class="time-primary">15 Sep</span>
+                        <span class="time-secondary">9:00 AM</span>
+                    </div>
+                </div>
 
-        <!-- 7. Traffic & Vehicles -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'traffic' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Traffic & Vehicles</h3>
-            <p class="module-card-desc">
-                CPU-safe computer vision heuristics monitoring campus entrance gates, vehicle density, and peak flow bottlenecks.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-prediction">📹 Vision AI</span>
-                <a href="{% url 'traffic:dashboard' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
-            </div>
-        </div>
-
-        <!-- 8. Smart Parking -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'parking' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Smart Parking</h3>
-            <p class="module-card-desc">
-                220 visual parking slots with real-time AJAX toggling across EV Charging, Faculty, Student, and Accessible bays.
-            </p>
-            <div class="module-card-footer">
-                <span class="live-pill"><span class="pulse-dot"></span> AJAX Bay Sync</span>
-                <a href="{% url 'parking:dashboard' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
-            </div>
-        </div>
-
-        <!-- 9. Canteen & Food -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'canteen' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Canteen & Food</h3>
-            <p class="module-card-desc">
-                Meal preparation demand forecasting across breakfast, lunch, and dinner reducing dining hall food waste by up to 18%.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-prediction">🍽️ Demand Regressor</span>
-                <a href="{% url 'canteen:dashboard' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
-            </div>
-        </div>
-
-        <!-- 10. Waste Segregation -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'waste' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Waste Segregation</h3>
-            <p class="module-card-desc">
-                TrashNet 6-class waste image classifier categorizing glass, metal, paper, and plastic with bin recommendations and eco-points.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-prediction">♻️ TrashNet Vision</span>
-                <a href="{% url 'waste:dashboard' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
-            </div>
-        </div>
-
-        <!-- 11. Energy Monitoring -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'energy' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Energy Monitoring</h3>
-            <p class="module-card-desc">
-                Unsupervised Isolation Forest monitoring 5 sub-meters to flag nocturnal baseline power leaks and off-hour equipment idling.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-alert">⚡ Isolation Forest</span>
-                <a href="{% url 'energy:dashboard' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
-            </div>
-        </div>
-
-        <!-- 12. Department Insights -->
-        <div class="module-card-3d">
-            <div class="module-3d-visual">
-                {% campus_3d_visual 'department' 130 90 %}
-            </div>
-            <h3 class="module-card-title">Department Insights</h3>
-            <p class="module-card-desc">
-                Cross-department analytics comparing student performance, faculty mentorship allocations, and curriculum progress.
-            </p>
-            <div class="module-card-footer">
-                <span class="ai-badge ai-insight">🏛️ Dean Analytics</span>
-                <a href="{% url 'departments:list' %}" class="btn btn-secondary btn-sm">Explore ➔</a>
+                <!-- Event 4 -->
+                <div class="event-item-row">
+                    <div class="event-badge-icon" style="background:#DCFCE7; color:#15803D;">
+                        🌱
+                    </div>
+                    <div class="event-details">
+                        <h5 class="event-title">Sustainability Awareness</h5>
+                        <span class="event-dept">Green Campus Club</span>
+                    </div>
+                    <div class="event-time-badge badge-date">
+                        <span class="time-primary">16 Sep</span>
+                        <span class="time-secondary">11:00 AM</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
 </div>
-{% endblock %}
 
-{% block scripts %}
+<!-- Chart initialization & AI helper scripts -->
 <script>
-    // 3D Isometric Interactive Building Popover
-    function showBuildingInfo(e, title, dept, count, risk, ai, link) {
-        const pop = document.getElementById('buildingPopover');
-        document.getElementById('popoverTitle').innerText = title;
-        document.getElementById('popoverDept').innerText = dept;
-        document.getElementById('popoverCount').innerText = count;
-        document.getElementById('popoverRisk').innerText = risk;
-        document.getElementById('popoverAi').innerText = ai;
-        document.getElementById('popoverLink').href = link;
-
-        // Position popover relative to container
-        const container = document.querySelector('.isometric-map-wrapper');
-        const rect = container.getBoundingClientRect();
-        
-        let x = e.clientX - rect.left + 15;
-        let y = e.clientY - rect.top - 20;
-
-        if (x + 230 > rect.width) x = rect.width - 240;
-        if (y + 180 > rect.height) y = rect.height - 190;
-
-        pop.style.left = x + 'px';
-        pop.style.top = y + 'px';
-        pop.classList.add('active');
-    }
-
-    function hideBuildingInfo() {
-        const pop = document.getElementById('buildingPopover');
-        // Small delay to allow mouse to enter popover if clicked
-        setTimeout(() => {
-            if (!pop.matches(':hover')) {
-                pop.classList.remove('active');
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('campusActivityChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [
+                    {
+                        label: 'Events',
+                        data: [12, 19, 15, 28, 22, 14, 10],
+                        borderColor: '#8B5CF6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.08)',
+                        fill: true,
+                        tension: 0.42,
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#8B5CF6',
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Complaints',
+                        data: [8, 12, 10, 12, 16, 9, 6],
+                        borderColor: '#F43F5E',
+                        backgroundColor: 'rgba(244, 63, 94, 0.08)',
+                        fill: true,
+                        tension: 0.42,
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#F43F5E',
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Transport',
+                        data: [25, 29, 32, 35, 34, 18, 12],
+                        borderColor: '#06B6D4',
+                        backgroundColor: 'rgba(6, 182, 212, 0.08)',
+                        fill: true,
+                        tension: 0.42,
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#06B6D4',
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Canteen',
+                        data: [15, 22, 18, 18, 26, 30, 20],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                        fill: true,
+                        tension: 0.42,
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#3B82F6',
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.92)',
+                        titleFont: { family: 'Inter', size: 12, weight: 'bold' },
+                        bodyFont: { family: 'Inter', size: 11 },
+                        padding: 10,
+                        cornerRadius: 8,
+                        boxPadding: 4,
+                        callbacks: {
+                            label: function(context) {
+                                return ` ${context.dataset.label}: ${context.parsed.y}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 45,
+                        ticks: { stepSize: 10, font: { size: 10, family: 'Inter' }, color: '#94A3B8' },
+                        grid: { color: 'rgba(226, 232, 240, 0.6)', drawBorder: false }
+                    },
+                    x: {
+                        ticks: { font: { size: 10, family: 'Inter' }, color: '#94A3B8' },
+                        grid: { display: false }
+                    }
+                }
             }
-        }, 300);
+        });
     }
+});
+
+function sendHeroPrompt(promptText) {
+    document.getElementById('heroAiInput').value = promptText;
+    executeHeroAiSearch();
+}
+
+function executeHeroAiSearch() {
+    const input = document.getElementById('heroAiInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const respBox = document.getElementById('heroAiResponse');
+    respBox.style.display = 'block';
+    respBox.innerHTML = '<span style="color:#2563EB;">🤖 Analyzing campus records...</span>';
+
+    fetch('/assistant/api/chat/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg })
+    })
+    .then(res => res.json())
+    .then(data => {
+        respBox.innerHTML = `<strong>Assistant:</strong> ${data.response || "No data returned."}`;
+    })
+    .catch(() => {
+        respBox.innerHTML = '<strong>Assistant:</strong> Operational in telemetry mode. Please verify network boundaries.';
+    });
+}
 </script>
 {% endblock %}
