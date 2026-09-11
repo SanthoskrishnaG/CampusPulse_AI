@@ -1,31 +1,43 @@
 {% extends 'base.html' %}
+{% load static campus_3d %}
 
 {% block title %}Lodge Complaint - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 680px; margin: 1rem auto;">
-    <div class="card" style="border: 1px solid var(--border-glow);">
-        <div class="card-header">
-            <h2 class="card-title">✍️ Submit Natural Language Complaint</h2>
+<div style="max-width: 720px; margin: 2rem auto;">
+    <div class="card-light" style="padding: 2.5rem; box-shadow: var(--shadow-md);">
+        <div class="card-header-clean">
+            <div>
+                <span class="ai-badge ai-prediction" style="margin-bottom:0.35rem;">⚡ Real-Time NLP Triage</span>
+                <h2 class="card-title-clean">Submit Grievance Ticket</h2>
+            </div>
+            {% campus_3d_visual 'complaints' 80 60 %}
         </div>
 
-        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
-            Simply type your complaint in everyday natural language (e.g. <i>"The ceiling fan in Room 302, Block C is sparking and not spinning"</i>). Our NLP engine automatically classifies the category, assigns urgency priority, routes the ticket to the responsible maintenance division, and sets SLA deadlines.
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.75rem; line-height: 1.6;">
+            Simply describe the issue in plain English (e.g. <i>"The WiFi router on 3rd floor Block B is offline and students cannot submit lab assignments"</i>). Our NLP engine will classify the department, assess emergency priority, and set statutory SLA targets.
         </p>
 
         <form method="POST">
             {% csrf_token %}
-            <div class="form-group">
-                <label class="form-label">Subject / Short Title</label>
-                <input type="text" name="title" class="form-input" placeholder="e.g. Broken bench and damaged power socket in Block B" required>
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
+                    Subject / Short Title
+                </label>
+                <input type="text" name="title" class="form-select-light" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); font-size: 0.92rem;" placeholder="e.g. Damaged power socket and ceiling light in Lab 204" required>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Full Complaint Description</label>
-                <textarea name="description" class="form-textarea" rows="4" placeholder="Describe what is broken or needed, mentioning the building, block, or room number..." required></textarea>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
+                    Full Complaint Description
+                </label>
+                <textarea name="description" class="form-select-light" rows="5" style="width: 100%; padding: 0.85rem 1rem; border-radius: var(--radius-md); font-size: 0.92rem; font-family: inherit;" placeholder="State the details, mentioning building block, floor, or room number..." required></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Process with AI & Submit Ticket ➔</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem;">
+                <span>Process with AI & Submit Ticket</span>
+                <span>➔</span>
+            </button>
         </form>
     </div>
 </div>

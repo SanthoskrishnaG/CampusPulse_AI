@@ -1,3 +1,4 @@
+{% load static campus_3d %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CampusPulse AI - Intelligent Campus Operating Platform{% endblock %}</title>
     
-    <!-- Design System Fonts & Icons -->
+    <!-- Design System Fonts (Inter & Outfit) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Chart.js & Leaflet -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -21,85 +22,97 @@
 <body>
     <div class="app-container">
         <!-- Sidebar Navigation -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="brand-badge">CP</div>
-                <div>
-                    <a href="{% url 'common:home' %}" class="brand-title">CampusPulse AI</a>
+                <div class="brand-info">
+                    <a href="{% url 'common:home' %}" class="brand-title">
+                        CampusPulse <span style="color:var(--brand-cyan);">AI</span>
+                    </a>
+                    <span class="brand-tagline">Intelligent Campus Platform</span>
                 </div>
             </div>
 
             <nav class="sidebar-nav">
+                <a href="{% url 'analytics:dashboard' %}" class="nav-link {% if request.resolver_match.view_name == 'analytics:dashboard' %}active{% endif %}">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+
                 <div class="nav-section-title">Institutional Core</div>
-                {% if user.is_authenticated and user.is_super_admin or user.is_college_admin %}
-                <a href="{% url 'analytics:dashboard' %}" class="nav-link">
-                    <span class="nav-icon">⚡</span><span>Command Center</span>
-                </a>
-                <a href="{% url 'analytics:model_registry' %}" class="nav-link">
-                    <span class="nav-icon">🧠</span><span>Model Registry</span>
-                </a>
-                {% endif %}
-                
-                <a href="{% url 'departments:list' %}" class="nav-link">
+                <a href="{% url 'departments:list' %}" class="nav-link {% if 'departments' in request.path %}active{% endif %}">
                     <span class="nav-icon">🏛️</span><span>Departments</span>
                 </a>
-                <a href="{% url 'faculty:list' %}" class="nav-link">
+                <a href="{% url 'faculty:list' %}" class="nav-link {% if 'faculty' in request.path %}active{% endif %}">
                     <span class="nav-icon">👨‍🏫</span><span>Faculty</span>
                 </a>
-                <a href="{% url 'students:list' %}" class="nav-link">
+                <a href="{% url 'students:list' %}" class="nav-link {% if 'students' in request.path %}active{% endif %}">
                     <span class="nav-icon">🎓</span><span>Students</span>
                 </a>
-                <a href="{% url 'academics:risk_dashboard' %}" class="nav-link">
+                <a href="{% url 'academics:risk_dashboard' %}" class="nav-link {% if 'academics' in request.path %}active{% endif %}">
                     <span class="nav-icon">🛡️</span><span>Academic Risk AI</span>
+                </a>
+                <a href="{% url 'common:map' %}" class="nav-link {% if request.resolver_match.view_name == 'common:map' %}active{% endif %}">
+                    <span class="nav-icon">🗺️</span><span>Campus Map</span>
                 </a>
 
                 <div class="nav-section-title">Student Engagement</div>
-                <a href="{% url 'events:list' %}" class="nav-link">
+                <a href="{% url 'events:list' %}" class="nav-link {% if 'events' in request.path %}active{% endif %}">
                     <span class="nav-icon">📅</span><span>Events & Workshops</span>
                 </a>
-                <a href="{% url 'clubs:list' %}" class="nav-link">
+                <a href="{% url 'clubs:list' %}" class="nav-link {% if 'clubs' in request.path %}active{% endif %}">
                     <span class="nav-icon">✨</span><span>Campus Clubs</span>
                 </a>
-                <a href="{% url 'projects:list' %}" class="nav-link">
+                <a href="{% url 'projects:list' %}" class="nav-link {% if 'projects' in request.path %}active{% endif %}">
                     <span class="nav-icon">🚀</span><span>Projects & Teams</span>
                 </a>
-                <a href="{% url 'recommendations:hub' %}" class="nav-link">
+                <a href="{% url 'recommendations:hub' %}" class="nav-link {% if 'recommendations' in request.path %}active{% endif %}">
                     <span class="nav-icon">🎯</span><span>AI Recommendations</span>
+                </a>
+                <a href="{% url 'recommendations:hub' %}#career" class="nav-link">
+                    <span class="nav-icon">💼</span><span>Career Guidance</span>
                 </a>
 
                 <div class="nav-section-title">Smart Campus Operations</div>
-                <a href="{% url 'complaints:list' %}" class="nav-link">
+                <a href="{% url 'complaints:list' %}" class="nav-link {% if 'complaints' in request.path %}active{% endif %}">
                     <span class="nav-icon">🛠️</span><span>Complaints AI</span>
                 </a>
-                <a href="{% url 'transport:dashboard' %}" class="nav-link">
+                <a href="{% url 'transport:dashboard' %}" class="nav-link {% if 'transport' in request.path %}active{% endif %}">
                     <span class="nav-icon">🚌</span><span>Smart Transport</span>
                 </a>
-                <a href="{% url 'parking:dashboard' %}" class="nav-link">
+                <a href="{% url 'traffic:dashboard' %}" class="nav-link {% if 'traffic' in request.path %}active{% endif %}">
+                    <span class="nav-icon">📹</span><span>Traffic & Vehicles</span>
+                </a>
+                <a href="{% url 'parking:dashboard' %}" class="nav-link {% if 'parking' in request.path %}active{% endif %}">
                     <span class="nav-icon">🚗</span><span>Smart Parking</span>
                 </a>
-                <a href="{% url 'traffic:dashboard' %}" class="nav-link">
-                    <span class="nav-icon">📹</span><span>Traffic Vision AI</span>
+                <a href="{% url 'canteen:dashboard' %}" class="nav-link {% if 'canteen' in request.path %}active{% endif %}">
+                    <span class="nav-icon">🍽️</span><span>Canteen & Food</span>
                 </a>
-                <a href="{% url 'canteen:dashboard' %}" class="nav-link">
-                    <span class="nav-icon">🍽️</span><span>Food Demand AI</span>
+                <a href="{% url 'waste:dashboard' %}" class="nav-link {% if 'waste' in request.path %}active{% endif %}">
+                    <span class="nav-icon">♻️</span><span>Waste Segregation</span>
                 </a>
-                <a href="{% url 'energy:dashboard' %}" class="nav-link">
-                    <span class="nav-icon">💡</span><span>Energy Anomaly</span>
-                </a>
-                <a href="{% url 'waste:dashboard' %}" class="nav-link">
-                    <span class="nav-icon">♻️</span><span>Waste Vision AI</span>
-                </a>
-                <a href="{% url 'common:map' %}" class="nav-link">
-                    <span class="nav-icon">🗺️</span><span>AI Campus Map</span>
-                </a>
-                <a href="{% url 'ai_assistant:chat' %}" class="nav-link">
-                    <span class="nav-icon">💬</span><span>Campus AI Assistant</span>
+                <a href="{% url 'energy:dashboard' %}" class="nav-link {% if 'energy' in request.path %}active{% endif %}">
+                    <span class="nav-icon">💡</span><span>Energy Monitoring</span>
                 </a>
 
+                <div class="nav-section-title">Analytics & Admin</div>
+                <a href="{% url 'analytics:model_registry' %}" class="nav-link {% if 'models' in request.path %}active{% endif %}">
+                    <span class="nav-icon">🧠</span><span>Model Registry</span>
+                </a>
+                <a href="{% url 'notifications:list' %}" class="nav-link {% if 'notifications' in request.path %}active{% endif %}">
+                    <span class="nav-icon">🔔</span>
+                    <span>Notifications</span>
+                    {% if unread_notifications_count > 0 %}
+                    <span style="background:var(--brand-electric); color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.45rem; border-radius:10px; margin-left:auto;">{{ unread_notifications_count }}</span>
+                    {% endif %}
+                </a>
+                <a href="{% url 'ai_assistant:chat' %}" class="nav-link {% if 'assistant' in request.path %}active{% endif %}">
+                    <span class="nav-icon">💬</span><span>AI Assistant</span>
+                </a>
                 {% if user.is_authenticated and user.is_super_admin %}
-                <div class="nav-section-title">System & Security</div>
                 <a href="{% url 'common:audit_logs' %}" class="nav-link">
-                    <span class="nav-icon">📜</span><span>Audit Logs</span>
+                    <span class="nav-icon">📜</span><span>System Audit Logs</span>
                 </a>
                 <a href="/admin/" class="nav-link" target="_blank">
                     <span class="nav-icon">⚙️</span><span>Django Admin</span>
@@ -113,58 +126,75 @@
             <!-- Topbar -->
             <header class="topbar">
                 <div class="topbar-left">
-                    <div class="campus-pill">
-                        <span>🏫</span>
-                        <span>{{ CAMPUS_NAME }}</span>
-                    </div>
+                    <!-- Mobile Hamburger -->
+                    <button id="mobileMenuBtn" class="btn btn-secondary btn-sm" style="display:none; padding:0.4rem 0.6rem;" onclick="document.getElementById('sidebar').classList.toggle('mobile-open')">
+                        ☰
+                    </button>
 
+                    <!-- Global AI Search Trigger (Ctrl+K) -->
+                    <div class="global-search-bar" onclick="openSearchModal()">
+                        <span style="color:var(--text-muted); font-size:0.9rem;">🔍</span>
+                        <input type="text" class="global-search-input" placeholder="Search students, events, classrooms, buses, complaints..." readonly>
+                        <span class="search-kbd">Ctrl K</span>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <!-- Weather Card Pill -->
                     {% if current_weather %}
-                    <div class="weather-pill">
+                    <div class="weather-pill" title="Live Campus Microclimate (Open-Meteo)">
                         <span>🌤️</span>
                         <span>{{ current_weather.temperature }}°C {{ current_weather.condition }}</span>
                     </div>
                     {% endif %}
-                </div>
 
-                <div class="topbar-right">
-                    <!-- Simulation Controller -->
-                    <div class="sim-controls" title="Simulation Speed Multiplier">
-                        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600; margin-right:0.25rem;">SIM:</span>
+                    <!-- AI Status Indicator Pill -->
+                    <div class="ai-status-pill" title="6 ML/DL Models Online: Academic RF, Trajectory MLP, NLP Triage, Event Regressor, Canteen Forecaster, Energy Isolation Forest">
+                        <span class="status-dot"></span>
+                        <span>AI Engine Online</span>
+                    </div>
+
+                    <!-- Simulation Speed Multipliers (1x, 2x, 5x, 10x) -->
+                    <div class="sim-controls" title="Telemetry Simulation Speed">
+                        <span style="font-size:0.7rem; color:var(--text-muted); font-weight:700; margin:0 0.2rem;">SIM:</span>
                         <button class="sim-btn active" data-speed="1.0">1x</button>
                         <button class="sim-btn" data-speed="2.0">2x</button>
                         <button class="sim-btn" data-speed="5.0">5x</button>
                         <button class="sim-btn" data-speed="10.0">10x</button>
                     </div>
 
-                    <!-- Role Switcher for Demo / Viva -->
-                    <div style="position:relative;">
-                        <select onchange="if(this.value) window.location.href='/accounts/demo-login/' + this.value + '/';" class="form-select" style="padding:0.35rem 0.65rem; font-size:0.78rem; background:rgba(0,0,0,0.5); border-radius:var(--radius-full);">
-                            <option value="">Switch Demo Role ▾</option>
-                            <option value="SUPER_ADMIN">👑 Super Admin</option>
-                            <option value="FACULTY">👨‍🏫 Faculty</option>
-                            <option value="STUDENT">🎓 Student</option>
-                            <option value="DEPARTMENT_ADMIN">🏛️ Dept Admin (HOD)</option>
-                            <option value="CLUB_ADMIN">✨ Club Lead</option>
-                            <option value="TRANSPORT_MANAGER">🚌 Transport Manager</option>
-                            <option value="CANTEEN_MANAGER">🍽️ Canteen Manager</option>
-                            <option value="MAINTENANCE_STAFF">🛠️ Maintenance Staff</option>
-                        </select>
-                    </div>
+                    <!-- Fast Demo Role Switcher -->
+                    <select onchange="if(this.value) window.location.href='/accounts/demo-login/' + this.value + '/';" class="form-select-light" title="Switch Demo Role Instantly">
+                        <option value="">Switch Role ▾</option>
+                        <option value="SUPER_ADMIN">👑 Super Admin</option>
+                        <option value="FACULTY">👨‍🏫 Faculty</option>
+                        <option value="STUDENT">🎓 Student</option>
+                        <option value="DEPARTMENT_ADMIN">🏛️ Dept Admin (HOD)</option>
+                        <option value="CLUB_ADMIN">✨ Club Lead</option>
+                        <option value="TRANSPORT_MANAGER">🚌 Transport Mgr</option>
+                        <option value="CANTEEN_MANAGER">🍽️ Canteen Mgr</option>
+                        <option value="MAINTENANCE_STAFF">🛠️ Maintenance</option>
+                    </select>
 
-                    {% if user.is_authenticated %}
+                    <!-- Notifications Icon -->
                     <a href="{% url 'notifications:list' %}" class="campus-pill" style="position:relative;" title="Notifications">
                         <span>🔔</span>
                         {% if unread_notifications_count > 0 %}
-                        <span style="background:var(--accent-rose); color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.35rem; border-radius:10px; margin-left:2px;">{{ unread_notifications_count }}</span>
+                        <span style="background:var(--brand-cyan); color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.35rem; border-radius:10px;">{{ unread_notifications_count }}</span>
                         {% endif %}
                     </a>
 
-                    <div style="display:flex; align-items:center; gap:0.6rem;">
-                        <a href="{% url 'accounts:profile' %}" style="display:flex; align-items:center; gap:0.5rem;">
-                            <span class="role-badge role-{{ user.role }}">{{ user.get_role_display }}</span>
-                            <span style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">{{ user.first_name|default:user.username }}</span>
-                        </a>
-                        <a href="{% url 'accounts:logout' %}" class="btn btn-secondary btn-sm" style="padding:0.25rem 0.65rem;" title="Logout">🚪</a>
+                    <!-- User Profile Avatar & Dropdown -->
+                    {% if user.is_authenticated %}
+                    <div class="user-profile-menu" onclick="window.location.href='{% url 'accounts:profile' %}';">
+                        <div class="user-avatar-circle">
+                            {{ user.first_name|default:user.username|slice:":1"|upper }}
+                        </div>
+                        <div style="display:flex; flex-direction:column; line-height:1.2;">
+                            <span style="font-size:0.8rem; font-weight:700; color:var(--text-primary);">{{ user.first_name|default:user.username }}</span>
+                            <span style="font-size:0.68rem; color:var(--text-muted); font-weight:600;">{{ user.get_role_display }}</span>
+                        </div>
+                        <a href="{% url 'accounts:logout' %}" style="margin-left:0.35rem; color:var(--text-muted); font-size:0.85rem;" title="Sign Out">🚪</a>
                     </div>
                     {% else %}
                     <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-sm">Sign In</a>
@@ -175,7 +205,7 @@
             <!-- Page Content -->
             <main class="content-wrapper">
                 {% if messages %}
-                <div class="messages-container">
+                <div class="messages-container" style="margin-bottom:1.25rem;">
                     {% for message in messages %}
                     <div class="alert alert-{{ message.tags|default:'info' }}">
                         <span>{{ message }}</span>
@@ -189,7 +219,176 @@
         </div>
     </div>
 
+    <!-- Floating 3D AI Assistant Widget -->
+    <div class="floating-ai-btn" id="floatingAiBtn" onclick="toggleAiDrawer()" title="Campus AI Assistant">
+        {% campus_3d_visual 'ai_mascot' 42 42 %}
+        <span class="floating-ai-badge">AI</span>
+    </div>
+
+    <!-- AI Assistant Drawer -->
+    <div class="ai-drawer" id="aiDrawer">
+        <div class="ai-drawer-header">
+            <div style="display:flex; align-items:center; gap:0.65rem;">
+                <div style="width:36px; height:36px; border-radius:50%; background:var(--brand-gradient); display:flex; align-items:center; justify-content:center;">
+                    🤖
+                </div>
+                <div>
+                    <h4 style="font-size:0.95rem; font-weight:700;">Campus AI Assistant</h4>
+                    <span style="font-size:0.7rem; color:var(--text-muted);">Ask anything about your campus</span>
+                </div>
+            </div>
+            <button onclick="toggleAiDrawer()" style="background:none; border:none; font-size:1.25rem; color:var(--text-muted); cursor:pointer;">&times;</button>
+        </div>
+
+        <div class="ai-drawer-body" id="drawerChatMessages">
+            <div class="chat-bubble ai">
+                Hello <strong>{{ user.first_name|default:'there' }}</strong>! 👋 I am the CampusPulse AI Assistant. How can I help you today?
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0.4rem; margin-top:0.5rem;">
+                <span style="font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Suggested Inquiries:</span>
+                <button class="btn btn-secondary btn-sm" style="text-align:left; justify-content:flex-start; font-size:0.75rem;" onclick="sendDrawerPrompt('What events are happening this week?')">
+                    📅 What events are happening this week?
+                </button>
+                <button class="btn btn-secondary btn-sm" style="text-align:left; justify-content:flex-start; font-size:0.75rem;" onclick="sendDrawerPrompt('Show current bus locations and ETAs')">
+                    🚌 Show current bus locations and ETAs
+                </button>
+                <button class="btn btn-secondary btn-sm" style="text-align:left; justify-content:flex-start; font-size:0.75rem;" onclick="sendDrawerPrompt('What is the current parking availability?')">
+                    🚗 What is the current parking availability?
+                </button>
+            </div>
+        </div>
+
+        <div class="ai-drawer-footer">
+            <div style="display:flex; gap:0.5rem;">
+                <input type="text" id="drawerInput" class="form-select-light" style="flex:1; border-radius:var(--radius-md); padding:0.6rem 0.85rem;" placeholder="Ask campus AI..." onkeydown="if(event.key==='Enter') sendDrawerMessage()">
+                <button class="btn btn-primary btn-sm" onclick="sendDrawerMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Search Modal (Ctrl + K) -->
+    <div class="search-modal-backdrop" id="searchModal" onclick="if(event.target===this) closeSearchModal()">
+        <div class="search-modal-box">
+            <div class="search-modal-header">
+                <span style="font-size:1.1rem; color:var(--brand-cyan);">🔍</span>
+                <input type="text" id="modalSearchInput" class="search-modal-input" placeholder="Search students, events, classrooms, buses, complaints..." oninput="handleGlobalSearch(this.value)">
+                <span class="search-kbd" onclick="closeSearchModal()" style="cursor:pointer;">ESC</span>
+            </div>
+            <div class="search-results-list" id="searchResultsList">
+                <div style="padding:1.5rem; text-align:center; color:var(--text-muted); font-size:0.85rem;">
+                    Type 2 or more characters to search across all campus entities...
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/static/js/main.js"></script>
+    <script>
+        // Global Search Modal handling
+        function openSearchModal() {
+            document.getElementById('searchModal').classList.add('open');
+            setTimeout(() => document.getElementById('modalSearchInput').focus(), 100);
+        }
+        function closeSearchModal() {
+            document.getElementById('searchModal').classList.remove('open');
+        }
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                openSearchModal();
+            }
+            if (e.key === 'Escape') {
+                closeSearchModal();
+            }
+        });
+
+        let searchDebounceTimer = null;
+        function handleGlobalSearch(q) {
+            clearTimeout(searchDebounceTimer);
+            if (!q || q.trim().length < 2) {
+                document.getElementById('searchResultsList').innerHTML = '<div style="padding:1.5rem; text-align:center; color:var(--text-muted); font-size:0.85rem;">Type 2 or more characters to search across all campus entities...</div>';
+                return;
+            }
+            searchDebounceTimer = setTimeout(() => {
+                fetch('/api/global-search/?q=' + encodeURIComponent(q.trim()))
+                    .then(res => res.json())
+                    .then(data => {
+                        const list = document.getElementById('searchResultsList');
+                        if (!data.results || data.results.length === 0) {
+                            list.innerHTML = '<div style="padding:1.5rem; text-align:center; color:var(--text-muted); font-size:0.85rem;">No campus records found matching "' + q + '"</div>';
+                            return;
+                        }
+                        let html = '';
+                        data.results.forEach(item => {
+                            html += `
+                                <a href="${item.url}" class="search-result-item">
+                                    <div>
+                                        <div style="font-weight:600; font-size:0.88rem;">${item.title}</div>
+                                        <div style="font-size:0.75rem; color:var(--text-muted);">${item.subtitle}</div>
+                                    </div>
+                                    <span class="ai-badge">${item.badge}</span>
+                                </a>
+                            `;
+                        });
+                        list.innerHTML = html;
+                    });
+            }, 250);
+        }
+
+        // Floating AI Assistant Drawer Toggle
+        function toggleAiDrawer() {
+            document.getElementById('aiDrawer').classList.toggle('open');
+        }
+
+        function sendDrawerPrompt(promptText) {
+            document.getElementById('drawerInput').value = promptText;
+            sendDrawerMessage();
+        }
+
+        function sendDrawerMessage() {
+            const input = document.getElementById('drawerInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const chat = document.getElementById('drawerChatMessages');
+            chat.innerHTML += `<div class="chat-bubble user">${msg}</div>`;
+            input.value = '';
+
+            // Thinking animation
+            const thinkingId = 'thinking_' + Date.now();
+            chat.innerHTML += `
+                <div class="chat-bubble ai" id="${thinkingId}">
+                    <span class="ai-thinking">
+                        <span class="ai-thinking-dot"></span>
+                        <span class="ai-thinking-dot"></span>
+                        <span class="ai-thinking-dot"></span>
+                        Analyzing campus records...
+                    </span>
+                </div>
+            `;
+            chat.scrollTop = chat.scrollHeight;
+
+            fetch('/assistant/api/chat/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const bubble = document.getElementById(thinkingId);
+                if (bubble) {
+                    bubble.innerHTML = data.response || "I was unable to retrieve that campus data right now.";
+                }
+                chat.scrollTop = chat.scrollHeight;
+            })
+            .catch(() => {
+                const bubble = document.getElementById(thinkingId);
+                if (bubble) {
+                    bubble.innerHTML = "Campus AI Assistant is operating offline. All security boundaries remain active.";
+                }
+            });
+        }
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -1,59 +1,90 @@
 {% extends 'base.html' %}
+{% load static campus_3d %}
 
 {% block title %}Smart Campus Transport - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-    <div>
-        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🚌 Smart Campus Transport Fleet</h1>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-            Real-time GPS vehicle tracking, route ETA calculations, passenger occupancy gauges, and arrival delay predictions.
-        </p>
-    </div>
-    <div style="display: flex; gap: 0.75rem;">
-        <a href="{% url 'transport:routes' %}" class="btn btn-secondary">Route Catalog</a>
-    </div>
-</div>
+<div style="max-width: 1300px; margin: 0 auto;">
 
-<!-- Map Card -->
-<div class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border-glow); margin-bottom: 2rem;">
-    <div id="transportMap" style="height: 480px; width: 100%; background: #0b0f19;"></div>
-</div>
+    <!-- Compact Page Hero with 3D Visual -->
+    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #E0F2FE 100%);">
+        <div style="max-width: 650px;">
+            <div class="hero-pill" style="margin-bottom: 0.5rem;">
+                <span>🚌</span>
+                <span>Spatial Fleet Telemetry & Transit Simulation</span>
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
+                Smart Transport<br>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Move smarter across campus.</span>
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
+                Continuous GPS vehicle movement simulation with controllable 1x-10x multipliers, real-time arrival ETAs, and passenger load gauges.
+            </p>
+        </div>
+        <div style="flex-shrink: 0;">
+            {% campus_3d_visual 'transport' 150 100 %}
+        </div>
+    </div>
 
-<!-- Live Bus Cards Grid -->
-<h3 style="font-size: 1.3rem; margin-bottom: 1rem;">🚌 Live Fleet Telemetry</h3>
-<div id="busCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
-    {% for b in live_buses %}
-    <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+    <!-- Telemetry Control Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span class="live-pill"><span class="pulse-dot"></span> LIVE FLEET GPS</span>
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Auto-polling active vehicles every 2 seconds</span>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="{% url 'transport:routes' %}" class="btn btn-secondary btn-sm">Transit Route Catalog</a>
+        </div>
+    </div>
+
+    <!-- Map Card (Clean Light Style) -->
+    <div class="card-light" style="padding: 0; overflow: hidden; margin-bottom: 2rem;">
+        <div id="transportMap" style="height: 480px; width: 100%;"></div>
+    </div>
+
+    <!-- Live Bus Cards Grid -->
+    <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 1.35rem; font-weight: 800;">Active Fleet Telemetry</h3>
+        <span class="ai-badge ai-prediction">ML ETA Regressor Active</span>
+    </div>
+
+    <div id="busCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+        {% for b in live_buses %}
+        <div class="card-light">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <div>
+                    <span class="role-badge" style="background: #F0F9FF; color: #0284C7; border: 1px solid #BAE6FD;">{{ b.route_code }}</span>
+                    <h4 style="font-size: 1.15rem; font-weight: 800; margin-top: 0.35rem;">Bus {{ b.bus_number }}</h4>
+                </div>
+                <span class="ai-badge {% if b.status == 'ON_TIME' %}ai-confidence{% else %}ai-alert{% endif %}">{{ b.status }}</span>
+            </div>
+
+            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">
+                <div>📍 <strong>Approaching:</strong> {{ b.next_stop }}</div>
+                <div>⏱️ <strong>Estimated Arrival (ETA):</strong> <strong style="color: var(--brand-electric);">{{ b.eta_mins }} mins</strong></div>
+                <div>⚠️ <strong>Predicted Delay:</strong> {{ b.predicted_delay_mins }} mins</div>
+                <div>⚡ <strong>Speed:</strong> {{ b.speed_kmh }} km/h</div>
+            </div>
+
+            <!-- Passenger Load Bar -->
             <div>
-                <span class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); font-weight: 700;">{{ b.route_code }}</span>
-                <h4 style="font-size: 1.15rem; font-weight: 700; margin-top: 0.2rem;">{{ b.bus_number }}</h4>
-            </div>
-            <span class="badge badge-{% if b.status == 'ON_TIME' %}low{% else %}medium{% endif %}">{{ b.status }}</span>
-        </div>
-
-        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">
-            <div>📍 <b>Approaching:</b> {{ b.next_stop }}</div>
-            <div>⏱️ <b>Estimated Arrival (ETA):</b> <b style="color: var(--accent-cyan);">{{ b.eta_mins }} mins</b></div>
-            <div>⚠️ <b>Predicted Delay:</b> {{ b.predicted_delay_mins }} mins</div>
-            <div>⚡ <b>Speed:</b> {{ b.speed_kmh }} km/h</div>
-        </div>
-
-        <!-- Occupancy Bar -->
-        <div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">
-                <span>Passenger Load</span>
-                <span><b>{{ b.current_passengers }}/{{ b.capacity }} ({{ b.occupancy_pct }}%)</b></span>
-            </div>
-            <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
-                <div style="width: {{ b.occupancy_pct }}%; height: 100%; background: {% if b.occupancy_pct > 85 %}var(--accent-rose){% elif b.occupancy_pct > 65 %}var(--accent-amber){% else %}var(--accent-emerald){% endif %};"></div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+                    <span>Passenger Capacity</span>
+                    <strong>{{ b.current_passengers }}/{{ b.capacity }} ({{ b.occupancy_pct }}%)</strong>
+                </div>
+                <div style="width: 100%; height: 7px; background: #E2E8F0; border-radius: 4px; overflow: hidden;">
+                    <div style="width: {{ b.occupancy_pct }}%; height: 100%; background: {% if b.occupancy_pct > 85 %}var(--danger){% elif b.occupancy_pct > 65 %}var(--warning){% else %}var(--success){% endif %};"></div>
+                </div>
             </div>
         </div>
+        {% empty %}
+        <div class="card-light" style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem;">
+            {% campus_3d_visual 'transport' 80 60 %}
+            <p style="font-weight: 600; margin-top: 1rem;">Connecting to simulated campus bus telemetry...</p>
+        </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p style="color: var(--text-muted); padding: 1.5rem;">Connecting to vehicle GPS stream...</p>
-    {% endfor %}
+
 </div>
 {% endblock %}
 
@@ -65,8 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const map = L.map('transportMap').setView([defaultLat, defaultLng], 15);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO'
     }).addTo(map);
 
     const busMarkers = {};
@@ -78,10 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             data.buses.forEach(b => {
                 const popupContent = `
-                    <div style="color:#0b0f19;">
-                        <h4 style="margin:0 0 4px;">${b.bus_number} (${b.route_code})</h4>
-                        <p style="margin:0; font-size:0.8rem;">Approaching: ${b.next_stop}</p>
-                        <p style="margin:0; font-size:0.8rem;">ETA: ${b.eta_mins} mins | Occupancy: ${b.occupancy_pct}%</p>
+                    <div style="color:#0F172A; font-family:'Inter', sans-serif;">
+                        <h4 style="margin:0 0 4px; font-weight:700;">Bus ${b.bus_number} (${b.route_code})</h4>
+                        <p style="margin:0; font-size:0.8rem; color:#475569;">Approaching: <strong>${b.next_stop}</strong></p>
+                        <p style="margin:4px 0 0; font-size:0.8rem; color:#0284C7;">ETA: <strong>${b.eta_mins} mins</strong> | Occupancy: <strong>${b.occupancy_pct}%</strong></p>
                     </div>
                 `;
 
@@ -99,8 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Refresh every 3 seconds for fluid moving simulation
-    setInterval(refreshTelemetry, 3000);
+    setInterval(refreshTelemetry, 2000);
     refreshTelemetry();
 });
 </script>

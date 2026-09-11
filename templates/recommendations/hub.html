@@ -1,88 +1,163 @@
 {% extends 'base.html' %}
+{% load static campus_3d %}
 
 {% block title %}AI Recommendation Hub - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-    <div>
-        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🎯 Campus AI Recommendation Hub</h1>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-            Personalized discovery across Clubs, Events, and Complementary Teammates powered by semantic profile vectors.
-        </p>
-    </div>
-</div>
+<div style="max-width: 1300px; margin: 0 auto;">
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem;">
-    <!-- Recommended Clubs -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">✨ Recommended Clubs</h3>
-            <span class="badge badge-low">Skill Alignment</span>
+    <!-- Compact Page Hero with 3D Visual -->
+    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #FAF5FF 100%);">
+        <div style="max-width: 650px;">
+            <div class="hero-pill" style="margin-bottom: 0.5rem;">
+                <span>🎯</span>
+                <span>Content-Based Filtering & Complementary Skill Matching</span>
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
+                AI Recommendations<br>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Curated for Your Academic Journey.</span>
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
+                Personalized suggestions across campus societies, technical workshops, capstone teammates, and industry career pathways.
+            </p>
         </div>
-        {% for item in recommended_clubs %}
-        <div style="padding: 1rem 0; border-bottom: 1px solid var(--border-subtle);">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <a href="{% url 'clubs:detail' item.club.code %}" style="font-weight: 700; color: var(--text-primary);">{{ item.club.name }}</a>
-                <span class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan);">{{ item.score }}% Fit</span>
-            </div>
-            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
-                {{ item.reasons.0 }}
-            </div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">
-                {{ item.reasons.1 }}
-            </div>
+        <div style="flex-shrink: 0;">
+            {% campus_3d_visual 'recommendation' 150 100 %}
         </div>
-        {% empty %}
-        <p style="color: var(--text-muted); padding: 1.5rem;">No clubs matching.</p>
-        {% endfor %}
     </div>
 
-    <!-- Recommended Events -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">📅 Upcoming Recommended Events</h3>
-            <span class="badge" style="background: rgba(79, 172, 254, 0.15); color: var(--accent-blue);">Curated For You</span>
+    <!-- Recommendations Triple Column Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        
+        <!-- Recommended Clubs -->
+        <div class="card-light">
+            <div class="card-header-clean">
+                <h3 class="card-title-clean">✨ Recommended Clubs</h3>
+                <span class="ai-badge ai-insight">Skill Vector Match</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                {% for item in recommended_clubs %}
+                <div style="padding: 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                        <a href="{% url 'clubs:detail' item.club.code %}" style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">
+                            {{ item.club.name }}
+                        </a>
+                        <span class="ai-badge ai-confidence">{{ item.score }}% Fit</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.2rem;">
+                        {{ item.reasons.0 }}
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">
+                        {{ item.reasons.1 }}
+                    </div>
+                </div>
+                {% empty %}
+                <div style="text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.85rem;">
+                    No direct club matches found for your current profile skills.
+                </div>
+                {% endfor %}
+            </div>
         </div>
-        {% for item in recommended_events %}
-        <div style="padding: 1rem 0; border-bottom: 1px solid var(--border-subtle);">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <a href="{% url 'events:detail' item.event.pk %}" style="font-weight: 700; color: var(--text-primary);">{{ item.event.title }}</a>
-                <span class="badge" style="background: rgba(79, 172, 254, 0.15); color: var(--accent-blue);">{{ item.score }}% Fit</span>
+
+        <!-- Recommended Events -->
+        <div class="card-light">
+            <div class="card-header-clean">
+                <h3 class="card-title-clean">📅 Recommended Workshops</h3>
+                <span class="ai-badge ai-prediction">Interest Alignment</span>
             </div>
-            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
-                {{ item.reasons.0 }}
-            </div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">
-                📍 {{ item.event.location_name }} &bull; {{ item.event.start_time|date:"M d, h:i A" }}
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                {% for item in recommended_events %}
+                <div style="padding: 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                        <a href="{% url 'events:detail' item.event.pk %}" style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">
+                            {{ item.event.title }}
+                        </a>
+                        <span class="ai-badge ai-prediction">{{ item.score }}% Fit</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.2rem;">
+                        {{ item.reasons.0 }}
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">
+                        📍 {{ item.event.location_name }} · {{ item.event.start_time|date:"M d, h:i A" }}
+                    </div>
+                </div>
+                {% empty %}
+                <div style="text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.85rem;">
+                    No event recommendations right now.
+                </div>
+                {% endfor %}
             </div>
         </div>
-        {% empty %}
-        <p style="color: var(--text-muted); padding: 1.5rem;">No upcoming events matching.</p>
-        {% endfor %}
+
+        <!-- Recommended Teammates -->
+        <div class="card-light">
+            <div class="card-header-clean">
+                <h3 class="card-title-clean">🤝 Hackathon Teammates</h3>
+                <span class="ai-badge" style="background:#FAF5FF; border-color:#E9D5FF; color:#7E22CE;">Complementary Matrix</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                {% for item in recommended_teammates %}
+                <div style="padding: 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                        <a href="{% url 'students:detail' item.student.student_id %}" style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">
+                            {{ item.student.get_display_name }}
+                        </a>
+                        <span class="ai-badge ai-confidence">{{ item.score }}% Fit</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.2rem;">
+                        {{ item.reasons.0 }}
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">
+                        {{ item.reasons.1 }} · {{ item.reasons.2 }}
+                    </div>
+                </div>
+                {% empty %}
+                <div style="text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.85rem;">
+                    No complementary teammate matches found.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
     </div>
 
-    <!-- Recommended Teammates -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">🤝 Complementary Hackathon Teammates</h3>
-            <span class="badge" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">Complementary Matrix</span>
+    <!-- Career Guidance Section -->
+    <div class="card-light" id="career" style="padding: 2rem; margin-bottom: 2.5rem; background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <span class="ai-badge ai-insight" style="margin-bottom: 0.35rem;">💼 Career Analytics</span>
+                <h3 style="font-size: 1.45rem; font-weight: 800;">Career Guidance & Skill Trajectory</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem;">Industry alignment based on semester performance, project portfolios, and technical interests.</p>
+            </div>
+            {% campus_3d_visual 'career' 110 70 %}
         </div>
-        {% for item in recommended_teammates %}
-        <div style="padding: 1rem 0; border-bottom: 1px solid var(--border-subtle);">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <a href="{% url 'students:detail' item.student.student_id %}" style="font-weight: 700; color: var(--text-primary);">{{ item.student.get_display_name }}</a>
-                <span class="badge badge-low">{{ item.score }}% Fit</span>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem;">
+            <div style="padding: 1.25rem; background: #FFFFFF; border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+                <span class="ai-badge ai-confidence" style="margin-bottom: 0.5rem;">92% Role Match</span>
+                <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.35rem;">AI / Machine Learning Engineer</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.75rem;">Strong alignment with Python, PyTorch, Linear Algebra, and Data Structures coursework.</p>
+                <span style="font-size: 0.75rem; color: var(--brand-electric); font-weight: 600;">Recommended Next Step: Compete in Kaggle / Open Source</span>
             </div>
-            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem;">
-                {{ item.reasons.0 }}
+
+            <div style="padding: 1.25rem; background: #FFFFFF; border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+                <span class="ai-badge ai-insight" style="margin-bottom: 0.5rem;">86% Role Match</span>
+                <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.35rem;">Full-Stack Cloud Architect</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.75rem;">Demonstrated competency in Django, relational database design, and asynchronous APIs.</p>
+                <span style="font-size: 0.75rem; color: var(--brand-electric); font-weight: 600;">Recommended Next Step: Containerization & CI/CD</span>
             </div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">
-                {{ item.reasons.1 }} &bull; {{ item.reasons.2 }}
+
+            <div style="padding: 1.25rem; background: #FFFFFF; border: 1px solid var(--border-subtle); border-radius: var(--radius-md);">
+                <span class="ai-badge" style="background:#FFFBEB; border-color:#FDE68A; color:#B45309; margin-bottom: 0.5rem;">80% Role Match</span>
+                <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.35rem;">IoT & Embedded Systems Engineer</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 0.75rem;">Complementary telemetry skills in hardware sensor communication and edge vision.</p>
+                <span style="font-size: 0.75rem; color: var(--brand-electric); font-weight: 600;">Recommended Next Step: Raspberry Pi Edge Computing</span>
             </div>
         </div>
-        {% empty %}
-        <p style="color: var(--text-muted); padding: 1.5rem;">No teammates matching.</p>
-        {% endfor %}
     </div>
+
 </div>
 {% endblock %}

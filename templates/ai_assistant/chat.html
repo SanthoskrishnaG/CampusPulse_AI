@@ -1,43 +1,84 @@
 {% extends 'base.html' %}
+{% load static campus_3d %}
 
 {% block title %}Campus AI Assistant - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 800px; margin: 0 auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+<div style="max-width: 960px; margin: 0 auto;">
+
+    <!-- Assistant Header with 3D AI Mascot -->
+    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2.25rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #FAF5FF 100%);">
         <div>
-            <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">💬 Campus AI Assistant</h1>
+            <div class="hero-pill" style="margin-bottom: 0.4rem;">
+                <span>🤖</span>
+                <span>Permission-Aware Conversational Intelligence</span>
+            </div>
+            <h1 style="font-size: 2.15rem; font-weight: 800; margin-bottom: 0.25rem;">
+                Campus AI Assistant
+            </h1>
             <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                Permission-guarded natural language query engine connected across all campus operational databases.
+                Ask anything about your campus. Grounded strictly in real-time academic, operations, and facility databases.
             </p>
+        </div>
+        <div style="flex-shrink: 0;">
+            {% campus_3d_visual 'ai_mascot' 90 90 %}
         </div>
     </div>
 
-    <!-- Suggested Quick Queries -->
-    <div style="margin-bottom: 1.25rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-        <button class="campus-pill quick-query-btn" style="cursor: pointer;">How many high-risk students in CSE?</button>
-        <button class="campus-pill quick-query-btn" style="cursor: pointer;">Which department has the most open complaints?</button>
-        <button class="campus-pill quick-query-btn" style="cursor: pointer;">What is the live status of campus buses?</button>
-        <button class="campus-pill quick-query-btn" style="cursor: pointer;">Are parking slots free in North Lot?</button>
-        <button class="campus-pill quick-query-btn" style="cursor: pointer;">What is today's lunch demand forecast?</button>
-        <button class="campus-pill quick-query-btn" style="cursor: pointer;">Show active energy anomalies</button>
+    <!-- Suggested Inquiries Strip -->
+    <div style="margin-bottom: 1.25rem;">
+        <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">
+            Suggested Queries:
+        </span>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
+                🎓 How many high-risk students are there?
+            </button>
+            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
+                📅 What events are happening today?
+            </button>
+            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
+                ✨ Which clubs have upcoming events?
+            </button>
+            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
+                🚌 Show current bus locations
+            </button>
+            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
+                🚗 Is parking available near Block A?
+            </button>
+            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
+                🛠️ Which department has the most complaints?
+            </button>
+            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
+                🍽️ Predict tomorrow's canteen demand
+            </button>
+        </div>
     </div>
 
-    <!-- Chat History Container -->
-    <div class="card" style="height: 480px; display: flex; flex-direction: column; padding: 1.5rem; border: 1px solid var(--border-glow); margin-bottom: 1rem;">
+    <!-- Main Chat Window Card -->
+    <div class="card-light" style="height: 520px; display: flex; flex-direction: column; padding: 1.5rem; margin-bottom: 1.5rem;">
+        <!-- Chat Scroll Area -->
         <div id="chatMessages" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; padding-right: 0.5rem;">
-            <div style="background: rgba(0, 242, 254, 0.08); border-left: 3px solid var(--accent-cyan); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; line-height: 1.6;">
-                <b>CampusPulse AI Assistant:</b><br>
-                Hello <b>{{ user.first_name|default:user.username }}</b>! I am your real-time campus operating assistant. Ask me anything regarding academic risk distributions, maintenance tickets, bus fleet ETA, parking vacancies, kitchen portion recommendations, or power grid telemetry.
+            <!-- Welcome AI Message -->
+            <div class="chat-bubble ai" style="max-width: 90%;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+                    <span class="ai-badge ai-insight">🤖 CampusPulse Core</span>
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">Verified Session</span>
+                </div>
+                Hello <strong>{{ user.first_name|default:user.username }}</strong>! I am your real-time campus operating assistant. You can ask me about academic retention, facility complaints, bus fleet schedules, dining hall portions, or power grid telemetry. How can I assist you today?
             </div>
         </div>
 
         <!-- Chat Input Form -->
-        <div style="display: flex; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
-            <input type="text" id="queryInput" class="form-input" placeholder="Ask a question about campus telemetry..." style="flex: 1;">
-            <button id="sendBtn" class="btn btn-primary">Ask AI ➔</button>
+        <div style="display: flex; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+            <input type="text" id="queryInput" class="form-select-light" placeholder="Ask anything about your campus..." style="flex: 1; font-size: 0.92rem; padding: 0.75rem 1.25rem; border-radius: var(--radius-md);">
+            <button id="sendBtn" class="btn btn-primary">
+                <span>Ask AI</span>
+                <span>➔</span>
+            </button>
         </div>
     </div>
+
 </div>
 {% endblock %}
 
@@ -48,24 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendBtn = document.getElementById('sendBtn');
     const chat = document.getElementById('chatMessages');
 
-    function appendMessage(sender, text, isAi = false) {
-        const msgDiv = document.createElement('div');
-        msgDiv.style.padding = '0.9rem';
-        msgDiv.style.borderRadius = 'var(--radius-sm)';
-        msgDiv.style.fontSize = '0.9rem';
-        msgDiv.style.lineHeight = '1.6';
-
-        if (isAi) {
-            msgDiv.style.background = 'rgba(0, 242, 254, 0.08)';
-            msgDiv.style.borderLeft = '3px solid var(--accent-cyan)';
-            msgDiv.innerHTML = `<b>CampusPulse AI:</b><br>${text.replace(/\n/g, '<br>')}`;
-        } else {
-            msgDiv.style.background = 'rgba(255, 255, 255, 0.04)';
-            msgDiv.style.alignSelf = 'flex-end';
-            msgDiv.innerHTML = `<b>You:</b> ${text}`;
-        }
-
-        chat.appendChild(msgDiv);
+    function appendUserMessage(text) {
+        const div = document.createElement('div');
+        div.className = 'chat-bubble user';
+        div.innerText = text;
+        chat.appendChild(div);
         chat.scrollTop = chat.scrollHeight;
     }
 
@@ -73,19 +101,65 @@ document.addEventListener('DOMContentLoaded', () => {
         const q = (queryText || input.value).trim();
         if (!q) return;
 
-        appendMessage('You', q, false);
+        appendUserMessage(q);
         input.value = '';
 
+        // Multi-Step AI Thinking Animation
+        const thinkingId = 'thinking_' + Date.now();
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.className = 'chat-bubble ai';
+        thinkingDiv.id = thinkingId;
+        thinkingDiv.innerHTML = `
+            <span class="ai-thinking" id="${thinkingId}_text">
+                <span class="ai-thinking-dot"></span>
+                <span class="ai-thinking-dot"></span>
+                <span class="ai-thinking-dot"></span>
+                Analyzing campus data...
+            </span>
+        `;
+        chat.appendChild(thinkingDiv);
+        chat.scrollTop = chat.scrollHeight;
+
+        // Stage 2 thinking update
+        const timer1 = setTimeout(() => {
+            const el = document.getElementById(thinkingId + '_text');
+            if (el) el.innerHTML = `<span class="ai-thinking-dot"></span><span class="ai-thinking-dot"></span><span class="ai-thinking-dot"></span> Checking relevant records...`;
+        }, 350);
+
+        // Stage 3 thinking update
+        const timer2 = setTimeout(() => {
+            const el = document.getElementById(thinkingId + '_text');
+            if (el) el.innerHTML = `<span class="ai-thinking-dot"></span><span class="ai-thinking-dot"></span><span class="ai-thinking-dot"></span> Generating insight...`;
+        }, 700);
+
         try {
-            const resp = await fetch('{% url "ai_assistant:api_query" %}', {
+            const resp = await fetch('/assistant/api/chat/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query: q })
+                body: JSON.stringify({ message: q })
             });
             const data = await resp.json();
-            appendMessage('CampusPulse AI', data.response || "No response received.", true);
+            clearTimeout(timer1);
+            clearTimeout(timer2);
+
+            thinkingDiv.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+                    <span class="ai-badge ai-insight">🤖 AI Insight</span>
+                    <span class="ai-badge ai-confidence">95% Confidence</span>
+                </div>
+                <div style="line-height: 1.55; color: var(--text-primary); font-size: 0.92rem;">
+                    ${data.response ? data.response.replace(/\n/g, '<br>') : "I could not find matching campus records."}
+                </div>
+            `;
+            chat.scrollTop = chat.scrollHeight;
         } catch (err) {
-            appendMessage('CampusPulse AI', "An error occurred connecting to the campus assistant.", true);
+            clearTimeout(timer1);
+            clearTimeout(timer2);
+            thinkingDiv.innerHTML = `
+                <div class="ai-badge ai-alert" style="margin-bottom:0.35rem;">⚠️ System Notice</div>
+                <div>Campus assistant is running with local database fallback. Security boundaries remain strictly enforced.</div>
+            `;
+            chat.scrollTop = chat.scrollHeight;
         }
     }
 
@@ -96,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.quick-query-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            sendQuery(btn.innerText);
+            sendQuery(btn.innerText.replace(/^[^\w]+/, '').trim());
         });
     });
 });

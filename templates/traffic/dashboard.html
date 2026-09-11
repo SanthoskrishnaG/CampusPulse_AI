@@ -1,132 +1,102 @@
 {% extends 'base.html' %}
+{% load static campus_3d %}
 
 {% block title %}Traffic & Vehicle Vision AI - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-    <div>
-        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">📹 Traffic & Vehicle Vision AI</h1>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-            Computer vision vehicle detection, campus gate throughput monitoring, and bottleneck prevention.
-        </p>
-    </div>
-</div>
+<div style="max-width: 1300px; margin: 0 auto;">
 
-<div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; margin-bottom: 2rem;">
-    <!-- Upload / Feed Scanner -->
-    <div class="card" style="border: 1px solid var(--border-glow);">
-        <div class="card-header">
-            <h3 class="card-title">🔍 Analyze Camera Feed Snapshot</h3>
+    <!-- Compact Page Hero with 3D Visual -->
+    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #EFF6FF 60%, #E0F2FE 100%);">
+        <div style="max-width: 650px;">
+            <div class="hero-pill" style="margin-bottom: 0.5rem;">
+                <span>📹</span>
+                <span>Gate Throughput & Computer Vision Vehicle Detection</span>
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
+                Traffic & Vehicles<br>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Intelligent Gate Flow & Safety.</span>
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
+                CPU-safe computer vision pipeline monitoring campus entrance gates, vehicle density, and queuing bottlenecks without storing private license plates.
+            </p>
         </div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
-            Upload an image from campus entrance cameras or mobile capture. The CPU-optimized vision pipeline detects vehicle classes and rates congestion.
-        </p>
-
-        <form method="POST" action="{% url 'traffic:analyze' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-                <label class="form-label">Surveillance Zone / Gate</label>
-                <input type="text" name="location_name" class="form-input" value="Campus Main Gate (North)" required>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Traffic Snapshot Image</label>
-                <input type="file" name="image" accept="image/*" class="form-input" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Run Computer Vision Detection ➔</button>
-        </form>
-    </div>
-
-    <!-- Latest Detection Telemetry -->
-    {% if latest %}
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">⚡ Latest Gate Surveillance Telemetry</h3>
-            <span class="badge badge-{% if latest.congestion_level == 'CLEAR' %}low{% elif latest.congestion_level == 'MODERATE' %}medium{% else %}high{% endif %}">
-                {{ latest.get_congestion_level_display }}
-            </span>
-        </div>
-
-        <div class="metric-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 1.25rem;">
-            <div class="metric-card" style="padding: 1rem;">
-                <div class="metric-label">Total Vehicles</div>
-                <div class="metric-value">{{ latest.total_vehicles }}</div>
-                <div class="metric-sub">{{ latest.location_name }}</div>
-            </div>
-            <div class="metric-card" style="padding: 1rem;">
-                <div class="metric-label">Model Confidence</div>
-                <div class="metric-value" style="color: var(--accent-emerald);">{{ latest.confidence|floatformat:2 }}</div>
-                <div class="metric-sub">CPU Inference Engine</div>
-            </div>
-        </div>
-
-        <div style="font-size: 0.85rem; color: var(--text-secondary); border-top: 1px solid var(--border-subtle); padding-top: 1rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; text-align: center;">
-            <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: var(--radius-sm);">
-                <div style="color: var(--text-muted); font-size: 0.75rem;">🚗 Cars</div>
-                <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary);">{{ latest.car_count }}</div>
-            </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: var(--radius-sm);">
-                <div style="color: var(--text-muted); font-size: 0.75rem;">🏍️ Bikes</div>
-                <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary);">{{ latest.motorcycle_count }}</div>
-            </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: var(--radius-sm);">
-                <div style="color: var(--text-muted); font-size: 0.75rem;">🚌 Buses</div>
-                <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary);">{{ latest.bus_count }}</div>
-            </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: var(--radius-sm);">
-                <div style="color: var(--text-muted); font-size: 0.75rem;">🚛 Trucks</div>
-                <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary);">{{ latest.truck_count }}</div>
-            </div>
+        <div style="flex-shrink: 0;">
+            {% campus_3d_visual 'traffic' 150 100 %}
         </div>
     </div>
-    {% else %}
-    <div class="card" style="display: flex; align-items: center; justify-content: center; text-align: center; color: var(--text-muted);">
-        No traffic observations logged yet. Upload an image to start detection.
-    </div>
-    {% endif %}
-</div>
 
-<!-- History Table -->
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">📜 Gate Vehicle Observation History</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; margin-bottom: 2.5rem;">
+        <!-- Surveillance Upload Form -->
+        <div class="card-light">
+            <div class="card-header-clean">
+                <h3 class="card-title-clean">🔍 Analyze Camera Feed</h3>
+                <span class="ai-badge ai-prediction">Edge Vision</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                Upload an image from gate surveillance cameras to estimate vehicle counts and congestion levels.
+            </p>
+
+            <form method="POST" action="{% url 'traffic:analyze' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div style="margin-bottom: 1rem;">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
+                        Surveillance Zone / Gate
+                    </label>
+                    <input type="text" name="location_name" class="form-select-light" value="Campus Main Gate (North)" style="width:100%;" required>
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
+                        Traffic Snapshot Image
+                    </label>
+                    <input type="file" name="image" accept="image/*" class="form-select-light" style="width:100%;" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <span>Run Vehicle Vision Detection</span>
+                    <span>➔</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Latest Gate Surveillance Telemetry -->
+        <div class="card-light">
+            <div class="card-header-clean">
+                <h3 class="card-title-clean">⚡ Latest Surveillance Telemetry</h3>
+                <span class="ai-badge ai-confidence">Live Feed Active</span>
+            </div>
+
+            {% if latest %}
+            <div class="kpi-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 1.25rem;">
+                <div class="kpi-card-light">
+                    <span class="kpi-title">Detected Vehicles</span>
+                    <div class="kpi-value">{{ latest.total_vehicles }}</div>
+                    <span class="kpi-trend positive">{{ latest.location_name }}</span>
+                </div>
+                <div class="kpi-card-light">
+                    <span class="kpi-title">Model Confidence</span>
+                    <div class="kpi-value" style="color:var(--success);">{{ latest.confidence|floatformat:2 }}</div>
+                    <span class="kpi-trend positive">CPU Vision Heuristics</span>
+                </div>
+            </div>
+
+            <div style="padding: 1rem; background: var(--bg-surface-subtle); border-radius: var(--radius-md); border: 1px solid var(--border-light); font-size: 0.85rem; line-height: 1.6;">
+                <div>🚗 <strong>Cars:</strong> {{ latest.cars_count }}</div>
+                <div>🛵 <strong>Two-Wheelers:</strong> {{ latest.two_wheelers_count }}</div>
+                <div>🚌 <strong>Heavy Transits / Buses:</strong> {{ latest.buses_count }}</div>
+                <div style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.78rem;">
+                    Timestamp: {{ latest.timestamp|date:"M d, Y · H:i:s" }}
+                </div>
+            </div>
+            {% else %}
+            <div style="text-align:center; padding:3rem 1rem; color:var(--text-muted);">
+                {% campus_3d_visual 'traffic' 80 60 %}
+                <p style="font-weight:600; margin-top:1rem;">No gate snapshots analyzed yet.</p>
+            </div>
+            {% endif %}
+        </div>
     </div>
-    <div class="table-container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Gate Location</th>
-                    <th>Total Count</th>
-                    <th>Class Breakdown</th>
-                    <th>Congestion Level</th>
-                    <th>Confidence</th>
-                    <th>Timestamp</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for obs in recent_observations %}
-                <tr>
-                    <td><b>{{ obs.location_name }}</b></td>
-                    <td><b>{{ obs.total_vehicles }}</b></td>
-                    <td style="font-size: 0.8rem; color: var(--text-secondary);">
-                        {{ obs.car_count }} Cars &bull; {{ obs.motorcycle_count }} Bikes &bull; {{ obs.bus_count }} Buses &bull; {{ obs.truck_count }} Trucks
-                    </td>
-                    <td>
-                        <span class="badge badge-{% if obs.congestion_level == 'CLEAR' %}low{% elif obs.congestion_level == 'MODERATE' %}medium{% else %}high{% endif %}">
-                            {{ obs.get_congestion_level_display }}
-                        </span>
-                    </td>
-                    <td>{{ obs.confidence|floatformat:2 }}</td>
-                    <td>{{ obs.timestamp|date:"M d, H:i" }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No historical observations.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+
 </div>
 {% endblock %}

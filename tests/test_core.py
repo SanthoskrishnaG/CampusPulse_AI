@@ -118,3 +118,41 @@ class CampusPulseCorePlatformTests(TestCase):
 
         admin_response = CampusAIAssistant.answer_query("How many high risk students in CSE?", self.admin_user)
         self.assertIn("Academic Risk Summary", admin_response)
+
+    def test_all_redesigned_pages_render(self):
+        """Verifies that all redesigned templates render HTTP 200 with new Light 3D assets."""
+        # Unauthenticated home page
+        self.client.logout()
+        res_home = self.client.get(reverse('common:home'))
+        self.assertEqual(res_home.status_code, 200)
+        self.assertContains(res_home, "CampusPulse", status_code=200)
+
+        # Authenticated routes
+        self.client.force_login(self.admin_user)
+        routes = [
+            'common:map',
+            'events:list',
+            'clubs:list',
+            'complaints:list',
+            'transport:dashboard',
+            'parking:dashboard',
+            'canteen:dashboard',
+            'energy:dashboard',
+            'waste:dashboard',
+            'traffic:dashboard',
+            'ai_assistant:chat',
+            'analytics:dashboard',
+            'analytics:model_registry',
+            'students:list',
+            'departments:list',
+            'faculty:list',
+            'projects:list',
+            'recommendations:hub',
+        ]
+        for r in routes:
+            url = reverse(r)
+            res = self.client.get(url)
+            self.assertEqual(res.status_code, 200, f"Failed to render {r} ({url})")
+            self.assertContains(res, "CampusPulse", status_code=200)
+
+

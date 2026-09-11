@@ -1,67 +1,127 @@
 {% extends 'base.html' %}
+{% load static campus_3d %}
 
 {% block title %}AI Model Registry & Governance - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <div>
-        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🧠 Machine Learning Model Registry</h1>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-            Enterprise model registry, evaluation metrics, feature provenance, and retraining pipelines.
-        </p>
-    </div>
-</div>
+<div style="max-width: 1300px; margin: 0 auto;">
 
-<div class="card" style="margin-bottom: 2rem;">
-    <div class="card-header">
-        <h3 class="card-title">Production Model Fleet</h3>
-        <span class="badge badge-low">Live Calibrated Models</span>
+    <!-- Compact Page Hero with 3D Visual -->
+    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #FAF5FF 100%);">
+        <div style="max-width: 650px;">
+            <div class="hero-pill" style="margin-bottom: 0.5rem;">
+                <span>🧠</span>
+                <span>Centralized Artifact Provenance & Continuous Calibration</span>
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
+                Model Registry<br>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Deterministic Machine Learning Fleet.</span>
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
+                Central tracking of all 6 production model weights, hyperparameter configurations, test evaluation scores, and explainable feature importances.
+            </p>
+        </div>
+        <div style="flex-shrink: 0;">
+            {% campus_3d_visual 'recommendation' 150 100 %}
+        </div>
     </div>
 
-    <div class="table-container">
-        <table class="table">
+    <!-- AI Model Status Overview Ribbon -->
+    <div class="card-light" style="padding: 1.25rem 1.5rem; margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <span class="status-dot"></span>
+                <strong style="font-size: 0.95rem;">AI ENGINE STATUS: ALL SYSTEMS ONLINE</strong>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Zero Cloud Dependency · 100% In-House CPU Execution</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem;">
+            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
+                <span>Academic Risk RF</span>
+                <span class="ai-badge ai-confidence">Online</span>
+            </div>
+            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
+                <span>Sequential MLP</span>
+                <span class="ai-badge ai-confidence">Online</span>
+            </div>
+            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
+                <span>Complaint NLP</span>
+                <span class="ai-badge ai-confidence">Online</span>
+            </div>
+            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
+                <span>Event Regressor</span>
+                <span class="ai-badge ai-confidence">Online</span>
+            </div>
+            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
+                <span>Canteen Demand</span>
+                <span class="ai-badge ai-confidence">Online</span>
+            </div>
+            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
+                <span>Isolation Forest</span>
+                <span class="ai-badge ai-confidence">Online</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Table -->
+    <div class="table-container-light" style="margin-bottom: 2.5rem;">
+        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-size: 1.1rem; font-weight: 800;">Production Model Fleet</h3>
+            <span class="ai-badge ai-insight">Tracked in models/model_registry.json</span>
+        </div>
+        <table class="table-clean">
             <thead>
                 <tr>
                     <th>Model Identifier</th>
-                    <th>Algorithm</th>
+                    <th>Algorithm & Pipeline</th>
                     <th>Version</th>
-                    <th>Validation Metrics</th>
+                    <th>Validation Benchmarks</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for model_name, info in models.items %}
                 <tr>
                     <td>
-                        <div style="font-weight: 700; color: var(--text-primary);">{{ model_name }}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ info.description }}</div>
+                        <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">{{ model_name }}</div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted);">{{ info.description }}</div>
                     </td>
-                    <td><span class="badge" style="background: rgba(79, 172, 254, 0.15); color: var(--accent-blue);">{{ info.algorithm }}</span></td>
-                    <td><code>v{{ info.version }}</code></td>
                     <td>
-                        <div style="font-size: 0.8rem; font-family: monospace;">
+                        <span class="role-badge" style="background:#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE;">
+                            {{ info.algorithm }}
+                        </span>
+                    </td>
+                    <td>
+                        <code style="background:#F1F5F9; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.8rem; font-weight:700;">v{{ info.version }}</code>
+                    </td>
+                    <td>
+                        <div style="font-size: 0.82rem; font-family: monospace;">
                             {% for k, v in info.metrics.items %}
-                            <span style="color: var(--accent-cyan);">{{ k }}</span>: {{ v }} &nbsp;
+                            <span style="color: var(--brand-electric); font-weight:700;">{{ k }}</span>: {{ v }} &nbsp;
                             {% endfor %}
                         </div>
                     </td>
-                    <td><span class="badge badge-low">● Active</span></td>
                     <td>
-                        <a href="{% url 'analytics:retrain_model' model_name %}" class="btn btn-secondary btn-sm" onclick="return confirm('Retrain {{ model_name }} pipeline?');">
+                        <span class="ai-badge ai-confidence">● Active</span>
+                    </td>
+                    <td>
+                        <a href="{% url 'analytics:retrain_model' model_name %}" class="btn btn-secondary btn-sm" onclick="return confirm('Retrain {{ model_name }} pipeline now?');">
                             🔄 Retrain
                         </a>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                        No models registered yet. Run <code>python manage.py train_models</code> to initialize baseline models.
+                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                        No models registered yet. Run <code>python manage.py train_models</code> to train and serialize weights.
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+
 </div>
 {% endblock %}

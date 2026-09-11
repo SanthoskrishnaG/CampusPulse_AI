@@ -111,3 +111,125 @@ def audit_log_view(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'common/audit_logs.html', {'page_obj': page_obj, 'q': q})
+
+def global_search_api(request):
+    """
+    Fast, categorized global campus search endpoint (Ctrl+K).
+    Searches Students, Events, Departments, Clubs, Complaints, Buses, and Campus Locations.
+    """
+    query = request.GET.get('q', '').strip()
+    if not query or len(query) < 2:
+        return JsonResponse({'results': []})
+
+    results = []
+
+    # 1. Students
+    try:
+        from apps.students.models import Student
+        students = Student.objects.filter(
+            roll_number__icontains=query
+        ).select_related('user', 'department')[:5]
+        for s in students:
+            results.append({
+                'category': 'Students',
+                'title': f"{s.user.get_full_name() or s.user.username} ({s.roll_number})",
+                'subtitle': f"{s.department.name if s.department else 'General'} · Sem {s.current_semester}",
+                'url': f"/students/{s.id}/",
+                'badge': '🎓 Student'
+            })
+    except Exception:
+        pass
+
+    # 2. Events
+    try:
+        from apps.events.models import Event
+        events = Event.objects.filter(title__icontains=query)[:5]
+        for e in events:
+            results.append({
+                'category': 'Events',
+                'title': e.title,
+                'subtitle': f"{e.get_category_display()} · {e.start_time.strftime('%b %d, %H:%M')}",
+                'url': f"/events/{e.id}/",
+                'badge': '📅 Event'
+            })
+    except Exception:
+        pass
+
+    # 3. Departments
+    try:
+        from apps.departments.models import Department
+        depts = Department.objects.filter(name__icontains=query)[:4]
+        for d in depts:
+            results.append({
+                'category': 'Departments',
+                'title': f"{d.name} ({d.code})",
+                'subtitle': f"Block: {d.building_block} · HOD: {d.hod_name or 'Assigned'}",
+                'url': f"/departments/{d.id}/",
+                'badge': '🏛️ Department'
+            })
+    except Exception:
+        pass
+
+    # 4. Clubs
+    try:
+        from apps.clubs.models import Club
+        clubs = Club.objects.filter(name__icontains=query)[:4]
+        for c in clubs:
+            results.append({
+                'category': 'Clubs',
+                'title': c.name,
+                'subtitle': f"{c.get_category_display()} · {c.members_count} Members",
+                'url': f"/clubs/{c.id}/",
+                'badge': '✨ Club'
+            })
+    except Exception:
+        pass
+
+    # 5. Complaints
+    try:
+        from apps.complaints.models import Complaint
+        complaints = Complaint.objects.filter(
+            ticket_number__icontains=query
+        ) | Complaint.objects.filter(title__icontains=query)[:4]
+        for cp in complaints[:4]:
+            results.append({
+                'category': 'Complaints',
+                'title': f"{cp.ticket_number}: {cp.title[:35]}",
+                'subtitle': f"Category: {cp.nlp_predicted_category or cp.category} · Priority: {cp.priority}",
+                'url': f"/complaints/{cp.id}/",
+                'badge': '🛠️ Ticket'
+            })
+    except Exception:
+        pass
+
+    # 6. Transport / Buses
+    try:
+        from apps.transport.models import Bus
+        buses = Bus.objects.filter(bus_number__icontains=query)[:3]
+        for b in buses:
+            results.append({
+                'category': 'Transport',
+                'title': f"Bus {b.bus_number}",
+                'subtitle': f"Route: {b.route.route_name if b.route else 'Campus Shuttle'}",
+                'url': "/transport/",
+                'badge': '🚌 Bus'
+            })
+    except Exception:
+        pass
+
+    # 7. Campus Locations / Buildings
+    try:
+        locations = CampusLocation.objects.filter(name__icontains=query)[:4]
+        for loc in locations:
+            results.append({
+                'category': 'Campus Map',
+                'title': f"{loc.name} ({loc.code})",
+                'subtitle': f"Category: {loc.get_category_display()} · Capacity: {loc.capacity}",
+                'url': f"/map/?lat={loc.latitude}&lng={loc.longitude}",
+                'badge': '📍 Location'
+            })
+    except Exception:
+        pass
+
+    return JsonResponse({'results': results})
+

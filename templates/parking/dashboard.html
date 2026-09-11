@@ -1,91 +1,149 @@
 {% extends 'base.html' %}
+{% load static campus_3d %}
 
 {% block title %}Smart Parking Intelligence - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-    <div>
-        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🚗 Smart Campus Parking Intelligence</h1>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-            Real-time bay occupancy telemetry, interactive slot allocation, and peak hour overflow forecasts.
-        </p>
+<div style="max-width: 1300px; margin: 0 auto;">
+
+    <!-- Compact Page Hero with 3D Visual -->
+    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #F1F5F9 100%);">
+        <div style="max-width: 650px;">
+            <div class="hero-pill" style="margin-bottom: 0.5rem;">
+                <span>🚗</span>
+                <span>Smart Bay Telemetry & Vacancy Allocation</span>
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
+                Smart Parking<br>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Know where to park before you arrive.</span>
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
+                Real-time bay occupancy grid across 220 parking bays, peak hour overflow forecasting, and instant AJAX sensor simulation.
+            </p>
+        </div>
+        <div style="flex-shrink: 0;">
+            {% campus_3d_visual 'parking' 150 100 %}
+        </div>
     </div>
 
-    <!-- Parking Lot Switcher -->
-    <div>
-        <select onchange="window.location.href='?lot=' + this.value;" class="form-select" style="min-width: 220px;">
-            {% for l in lots %}
-            <option value="{{ l.code }}" {% if current_lot.code == l.code %}selected{% endif %}>{{ l.name }} ({{ l.available_count }} free)</option>
+    <!-- Parking Lot Selection Bar -->
+    <div class="card-light" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">ACTIVE LOT:</span>
+            <select onchange="window.location.href='?lot=' + this.value;" class="form-select-light" style="min-width: 240px;">
+                {% for l in lots %}
+                <option value="{{ l.code }}" {% if current_lot.code == l.code %}selected{% endif %}>{{ l.name }} ({{ l.available_count }} available)</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span class="live-pill"><span class="pulse-dot"></span> LIVE SENSOR GRID</span>
+            <span class="ai-badge ai-prediction">Occupancy Forecaster Online</span>
+        </div>
+    </div>
+
+    {% if current_lot %}
+    <!-- Lot KPI Metrics -->
+    <div class="kpi-grid">
+        <div class="kpi-card-light">
+            <div class="kpi-header">
+                <span class="kpi-title">Total Capacity</span>
+                <div class="kpi-icon-wrap">🅿️</div>
+            </div>
+            <div class="kpi-value">{{ current_lot.total_slots }}</div>
+            <div class="kpi-trend neutral">
+                <span>{{ current_lot.name }}</span>
+            </div>
+        </div>
+
+        <div class="kpi-card-light">
+            <div class="kpi-header">
+                <span class="kpi-title">Occupied Bays</span>
+                <div class="kpi-icon-wrap" style="color:var(--danger); background:#FEF2F2;">🚗</div>
+            </div>
+            <div class="kpi-value" style="color:var(--danger);" id="occupiedCount">{{ current_lot.occupied_count }}</div>
+            <div class="kpi-trend negative">
+                <span>Active Sensor Signals</span>
+            </div>
+        </div>
+
+        <div class="kpi-card-light">
+            <div class="kpi-header">
+                <span class="kpi-title">Vacant Available</span>
+                <div class="kpi-icon-wrap" style="color:var(--success); background:#F0FDF4;">🟢</div>
+            </div>
+            <div class="kpi-value" style="color:var(--success);" id="availableCount">{{ current_lot.available_count }}</div>
+            <div class="kpi-trend positive">
+                <span>Immediate Entry Permitted</span>
+            </div>
+        </div>
+
+        <div class="kpi-card-light">
+            <div class="kpi-header">
+                <span class="kpi-title">Utilization Rate</span>
+                <div class="kpi-icon-wrap" style="color:var(--brand-electric); background:#F0F9FF;">⚡</div>
+            </div>
+            <div class="kpi-value" style="color:var(--brand-electric);" id="occupancyPct">{{ current_lot.occupancy_percentage }}%</div>
+            <div class="kpi-trend neutral">
+                <span>{{ peak_status|default:'Normal Flow' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Demand Forecast Ribbon -->
+    <div class="card-light" style="padding: 1.1rem 1.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 100%);">
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+            <div style="font-size: 1.5rem;">🤖</div>
+            <div style="font-size: 0.88rem; color: var(--text-primary); line-height: 1.5;">
+                <strong>AI Parking Demand Forecast:</strong> {{ predicted_trend|default:'Moderate parking pressure expected during 1:00 PM - 2:30 PM lunch break.' }}
+                Recommended overflow bay: <strong style="color: var(--brand-electric);">East Academic Complex</strong>.
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Parking Bay Visualizer -->
+    <div class="card-light" style="margin-bottom: 2.5rem;">
+        <div class="card-header-clean">
+            <div>
+                <h3 class="card-title-clean">🅿️ Visual Bay Grid ({{ current_lot.name }})</h3>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">Click any parking bay to simulate vehicle arrival / departure</span>
+            </div>
+
+            <div style="display: flex; gap: 1rem; font-size: 0.82rem;">
+                <span style="display: flex; align-items: center; gap: 0.35rem;">
+                    <span style="width: 12px; height: 12px; background: #22C55E; border-radius: 3px;"></span>
+                    <span>Available</span>
+                </span>
+                <span style="display: flex; align-items: center; gap: 0.35rem;">
+                    <span style="width: 12px; height: 12px; background: #EF4444; border-radius: 3px;"></span>
+                    <span>Occupied</span>
+                </span>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 0.85rem; padding: 1rem 0;">
+            {% for slot in slots %}
+            <div onclick="toggleSlot({{ slot.id }}, this);"
+                 id="slot-{{ slot.id }}"
+                 style="background: {% if slot.is_occupied %}#FEF2F2{% else %}#F0FDF4{% endif %};
+                        border: 1px solid {% if slot.is_occupied %}#FECACA{% else %}#BBF7D0{% endif %};
+                        border-radius: var(--radius-md); padding: 0.85rem 0.5rem; text-align: center; cursor: pointer; transition: var(--transition-fast);"
+                 title="Click to toggle slot state">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary);">{{ slot.slot_number }}</div>
+                <div style="font-size: 1.25rem; margin: 0.25rem 0;">
+                    {% if slot.is_occupied %}🚗{% else %}🟢{% endif %}
+                </div>
+                <div style="font-size: 0.68rem; color: {% if slot.is_occupied %}var(--danger){% else %}var(--success){% endif %}; font-weight: 700;">
+                    {% if slot.is_occupied %}OCCUPIED{% else %}FREE{% endif %}
+                </div>
+            </div>
             {% endfor %}
-        </select>
-    </div>
-</div>
-
-{% if current_lot %}
-<!-- Lot Metrics -->
-<div class="metric-grid">
-    <div class="metric-card">
-        <div class="metric-label">Total Capacity</div>
-        <div class="metric-value">{{ current_lot.total_slots }}</div>
-        <div class="metric-sub">{{ current_lot.name }}</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-label">Occupied Bays</div>
-        <div class="metric-value" style="color: var(--accent-amber);">{{ current_lot.occupied_count }}</div>
-        <div class="metric-sub">Active Parking Sensors</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-label">Vacant Available</div>
-        <div class="metric-value" style="color: var(--accent-emerald);">{{ current_lot.available_count }}</div>
-        <div class="metric-sub">Immediate Entry Permitted</div>
-    </div>
-    <div class="metric-card">
-        <div class="metric-label">Utilization Rate</div>
-        <div class="metric-value" style="color: var(--accent-cyan);">{{ current_lot.occupancy_percentage }}%</div>
-        <div class="metric-sub">{{ peak_status }}</div>
-    </div>
-</div>
-
-<!-- Demand Forecast Ribbon -->
-<div class="card" style="padding: 1rem 1.5rem; margin-bottom: 1.5rem; background: rgba(0, 242, 254, 0.05); border: 1px solid var(--border-glow);">
-    <div style="display: flex; align-items: center; gap: 0.75rem;">
-        <span style="font-size: 1.5rem;">🤖</span>
-        <div style="font-size: 0.85rem; color: var(--text-primary);">
-            <b>AI Parking Demand Forecast:</b> {{ predicted_trend }}. Recommended alternative lot during peaks: <b>PKG-AUDITORIUM (South Bay)</b>.
         </div>
     </div>
-</div>
+    {% endif %}
 
-<!-- Interactive Parking Bay Visualizer -->
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">🅿️ Visual Bay Grid ({{ current_lot.name }})</h3>
-        <div style="display: flex; gap: 1rem; font-size: 0.8rem;">
-            <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width:10px; height:10px; background:#10b981; border-radius:2px;"></span> Available</span>
-            <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width:10px; height:10px; background:#ef4444; border-radius:2px;"></span> Occupied</span>
-            <span style="color: var(--text-muted);">(Click any slot to simulate vehicle entry/exit)</span>
-        </div>
-    </div>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.75rem; padding: 1rem 0;">
-        {% for slot in slots %}
-        <div onclick="toggleSlot({{ slot.id }}, this);"
-             id="slot-{{ slot.id }}"
-             style="background: {% if slot.is_occupied %}rgba(239, 68, 68, 0.18){% else %}rgba(16, 185, 129, 0.18){% endif %};
-                    border: 1px solid {% if slot.is_occupied %}rgba(239, 68, 68, 0.4){% else %}rgba(16, 185, 129, 0.4){% endif %};
-                    border-radius: var(--radius-sm); padding: 0.75rem 0.5rem; text-align: center; cursor: pointer; transition: var(--transition);">
-            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary);">{{ slot.slot_number }}</div>
-            <div style="font-size: 1.1rem; margin: 0.2rem 0;">
-                {% if slot.is_occupied %}🚗{% else %}🟢{% endif %}
-            </div>
-            <div style="font-size: 0.65rem; color: {% if slot.is_occupied %}var(--accent-rose){% else %}var(--accent-emerald){% endif %}; font-weight: 700;">
-                {% if slot.is_occupied %}BUSY{% else %}FREE{% endif %}
-            </div>
-        </div>
-        {% endfor %}
-    </div>
 </div>
-{% endif %}
 {% endblock %}
 
 {% block scripts %}
@@ -98,18 +156,21 @@ async function toggleSlot(slotId, element) {
         });
         const data = await resp.json();
         if (data.status === 'ok') {
-            if (data.is_occupied) {
-                element.style.background = 'rgba(239, 68, 68, 0.18)';
-                element.style.borderColor = 'rgba(239, 68, 68, 0.4)';
-                element.children[1].innerText = '🚗';
-                element.children[2].innerText = 'BUSY';
-                element.children[2].style.color = 'var(--accent-rose)';
-            } else {
-                element.style.background = 'rgba(16, 185, 129, 0.18)';
-                element.style.borderColor = 'rgba(16, 185, 129, 0.4)';
-                element.children[1].innerText = '🟢';
-                element.children[2].innerText = 'FREE';
-                element.children[2].style.color = 'var(--accent-emerald)';
+            const isOcc = data.slot.is_occupied;
+            element.style.background = isOcc ? '#FEF2F2' : '#F0FDF4';
+            element.style.borderColor = isOcc ? '#FECACA' : '#BBF7D0';
+            element.querySelector('div:nth-child(2)').innerText = isOcc ? '🚗' : '🟢';
+            const label = element.querySelector('div:nth-child(3)');
+            label.innerText = isOcc ? 'OCCUPIED' : 'FREE';
+            label.style.color = isOcc ? 'var(--danger)' : 'var(--success)';
+
+            if (data.lot) {
+                const occEl = document.getElementById('occupiedCount');
+                const avlEl = document.getElementById('availableCount');
+                const pctEl = document.getElementById('occupancyPct');
+                if (occEl) occEl.innerText = data.lot.occupied;
+                if (avlEl) avlEl.innerText = data.lot.available;
+                if (pctEl) pctEl.innerText = data.lot.occupancy_pct + '%';
             }
         }
     } catch (err) {

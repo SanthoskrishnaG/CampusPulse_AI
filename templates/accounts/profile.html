@@ -1,44 +1,59 @@
 {% extends 'base.html' %}
+{% load static campus_3d %}
 
 {% block title %}User Profile - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 680px; margin: 1rem auto;">
-    <div class="card">
-        <div class="card-header">
-            <h2 class="card-title">👤 User Account Profile</h2>
+<div style="max-width: 720px; margin: 1.5rem auto;">
+    <div class="card-light" style="padding: 2.5rem;">
+        <div class="card-header-clean">
+            <div style="display:flex; align-items:center; gap:0.85rem;">
+                <div class="user-avatar-circle" style="width:48px; height:48px; font-size:1.2rem;">
+                    {{ user.first_name|default:user.username|slice:":1"|upper }}
+                </div>
+                <div>
+                    <h2 class="card-title-clean">User Account Profile</h2>
+                    <span style="font-size:0.8rem; color:var(--text-muted);">Manage your personal details and university credentials</span>
+                </div>
+            </div>
             <span class="role-badge role-{{ user.role }}">{{ user.get_role_display }}</span>
         </div>
 
         <form method="POST">
             {% csrf_token %}
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="form-group">
-                    <label class="form-label">First Name</label>
-                    {{ form.first_name }}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+                <div>
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
+                        First Name
+                    </label>
+                    <input type="text" name="first_name" class="form-select-light" value="{{ user.first_name }}" style="width:100%; padding:0.65rem 0.95rem;">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Last Name</label>
-                    {{ form.last_name }}
+                <div>
+                    <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
+                        Last Name
+                    </label>
+                    <input type="text" name="last_name" class="form-select-light" value="{{ user.last_name }}" style="width:100%; padding:0.65rem 0.95rem;">
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Email Address</label>
-                {{ form.email }}
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
+                    Email Address
+                </label>
+                <input type="email" name="email" class="form-select-light" value="{{ user.email }}" style="width:100%; padding:0.65rem 0.95rem;">
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Contact Phone</label>
-                {{ form.phone }}
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
+                    University Department
+                </label>
+                <input type="text" class="form-select-light" value="{{ user.department.name|default:'General Campus' }}" style="width:100%; padding:0.65rem 0.95rem; background:#F8FAFC;" readonly>
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Biography / Institutional Notes</label>
-                {{ form.bio }}
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Profile Updates</button>
+            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">
+                <span>Save Profile Updates</span>
+                <span>➔</span>
+            </button>
         </form>
     </div>
 </div>

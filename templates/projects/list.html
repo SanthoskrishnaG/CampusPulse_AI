@@ -1,45 +1,72 @@
 {% extends 'base.html' %}
+{% load static campus_3d %}
 
 {% block title %}Capstone Projects & Innovation Teams - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
-    <div>
-        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🚀 Capstone Projects & Teams</h1>
-        <p style="color: var(--text-secondary); font-size: 0.95rem;">
-            Interdisciplinary research projects, hackathon initiatives, and AI-driven complementary team composition.
-        </p>
-    </div>
-    <a href="{% url 'projects:create' %}" class="btn btn-primary">+ Announce New Project</a>
-</div>
+<div style="max-width: 1300px; margin: 0 auto;">
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
-    {% for proj in projects %}
-    <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); font-weight: 700;">
-                {{ proj.department.code }}
-            </span>
-            <span class="badge badge-low">{{ proj.get_status_display }}</span>
+    <!-- Compact Page Hero with 3D Visual -->
+    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 60%, #ECFDF5 100%);">
+        <div style="max-width: 650px;">
+            <div class="hero-pill" style="margin-bottom: 0.5rem;">
+                <span>🚀</span>
+                <span>Interdisciplinary Innovation & Team Composition</span>
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
+                Projects & Teams<br>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Complementary Skill Collaboration.</span>
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
+                AI-assisted teammate recommendations assembling balanced squads across engineering, UI/UX design, data science, and domain leadership.
+            </p>
         </div>
-
-        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">
-            <a href="{% url 'projects:detail' proj.pk %}" style="color: var(--text-primary);">{{ proj.title }}</a>
-        </h3>
-
-        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-            {{ proj.description }}
-        </p>
-
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-            <div><b>Lead:</b> {{ proj.creator.get_display_name }} ({{ proj.creator.department.code }})</div>
-            <div><b>Skills Required:</b> {{ proj.required_skills }}</div>
+        <div style="flex-shrink: 0;">
+            {% campus_3d_visual 'projects' 150 100 %}
         </div>
-
-        <a href="{% url 'projects:detail' proj.pk %}" class="btn btn-secondary btn-sm" style="width: 100%;">View Team & AI Recommendations ➔</a>
     </div>
-    {% empty %}
-    <p style="color: var(--text-muted); padding: 2rem;">No active projects found. Be the first to announce one!</p>
-    {% endfor %}
+
+    <!-- Top Action Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.35rem; font-weight: 800;">Active Campus Initiatives</h3>
+        <a href="{% url 'projects:create' %}" class="btn btn-primary btn-sm">+ Announce New Project</a>
+    </div>
+
+    <!-- Projects Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        {% for proj in projects %}
+        <div class="card-light" style="display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <span class="role-badge" style="background:#F0FDF4; color:#15803D; border:1px solid #BBF7D0;">
+                    {{ proj.department.code|default:"CAMPUS" }}
+                </span>
+                <span class="ai-badge ai-confidence">{{ proj.get_status_display }}</span>
+            </div>
+
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.4rem;">
+                <a href="{% url 'projects:detail' proj.pk %}" style="color: var(--text-primary);">{{ proj.title }}</a>
+            </h3>
+
+            <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5; flex: 1;">
+                {{ proj.description|truncatewords:22 }}
+            </p>
+
+            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 1.25rem; background: var(--bg-surface-subtle); padding: 0.85rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); line-height: 1.5;">
+                <div><strong>Lead:</strong> {{ proj.creator.get_display_name }}</div>
+                <div style="margin-top: 0.25rem;"><strong>Required Skills:</strong> {{ proj.required_skills }}</div>
+            </div>
+
+            <a href="{% url 'projects:detail' proj.pk %}" class="btn btn-secondary btn-sm" style="width: 100%;">
+                View Team & AI Recommendations ➔
+            </a>
+        </div>
+        {% empty %}
+        <div class="card-light" style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem;">
+            {% campus_3d_visual 'projects' 80 60 %}
+            <p style="font-weight: 600; margin-top: 1rem;">No active projects announced yet. Be the first to initiate one!</p>
+        </div>
+        {% endfor %}
+    </div>
+
 </div>
 {% endblock %}
