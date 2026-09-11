@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Ticket CMP-{{ complaint.id|stringformat:"04d" }} - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.5rem;">
+            CMP-{{ complaint.id|stringformat:"04d" }}
+        </span>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">{{ complaint.title }}</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Submitted by {{ complaint.user.get_full_name|default:complaint.user.username }} on {{ complaint.created_at|date:"M d, Y - h:i A" }}
+        </p>
+    </div>
+    <a href="{% url 'complaints:list' %}" class="btn btn-secondary">« Back to List</a>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Main Details -->
+    <div>
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <h3 class="card-title" style="margin-bottom: 0.75rem;">Complaint Description</h3>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
+                {{ complaint.description }}
+            </p>
+
+            {% if complaint.resolution_notes %}
+            <div style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--accent-emerald); border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+                <div style="font-weight: 700; color: var(--accent-emerald); font-size: 0.9rem; margin-bottom: 0.25rem;">Resolution Notes:</div>
+                <div style="font-size: 0.85rem; color: var(--text-primary);">{{ complaint.resolution_notes }}</div>
+            </div>
+            {% endif %}
+
+            <!-- AI Extraction Matrix -->
+            <div style="border-top: 1px solid var(--border-subtle); padding-top: 1.25rem;">
+                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    🤖 AI Auto-Triage Diagnostics
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <div>🏷️ <b>Predicted Category:</b> {{ complaint.get_category_display }}</div>
+                    <div>⚡ <b>Priority Rating:</b> <span class="badge badge-{% if complaint.priority == 'URGENT' %}high{% elif complaint.priority == 'HIGH' %}medium{% else %}low{% endif %}">{{ complaint.get_priority_display }}</span></div>
+                    <div>🏢 <b>Target Division:</b> {{ complaint.target_department }}</div>
+                    <div>📍 <b>Extracted Location:</b> {{ complaint.location_extracted|default:"Campus Premises" }}</div>
+                    <div>🎯 <b>Model Confidence:</b> {{ complaint.confidence|floatformat:2 }}</div>
+                    <div>⏱️ <b>Enforced SLA:</b> {{ complaint.sla_hours }} Hours Max</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status History Timeline -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">📜 Workflow & Audit Timeline</h3>
+            </div>
+            {% for h in history %}
+            <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; gap: 1rem;">
+                <div style="font-size: 0.75rem; color: var(--text-muted); width: 120px;">{{ h.timestamp|date:"M d, H:i" }}</div>
+                <div style="flex: 1;">
+                    <span class="badge" style="background: rgba(255,255,255,0.06); font-size: 0.75rem;">{{ h.status }}</span>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary); margin-left: 0.5rem;">{{ h.comments }}</span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">({{ h.updated_by.username|default:"System" }})</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Administrative Action Panel -->
+    <div>
+        <div class="card" style="border: 1px solid var(--border-glow);">
+            <div class="card-header">
+                <h3 class="card-title">⚙️ Update Ticket Status</h3>
+            </div>
+
+            <form method="POST" action="{% url 'complaints:update_status' complaint.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label">Workflow Status</label>
+                    <select name="status" class="form-select">
+                        <option value="SUBMITTED" {% if complaint.status == 'SUBMITTED' %}selected{% endif %}>Submitted (AI Triaged)</option>
+                        <option value="ASSIGNED" {% if complaint.status == 'ASSIGNED' %}selected{% endif %}>Assigned to Field Staff</option>
+                        <option value="IN_PROGRESS" {% if complaint.status == 'IN_PROGRESS' %}selected{% endif %}>Work In Progress</option>
+                        <option value="RESOLVED" {% if complaint.status == 'RESOLVED' %}selected{% endif %}>Mark as Resolved</option>
+                        <option value="REJECTED" {% if complaint.status == 'REJECTED' %}selected{% endif %}>Close / Rejected</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Resolution Summary / Action Notes</label>
+                    <textarea name="notes" class="form-textarea" rows="3" placeholder="Describe actions taken or work completed..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm" style="width: 100%;">Update Status & Notify Student</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Campus Student Clubs - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">✨ Campus Student Clubs</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Technical societies, cultural troupes, athletics, and social entrepreneurship student organizations.
+        </p>
+    </div>
+    {% if user.is_authenticated and user.is_club_admin or user.is_super_admin %}
+    <a href="{% url 'clubs:dashboard' %}" class="btn btn-primary">Club Admin Portal ➔</a>
+    {% endif %}
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for club in clubs %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span class="badge" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); font-weight: 700;">
+                {{ club.get_category_display }}
+            </span>
+            <span class="badge" style="background: rgba(255,255,255,0.06); font-size: 0.75rem;">
+                👥 {{ club.member_count }} members
+            </span>
+        </div>
+
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">
+            <a href="{% url 'clubs:detail' club.code %}" style="color: var(--text-primary);">{{ club.name }}</a>
+        </h3>
+
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            {{ club.description }}
+        </p>
+
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            <b>Skills Developed:</b> {{ club.skills_developed }}
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="{% url 'clubs:detail' club.code %}" class="btn btn-secondary btn-sm" style="flex: 1;">Explore Activities</a>
+            <a href="{% url 'clubs:join' club.code %}" class="btn btn-primary btn-sm" style="flex: 1;">Join Club</a>
+        </div>
+    </div>
+    {% empty %}
+    <p style="color: var(--text-muted); padding: 2rem;">No clubs found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

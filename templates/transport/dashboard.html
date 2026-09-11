@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Smart Campus Transport - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🚌 Smart Campus Transport Fleet</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Real-time GPS vehicle tracking, route ETA calculations, passenger occupancy gauges, and arrival delay predictions.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'transport:routes' %}" class="btn btn-secondary">Route Catalog</a>
+    </div>
+</div>
+
+<!-- Map Card -->
+<div class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border-glow); margin-bottom: 2rem;">
+    <div id="transportMap" style="height: 480px; width: 100%; background: #0b0f19;"></div>
+</div>
+
+<!-- Live Bus Cards Grid -->
+<h3 style="font-size: 1.3rem; margin-bottom: 1rem;">🚌 Live Fleet Telemetry</h3>
+<div id="busCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for b in live_buses %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <div>
+                <span class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); font-weight: 700;">{{ b.route_code }}</span>
+                <h4 style="font-size: 1.15rem; font-weight: 700; margin-top: 0.2rem;">{{ b.bus_number }}</h4>
+            </div>
+            <span class="badge badge-{% if b.status == 'ON_TIME' %}low{% else %}medium{% endif %}">{{ b.status }}</span>
+        </div>
+
+        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">
+            <div>📍 <b>Approaching:</b> {{ b.next_stop }}</div>
+            <div>⏱️ <b>Estimated Arrival (ETA):</b> <b style="color: var(--accent-cyan);">{{ b.eta_mins }} mins</b></div>
+            <div>⚠️ <b>Predicted Delay:</b> {{ b.predicted_delay_mins }} mins</div>
+            <div>⚡ <b>Speed:</b> {{ b.speed_kmh }} km/h</div>
+        </div>
+
+        <!-- Occupancy Bar -->
+        <div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.3rem;">
+                <span>Passenger Load</span>
+                <span><b>{{ b.current_passengers }}/{{ b.capacity }} ({{ b.occupancy_pct }}%)</b></span>
+            </div>
+            <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
+                <div style="width: {{ b.occupancy_pct }}%; height: 100%; background: {% if b.occupancy_pct > 85 %}var(--accent-rose){% elif b.occupancy_pct > 65 %}var(--accent-amber){% else %}var(--accent-emerald){% endif %};"></div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p style="color: var(--text-muted); padding: 1.5rem;">Connecting to vehicle GPS stream...</p>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const defaultLat = {{ CAMPUS_LAT }};
+    const defaultLng = {{ CAMPUS_LNG }};
+
+    const map = L.map('transportMap').setView([defaultLat, defaultLng], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const busMarkers = {};
+
+    async function refreshTelemetry() {
+        try {
+            const resp = await fetch('{% url "transport:api_live_telemetry" %}');
+            const data = await resp.json();
+            
+            data.buses.forEach(b => {
+                const popupContent = `
+                    <div style="color:#0b0f19;">
+                        <h4 style="margin:0 0 4px;">${b.bus_number} (${b.route_code})</h4>
+                        <p style="margin:0; font-size:0.8rem;">Approaching: ${b.next_stop}</p>
+                        <p style="margin:0; font-size:0.8rem;">ETA: ${b.eta_mins} mins | Occupancy: ${b.occupancy_pct}%</p>
+                    </div>
+                `;
+
+                if (busMarkers[b.bus_id]) {
+                    busMarkers[b.bus_id].setLatLng([b.latitude, b.longitude]);
+                    busMarkers[b.bus_id].setPopupContent(popupContent);
+                } else {
+                    const marker = L.marker([b.latitude, b.longitude]).addTo(map);
+                    marker.bindPopup(popupContent);
+                    busMarkers[b.bus_id] = marker;
+                }
+            });
+        } catch (err) {
+            console.error("Telemetry update error:", err);
+        }
+    }
+
+    // Refresh every 3 seconds for fluid moving simulation
+    setInterval(refreshTelemetry, 3000);
+    refreshTelemetry();
+});
+</script>
+{% endblock %}

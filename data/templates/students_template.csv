@@ -1,0 +1,6 @@
+student_id,department_code,first_name,last_name,semester,cgpa,attendance,skills,interests
+STU2026-001,CSE,Aarav,Patel,5,8.75,92.0,"Python, PyTorch, Django, Docker","Machine Learning, Computer Vision"
+STU2026-002,IT,Diya,Nair,5,7.90,84.5,"JavaScript, React, Node.js, SQL","Full Stack Development, Web3"
+STU2026-003,ECE,Kavya,Iyer,5,6.40,68.0,"Embedded C, Arduino, VLSI, MATLAB","IoT, Robotics"
+STU2026-004,AIDS,Siddharth,Rao,5,5.80,62.5,"Python, Pandas, NumPy, SQL","Data Analytics, NLP"
+STU2026-005,MECH,Vikram,Singh,5,8.10,89.0,"SolidWorks, ANSYS, AutoCAD, C++","Robotics, CAD Modeling"

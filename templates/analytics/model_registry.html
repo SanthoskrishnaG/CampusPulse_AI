@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Model Registry & Governance - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🧠 Machine Learning Model Registry</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Enterprise model registry, evaluation metrics, feature provenance, and retraining pipelines.
+        </p>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <h3 class="card-title">Production Model Fleet</h3>
+        <span class="badge badge-low">Live Calibrated Models</span>
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Model Identifier</th>
+                    <th>Algorithm</th>
+                    <th>Version</th>
+                    <th>Validation Metrics</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model_name, info in models.items %}
+                <tr>
+                    <td>
+                        <div style="font-weight: 700; color: var(--text-primary);">{{ model_name }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ info.description }}</div>
+                    </td>
+                    <td><span class="badge" style="background: rgba(79, 172, 254, 0.15); color: var(--accent-blue);">{{ info.algorithm }}</span></td>
+                    <td><code>v{{ info.version }}</code></td>
+                    <td>
+                        <div style="font-size: 0.8rem; font-family: monospace;">
+                            {% for k, v in info.metrics.items %}
+                            <span style="color: var(--accent-cyan);">{{ k }}</span>: {{ v }} &nbsp;
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td><span class="badge badge-low">● Active</span></td>
+                    <td>
+                        <a href="{% url 'analytics:retrain_model' model_name %}" class="btn btn-secondary btn-sm" onclick="return confirm('Retrain {{ model_name }} pipeline?');">
+                            🔄 Retrain
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        No models registered yet. Run <code>python manage.py train_models</code> to initialize baseline models.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

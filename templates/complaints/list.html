@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Campus Grievances & Complaints - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🛠️ Campus Complaint & Grievance AI</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Natural language complaint intake, AI automated categorization, priority ranking, and SLA tracking.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'complaints:submit' %}" class="btn btn-primary">+ Lodge Natural Language Complaint</a>
+        {% if user.is_authenticated and user.is_maintenance_or_facility or user.is_super_admin %}
+        <a href="{% url 'complaints:dashboard' %}" class="btn btn-secondary">Facilities Triage ➔</a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div class="card" style="padding: 1rem 1.5rem; margin-bottom: 1.5rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <select name="cat" class="form-select" style="width: auto; min-width: 180px;">
+            <option value="">All Complaint Categories</option>
+            {% for val, label in categories %}
+            <option value="{{ val }}" {% if selected_cat == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="status" class="form-select" style="width: auto; min-width: 160px;">
+            <option value="">All Statuses</option>
+            {% for val, label in statuses %}
+            <option value="{{ val }}" {% if selected_status == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+        {% if selected_cat or selected_status %}
+        <a href="{% url 'complaints:list' %}" class="btn btn-secondary btn-sm">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Complaints Table -->
+<div class="card">
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ticket ID & Title</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Routed Department</th>
+                    <th>Extracted Location</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in page_obj %}
+                <tr>
+                    <td>
+                        <a href="{% url 'complaints:detail' c.pk %}" style="font-weight: 700; color: var(--text-primary);">
+                            {{ c.title }}
+                        </a>
+                        <div style="font-size: 0.75rem; color: var(--accent-cyan); font-family: monospace;">CMP-{{ c.id|stringformat:"04d" }} &bull; {{ c.created_at|date:"M d, H:i" }}</div>
+                    </td>
+                    <td><span class="badge" style="background: rgba(0, 242, 254, 0.12); color: var(--accent-cyan);">{{ c.get_category_display }}</span></td>
+                    <td>
+                        <span class="badge badge-{% if c.priority == 'URGENT' %}high{% elif c.priority == 'HIGH' %}medium{% else %}low{% endif %}">
+                            {{ c.get_priority_display }}
+                        </span>
+                    </td>
+                    <td>{{ c.target_department }}</td>
+                    <td><span style="font-size: 0.8rem; color: var(--text-secondary);">📍 {{ c.location_extracted|default:"Campus Grounds" }}</span></td>
+                    <td>
+                        <span class="badge badge-{% if c.status == 'RESOLVED' %}low{% else %}medium{% endif %}">
+                            {{ c.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'complaints:detail' c.pk %}" class="btn btn-secondary btn-sm">View Ticket</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">No complaints found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.5rem;">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&cat={{ selected_cat|default:'' }}&status={{ selected_status|default:'' }}" class="btn btn-secondary btn-sm">« Prev</a>
+        {% endif %}
+        <span class="campus-pill">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&cat={{ selected_cat|default:'' }}&status={{ selected_status|default:'' }}" class="btn btn-secondary btn-sm">Next »</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

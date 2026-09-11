@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Department Dashboard - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🏛️ Department Operations Dashboard</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Academic risk breakdown, faculty allocations, and departmental tickets.
+        </p>
+    </div>
+    
+    <!-- Department Switcher -->
+    <div>
+        <select onchange="window.location.href='?dept=' + this.value;" class="form-select" style="min-width: 200px;">
+            {% for d in departments %}
+            <option value="{{ d.code }}" {% if current_dept.code == d.code %}selected{% endif %}>{{ d.name }} ({{ d.code }})</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+{% if current_dept %}
+<div class="metric-grid">
+    <div class="metric-card">
+        <div class="metric-label">Enrolled Students</div>
+        <div class="metric-value">{{ student_count }}</div>
+        <div class="metric-sub">{{ current_dept.name }}</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Faculty Staff</div>
+        <div class="metric-value" style="color: var(--accent-blue);">{{ faculty_count }}</div>
+        <div class="metric-sub">HOD: {{ current_dept.hod_name|default:"Prof. In-Charge" }}</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">High Academic Risk</div>
+        <div class="metric-value" style="color: var(--accent-rose);">{{ high_risk_count }}</div>
+        <div class="metric-sub">{{ medium_risk_count }} Moderate | {{ low_risk_count }} Low Risk</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Open Complaints</div>
+        <div class="metric-value" style="color: var(--accent-amber);">{{ complaints_count }}</div>
+        <div class="metric-sub">Classroom & Lab Facilities</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <!-- Announcements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📢 Department Notices</h3>
+        </div>
+        {% for a in announcements %}
+        <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 600; color: var(--text-primary);">{{ a.title }}</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">{{ a.content }}</div>
+            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.3rem;">{{ a.created_at|date:"M d, Y" }}</div>
+        </div>
+        {% empty %}
+        <p style="color: var(--text-muted); font-size: 0.85rem;">No active department notices.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Academic Resources -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📂 Syllabus & Lab Manuals</h3>
+        </div>
+        {% for r in resources %}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <div>
+                <div style="font-weight: 600; font-size: 0.9rem;">{{ r.title }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">{{ r.get_resource_type_display }}</div>
+            </div>
+            <a href="{{ r.link|default:'#' }}" class="btn btn-secondary btn-sm" target="_blank">Download</a>
+        </div>
+        {% empty %}
+        <p style="color: var(--text-muted); font-size: 0.85rem;">No uploaded course materials.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

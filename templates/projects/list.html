@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Capstone Projects & Innovation Teams - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🚀 Capstone Projects & Teams</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Interdisciplinary research projects, hackathon initiatives, and AI-driven complementary team composition.
+        </p>
+    </div>
+    <a href="{% url 'projects:create' %}" class="btn btn-primary">+ Announce New Project</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for proj in projects %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); font-weight: 700;">
+                {{ proj.department.code }}
+            </span>
+            <span class="badge badge-low">{{ proj.get_status_display }}</span>
+        </div>
+
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">
+            <a href="{% url 'projects:detail' proj.pk %}" style="color: var(--text-primary);">{{ proj.title }}</a>
+        </h3>
+
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            {{ proj.description }}
+        </p>
+
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            <div><b>Lead:</b> {{ proj.creator.get_display_name }} ({{ proj.creator.department.code }})</div>
+            <div><b>Skills Required:</b> {{ proj.required_skills }}</div>
+        </div>
+
+        <a href="{% url 'projects:detail' proj.pk %}" class="btn btn-secondary btn-sm" style="width: 100%;">View Team & AI Recommendations ➔</a>
+    </div>
+    {% empty %}
+    <p style="color: var(--text-muted); padding: 2rem;">No active projects found. Be the first to announce one!</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Campus AI Assistant - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">💬 Campus AI Assistant</h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                Permission-guarded natural language query engine connected across all campus operational databases.
+            </p>
+        </div>
+    </div>
+
+    <!-- Suggested Quick Queries -->
+    <div style="margin-bottom: 1.25rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <button class="campus-pill quick-query-btn" style="cursor: pointer;">How many high-risk students in CSE?</button>
+        <button class="campus-pill quick-query-btn" style="cursor: pointer;">Which department has the most open complaints?</button>
+        <button class="campus-pill quick-query-btn" style="cursor: pointer;">What is the live status of campus buses?</button>
+        <button class="campus-pill quick-query-btn" style="cursor: pointer;">Are parking slots free in North Lot?</button>
+        <button class="campus-pill quick-query-btn" style="cursor: pointer;">What is today's lunch demand forecast?</button>
+        <button class="campus-pill quick-query-btn" style="cursor: pointer;">Show active energy anomalies</button>
+    </div>
+
+    <!-- Chat History Container -->
+    <div class="card" style="height: 480px; display: flex; flex-direction: column; padding: 1.5rem; border: 1px solid var(--border-glow); margin-bottom: 1rem;">
+        <div id="chatMessages" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; padding-right: 0.5rem;">
+            <div style="background: rgba(0, 242, 254, 0.08); border-left: 3px solid var(--accent-cyan); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.9rem; line-height: 1.6;">
+                <b>CampusPulse AI Assistant:</b><br>
+                Hello <b>{{ user.first_name|default:user.username }}</b>! I am your real-time campus operating assistant. Ask me anything regarding academic risk distributions, maintenance tickets, bus fleet ETA, parking vacancies, kitchen portion recommendations, or power grid telemetry.
+            </div>
+        </div>
+
+        <!-- Chat Input Form -->
+        <div style="display: flex; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+            <input type="text" id="queryInput" class="form-input" placeholder="Ask a question about campus telemetry..." style="flex: 1;">
+            <button id="sendBtn" class="btn btn-primary">Ask AI ➔</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('queryInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const chat = document.getElementById('chatMessages');
+
+    function appendMessage(sender, text, isAi = false) {
+        const msgDiv = document.createElement('div');
+        msgDiv.style.padding = '0.9rem';
+        msgDiv.style.borderRadius = 'var(--radius-sm)';
+        msgDiv.style.fontSize = '0.9rem';
+        msgDiv.style.lineHeight = '1.6';
+
+        if (isAi) {
+            msgDiv.style.background = 'rgba(0, 242, 254, 0.08)';
+            msgDiv.style.borderLeft = '3px solid var(--accent-cyan)';
+            msgDiv.innerHTML = `<b>CampusPulse AI:</b><br>${text.replace(/\n/g, '<br>')}`;
+        } else {
+            msgDiv.style.background = 'rgba(255, 255, 255, 0.04)';
+            msgDiv.style.alignSelf = 'flex-end';
+            msgDiv.innerHTML = `<b>You:</b> ${text}`;
+        }
+
+        chat.appendChild(msgDiv);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
+    async function sendQuery(queryText) {
+        const q = (queryText || input.value).trim();
+        if (!q) return;
+
+        appendMessage('You', q, false);
+        input.value = '';
+
+        try {
+            const resp = await fetch('{% url "ai_assistant:api_query" %}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: q })
+            });
+            const data = await resp.json();
+            appendMessage('CampusPulse AI', data.response || "No response received.", true);
+        } catch (err) {
+            appendMessage('CampusPulse AI', "An error occurred connecting to the campus assistant.", true);
+        }
+    }
+
+    sendBtn.addEventListener('click', () => sendQuery());
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendQuery();
+    });
+
+    document.querySelectorAll('.quick-query-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            sendQuery(btn.innerText);
+        });
+    });
+});
+</script>
+{% endblock %}

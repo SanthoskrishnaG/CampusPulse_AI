@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications & Alerts - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🔔 Campus Notification Center</h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                Real-time alerts regarding academic interventions, event schedules, bus delays, and ticket resolutions.
+            </p>
+        </div>
+        <a href="{% url 'notifications:mark_all_read' %}" class="btn btn-secondary btn-sm">Mark All as Read</a>
+    </div>
+
+    <div class="card">
+        {% for n in notifications %}
+        <div style="padding: 1rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; {% if not n.is_read %}background: rgba(0, 242, 254, 0.03);{% endif %}">
+            <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                    <span class="badge" style="background: rgba(255,255,255,0.06);">{{ n.get_category_display }}</span>
+                    <span style="font-weight: 700; color: var(--text-primary);">{{ n.title }}</span>
+                    {% if not n.is_read %}
+                    <span style="width: 8px; height: 8px; background: var(--accent-rose); border-radius: 50%;"></span>
+                    {% endif %}
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary);">{{ n.message }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">{{ n.created_at|date:"M d, Y - h:i A" }}</div>
+            </div>
+
+            {% if not n.is_read %}
+            <a href="{% url 'notifications:mark_read' n.pk %}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">Mark Read</a>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p style="color: var(--text-muted); padding: 2rem; text-align: center;">No notifications in your inbox.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

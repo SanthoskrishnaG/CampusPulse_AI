@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CampusPulse AI - Intelligent Campus Operating Platform{% endblock %}</title>
+    
+    <!-- Design System Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js & Leaflet -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-badge">CP</div>
+                <div>
+                    <a href="{% url 'common:home' %}" class="brand-title">CampusPulse AI</a>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Institutional Core</div>
+                {% if user.is_authenticated and user.is_super_admin or user.is_college_admin %}
+                <a href="{% url 'analytics:dashboard' %}" class="nav-link">
+                    <span class="nav-icon">⚡</span><span>Command Center</span>
+                </a>
+                <a href="{% url 'analytics:model_registry' %}" class="nav-link">
+                    <span class="nav-icon">🧠</span><span>Model Registry</span>
+                </a>
+                {% endif %}
+                
+                <a href="{% url 'departments:list' %}" class="nav-link">
+                    <span class="nav-icon">🏛️</span><span>Departments</span>
+                </a>
+                <a href="{% url 'faculty:list' %}" class="nav-link">
+                    <span class="nav-icon">👨‍🏫</span><span>Faculty</span>
+                </a>
+                <a href="{% url 'students:list' %}" class="nav-link">
+                    <span class="nav-icon">🎓</span><span>Students</span>
+                </a>
+                <a href="{% url 'academics:risk_dashboard' %}" class="nav-link">
+                    <span class="nav-icon">🛡️</span><span>Academic Risk AI</span>
+                </a>
+
+                <div class="nav-section-title">Student Engagement</div>
+                <a href="{% url 'events:list' %}" class="nav-link">
+                    <span class="nav-icon">📅</span><span>Events & Workshops</span>
+                </a>
+                <a href="{% url 'clubs:list' %}" class="nav-link">
+                    <span class="nav-icon">✨</span><span>Campus Clubs</span>
+                </a>
+                <a href="{% url 'projects:list' %}" class="nav-link">
+                    <span class="nav-icon">🚀</span><span>Projects & Teams</span>
+                </a>
+                <a href="{% url 'recommendations:hub' %}" class="nav-link">
+                    <span class="nav-icon">🎯</span><span>AI Recommendations</span>
+                </a>
+
+                <div class="nav-section-title">Smart Campus Operations</div>
+                <a href="{% url 'complaints:list' %}" class="nav-link">
+                    <span class="nav-icon">🛠️</span><span>Complaints AI</span>
+                </a>
+                <a href="{% url 'transport:dashboard' %}" class="nav-link">
+                    <span class="nav-icon">🚌</span><span>Smart Transport</span>
+                </a>
+                <a href="{% url 'parking:dashboard' %}" class="nav-link">
+                    <span class="nav-icon">🚗</span><span>Smart Parking</span>
+                </a>
+                <a href="{% url 'traffic:dashboard' %}" class="nav-link">
+                    <span class="nav-icon">📹</span><span>Traffic Vision AI</span>
+                </a>
+                <a href="{% url 'canteen:dashboard' %}" class="nav-link">
+                    <span class="nav-icon">🍽️</span><span>Food Demand AI</span>
+                </a>
+                <a href="{% url 'energy:dashboard' %}" class="nav-link">
+                    <span class="nav-icon">💡</span><span>Energy Anomaly</span>
+                </a>
+                <a href="{% url 'waste:dashboard' %}" class="nav-link">
+                    <span class="nav-icon">♻️</span><span>Waste Vision AI</span>
+                </a>
+                <a href="{% url 'common:map' %}" class="nav-link">
+                    <span class="nav-icon">🗺️</span><span>AI Campus Map</span>
+                </a>
+                <a href="{% url 'ai_assistant:chat' %}" class="nav-link">
+                    <span class="nav-icon">💬</span><span>Campus AI Assistant</span>
+                </a>
+
+                {% if user.is_authenticated and user.is_super_admin %}
+                <div class="nav-section-title">System & Security</div>
+                <a href="{% url 'common:audit_logs' %}" class="nav-link">
+                    <span class="nav-icon">📜</span><span>Audit Logs</span>
+                </a>
+                <a href="/admin/" class="nav-link" target="_blank">
+                    <span class="nav-icon">⚙️</span><span>Django Admin</span>
+                </a>
+                {% endif %}
+            </nav>
+        </aside>
+
+        <!-- Main Body -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="campus-pill">
+                        <span>🏫</span>
+                        <span>{{ CAMPUS_NAME }}</span>
+                    </div>
+
+                    {% if current_weather %}
+                    <div class="weather-pill">
+                        <span>🌤️</span>
+                        <span>{{ current_weather.temperature }}°C {{ current_weather.condition }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="topbar-right">
+                    <!-- Simulation Controller -->
+                    <div class="sim-controls" title="Simulation Speed Multiplier">
+                        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600; margin-right:0.25rem;">SIM:</span>
+                        <button class="sim-btn active" data-speed="1.0">1x</button>
+                        <button class="sim-btn" data-speed="2.0">2x</button>
+                        <button class="sim-btn" data-speed="5.0">5x</button>
+                        <button class="sim-btn" data-speed="10.0">10x</button>
+                    </div>
+
+                    <!-- Role Switcher for Demo / Viva -->
+                    <div style="position:relative;">
+                        <select onchange="if(this.value) window.location.href='/accounts/demo-login/' + this.value + '/';" class="form-select" style="padding:0.35rem 0.65rem; font-size:0.78rem; background:rgba(0,0,0,0.5); border-radius:var(--radius-full);">
+                            <option value="">Switch Demo Role ▾</option>
+                            <option value="SUPER_ADMIN">👑 Super Admin</option>
+                            <option value="FACULTY">👨‍🏫 Faculty</option>
+                            <option value="STUDENT">🎓 Student</option>
+                            <option value="DEPARTMENT_ADMIN">🏛️ Dept Admin (HOD)</option>
+                            <option value="CLUB_ADMIN">✨ Club Lead</option>
+                            <option value="TRANSPORT_MANAGER">🚌 Transport Manager</option>
+                            <option value="CANTEEN_MANAGER">🍽️ Canteen Manager</option>
+                            <option value="MAINTENANCE_STAFF">🛠️ Maintenance Staff</option>
+                        </select>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'notifications:list' %}" class="campus-pill" style="position:relative;" title="Notifications">
+                        <span>🔔</span>
+                        {% if unread_notifications_count > 0 %}
+                        <span style="background:var(--accent-rose); color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.35rem; border-radius:10px; margin-left:2px;">{{ unread_notifications_count }}</span>
+                        {% endif %}
+                    </a>
+
+                    <div style="display:flex; align-items:center; gap:0.6rem;">
+                        <a href="{% url 'accounts:profile' %}" style="display:flex; align-items:center; gap:0.5rem;">
+                            <span class="role-badge role-{{ user.role }}">{{ user.get_role_display }}</span>
+                            <span style="font-size:0.85rem; font-weight:600; color:var(--text-primary);">{{ user.first_name|default:user.username }}</span>
+                        </a>
+                        <a href="{% url 'accounts:logout' %}" class="btn btn-secondary btn-sm" style="padding:0.25rem 0.65rem;" title="Logout">🚪</a>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'accounts:login' %}" class="btn btn-primary btn-sm">Sign In</a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="content-wrapper">
+                {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }}">
+                        <span>{{ message }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

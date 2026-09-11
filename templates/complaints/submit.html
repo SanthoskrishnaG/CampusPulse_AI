@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Lodge Complaint - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 1rem auto;">
+    <div class="card" style="border: 1px solid var(--border-glow);">
+        <div class="card-header">
+            <h2 class="card-title">✍️ Submit Natural Language Complaint</h2>
+        </div>
+
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+            Simply type your complaint in everyday natural language (e.g. <i>"The ceiling fan in Room 302, Block C is sparking and not spinning"</i>). Our NLP engine automatically classifies the category, assigns urgency priority, routes the ticket to the responsible maintenance division, and sets SLA deadlines.
+        </p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Subject / Short Title</label>
+                <input type="text" name="title" class="form-input" placeholder="e.g. Broken bench and damaged power socket in Block B" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Full Complaint Description</label>
+                <textarea name="description" class="form-textarea" rows="4" placeholder="Describe what is broken or needed, mentioning the building, block, or room number..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Process with AI & Submit Ticket ➔</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

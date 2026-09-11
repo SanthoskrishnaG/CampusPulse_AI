@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Academic Departments - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🏛️ Academic Departments</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Institutional departments, degree programs, faculty chairs, and specialized research labs.
+        </p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for dept in departments %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div>
+                <span class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.5rem;">{{ dept.code }}</span>
+                <h3 style="font-size: 1.25rem; font-weight: 700;">{{ dept.name }}</h3>
+            </div>
+            <div style="font-size: 1.8rem;">🏛️</div>
+        </div>
+
+        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.6;">
+            <div><b>Head of Dept:</b> {{ dept.hod_name|default:"Department Chair" }}</div>
+            <div><b>Location:</b> {{ dept.building|default:"Academic Block" }}</div>
+            <div><b>Established:</b> {{ dept.established_year }}</div>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="{% url 'departments:detail' dept.code %}" class="btn btn-secondary btn-sm" style="flex: 1;">View Details</a>
+            <a href="{% url 'departments:dashboard' %}?dept={{ dept.code }}" class="btn btn-primary btn-sm" style="flex: 1;">Dashboard</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

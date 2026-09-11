@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Faculty Directory - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">👨‍🏫 Faculty & Research Mentors</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Academic chairs, professors, and capstone research advisors.
+        </p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for f in faculty_members %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+            <div>
+                <span class="badge" style="background: rgba(79, 172, 254, 0.15); color: var(--accent-blue); font-weight: 700; margin-bottom: 0.4rem;">{{ f.department.code }}</span>
+                <h3 style="font-size: 1.2rem; font-weight: 700;">{{ f.user.get_full_name|default:f.user.username }}</h3>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ f.get_designation_display }}</div>
+            </div>
+            <div style="font-size: 1.8rem;">👨‍🏫</div>
+        </div>
+
+        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.6;">
+            <div><b>Specialization:</b> {{ f.specialization|default:"Computer Science & Engineering" }}</div>
+            <div><b>Office:</b> {{ f.cabin_location|default:"Faculty Block" }}</div>
+            <div><b>Hours:</b> {{ f.office_hours }}</div>
+        </div>
+
+        <a href="{% url 'faculty:detail' f.pk %}" class="btn btn-secondary btn-sm" style="width: 100%;">View Mentor Profile</a>
+    </div>
+    {% empty %}
+    <p style="color: var(--text-muted); padding: 2rem;">No faculty profiles found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

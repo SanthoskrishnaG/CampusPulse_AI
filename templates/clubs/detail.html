@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ club.name }} - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="badge" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); font-weight: 700; margin-bottom: 0.5rem;">
+            {{ club.get_category_display }}
+        </span>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">{{ club.name }}</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Code: <code style="color: var(--accent-cyan);">{{ club.code }}</code> | Members: {{ club.member_count }}
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        {% if is_member %}
+        <span class="badge badge-low" style="padding: 0.6rem 1rem;">✓ Enrolled Member</span>
+        {% else %}
+        <a href="{% url 'clubs:join' club.code %}" class="btn btn-primary">Join Club ➔</a>
+        {% endif %}
+        <a href="{% url 'clubs:list' %}" class="btn btn-secondary">« Back to Clubs</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h3 class="card-title" style="margin-bottom: 0.75rem;">Club Mission & Portfolio</h3>
+    <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem;">
+        {{ club.description }}
+    </p>
+    <div style="font-size: 0.85rem; color: var(--text-muted);">
+        <b>Target Competencies & Skills:</b> {{ club.skills_developed }}
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <!-- Announcements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📢 Club Announcements</h3>
+        </div>
+        {% for a in announcements %}
+        <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 600;">{{ a.title }}</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">{{ a.content }}</div>
+        </div>
+        {% empty %}
+        <p style="color: var(--text-muted); font-size: 0.85rem;">No active announcements.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Achievements -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">🏆 Competitions & Awards</h3>
+        </div>
+        {% for ach in achievements %}
+        <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 600;">{{ ach.title }}</div>
+            <div style="font-size: 0.8rem; color: var(--accent-amber);">{{ ach.position }} - {{ ach.competition }}</div>
+        </div>
+        {% empty %}
+        <p style="color: var(--text-muted); font-size: 0.85rem;">No achievements logged yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

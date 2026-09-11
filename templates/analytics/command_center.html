@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}Campus Master Command Center - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Campus Master Command Center</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Unified AI Operations, Model Telemetry & Cross-Department Resource Governance
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'analytics:model_registry' %}" class="btn btn-secondary">🧠 Model Registry</a>
+        <a href="{% url 'academics:risk_dashboard' %}" class="btn btn-primary">🛡️ Academic Risk AI</a>
+    </div>
+</div>
+
+<!-- Primary Telemetry Metrics -->
+<div class="metric-grid">
+    <div class="metric-card">
+        <div class="metric-label">Enrolled Students</div>
+        <div class="metric-value">{{ total_students }}</div>
+        <div class="metric-sub">{{ total_departments }} Departments | {{ total_faculty }} Faculty</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">High Academic Risk</div>
+        <div class="metric-value" style="color: var(--accent-rose);">{{ risk_high }}</div>
+        <div class="metric-sub">{{ risk_med }} Moderate | {{ risk_low }} Low Risk</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Open Grievances</div>
+        <div class="metric-value" style="color: var(--accent-amber);">{{ open_complaints }}</div>
+        <div class="metric-sub">{{ urgent_complaints }} Critical SLA Escalations</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Fleet Occupancy</div>
+        <div class="metric-value" style="color: var(--accent-cyan);">{{ avg_bus_occupancy }}%</div>
+        <div class="metric-sub">{{ bus_count }} Active Buses on Campus Routes</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Parking Utilization</div>
+        <div class="metric-value" style="color: var(--accent-emerald);">{{ parking_occ_pct }}%</div>
+        <div class="metric-sub">Smart Parking Bay Sensors</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Energy Anomalies</div>
+        <div class="metric-value" style="color: {% if active_anomalies > 0 %}var(--accent-rose){% else %}var(--accent-emerald){% endif %};">
+            {{ active_anomalies }}
+        </div>
+        <div class="metric-sub">Isolation Forest Telemetry</div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">🛡️ Academic Risk Distribution</h3>
+        </div>
+        <div style="max-height: 280px; display: flex; justify-content: center;">
+            <canvas id="riskChart"></canvas>
+        </div>
+        <div style="display: flex; justify-content: space-around; margin-top: 1.25rem; font-size: 0.85rem; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
+            <span style="color: var(--accent-emerald);">● Low: {{ risk_low }}</span>
+            <span style="color: var(--accent-amber);">● Med: {{ risk_med }}</span>
+            <span style="color: var(--accent-rose);">● High: {{ risk_high }}</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📊 Campus Operations Telemetry</h3>
+        </div>
+        <div style="max-height: 280px;">
+            <canvas id="operationsChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Command Domain Grid -->
+<h3 style="font-size: 1.25rem; margin-bottom: 1rem;">Campus Domain Operations</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+    <a href="{% url 'transport:dashboard' %}" class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">🚌</div>
+        <h4 style="font-size: 1rem; margin-bottom: 0.2rem;">Smart Transport Fleet</h4>
+        <p style="font-size: 0.8rem; color: var(--text-secondary);">Live GPS route interpolation & arrival delays</p>
+    </a>
+    <a href="{% url 'parking:dashboard' %}" class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">🚗</div>
+        <h4 style="font-size: 1rem; margin-bottom: 0.2rem;">Smart Parking Bays</h4>
+        <p style="font-size: 0.8rem; color: var(--text-secondary);">Bay vacancy allocation & peak forecasting</p>
+    </a>
+    <a href="{% url 'complaints:dashboard' %}" class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">🛠️</div>
+        <h4 style="font-size: 1rem; margin-bottom: 0.2rem;">Grievance & Facilities</h4>
+        <p style="font-size: 0.8rem; color: var(--text-secondary);">AI NLP triage, auto-routing & SLA compliance</p>
+    </a>
+    <a href="{% url 'canteen:dashboard' %}" class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">🍽️</div>
+        <h4 style="font-size: 1rem; margin-bottom: 0.2rem;">Food Demand Intelligence</h4>
+        <p style="font-size: 0.8rem; color: var(--text-secondary);">Portion forecasting & kitchen waste reduction</p>
+    </a>
+    <a href="{% url 'energy:dashboard' %}" class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">💡</div>
+        <h4 style="font-size: 1rem; margin-bottom: 0.2rem;">Energy Anomaly Monitor</h4>
+        <p style="font-size: 0.8rem; color: var(--text-secondary);">Nocturnal leak detection with Isolation Forest</p>
+    </a>
+    <a href="{% url 'waste:dashboard' %}" class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.6rem; margin-bottom: 0.4rem;">♻️</div>
+        <h4 style="font-size: 1rem; margin-bottom: 0.2rem;">Waste Computer Vision</h4>
+        <p style="font-size: 0.8rem; color: var(--text-secondary);">TrashNet 6-class image segregation scanner</p>
+    </a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Risk Donut Chart
+    const ctxRisk = document.getElementById('riskChart').getContext('2d');
+    new Chart(ctxRisk, {
+        type: 'doughnut',
+        data: {
+            labels: ['Low Risk', 'Moderate Risk', 'High Academic Risk'],
+            datasets: [{
+                data: [{{ risk_low|default:10 }}, {{ risk_med|default:5 }}, {{ risk_high|default:2 }}],
+                backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                borderWidth: 0,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            cutout: '72%'
+        }
+    });
+
+    // Operations Bar Chart
+    const ctxOps = document.getElementById('operationsChart').getContext('2d');
+    new Chart(ctxOps, {
+        type: 'bar',
+        data: {
+            labels: ['Fleet Occupancy (%)', 'Parking Occ (%)', 'Open Tickets (x10)', 'Events Held (x10)'],
+            datasets: [{
+                label: 'Operational Metric',
+                data: [
+                    {{ avg_bus_occupancy|default:65 }},
+                    {{ parking_occ_pct|default:72 }},
+                    {{ open_complaints|default:12 }} * 10,
+                    {{ total_events|default:25 }} * 10
+                ],
+                backgroundColor: ['#00f2fe', '#10b981', '#f59e0b', '#8b5cf6'],
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#9ca3af' } },
+                x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

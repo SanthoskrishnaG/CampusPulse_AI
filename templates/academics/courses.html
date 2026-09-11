@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Course Catalog - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">📚 Academic Course Catalog</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Curriculum syllabi, credit structures, and departmental course offerings.
+        </p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for c in courses %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); font-weight: 700;">{{ c.code }}</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">{{ c.credits }} Credits &bull; Sem {{ c.semester }}</span>
+        </div>
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem;">{{ c.name }}</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            {{ c.department.name }} ({{ c.department.code }})
+        </p>
+        <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">
+            {{ c.description|default:"Core undergraduate engineering course with lectures, tutorials, and laboratory coursework." }}
+        </p>
+    </div>
+    {% empty %}
+    <p style="color: var(--text-muted); padding: 2rem;">No courses catalogued.</p>
+    {% endfor %}
+</div>
+{% endblock %}

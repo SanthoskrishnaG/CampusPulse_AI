@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Smart Parking Intelligence - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🚗 Smart Campus Parking Intelligence</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Real-time bay occupancy telemetry, interactive slot allocation, and peak hour overflow forecasts.
+        </p>
+    </div>
+
+    <!-- Parking Lot Switcher -->
+    <div>
+        <select onchange="window.location.href='?lot=' + this.value;" class="form-select" style="min-width: 220px;">
+            {% for l in lots %}
+            <option value="{{ l.code }}" {% if current_lot.code == l.code %}selected{% endif %}>{{ l.name }} ({{ l.available_count }} free)</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+{% if current_lot %}
+<!-- Lot Metrics -->
+<div class="metric-grid">
+    <div class="metric-card">
+        <div class="metric-label">Total Capacity</div>
+        <div class="metric-value">{{ current_lot.total_slots }}</div>
+        <div class="metric-sub">{{ current_lot.name }}</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Occupied Bays</div>
+        <div class="metric-value" style="color: var(--accent-amber);">{{ current_lot.occupied_count }}</div>
+        <div class="metric-sub">Active Parking Sensors</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Vacant Available</div>
+        <div class="metric-value" style="color: var(--accent-emerald);">{{ current_lot.available_count }}</div>
+        <div class="metric-sub">Immediate Entry Permitted</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Utilization Rate</div>
+        <div class="metric-value" style="color: var(--accent-cyan);">{{ current_lot.occupancy_percentage }}%</div>
+        <div class="metric-sub">{{ peak_status }}</div>
+    </div>
+</div>
+
+<!-- Demand Forecast Ribbon -->
+<div class="card" style="padding: 1rem 1.5rem; margin-bottom: 1.5rem; background: rgba(0, 242, 254, 0.05); border: 1px solid var(--border-glow);">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 1.5rem;">🤖</span>
+        <div style="font-size: 0.85rem; color: var(--text-primary);">
+            <b>AI Parking Demand Forecast:</b> {{ predicted_trend }}. Recommended alternative lot during peaks: <b>PKG-AUDITORIUM (South Bay)</b>.
+        </div>
+    </div>
+</div>
+
+<!-- Interactive Parking Bay Visualizer -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">🅿️ Visual Bay Grid ({{ current_lot.name }})</h3>
+        <div style="display: flex; gap: 1rem; font-size: 0.8rem;">
+            <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width:10px; height:10px; background:#10b981; border-radius:2px;"></span> Available</span>
+            <span style="display: flex; align-items: center; gap: 0.35rem;"><span style="width:10px; height:10px; background:#ef4444; border-radius:2px;"></span> Occupied</span>
+            <span style="color: var(--text-muted);">(Click any slot to simulate vehicle entry/exit)</span>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.75rem; padding: 1rem 0;">
+        {% for slot in slots %}
+        <div onclick="toggleSlot({{ slot.id }}, this);"
+             id="slot-{{ slot.id }}"
+             style="background: {% if slot.is_occupied %}rgba(239, 68, 68, 0.18){% else %}rgba(16, 185, 129, 0.18){% endif %};
+                    border: 1px solid {% if slot.is_occupied %}rgba(239, 68, 68, 0.4){% else %}rgba(16, 185, 129, 0.4){% endif %};
+                    border-radius: var(--radius-sm); padding: 0.75rem 0.5rem; text-align: center; cursor: pointer; transition: var(--transition);">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-primary);">{{ slot.slot_number }}</div>
+            <div style="font-size: 1.1rem; margin: 0.2rem 0;">
+                {% if slot.is_occupied %}🚗{% else %}🟢{% endif %}
+            </div>
+            <div style="font-size: 0.65rem; color: {% if slot.is_occupied %}var(--accent-rose){% else %}var(--accent-emerald){% endif %}; font-weight: 700;">
+                {% if slot.is_occupied %}BUSY{% else %}FREE{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function toggleSlot(slotId, element) {
+    try {
+        const resp = await fetch(`/parking/api/toggle-slot/${slotId}/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await resp.json();
+        if (data.status === 'ok') {
+            if (data.is_occupied) {
+                element.style.background = 'rgba(239, 68, 68, 0.18)';
+                element.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                element.children[1].innerText = '🚗';
+                element.children[2].innerText = 'BUSY';
+                element.children[2].style.color = 'var(--accent-rose)';
+            } else {
+                element.style.background = 'rgba(16, 185, 129, 0.18)';
+                element.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                element.children[1].innerText = '🟢';
+                element.children[2].innerText = 'FREE';
+                element.children[2].style.color = 'var(--accent-emerald)';
+            }
+        }
+    } catch (err) {
+        console.error("Slot toggle failed:", err);
+    }
+}
+</script>
+{% endblock %}

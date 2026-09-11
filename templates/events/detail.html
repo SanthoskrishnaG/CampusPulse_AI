@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.title }} - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="badge" style="background: rgba(79, 172, 254, 0.15); color: var(--accent-blue); font-weight: 700; margin-bottom: 0.5rem;">
+            {{ event.get_event_type_display }}
+        </span>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">{{ event.title }}</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Organized by: {{ event.department.name|default:event.club.name|default:"Central College Council" }}
+        </p>
+    </div>
+    <a href="{% url 'events:list' %}" class="btn btn-secondary">« Back to Events</a>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Event Description & Feedback -->
+    <div>
+        <div class="card" style="margin-bottom: 1.5rem;">
+            <h3 class="card-title" style="margin-bottom: 0.75rem;">Event Overview</h3>
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem;">
+                {{ event.description }}
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem; color: var(--text-secondary); border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+                <div>📍 <b>Venue:</b> {{ event.location_name }}</div>
+                <div>🎤 <b>Keynote Speaker:</b> {{ event.speaker|default:"Faculty Expert Panel" }}</div>
+                <div>⏰ <b>Starts:</b> {{ event.start_time|date:"M d, Y - h:i A" }}</div>
+                <div>🏁 <b>Ends:</b> {{ event.end_time|date:"M d, Y - h:i A" }}</div>
+            </div>
+        </div>
+
+        <!-- Student Feedback -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">💬 Attendee Feedback & Ratings</h3>
+            </div>
+            {% for f in feedbacks %}
+            <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="font-weight: 600; font-size: 0.85rem;">{{ f.student.get_display_name }}</span>
+                    <span style="color: var(--accent-amber);">★ {{ f.rating }}/5</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">{{ f.comments }}</div>
+            </div>
+            {% empty %}
+            <p style="color: var(--text-muted); font-size: 0.85rem;">No attendee reviews submitted yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Registration Card & ML Turnout Forecast -->
+    <div>
+        <div class="card" style="margin-bottom: 1.5rem; border: 1px solid var(--border-glow);">
+            <div class="card-header">
+                <h3 class="card-title">🎟️ Registration & Entry Pass</h3>
+            </div>
+
+            {% if is_registered %}
+            <div style="text-align: center; padding: 1.5rem 0;">
+                <div style="font-size: 3rem; margin-bottom: 0.5rem;">✅</div>
+                <h4 style="color: var(--accent-emerald); margin-bottom: 0.4rem;">You are Registered!</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    Show your digital token at the entrance desk to mark verified attendance and receive your certificate.
+                </p>
+                <div style="background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: var(--radius-sm); font-family: monospace; font-size: 0.75rem; color: var(--accent-cyan);">
+                    TOKEN: {{ user_registration.qr_token }}
+                </div>
+                {% if not user_registration.attended %}
+                <a href="{% url 'events:checkin' user_registration.qr_token %}" class="btn btn-secondary btn-sm" style="margin-top: 1rem; width: 100%;">Simulate QR Check-In Scan</a>
+                {% else %}
+                <div class="badge badge-low" style="margin-top: 1rem; width: 100%; justify-content: center; padding: 0.5rem;">✓ Attendance Confirmed & Certificate Generated</div>
+                {% endif %}
+            </div>
+            {% else %}
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+                Reserve your seat for this campus event. Capacity is limited to {{ event.capacity }} participants.
+            </p>
+            <form method="POST" action="{% url 'events:register' event.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Confirm Event Registration ➔</button>
+            </form>
+            {% endif %}
+        </div>
+
+        <!-- ML Turnout Forecast -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">🤖 AI Attendance Forecast</h3>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+                <div>Predicted Turnout: <b style="color: var(--accent-cyan);">{{ prediction.predicted_attendance }} attendees</b></div>
+                <div>Anticipated No-Show Rate: <b style="color: var(--accent-amber);">{{ prediction.predicted_no_show_rate }}%</b></div>
+                <div>Optimal Capacity Sizing: <b>{{ prediction.recommended_capacity }} seats</b></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

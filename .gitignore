@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv/
+
+# Environment Variables
+.env
+
+# Database
+*.sqlite3
+*.db
+db.sqlite3
+campuspulse.sqlite3
+
+# Logs and temporary files
+*.log
+*.pot
+*.bak
+scratch/
+tmp/
+
+# Static and Media uploads
+media/uploads/*
+!media/uploads/.gitkeep
+media/waste_uploads/*
+!media/waste_uploads/.gitkeep
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

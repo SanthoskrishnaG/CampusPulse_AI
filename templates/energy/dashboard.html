@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Energy Anomaly Intelligence - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">💡 Energy Intelligence & Anomaly Detection</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Real-time power consumption telemetry, nocturnal equipment leak detection, and Isolation Forest anomaly screening.
+        </p>
+    </div>
+    <button id="scanEnergyBtn" class="btn btn-primary">⚡ Run Live Grid Anomaly Scan</button>
+</div>
+
+<!-- Key Telemetry -->
+<div class="metric-grid">
+    <div class="metric-card">
+        <div class="metric-label">Monitored Building Meters</div>
+        <div class="metric-value">{{ meters|length }}</div>
+        <div class="metric-sub">Substation & Academic Blocks</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Estimated Campus Load</div>
+        <div class="metric-value" style="color: var(--accent-cyan);">{{ total_current_kwh }} <span style="font-size: 1rem; color: var(--text-secondary);">kWh</span></div>
+        <div class="metric-sub">Aggregated Baseline Demand</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Active Power Anomalies</div>
+        <div class="metric-value" style="color: {% if active_anomalies|length > 0 %}var(--accent-rose){% else %}var(--accent-emerald){% endif %};">
+            {{ active_anomalies|length }}
+        </div>
+        <div class="metric-sub">Flagged by Isolation Forest</div>
+    </div>
+</div>
+
+<!-- Active Anomalies Alerts -->
+{% if active_anomalies %}
+<div class="card" style="border: 1px solid rgba(239, 68, 68, 0.4); margin-bottom: 2rem; background: rgba(239, 68, 68, 0.05);">
+    <div class="card-header">
+        <h3 class="card-title" style="color: var(--accent-rose);">⚠️ Active Unresolved Energy Anomalies</h3>
+    </div>
+    {% for a in active_anomalies %}
+    <div style="padding: 0.85rem 0; border-bottom: 1px solid var(--border-subtle);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <b>{{ a.meter.building_name }}</b> ({{ a.meter.meter_id }})
+            <span class="badge badge-{% if a.severity == 'CRITICAL' %}high{% else %}medium{% endif %}">{{ a.get_severity_display }}</span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.3rem;">
+            {{ a.explanation }}
+        </div>
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">
+            Observed: <b>{{ a.kwh_observed }} kWh</b> vs Baseline Expected: <b>{{ a.kwh_expected }} kWh</b> &bull; {{ a.detected_at|date:"M d, H:i" }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Meter Fleet Table -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">⚡ Campus Power Meters</h3>
+    </div>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Meter Identifier</th>
+                    <th>Building / Facility</th>
+                    <th>Daytime Baseline</th>
+                    <th>Operational Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in meters %}
+                <tr>
+                    <td><code>{{ m.meter_id }}</code></td>
+                    <td><b>{{ m.building_name }}</b></td>
+                    <td>{{ m.baseline_kwh }} kWh</td>
+                    <td><span class="badge badge-low">● Online & Monitored</span></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No meters mapped.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('scanEnergyBtn');
+    if (btn) {
+        btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            btn.innerText = "Scanning Power Grid...";
+            try {
+                const resp = await fetch('{% url "energy:api_scan" %}');
+                const data = await resp.json();
+                alert(`Grid scan complete! Evaluated ${data.meters_scanned} meters. Identified ${data.anomalies_detected} anomalies.`);
+                window.location.reload();
+            } catch (err) {
+                alert("Scan failed: " + err);
+                btn.disabled = false;
+                btn.innerText = "⚡ Run Live Grid Anomaly Scan";
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

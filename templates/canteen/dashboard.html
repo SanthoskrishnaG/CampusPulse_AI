@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Canteen Demand & Food Waste AI - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🍽️ Canteen Demand & Food Waste AI</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Predictive meal portion forecasting, leftover reduction, and kitchen preparation guidance.
+        </p>
+    </div>
+</div>
+
+<!-- Forecast Cards for Today's Meals -->
+<h3 style="font-size: 1.3rem; margin-bottom: 1rem;">🤖 Today's AI Meal Demand Forecast ({{ today|date:"l, M d" }})</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+    {% for meal, fc in forecasts.items %}
+    <div class="card" style="border-top: 3px solid var(--accent-cyan);">
+        <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">{{ meal }}</div>
+        <div style="font-size: 2rem; font-weight: 800; color: var(--text-primary); margin: 0.4rem 0;">
+            {{ fc.recommended_prep }} <span style="font-size: 1rem; color: var(--text-secondary); font-weight: 500;">portions</span>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;">
+            <div>Expected Demand: <b>{{ fc.predicted_demand }}</b></div>
+            <div>Leftover Risk: <b style="color: var(--accent-emerald);">&lt; {{ fc.expected_waste_kg }} kg</b></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Recent Meal Records & Feedback Loop -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📜 Historical Meals & Waste Audit</h3>
+        </div>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Meal Type</th>
+                        <th>Prepared</th>
+                        <th>Actual Sold</th>
+                        <th>Leftover Waste</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rec in recent_records %}
+                    <tr>
+                        <td>{{ rec.date|date:"M d, Y" }}</td>
+                        <td><b>{{ rec.get_meal_type_display }}</b></td>
+                        <td>{{ rec.meals_prepared }}</td>
+                        <td><b style="color: var(--accent-emerald);">{{ rec.meals_sold }}</b></td>
+                        <td>
+                            <span style="color: {% if rec.leftover_waste_kg > 10 %}var(--accent-rose){% else %}var(--accent-emerald){% endif %}; font-weight: 600;">
+                                {{ rec.leftover_waste_kg }} kg
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No historical records yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Kitchen Feedback Loop Form -->
+    <div class="card" style="border: 1px solid var(--border-glow);">
+        <div class="card-header">
+            <h3 class="card-title">✍️ Log Kitchen Actual Sales</h3>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Log real sales at the end of each service to close the ML feedback loop and recalibrate models.
+        </p>
+
+        <form method="POST" action="{% url 'canteen:record_sales' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Meal Type</label>
+                <select name="meal_type" class="form-select">
+                    <option value="BREAKFAST">Breakfast</option>
+                    <option value="LUNCH" selected>Lunch</option>
+                    <option value="SNACKS">Evening Snacks</option>
+                    <option value="DINNER">Dinner</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Meals Prepared</label>
+                <input type="number" name="meals_prepared" class="form-input" value="320" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Meals Sold</label>
+                <input type="number" name="meals_sold" class="form-input" value="305" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Leftover Food Waste (kg)</label>
+                <input type="number" step="0.1" name="leftover_waste_kg" class="form-input" value="4.5" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm" style="width: 100%;">Record Actuals & Retrain Feedback ➔</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

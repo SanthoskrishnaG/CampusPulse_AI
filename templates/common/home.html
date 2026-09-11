@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}CampusPulse AI - Intelligent Campus Operating Platform{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 0 auto;">
+    <!-- Hero Section -->
+    <div class="card" style="text-align: center; padding: 4rem 2rem; background: radial-gradient(circle at 50% 30%, rgba(0, 242, 254, 0.12) 0%, rgba(17, 24, 39, 0.8) 70%); border: 1px solid var(--border-glow); margin-bottom: 2.5rem;">
+        <div class="brand-badge" style="width:64px; height:64px; font-size:2rem; margin: 0 auto 1.5rem;">CP</div>
+        <h1 style="font-size: 3rem; font-weight: 800; line-height: 1.15; margin-bottom: 1rem;">
+            Intelligent Campus. <span style="background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Smarter Decisions.</span>
+        </h1>
+        <p style="font-size: 1.15rem; color: var(--text-secondary); max-width: 720px; margin: 0 auto 2rem; line-height: 1.6;">
+            A unified, AI-powered operating system for higher-education campuses. Integrating predictive student intelligence, early academic risk intervention, smart transport, automated complaint triage, and sustainable resource management into one cohesive platform.
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <a href="{% url 'accounts:login' %}" class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1rem;">Enter Campus Portal ➔</a>
+            <a href="{% url 'common:map' %}" class="btn btn-secondary" style="padding: 0.8rem 2rem; font-size: 1rem;">Explore Campus Map</a>
+        </div>
+    </div>
+
+    <!-- Live Campus Telemetry Grid -->
+    <div class="metric-grid">
+        <div class="metric-card">
+            <div class="metric-label">Enrolled Students</div>
+            <div class="metric-value">{{ student_count }}</div>
+            <div class="metric-sub">Across 7 Academic Departments</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Campus Events</div>
+            <div class="metric-value" style="color: var(--accent-cyan);">{{ event_count }}</div>
+            <div class="metric-sub">Workshops, Hackathons & Seminars</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Active Student Clubs</div>
+            <div class="metric-value" style="color: var(--accent-emerald);">{{ club_count }}</div>
+            <div class="metric-sub">Technical, Cultural & Innovation</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Complaints Resolved</div>
+            <div class="metric-value" style="color: var(--accent-purple);">{{ complaint_count }}</div>
+            <div class="metric-sub">AI Auto-Triaged & Routed</div>
+        </div>
+    </div>
+
+    <!-- Platform Modules Overview -->
+    <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem; text-align: center;">Unified AI Domain Matrix</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        
+        <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">🛡️</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Academic Risk AI</h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Ensemble Random Forest & Sequential Deep Learning (Week 1 -> 5) tracking temporal student engagement to proactively recommend faculty interventions before exams.
+            </p>
+            <a href="{% url 'academics:risk_dashboard' %}" class="btn btn-secondary btn-sm">Explore Risk AI ➔</a>
+        </div>
+
+        <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">🛠️</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Campus Complaint AI</h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Natural language complaint submission with TF-IDF auto-triage extracting Category, Priority, Department routing, and Location entities with strict SLA enforcement.
+            </p>
+            <a href="{% url 'complaints:list' %}" class="btn btn-secondary btn-sm">View Grievance Hub ➔</a>
+        </div>
+
+        <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">🚌</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Smart Campus Transport</h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Real-time GPS fleet simulation with controllable 1x-10x speeds, passenger occupancy monitoring, and ML-driven ETA and arrival delay forecasting.
+            </p>
+            <a href="{% url 'transport:dashboard' %}" class="btn btn-secondary btn-sm">Track Fleet ➔</a>
+        </div>
+
+        <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">🚗</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Smart Parking & Traffic</h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Live slot allocation visualizer, peak vacancy predictors, and lightweight computer vision vehicle detection for campus security gates.
+            </p>
+            <a href="{% url 'parking:dashboard' %}" class="btn btn-secondary btn-sm">View Parking Bays ➔</a>
+        </div>
+
+        <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">🍽️</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Food Demand & Waste AI</h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Meal demand regression predicting exact preparation portions for breakfast, lunch, and dinner to minimize dining hall surplus and food wastage.
+            </p>
+            <a href="{% url 'canteen:dashboard' %}" class="btn btn-secondary btn-sm">Canteen Intelligence ➔</a>
+        </div>
+
+        <div class="card">
+            <div style="font-size: 2rem; margin-bottom: 0.75rem;">💡</div>
+            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Energy & Waste Intelligence</h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Isolation Forest electrical anomaly detection catching nocturnal power leaks, paired with 6-class TrashNet waste segregation computer vision classifier.
+            </p>
+            <a href="{% url 'energy:dashboard' %}" class="btn btn-secondary btn-sm">Sustainability Ops ➔</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

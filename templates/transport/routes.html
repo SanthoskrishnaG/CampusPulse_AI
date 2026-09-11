@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Campus Bus Routes - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🚌 Campus Bus Routes & Stops</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Designated routes, intermediate stops, distance metrics, and fleet allocations.
+        </p>
+    </div>
+    <a href="{% url 'transport:dashboard' %}" class="btn btn-primary">Live Tracking Map ➔</a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem;">
+    {% for r in routes %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); font-weight: 700;">{{ r.code }}</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">{{ r.distance_km }} km &bull; ~{{ r.estimated_duration_mins }} mins</span>
+        </div>
+
+        <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">{{ r.name }}</h3>
+        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            <div><b>Origin:</b> {{ r.start_point }}</div>
+            <div><b>Destination:</b> {{ r.end_point }}</div>
+        </div>
+
+        <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem;">Designated Bus Stops</h4>
+        <div style="display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.8rem; color: var(--text-secondary);">
+            {% for s in r.stops.all %}
+            <div>● Stop #{{ s.sequence }}: <b>{{ s.name }}</b></div>
+            {% empty %}
+            <div style="color: var(--text-muted);">Stops being mapped.</div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

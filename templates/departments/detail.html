@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ department.name }} ({{ department.code }}) - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="badge" style="background: rgba(0, 242, 254, 0.15); color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.5rem;">{{ department.code }}</span>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">{{ department.name }}</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Building: {{ department.building }} | Established {{ department.established_year }}
+        </p>
+    </div>
+    <a href="{% url 'departments:dashboard' %}?dept={{ department.code }}" class="btn btn-primary">Department Dashboard ➔</a>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h3 class="card-title" style="margin-bottom: 0.75rem;">Department Profile</h3>
+    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+        {{ department.description|default:"Leading academic department dedicated to excellence in engineering, foundational research, and student innovation." }}
+    </p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📢 Notices & Announcements</h3>
+        </div>
+        {% for a in announcements %}
+        <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <div style="font-weight: 600;">{{ a.title }}</div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">{{ a.content }}</div>
+        </div>
+        {% empty %}
+        <p style="color: var(--text-muted); font-size: 0.85rem;">No active notices.</p>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📂 Course Materials & Resources</h3>
+        </div>
+        {% for r in resources %}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <div>
+                <div style="font-weight: 600; font-size: 0.9rem;">{{ r.title }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">{{ r.get_resource_type_display }}</div>
+            </div>
+            <a href="{{ r.link|default:'#' }}" class="btn btn-secondary btn-sm" target="_blank">Access</a>
+        </div>
+        {% empty %}
+        <p style="color: var(--text-muted); font-size: 0.85rem;">No uploaded course materials.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

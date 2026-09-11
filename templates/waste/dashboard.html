@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Waste Intelligence & Vision Classifier - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">♻️ Waste Intelligence & Vision Classifier</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            TrashNet 6-class waste image classifier, disposal recommendations, and campus recycling metrics.
+        </p>
+    </div>
+</div>
+
+<div class="metric-grid">
+    <div class="metric-card">
+        <div class="metric-label">Recycled Diversion Rate</div>
+        <div class="metric-value" style="color: var(--accent-emerald);">{{ diversion_rate }}%</div>
+        <div class="metric-sub">Diverted from Landfill</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Total Recycled</div>
+        <div class="metric-value">{{ total_recycled }} <span style="font-size: 1rem; color: var(--text-secondary);">kg</span></div>
+        <div class="metric-sub">Dry Recyclables & Paper</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Campus Waste Generated</div>
+        <div class="metric-value">{{ total_waste }} <span style="font-size: 1rem; color: var(--text-secondary);">kg</span></div>
+        <div class="metric-sub">Past 14 Days Audit</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Waste Vision Classifier Upload Form -->
+    <div class="card" style="border: 1px solid var(--border-glow);">
+        <div class="card-header">
+            <h3 class="card-title">📷 Classify Waste Item</h3>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Upload an image of an item to identify whether it belongs in Cardboard, Glass, Metal, Paper, Plastic, or General Trash bins.
+        </p>
+
+        <form method="POST" action="{% url 'waste:classify' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Item Snapshot</label>
+                <input type="file" name="image" accept="image/*" class="form-input" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Run AI Segregation Classifier ➔</button>
+        </form>
+
+        <div style="margin-top: 1.5rem; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 0.75rem;">
+            Supported Classes: <b>Cardboard, Glass, Metal, Paper, Plastic, Trash</b> (TrashNet standard).
+        </div>
+    </div>
+
+    <!-- Recent Classifications Feed -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">🔍 Recent Item Scans & Disposal Advice</h3>
+        </div>
+        {% for pred in recent_classifications %}
+        <div style="padding: 0.85rem 0; border-bottom: 1px solid var(--border-subtle);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <b>{{ pred.get_predicted_class_display }}</b>
+                <span class="badge badge-low">{{ pred.confidence|floatformat:2 }} Confidence</span>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                💡 <b>Disposal Guide:</b> {{ pred.disposal_recommendation }}
+            </div>
+            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem;">
+                {{ pred.created_at|date:"M d, H:i" }}
+            </div>
+        </div>
+        {% empty %}
+        <p style="color: var(--text-muted); padding: 1.5rem;">No items scanned yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

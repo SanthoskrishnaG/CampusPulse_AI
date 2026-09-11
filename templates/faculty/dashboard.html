@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Faculty Portal - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">👨‍🏫 Faculty Mentoring & Academic Hub</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Early risk monitoring, intervention scheduling, and assigned course offerings.
+        </p>
+    </div>
+    {% if faculty %}
+    <div class="campus-pill" style="padding: 0.5rem 1rem;">
+        <span style="font-weight: 700;">{{ faculty.user.get_full_name }}</span>
+        <span style="color: var(--accent-cyan);">({{ faculty.department.code }} - {{ faculty.get_designation_display }})</span>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Faculty At-Risk Students Queue -->
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <h3 class="card-title">🛡️ High Priority Students Requiring Academic Mentoring</h3>
+        <a href="{% url 'academics:risk_dashboard' %}" class="btn btn-secondary btn-sm">Full Risk Center</a>
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Risk Classification</th>
+                    <th>Risk Score</th>
+                    <th>Identified Factors</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assess in at_risk_assessments %}
+                <tr>
+                    <td>
+                        <a href="{% url 'students:detail' assess.student.student_id %}" style="font-weight: 700; color: var(--text-primary);">
+                            {{ assess.student.get_display_name }}
+                        </a>
+                        <div style="font-size: 0.75rem; color: var(--accent-cyan); font-family: monospace;">
+                            {{ assess.student.student_id }} | Sem {{ assess.student.semester }} (Att: {{ assess.student.attendance_percentage }}%)
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge badge-{{ assess.risk_level|lower }}">● {{ assess.get_risk_level_display }}</span>
+                    </td>
+                    <td><b>{{ assess.risk_score|floatformat:1 }}%</b></td>
+                    <td>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); max-width: 300px;">
+                            {{ assess.get_factors.0|default:"Borderline coursework" }}
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{% url 'students:detail' assess.student.student_id %}" class="btn btn-primary btn-sm">
+                            Schedule Intervention
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No students flagged in this category.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Active Mentorship Interventions -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">📋 Scheduled Mentorship & Remedial Sessions</h3>
+    </div>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Intervention Type</th>
+                    <th>Status</th>
+                    <th>Session Focus</th>
+                    <th>Date Scheduled</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inter in interventions %}
+                <tr>
+                    <td><b>{{ inter.student.student_id }}</b> - {{ inter.student.get_display_name }}</td>
+                    <td>{{ inter.get_intervention_type_display }}</td>
+                    <td><span class="badge badge-low">{{ inter.get_status_display }}</span></td>
+                    <td><div style="font-size: 0.8rem; color: var(--text-secondary); max-width: 320px;">{{ inter.notes }}</div></td>
+                    <td>{{ inter.created_at|date:"M d, Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No active interventions currently logged.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

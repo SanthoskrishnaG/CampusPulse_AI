@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 1rem auto;">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">👤 User Account Profile</h2>
+            <span class="role-badge role-{{ user.role }}">{{ user.get_role_display }}</span>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                {{ form.email }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Contact Phone</label>
+                {{ form.phone }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Biography / Institutional Notes</label>
+                {{ form.bio }}
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Profile Updates</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}CampusPulse AI - Interactive AI Campus Map{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <div>
+        <h1 style="font-size: 1.8rem; margin-bottom: 0.25rem;">AI Interactive Campus Map</h1>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">
+            Geospatial directory of academic blocks, research labs, dining facilities, bus stops, and smart parking lots.
+        </p>
+    </div>
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden; border: 1px solid var(--border-glow);">
+    <div id="campusMap" style="height: 600px; width: 100%; background: #0b0f19;"></div>
+</div>
+
+<div style="margin-top: 1.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+        <span style="width: 12px; height: 12px; background: #00f2fe; border-radius: 50%;"></span> Academic Blocks
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+        <span style="width: 12px; height: 12px; background: #10b981; border-radius: 50%;"></span> Smart Parking
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+        <span style="width: 12px; height: 12px; background: #f59e0b; border-radius: 50%;"></span> Bus Stops
+    </div>
+    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+        <span style="width: 12px; height: 12px; background: #ef4444; border-radius: 50%;"></span> Canteens & Dining
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const defaultLat = {{ CAMPUS_LAT }};
+    const defaultLng = {{ CAMPUS_LNG }};
+
+    const map = L.map('campusMap').setView([defaultLat, defaultLng], 16);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Fetch campus locations from database API
+    fetch('{% url "common:api_map_locations" %}')
+        .then(res => res.json())
+        .then(locations => {
+            locations.forEach(loc => {
+                const marker = L.marker([loc.latitude, loc.longitude]).addTo(map);
+                marker.bindPopup(`
+                    <div style="color:#0b0f19; font-family: sans-serif;">
+                        <h4 style="margin: 0 0 4px; font-size: 1rem;">${loc.name}</h4>
+                        <p style="margin: 0 0 4px; font-size: 0.8rem; color: #4b5563;"><b>Code:</b> ${loc.code} | <b>Category:</b> ${loc.category}</p>
+                        <p style="margin: 0; font-size: 0.75rem; color: #6b7280;">Capacity: ${loc.capacity} persons | Floors: ${loc.floor_count}</p>
+                    </div>
+                `);
+            });
+        })
+        .catch(err => console.error("Map locations fetch failed:", err));
+});
+</script>
+{% endblock %}

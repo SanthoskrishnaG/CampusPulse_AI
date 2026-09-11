@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Facilities & Grievance Triage Dashboard - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🛠️ Facilities & Complaint Command Center</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Department workload distribution, critical SLA queues, and category breakdown.
+        </p>
+    </div>
+    <a href="{% url 'complaints:list' %}" class="btn btn-secondary">View All Tickets ➔</a>
+</div>
+
+<div class="metric-grid">
+    <div class="metric-card">
+        <div class="metric-label">Total Logged Tickets</div>
+        <div class="metric-value">{{ total }}</div>
+        <div class="metric-sub">Lifetime Campus Issues</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Active Open Queue</div>
+        <div class="metric-value" style="color: var(--accent-amber);">{{ open_count }}</div>
+        <div class="metric-sub">Pending Maintenance Action</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Critical Urgent SLA</div>
+        <div class="metric-value" style="color: var(--accent-rose);">{{ urgent_count }}</div>
+        <div class="metric-sub">Immediate Safety & Utility Priority</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Resolved Issues</div>
+        <div class="metric-value" style="color: var(--accent-emerald);">{{ resolved_count }}</div>
+        <div class="metric-sub">Satisfactorily Closed</div>
+    </div>
+</div>
+
+<!-- Category Distribution -->
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <h3 class="card-title">📊 Category Breakdown Matrix</h3>
+    </div>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        {% for cat in category_breakdown %}
+        <div class="card" style="flex: 1; min-width: 140px; padding: 1rem; text-align: center; background: rgba(0,0,0,0.3);">
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">{{ cat.category }}</div>
+            <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-cyan);">{{ cat.count }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

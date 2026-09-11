@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Campus Events & Workshops - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">📅 Campus Events & Workshops</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Department workshops, hackathons, cultural festivals, and technical symposiums with ML turnout forecasting.
+        </p>
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div class="card" style="padding: 1rem 1.5rem; margin-bottom: 1.5rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <input type="text" name="q" value="{{ request.GET.q|default:'' }}" class="form-input" placeholder="Search events by title..." style="flex: 1; min-width: 240px;">
+        
+        <select name="type" class="form-select" style="width: auto; min-width: 180px;">
+            <option value="">All Event Categories</option>
+            {% for val, label in event_types %}
+            <option value="{{ val }}" {% if selected_type == val %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+        {% if selected_type or request.GET.q %}
+        <a href="{% url 'events:list' %}" class="btn btn-secondary btn-sm">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Events Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+    {% for ev in events %}
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <span class="badge" style="background: rgba(79, 172, 254, 0.15); color: var(--accent-blue); font-weight: 700;">
+                {{ ev.get_event_type_display }}
+            </span>
+            <span class="badge badge-low">{{ ev.get_status_display }}</span>
+        </div>
+
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">
+            <a href="{% url 'events:detail' ev.pk %}" style="color: var(--text-primary);">{{ ev.title }}</a>
+        </h3>
+
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+            {{ ev.description }}
+        </p>
+
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.6;">
+            <div>📍 <b>Location:</b> {{ ev.location_name }}</div>
+            <div>⏰ <b>Date & Time:</b> {{ ev.start_time|date:"M d, Y - h:i A" }}</div>
+            <div>👥 <b>Capacity:</b> {{ ev.capacity }} seats ({{ ev.registration_count }} registered)</div>
+            <div>🤖 <b>ML Forecasted Attendance:</b> <span style="color: var(--accent-cyan); font-weight: 700;">~{{ ev.predicted_attendance }}</span></div>
+        </div>
+
+        <a href="{% url 'events:detail' ev.pk %}" class="btn btn-secondary btn-sm" style="width: 100%;">View Event Pass & Details ➔</a>
+    </div>
+    {% empty %}
+    <p style="color: var(--text-muted); padding: 2rem;">No events found matching your criteria.</p>
+    {% endfor %}
+</div>
+{% endblock %}

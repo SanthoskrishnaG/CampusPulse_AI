@@ -1,0 +1,121 @@
+{
+  "Academic_Risk_Classifier": {
+    "version": "1.0.0",
+    "algorithm": "LogisticRegression",
+    "metrics": {
+      "accuracy": 0.98,
+      "precision": 0.9803,
+      "recall": 0.98,
+      "f1_score": 0.9799,
+      "roc_auc": 0.9987
+    },
+    "features": [
+      "attendance_percentage",
+      "cgpa",
+      "internal_marks",
+      "backlog_count",
+      "semester",
+      "quiz_avg",
+      "assignment_avg",
+      "lms_hours_avg",
+      "trend_slope"
+    ],
+    "model_path": "models\\academic_risk_model.joblib",
+    "description": "Predicts student academic risk (LOW/MEDIUM/HIGH) based on attendance, marks, CGPA, and temporal trend.",
+    "is_active": true
+  },
+  "Academic_Sequential_DL": {
+    "version": "1.0.0",
+    "algorithm": "Multi-Layer Perceptron (Sequential Temporal Network)",
+    "metrics": {
+      "accuracy": 1.0,
+      "temporal_window": "5_weeks"
+    },
+    "features": [
+      "W1_att",
+      "W1_quiz",
+      "W2_att",
+      "W2_quiz",
+      "W3_att",
+      "W3_quiz",
+      "W4_att",
+      "W4_quiz",
+      "W5_att",
+      "W5_quiz"
+    ],
+    "model_path": "models\\academic_sequential_dl.joblib",
+    "description": "Deep sequential learning model tracking week-by-week student learning trajectory (Week 1 -> 5).",
+    "is_active": true
+  },
+  "Campus_Complaint_Classifier": {
+    "version": "1.0.0",
+    "algorithm": "TF-IDF + Logistic Regression",
+    "metrics": {
+      "accuracy": 1.0,
+      "f1_score": 1.0,
+      "num_samples": 136
+    },
+    "features": [
+      "complaint_text_ngrams"
+    ],
+    "model_path": "models\\complaint_classifier.joblib",
+    "description": "NLP triage model classifying natural language student complaints into category and target department.",
+    "is_active": true
+  },
+  "Event_Attendance_Forecaster": {
+    "version": "1.0.0",
+    "algorithm": "RandomForestRegressor",
+    "metrics": {
+      "mae": 8.73,
+      "r2_score": 0.9851,
+      "rmse": 14.89
+    },
+    "features": [
+      "capacity",
+      "event_type",
+      "is_weekend",
+      "hour",
+      "has_speaker",
+      "registrations"
+    ],
+    "model_path": "models\\event_attendance_regressor.joblib",
+    "description": "Forecasts actual student event turnout and expected no-show rates.",
+    "is_active": true
+  },
+  "Canteen_Food_Demand_Forecaster": {
+    "version": "1.0.0",
+    "algorithm": "RandomForestRegressor",
+    "metrics": {
+      "mae": 9.93,
+      "r2_score": 0.9849
+    },
+    "features": [
+      "day_of_week",
+      "meal_type",
+      "is_event",
+      "is_weekend",
+      "student_base"
+    ],
+    "model_path": "models\\canteen_demand_model.joblib",
+    "description": "Predicts student food demand per meal type to minimize canteen kitchen leftover waste.",
+    "is_active": true
+  },
+  "Energy_Anomaly_Detector": {
+    "version": "1.0.0",
+    "algorithm": "IsolationForest",
+    "metrics": {
+      "contamination": 0.06,
+      "samples_trained": 1000,
+      "algorithm": "IsolationForest"
+    },
+    "features": [
+      "hour",
+      "is_weekend",
+      "occupancy",
+      "kwh_consumed"
+    ],
+    "model_path": "models\\energy_isolation_forest.joblib",
+    "description": "Unsupervised anomaly detection identifying nocturnal energy leaks and midday load spikes.",
+    "is_active": true
+  }
+}

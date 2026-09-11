@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ student.get_display_name }} ({{ student.student_id }}) - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">{{ student.get_display_name }}</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Institutional Profile: <code style="color: var(--accent-cyan);">{{ student.student_id }}</code> | {{ student.program }} {{ student.department.name }}
+        </p>
+    </div>
+    <a href="{% url 'students:list' %}" class="btn btn-secondary">« Back to Directory</a>
+</div>
+
+<!-- Student Top KPIs -->
+<div class="metric-grid">
+    <div class="metric-card">
+        <div class="metric-label">CGPA</div>
+        <div class="metric-value">{{ student.cgpa|floatformat:2 }}</div>
+        <div class="metric-sub">Semester {{ student.semester }} - Section {{ student.section }}</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Attendance Rate</div>
+        <div class="metric-value" style="color: {% if student.attendance_percentage < 75 %}var(--accent-rose){% else %}var(--accent-emerald){% endif %};">
+            {{ student.attendance_percentage|floatformat:1 }}%
+        </div>
+        <div class="metric-sub">{% if student.attendance_percentage < 75 %}⚠️ Attendance Shortage{% else %}Meets Criteria{% endif %}</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">AI Risk Assessment</div>
+        <div class="metric-value">
+            {% if risk_assessment %}
+            <span class="badge badge-{{ risk_assessment.risk_level|lower }}">{{ risk_assessment.get_risk_level_display }}</span>
+            {% else %}
+            <span class="badge badge-low">Healthy</span>
+            {% endif %}
+        </div>
+        <div class="metric-sub">{% if risk_assessment %}{{ risk_assessment.risk_score }}% Probability{% else %}No flags{% endif %}</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Backlogs</div>
+        <div class="metric-value">{{ student.backlog_count }}</div>
+        <div class="metric-sub">Admitted {{ student.admission_year }}</div>
+    </div>
+</div>
+
+<!-- Risk Assessment & Interventions -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Risk Details -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">🛡️ Academic Risk Diagnostics</h3>
+            {% if risk_assessment %}
+            <span class="badge badge-{{ risk_assessment.risk_level|lower }}">{{ risk_assessment.risk_level }}</span>
+            {% endif %}
+        </div>
+        {% if risk_assessment %}
+        <p style="font-size: 0.9rem; margin-bottom: 1rem;">
+            <b>Recommended Action:</b> {{ risk_assessment.recommended_action }}
+        </p>
+        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+            <b>Contributing Risk Factors:</b>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem; line-height: 1.6;">
+                {% for factor in risk_assessment.get_factors %}
+                <li>{{ factor }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% else %}
+        <p style="color: var(--text-muted); font-size: 0.85rem;">No automated risk assessment recorded yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Intervention Assignment Form -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">✍️ Assign Faculty Intervention</h3>
+        </div>
+        <form method="POST" action="{% url 'academics:create_intervention' student.student_id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Intervention Category</label>
+                <select name="intervention_type" class="form-select">
+                    <option value="FACULTY_MENTORING">Faculty 1-on-1 Mentoring</option>
+                    <option value="REMEDIAL_CLASS">Remedial Class Session</option>
+                    <option value="ASSIGNMENT_SUPPORT">Assignment & Lab Support Extension</option>
+                    <option value="ATTENDANCE_WARNING">Attendance Shortage Advisory</option>
+                    <option value="PEER_TUTORING">Peer Study Group Assignment</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Action Plan & Notes</label>
+                <textarea name="notes" class="form-textarea" rows="3" placeholder="Specify targeted subjects, mentor assignments, and milestones..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Schedule Intervention</button>
+        </form>
+    </div>
+</div>
+
+<!-- Past Interventions -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">📋 Registered Academic Interventions</h3>
+    </div>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Assigned Faculty</th>
+                    <th>Status</th>
+                    <th>Action Notes</th>
+                    <th>Date Scheduled</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inter in interventions %}
+                <tr>
+                    <td><b>{{ inter.get_intervention_type_display }}</b></td>
+                    <td>{{ inter.faculty|default:"Assigned Department Mentor" }}</td>
+                    <td><span class="badge badge-low">{{ inter.get_status_display }}</span></td>
+                    <td><div style="max-width: 320px; font-size: 0.82rem; color: var(--text-secondary);">{{ inter.notes }}</div></td>
+                    <td>{{ inter.created_at|date:"M d, Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No interventions registered for this student.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

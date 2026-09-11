@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ faculty.user.get_full_name }} - Faculty Profile - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <span class="badge" style="background: rgba(79, 172, 254, 0.15); color: var(--accent-blue); font-weight: 700; margin-bottom: 0.4rem;">{{ faculty.department.name }}</span>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">{{ faculty.user.get_full_name }}</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            {{ faculty.get_designation_display }} | Employee ID: <code style="color: var(--accent-cyan);">{{ faculty.employee_id }}</code>
+        </p>
+    </div>
+    <a href="{% url 'faculty:list' %}" class="btn btn-secondary">« Back to Faculty</a>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h3 class="card-title" style="margin-bottom: 0.75rem;">Specialization & Research</h3>
+    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+        {{ faculty.specialization|default:"Advanced Machine Learning, Distributed Computing and Intelligent Systems." }}
+    </p>
+    <div style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);">
+        <b>Office Location:</b> {{ faculty.cabin_location }} | <b>Available Hours:</b> {{ faculty.office_hours }}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">📚 Course Offerings Supervised</h3>
+    </div>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Title</th>
+                    <th>Credits</th>
+                    <th>Academic Term</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for offering in courses %}
+                <tr>
+                    <td><b>{{ offering.course.code }}</b></td>
+                    <td>{{ offering.course.name }}</td>
+                    <td>{{ offering.course.credits }}</td>
+                    <td>{{ offering.academic_year }} (Sem {{ offering.semester }})</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No courses currently mapped to this faculty.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

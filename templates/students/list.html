@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Directory - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🎓 Institutional Student Directory</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Searchable student records with academic percentiles, attendance metrics, and skill tags.
+        </p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a href="{% url 'students:import_csv' %}" class="btn btn-secondary">📥 Import CSV Dataset</a>
+        <a href="{% url 'academics:risk_dashboard' %}" class="btn btn-primary">🛡️ Academic Risk AI</a>
+    </div>
+</div>
+
+<!-- Filters Bar -->
+<div class="card" style="padding: 1rem 1.5rem; margin-bottom: 1.5rem;">
+    <form method="GET" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <input type="text" name="q" value="{{ q|default:'' }}" class="form-input" placeholder="Search by name, student ID, or skills..." style="flex: 1; min-width: 240px;">
+        
+        <select name="dept" class="form-select" style="width: auto; min-width: 160px;">
+            <option value="">All Departments</option>
+            {% for d in departments %}
+            <option value="{{ d.code }}" {% if selected_dept == d.code %}selected{% endif %}>{{ d.name }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+        {% if q or selected_dept %}
+        <a href="{% url 'students:list' %}" class="btn btn-secondary btn-sm">Clear</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Students Table -->
+<div class="card">
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student ID & Name</th>
+                    <th>Department</th>
+                    <th>Sem</th>
+                    <th>CGPA</th>
+                    <th>Attendance</th>
+                    <th>Skills / Specialization</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in page_obj %}
+                <tr>
+                    <td>
+                        <a href="{% url 'students:detail' s.student_id %}" style="font-weight: 700; color: var(--text-primary);">
+                            {{ s.get_display_name }}
+                        </a>
+                        <div style="font-size: 0.75rem; color: var(--accent-cyan); font-family: monospace;">{{ s.student_id }}</div>
+                    </td>
+                    <td><span class="badge" style="background: rgba(139, 92, 246, 0.15); color: var(--accent-purple);">{{ s.department.code }}</span></td>
+                    <td>{{ s.semester }}</td>
+                    <td><b>{{ s.cgpa|floatformat:2 }}</b></td>
+                    <td>
+                        <span style="color: {% if s.attendance_percentage < 75 %}var(--accent-rose){% else %}var(--accent-emerald){% endif %}; font-weight: 600;">
+                            {{ s.attendance_percentage|floatformat:1 }}%
+                        </span>
+                    </td>
+                    <td>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{ s.skills|default:"General Engineering" }}
+                        </div>
+                    </td>
+                    <td>
+                        <a href="{% url 'students:detail' s.student_id %}" class="btn btn-secondary btn-sm">View Profile</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">No student records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.5rem;">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}&q={{ q|default:'' }}&dept={{ selected_dept|default:'' }}" class="btn btn-secondary btn-sm">« Prev</a>
+        {% endif %}
+        <span class="campus-pill">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}&q={{ q|default:'' }}&dept={{ selected_dept|default:'' }}" class="btn btn-secondary btn-sm">Next »</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
