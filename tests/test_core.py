@@ -155,4 +155,63 @@ class CampusPulseCorePlatformTests(TestCase):
             self.assertEqual(res.status_code, 200, f"Failed to render {r} ({url})")
             self.assertContains(res, "CampusPulse", status_code=200)
 
+    def test_canteen_dashboard_edge_cases(self):
+        """Verifies safe rendering of canteen waste numbers and edge cases."""
+        from apps.canteen.models import Canteen, MealRecord
+        from django.utils import timezone
+        import datetime
+
+        self.client.force_login(self.admin_user)
+        canteen, _ = Canteen.objects.get_or_create(code="CANTEEN-TEST", defaults={"name": "Test Dining Hall"})
+
+        # Edge case: empty records
+        MealRecord.objects.all().delete()
+        res_empty = self.client.get(reverse('canteen:dashboard'))
+        self.assertEqual(res_empty.status_code, 200)
+        self.assertContains(res_empty, "No historical records logged yet.")
+
+        import unittest.mock
+        today = timezone.now().date()
+        cases = [
+            (today - datetime.timedelta(days=1), 'BREAKFAST', 0.0),
+            (today - datetime.timedelta(days=2), 'LUNCH', 5.0),
+            (today - datetime.timedelta(days=3), 'DINNER', 10.0),
+            (today - datetime.timedelta(days=4), 'LUNCH', 10.1),
+            (today - datetime.timedelta(days=5), 'DINNER', 20.0),
+        ]
+        for d, meal_type, waste in cases:
+            MealRecord.objects.create(
+                canteen=canteen,
+                date=d,
+                meal_type=meal_type,
+                meals_prepared=300,
+                meals_sold=280,
+                leftover_waste_kg=waste
+            )
+
+        res = self.client.get(reverse('canteen:dashboard'))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'class="waste-success">0.0 kg</span>')
+        self.assertContains(res, 'class="waste-success">5.0 kg</span>')
+        self.assertContains(res, 'class="waste-success">10.0 kg</span>')
+        self.assertContains(res, 'class="waste-danger">10.1 kg</span>')
+        self.assertContains(res, 'class="waste-danger">20.0 kg</span>')
+
+        # Test safe handling when leftover_waste_kg is None / NULL
+        mock_rec = MealRecord(
+            canteen=canteen,
+            date=today - datetime.timedelta(days=6),
+            meal_type='BREAKFAST',
+            meals_prepared=300,
+            meals_sold=280,
+        )
+        mock_rec.leftover_waste_kg = None
+        with unittest.mock.patch('apps.canteen.views.MealRecord.objects.all') as mock_all:
+            mock_all.return_value = [mock_rec]
+            res_null = self.client.get(reverse('canteen:dashboard'))
+            self.assertEqual(res_null.status_code, 200)
+            self.assertContains(res_null, 'class="waste-na">N/A</span>')
+
+
+
 

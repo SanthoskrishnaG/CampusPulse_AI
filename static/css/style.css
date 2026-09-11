@@ -73,6 +73,22 @@
   --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Status & Telemetry Value Classes */
+.waste-danger {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.waste-success {
+  color: var(--success);
+  font-weight: 700;
+}
+
+.waste-na {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
 /* Base Resets */
 *, *::before, *::after {
   box-sizing: border-box;

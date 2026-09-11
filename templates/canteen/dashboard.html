@@ -75,9 +75,15 @@
                         <td>{{ rec.meals_prepared }}</td>
                         <td><strong style="color: var(--success);">{{ rec.meals_sold }}</strong></td>
                         <td>
-                            <span style="color: {% if rec.leftover_waste_kg > 10 %}var(--danger){% else %}var(--success){% endif %}; font-weight: 700;">
-                                {{ rec.leftover_waste_kg }} kg
-                            </span>
+                            {% if rec.leftover_waste_kg is not None %}
+                                {% if rec.leftover_waste_kg > 10 %}
+                                    <span class="waste-danger">{{ rec.leftover_waste_kg|floatformat:1 }} kg</span>
+                                {% else %}
+                                    <span class="waste-success">{{ rec.leftover_waste_kg|floatformat:1 }} kg</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="waste-na">N/A</span>
+                            {% endif %}
                         </td>
                     </tr>
                     {% empty %}
