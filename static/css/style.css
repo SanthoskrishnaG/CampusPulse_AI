@@ -3008,5 +3008,215 @@ a:hover {
   font-weight: 800;
 }
 
+/* 6. Building Markers, Navigation HUD & Animated SVG Path */
+.cit-bldg-marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cit-bldg-marker:hover,
+.cit-bldg-marker.active {
+  transform: translateY(-4px) scale(1.15);
+  z-index: 1000 !important;
+}
+
+.cit-bldg-icon-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.92rem;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18), 0 0 0 2.5px #FFFFFF;
+  transition: box-shadow 0.2s ease;
+}
+
+.cit-bldg-marker:hover .cit-bldg-icon-wrap {
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35), 0 0 0 3px #2563EB;
+}
+
+.cit-bldg-label-chip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.88);
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  margin-top: 3px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cit-bldg-marker:hover .cit-bldg-label-chip,
+.cit-bldg-marker.active .cit-bldg-label-chip {
+  opacity: 1;
+}
+
+/* Category Color Palette for Map Markers */
+.cat-academic    { background: #EFF6FF; color: #1D4ED8; border-color: #3B82F6; }
+.cat-department  { background: #F0FDF4; color: #15803D; border-color: #22C55E; }
+.cat-library     { background: #FAF5FF; color: #7E22CE; border-color: #A855F7; }
+.cat-food        { background: #FEF2F2; color: #B91C1C; border-color: #EF4444; }
+.cat-parking     { background: #F0FDF4; color: #166534; border-color: #10B981; }
+.cat-transport   { background: #FFFBEB; color: #B45309; border-color: #F59E0B; }
+.cat-hostel      { background: #FDF2F8; color: #BE185D; border-color: #EC4899; }
+.cat-sports      { background: #F0FDFA; color: #0F766E; border-color: #14B8A6; }
+.cat-research    { background: #EEF2FF; color: #4338CA; border-color: #6366F1; }
+.cat-facilities  { background: #F8FAFC; color: #334155; border-color: #64748B; }
+.cat-event       { background: #FFF7ED; color: #C2410C; border-color: #F97316; }
+
+/* Animated SVG Route Path */
+.cit-animated-route {
+  stroke-dasharray: 10, 10;
+  animation: citRouteDash 1.2s linear infinite;
+}
+
+@keyframes citRouteDash {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Campus Route Telemetry HUD Panel */
+.cit-route-hud {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 0.9rem 1.25rem;
+  box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.22), 0 4px 12px rgba(15, 23, 42, 0.08);
+  z-index: 1000;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: hudSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes hudSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 0.4rem;
+}
+
+.hud-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hud-stats {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 0.2rem;
+}
+
+.hud-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.hud-stat-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.hud-stat-val {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #2563EB;
+}
+
+/* Category Filter Bar */
+.cit-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding: 0.4rem 0.2rem;
+  margin-bottom: 0.85rem;
+  scrollbar-width: thin;
+}
+
+.cit-filter-btn {
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.cit-filter-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #0F172A;
+}
+
+.cit-filter-btn.active {
+  background: #2563EB;
+  border-color: #2563EB;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.cit-filter-count {
+  font-size: 0.68rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.cit-filter-btn.active .cit-filter-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
+
 
 

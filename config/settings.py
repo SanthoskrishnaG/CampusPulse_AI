@@ -176,7 +176,7 @@ from config.campus_config import CAMPUS_CONFIG
 CAMPUS_CONFIG = CAMPUS_CONFIG
 CAMPUS_NAME = os.environ.get('CAMPUS_NAME', CAMPUS_CONFIG['name'])
 CAMPUS_SHORT_NAME = CAMPUS_CONFIG['short_name']
-CAMPUS_LAT = float(os.environ.get('CAMPUS_LAT', CAMPUS_CONFIG['latitude']))
-CAMPUS_LNG = float(os.environ.get('CAMPUS_LNG', CAMPUS_CONFIG['longitude']))
+CAMPUS_LAT = CAMPUS_CONFIG['latitude']
+CAMPUS_LNG = CAMPUS_CONFIG['longitude']
 WEATHER_API_BASE_URL = os.environ.get('WEATHER_API_BASE_URL', 'https://api.open-meteo.com/v1/forecast')
 

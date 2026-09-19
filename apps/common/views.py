@@ -146,7 +146,7 @@ def home_view(request):
         {
             "id": "park", "name": "CIT Sports Ground", "dept": "Physical Education",
             "students": "Active Sports", "activity": "Athletics Track", "complaints": 0, "ai_status": "Green Zone",
-            "url": "/common/map/", "top": "50%", "left": "38%"
+            "url": "/map/", "top": "50%", "left": "38%"
         }
     ]
 

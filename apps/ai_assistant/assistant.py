@@ -31,7 +31,7 @@ class CampusAIAssistant:
                 f"- 🗺️ **Locality**: {CAMPUS_CONFIG['locality']}, {CAMPUS_CONFIG['city']}, {CAMPUS_CONFIG['state']} - {CAMPUS_CONFIG['postal_code']}\n"
                 f"- 🌐 **Coordinates**: `{CAMPUS_CONFIG['latitude']}, {CAMPUS_CONFIG['longitude']}`\n"
                 f"- 🎓 **Institution Type**: Premier Government-Aided Autonomous Institution affiliated with Anna University.\n\n"
-                f"You can view the full live geospatial campus telemetry on the [CIT Smart Campus Map](/common/map/)."
+                f"You can view the full live geospatial campus telemetry on the [CIT Smart Campus Map](/map/)."
             )
 
         if 'main gate' in q or 'entrance gate' in q or 'campus gate' in q:
@@ -41,7 +41,7 @@ class CampusAIAssistant:
                 f"- 📍 **Location**: Avinashi Road, Hope College side (Coordinates: `{gate['latitude']}, {gate['longitude']}`)\n"
                 f"- ℹ️ **Details**: {gate['description']}\n"
                 f"- 🚌 **Transit Access**: Connected to CIT Hope College Bus Bay with direct links to Gandhipuram, Railway Station, Singanallur, and Coimbatore Airport.\n\n"
-                f"View on the [Geospatial Campus Map](/common/map/)."
+                f"View on the [Geospatial Campus Map](/map/)."
             )
 
         if 'cse department' in q or 'cse block' in q or 'computer science department' in q or 'where is cse' in q:
@@ -73,7 +73,7 @@ class CampusAIAssistant:
                 f"- 📍 **Location**: Central Knowledge Quad (`{lib['latitude']}, {lib['longitude']}`)\n"
                 f"- ℹ️ **Details**: {lib['description']}\n"
                 f"- 📖 **Features**: RFID autonomous issue desks, digital research stations, and 60,000+ technical volumes.\n\n"
-                f"Explore library location on the [Campus Map](/common/map/)."
+                f"Explore library location on the [Campus Map](/map/)."
             )
 
         # 1. Academic Risk Questions (Permission-Guarded: Super Admin, College Admin, Dept Admin, Faculty only)

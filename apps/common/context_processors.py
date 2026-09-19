@@ -1,3 +1,4 @@
+import json
 from django.conf import settings
 from .weather import WeatherService
 from apps.accounts.models import User
@@ -14,13 +15,17 @@ def campus_context(request):
         except Exception:
             unread_notifications = 0
 
+    campus_config = getattr(settings, 'CAMPUS_CONFIG', {})
+
     return {
         'CAMPUS_NAME': settings.CAMPUS_NAME,
         'CAMPUS_SHORT_NAME': getattr(settings, 'CAMPUS_SHORT_NAME', 'CIT'),
         'CAMPUS_LAT': settings.CAMPUS_LAT,
         'CAMPUS_LNG': settings.CAMPUS_LNG,
-        'CAMPUS_CONFIG': getattr(settings, 'CAMPUS_CONFIG', {}),
+        'CAMPUS_CONFIG': campus_config,
+        'CAMPUS_CONFIG_JSON': json.dumps(campus_config),
         'current_weather': WeatherService.get_current_weather(),
         'unread_notifications_count': unread_notifications,
         'ROLES': User.Role,
     }
+

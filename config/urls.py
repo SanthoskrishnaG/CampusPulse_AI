@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from apps.common import views as common_views
 
 urlpatterns = [
     # Administrative Core
@@ -15,6 +16,7 @@ urlpatterns = [
 
     # Public Landing, Geo Map & System Audit
     path('', include('apps.common.urls', namespace='common')),
+    path('common/map/', common_views.map_view, name='common_map_direct'),
 
     # Core Academic & Institutional Domains
     path('departments/', include('apps.departments.urls', namespace='departments')),

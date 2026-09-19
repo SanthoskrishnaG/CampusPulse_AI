@@ -4,22 +4,22 @@
 {% block title %}Smart Campus Map - Coimbatore Institute of Technology (CIT) - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 1300px; margin: 0 auto;">
+<div style="max-width: 1320px; margin: 0 auto;">
 
     <!-- Page Hero with CIT Context & 3D Visual -->
     <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #E0F2FE 100%);">
-        <div style="max-width: 700px;">
+        <div style="max-width: 720px;">
             <div class="hero-pill" style="margin-bottom: 0.5rem;">
                 <span>🗺️</span>
                 <span>Coimbatore Institute of Technology • Hope College / Peelamedu</span>
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
                 CIT Smart Campus Map<br>
-                <span class="gradient-ai" style="font-size: 1.85rem;">Geospatial Campus Intelligence.</span>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Geospatial Navigation & Wayfinding.</span>
             </h1>
             <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
-                Real-time geospatial telemetry for Coimbatore Institute of Technology (Civil Aerodrome Post, Coimbatore – 641014).
-                Explore academic departments, research labs, smart parking bays, transit routes, and dining facilities.
+                Interactive campus navigation for Coimbatore Institute of Technology (Civil Aerodrome Post, Coimbatore – 641014).
+                Explore 27 academic blocks, laboratories, smart parking zones, dining facilities, and animated internal pedestrian & vehicle routes.
             </p>
         </div>
         <div style="flex-shrink: 0;">
@@ -27,47 +27,153 @@
         </div>
     </div>
 
-    <!-- Map View Mode Toggle, Filter & Search Bar -->
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:1rem;">
+    <!-- Mode Toggle, Search, Navigation Bar & Route Toggles -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
+        <!-- 2D / 3D Mode Selector -->
         <div style="display:flex; gap:0.5rem; background:#FFFFFF; border:1px solid var(--border-subtle); padding:0.35rem; border-radius:var(--radius-sm); box-shadow:var(--shadow-xs);">
             <button id="btn2dView" class="btn btn-primary btn-sm" onclick="switchMapView('2d')">
-                🗺️ 2D Geospatial Map
+                🗺️ 2D Campus Map & Routes
             </button>
             <button id="btn3dView" class="btn btn-secondary btn-sm" onclick="switchMapView('3d')">
-                🏢 3D Isometric Campus Twin
+                🏢 3D Isometric Twin
             </button>
         </div>
 
-        <!-- Campus Search & Quick Focus Input -->
-        <div style="display:flex; align-items:center; gap:0.5rem; flex-grow:1; max-width:480px; margin:0 0.5rem;">
+        <!-- Campus Search Bar -->
+        <div style="display:flex; align-items:center; gap:0.5rem; flex-grow:1; max-width:440px; margin:0 0.5rem;">
             <div style="position:relative; width:100%;">
-                <input type="text" id="mapSearchInput" class="form-input" placeholder="Search CIT campus, CSE, Library, Canteen, Parking..." style="width:100%; padding:0.45rem 2rem 0.45rem 0.85rem; font-size:0.85rem; border-radius:8px;">
+                <input type="text" id="mapSearchInput" class="form-input" placeholder="Search CIT, CSE, Library, Canteen, Parking..." style="width:100%; padding:0.45rem 2rem 0.45rem 0.85rem; font-size:0.85rem; border-radius:8px;">
                 <span style="position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--text-muted); cursor:pointer;" onclick="executeMapSearch()">🔍</span>
             </div>
             <button class="btn btn-secondary btn-sm" style="white-space:nowrap; padding:0.45rem 0.75rem;" onclick="focusCITCampus()">
-                🎯 Focus CIT
+                🎯 CIT
             </button>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.75rem;">
-            <span class="ai-badge badge-ai-realtime">● CIT GPS Telemetry Sync</span>
-            <span style="font-size:0.82rem; color:var(--text-muted);" title="Civil Aerodrome Post, Coimbatore">Coordinates: {{ CAMPUS_LAT }}, {{ CAMPUS_LNG }}</span>
+        <!-- Route Network Toggle & Telemetry Status -->
+        <div style="display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap;">
+            <button id="btnToggleRoutes" class="btn btn-secondary btn-sm" style="font-weight:700;" onclick="toggleAllCampusRoutes()">
+                🛣️ Show All Campus Routes
+            </button>
+            <span class="ai-badge badge-ai-realtime">● CIT GPS Sync</span>
         </div>
     </div>
 
+    <!-- Building-to-Building Route Planning Bar -->
+    <div class="card-light" style="padding: 0.75rem 1.25rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; background: #FFFFFF; border-left: 4px solid #2563EB;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; flex-grow: 1;">
+            <span style="font-size: 0.82rem; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: 0.04em;">Campus Route Navigator:</span>
+            
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">From:</span>
+                <select id="routeStartSelect" class="form-input" style="padding: 0.35rem 0.65rem; font-size: 0.82rem; min-width: 190px;">
+                    <!-- Populated dynamically via JS -->
+                </select>
+            </div>
+
+            <span style="color: var(--brand-blue); font-weight: 800;">➔</span>
+
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+                <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">To:</span>
+                <select id="routeDestSelect" class="form-input" style="padding: 0.35rem 0.65rem; font-size: 0.82rem; min-width: 190px;">
+                    <!-- Populated dynamically via JS -->
+                </select>
+            </div>
+
+            <button class="btn btn-primary btn-sm" onclick="calculateSelectedRoute()">
+                🚶 Find Route
+            </button>
+            <button id="btnClearRouteBtn" class="btn btn-secondary btn-sm" style="display: none;" onclick="clearActiveRoute()">
+                ✕ Clear
+            </button>
+        </div>
+
+        <div id="routeStatusBadge" style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary);">
+            Select any two campus locations to navigate
+        </div>
+    </div>
+
+    <!-- Category Filter Bar (All 27 Buildings/Components Categorized) -->
+    <div class="cit-filter-bar" id="categoryFilterBar">
+        <button class="cit-filter-btn active" onclick="filterByCategory('ALL', this)">
+            <span>🌐 All Locations</span> <span class="cit-filter-count" id="countAll">27</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('DEPARTMENT', this)">
+            <span>🏢 Departments</span> <span class="cit-filter-count">6</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('ACADEMIC', this)">
+            <span>🏫 Academic</span> <span class="cit-filter-count">1</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('RESEARCH', this)">
+            <span>🤖 AI & Labs</span> <span class="cit-filter-count">3</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('LIBRARY', this)">
+            <span>📚 Library</span> <span class="cit-filter-count">1</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('FOOD', this)">
+            <span>🍽️ Canteen</span> <span class="cit-filter-count">1</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('EVENT', this)">
+            <span>🎭 Auditorium & Halls</span> <span class="cit-filter-count">2</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('PARKING', this)">
+            <span>🚗 Smart Parking</span> <span class="cit-filter-count">3</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('TRANSPORT', this)">
+            <span>🚌 Transit</span> <span class="cit-filter-count">2</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('HOSTEL', this)">
+            <span>🏠 Hostels</span> <span class="cit-filter-count">2</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('SPORTS', this)">
+            <span>⚽ Sports & Grounds</span> <span class="cit-filter-count">2</span>
+        </button>
+        <button class="cit-filter-btn" onclick="filterByCategory('FACILITIES', this)">
+            <span>🏥 Facilities & Security</span> <span class="cit-filter-count">4</span>
+        </button>
+    </div>
+
     <!-- 2D Leaflet Map Container Card -->
-    <div id="map2dContainer" class="card-light" style="padding: 0; overflow: hidden; margin-bottom: 1.5rem; position:relative;">
-        <div id="campusMap" style="height: 600px; width: 100%;"></div>
+    <div id="map2dContainer" class="card-light" style="padding: 0; overflow: hidden; margin-bottom: 1.5rem; position: relative;">
+        <div id="campusMap" style="height: 640px; width: 100%;"></div>
+
+        <!-- Floating Active Route Telemetry HUD -->
+        <div id="citRouteHud" class="cit-route-hud" style="display: none;">
+            <div class="hud-header">
+                <div class="hud-title">
+                    <span style="font-size: 1.1rem;">🚶</span>
+                    <span id="hudRouteTitle">Main Gate ➔ CSE Department</span>
+                </div>
+                <button onclick="clearActiveRoute()" style="background: none; border: none; font-size: 1.1rem; color: var(--text-muted); cursor: pointer;">✕</button>
+            </div>
+            <div class="hud-stats">
+                <div class="hud-stat-item">
+                    <span class="hud-stat-label">Distance</span>
+                    <span class="hud-stat-val" id="hudRouteDist">180 m</span>
+                </div>
+                <div class="hud-stat-item">
+                    <span class="hud-stat-label">Walk Time</span>
+                    <span class="hud-stat-val" id="hudRouteTime">~2.5 mins</span>
+                </div>
+                <div class="hud-stat-item">
+                    <span class="hud-stat-label">Pathway</span>
+                    <span class="hud-stat-val" id="hudRouteMode" style="font-size: 0.88rem; color: #16A34A;">Paved Walkway</span>
+                </div>
+            </div>
+            <div id="hudRouteSteps" style="font-size: 0.74rem; color: var(--text-secondary); line-height: 1.4; margin-top: 0.2rem;">
+                <!-- Step description -->
+            </div>
+        </div>
     </div>
 
     <!-- 3D Isometric Digital Twin Container Card -->
     <div id="map3dContainer" class="card-light" style="display:none; padding: 0; overflow: hidden; margin-bottom: 1.5rem; position: relative;">
-        <div style="position: relative; width: 100%; height: 600px; background: #E0F2FE; overflow: hidden;">
+        <div style="position: relative; width: 100%; height: 640px; background: #E0F2FE; overflow: hidden;">
             <img src="{% static 'images/campus_isometric_hero.jpg' %}" alt="CIT 3D Campus Digital Twin" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(1.02);">
             
             <!-- 3D Digital Twin Hotspots for CIT -->
             <div class="campus-pin-wrapper pin-cse" data-top="34%" data-left="44%">
-                <a href="{% url 'departments:list' %}" class="campus-pin">Computing Complex (CSE/IT)</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('DEPT-CSE')" class="campus-pin">Computing Complex (CSE/IT)</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -80,12 +186,12 @@
                         <div><span class="telemetry-item-label">Students</span><div class="telemetry-item-val">842 Enrolled</div></div>
                         <div><span class="telemetry-item-label">AI Status</span><div class="telemetry-item-val" style="color:var(--success);">Optimal</div></div>
                     </div>
-                    <a href="{% url 'departments:list' %}" class="telemetry-link-btn">View CSE Telemetry ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('DEPT-CSE')" class="telemetry-link-btn">🚶 Navigate to CSE on 2D Map ➔</a>
                 </div>
             </div>
 
             <div class="campus-pin-wrapper pin-science" data-top="22%" data-left="24%">
-                <a href="{% url 'departments:list' %}" class="campus-pin">Core Engineering Block</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('DEPT-ECE')" class="campus-pin">Core Engineering Block</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -98,12 +204,12 @@
                         <div><span class="telemetry-item-label">Students</span><div class="telemetry-item-val">620 Active</div></div>
                         <div><span class="telemetry-item-label">Workshops</span><div class="telemetry-item-val">4 Scheduled</div></div>
                     </div>
-                    <a href="{% url 'departments:list' %}" class="telemetry-link-btn">View Department Telemetry ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('DEPT-ECE')" class="telemetry-link-btn">🚶 Navigate to Core Engg on 2D Map ➔</a>
                 </div>
             </div>
 
             <div class="campus-pin-wrapper pin-library" data-top="46%" data-left="62%">
-                <a href="{% url 'departments:list' %}" class="campus-pin">Central Library</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('LIB-CENTRAL')" class="campus-pin">Central Library</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -113,15 +219,15 @@
                         <span class="ai-badge badge-ai-realtime">Quiet Zone</span>
                     </div>
                     <div class="telemetry-grid">
-                        <div><span class="telemetry-item-label">Occupancy</span><div class="telemetry-item-val">310 / 500</div></div>
+                        <div><span class="telemetry-item-label">Occupancy</span><div class="telemetry-item-val">310 / 850</div></div>
                         <div><span class="telemetry-item-label">Digital Stations</span><div class="telemetry-item-val">48 Avail</div></div>
                     </div>
-                    <a href="{% url 'departments:list' %}" class="telemetry-link-btn">Explore Library ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('LIB-CENTRAL')" class="telemetry-link-btn">🚶 Navigate to Library on 2D Map ➔</a>
                 </div>
             </div>
 
             <div class="campus-pin-wrapper pin-canteen" data-top="64%" data-left="52%">
-                <a href="{% url 'canteen:dashboard' %}" class="campus-pin">Smart Canteen</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('CAN-MAIN')" class="campus-pin">Smart Canteen</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -134,12 +240,12 @@
                         <div><span class="telemetry-item-label">Demand</span><div class="telemetry-item-val">780 Meals</div></div>
                         <div><span class="telemetry-item-label">Seating</span><div class="telemetry-item-val">65% Full</div></div>
                     </div>
-                    <a href="{% url 'canteen:dashboard' %}" class="telemetry-link-btn">Open Canteen Dashboard ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('CAN-MAIN')" class="telemetry-link-btn">🚶 Navigate to Canteen on 2D Map ➔</a>
                 </div>
             </div>
 
             <div class="campus-pin-wrapper pin-parking" data-top="74%" data-left="28%">
-                <a href="{% url 'parking:dashboard' %}" class="campus-pin">Main Gate Parking (Lot A)</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('PKG-STUDENT')" class="campus-pin">Main Gate Parking (Lot A)</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -152,12 +258,12 @@
                         <div><span class="telemetry-item-label">Occupancy</span><div class="telemetry-item-val">Available</div></div>
                         <div><span class="telemetry-item-label">Status</span><div class="telemetry-item-val" style="color:var(--success);">Sensor Monitored</div></div>
                     </div>
-                    <a href="{% url 'parking:dashboard' %}" class="telemetry-link-btn">Open Parking Telemetry ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('PKG-STUDENT')" class="telemetry-link-btn">🚶 Navigate to Parking on 2D Map ➔</a>
                 </div>
             </div>
 
             <div class="campus-pin-wrapper pin-bus" data-top="82%" data-left="68%">
-                <a href="{% url 'transport:dashboard' %}" class="campus-pin">Hope College Transit Hub</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('TRANSIT-HUB')" class="campus-pin">Hope College Transit Hub</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -170,7 +276,7 @@
                         <div><span class="telemetry-item-label">Coimbatore Routes</span><div class="telemetry-item-val">4 Corridors</div></div>
                         <div><span class="telemetry-item-label">Fleet Status</span><div class="telemetry-item-val" style="color:var(--brand-blue);">TN-38 Live GPS</div></div>
                     </div>
-                    <a href="{% url 'transport:dashboard' %}" class="telemetry-link-btn">Open Transit Telemetry ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('TRANSIT-HUB')" class="telemetry-link-btn">🚶 Navigate to Transit Hub on 2D Map ➔</a>
                 </div>
             </div>
         </div>
@@ -200,26 +306,32 @@
         <div class="flow-node" style="background:#EFF6FF; border-color:#93C5FD; color:#1D4ED8;">🧠 AI ENGINE</div>
     </div>
 
-    <!-- Legend -->
-    <div class="card-light" style="padding: 1rem 1.5rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin-top: 1rem;">
+    <!-- Map Legend -->
+    <div class="card-light" style="padding: 1rem 1.5rem; display: flex; gap: 1.8rem; flex-wrap: wrap; align-items: center; margin-top: 1rem;">
         <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Map Legend:</span>
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-            <span style="width: 14px; height: 14px; background: #2563EB; border-radius: 50%; box-shadow: 0 0 0 2px #93C5FD;"></span> CIT Campus Center
+            <span style="width: 14px; height: 14px; border: 2px dashed #0284C7; background: rgba(56, 189, 248, 0.18); border-radius: 2px;"></span> CIT Campus Boundary
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-            <span style="width: 12px; height: 12px; border: 2px dashed #0284C7; background: rgba(56, 189, 248, 0.2); border-radius: 2px;"></span> CIT Campus Area
+            <span style="width: 18px; height: 4px; background: #2563EB; border-radius: 2px;"></span> Active Walkway Route
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-            <span style="width: 12px; height: 12px; background: var(--brand-cyan); border-radius: 50%;"></span> Academic Blocks
+            <span style="width: 10px; height: 10px; background: #1D4ED8; border-radius: 50%;"></span> Academic / Departments
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-            <span style="width: 12px; height: 12px; background: var(--success); border-radius: 50%;"></span> Smart Parking
+            <span style="width: 10px; height: 10px; background: #7E22CE; border-radius: 50%;"></span> Library
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-            <span style="width: 12px; height: 12px; background: var(--warning); border-radius: 50%;"></span> Transit Stops
+            <span style="width: 10px; height: 10px; background: #B91C1C; border-radius: 50%;"></span> Canteen / Dining
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
-            <span style="width: 12px; height: 12px; background: var(--danger); border-radius: 50%;"></span> Dining & Facilities
+            <span style="width: 10px; height: 10px; background: #166534; border-radius: 50%;"></span> Smart Parking
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+            <span style="width: 10px; height: 10px; background: #B45309; border-radius: 50%;"></span> Transit Hub
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+            <span style="width: 10px; height: 10px; background: #0F766E; border-radius: 50%;"></span> Sports & Ground
         </div>
     </div>
 
@@ -230,62 +342,109 @@
 <script>
 let leafletMap = null;
 let citMainMarker = null;
-const allLocationMarkers = [];
+let campusBoundaryLayer = null;
+let activeRouteLayer = null;
+let allCampusRoutesLayerGroup = null;
+let areAllRoutesVisible = false;
 
+// Master Campus Configuration from Centralized Server Settings
+const CIT_CONFIG = {{ CAMPUS_CONFIG_JSON|default:'{}'|safe }};
+
+// Fallback in case context processor has empty dict
 const CIT_COORDS = {
-    lat: {{ CAMPUS_LAT|default:11.02752 }},
-    lng: {{ CAMPUS_LNG|default:77.02724 }},
-    zoom: 17,
-    name: "{{ CAMPUS_NAME|escapejs }}",
-    shortName: "{{ CAMPUS_SHORT_NAME|default:'CIT'|escapejs }}",
-    locality: "Hope College / Peelamedu, Coimbatore",
-    address: "Civil Aerodrome Post, Coimbatore, Tamil Nadu - 641014"
+    lat: CIT_CONFIG.latitude || 11.02752,
+    lng: CIT_CONFIG.longitude || 77.02724,
+    zoom: CIT_CONFIG.default_zoom || 17,
+    name: CIT_CONFIG.name || "Coimbatore Institute of Technology",
+    shortName: CIT_CONFIG.short_name || "CIT",
+    locality: CIT_CONFIG.locality || "Hope College / Peelamedu",
+    address: CIT_CONFIG.address || "Civil Aerodrome Post, Coimbatore, Tamil Nadu - 641014"
 };
 
-// Approximate CIT Campus Area Boundary Polygon for visualization demo
-const CIT_BOUNDARY_COORDS = [
-    [11.0302, 77.0250],
-    [11.0306, 77.0295],
-    [11.0252, 77.0301],
-    [11.0246, 77.0255]
+const CIT_BOUNDARY_COORDS = CIT_CONFIG.boundary_approx || [
+    [11.0298, 77.0252],
+    [11.0304, 77.0282],
+    [11.0299, 77.0305],
+    [11.0268, 77.0310],
+    [11.0245, 77.0302],
+    [11.0242, 77.0270],
+    [11.0250, 77.0252],
+    [11.0276, 77.0250]
 ];
+
+const CIT_WAYPOINTS = CIT_CONFIG.waypoints || {
+    "WP_GATE": [11.0291, 77.0268],
+    "WP_ADMIN_ROUND": [11.0283, 77.0271],
+    "WP_QUAD_CENTRE": [11.0276, 77.0271],
+    "WP_EAST_AVENUE": [11.0276, 77.0283],
+    "WP_AUDI_LANE": [11.0284, 77.0283],
+    "WP_SOUTH_SPINE": [11.0266, 77.0271],
+    "WP_HOSTEL_JUNC": [11.0254, 77.0275],
+    "WP_SPORTS_ROAD": [11.0260, 77.0285],
+    "WP_WEST_PARK_LANE": [11.0288, 77.0262]
+};
+
+const CIT_LOCATIONS = CIT_CONFIG.locations || [];
+const locationMarkersMap = {};
 
 document.addEventListener('DOMContentLoaded', () => {
     initCITMap();
     initSearchListener();
+    populateRouteDropdowns();
 });
 
 function initCITMap() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // If reduced motion is preferred, initialize directly at CIT Campus
-    const initialLat = prefersReducedMotion ? CIT_COORDS.lat : 11.0168;
-    const initialLng = prefersReducedMotion ? CIT_COORDS.lng : 76.9558;
-    const initialZoom = prefersReducedMotion ? CIT_COORDS.zoom : 12;
+    const initialLat = prefersReducedMotion ? CIT_COORDS.lat : (CIT_CONFIG.regional_lat || 11.0168);
+    const initialLng = prefersReducedMotion ? CIT_COORDS.lng : (CIT_CONFIG.regional_lng || 76.9558);
+    const initialZoom = prefersReducedMotion ? CIT_COORDS.zoom : (CIT_CONFIG.regional_zoom || 12);
 
-    leafletMap = L.map('campusMap').setView([initialLat, initialLng], initialZoom);
+    leafletMap = L.map('campusMap', {
+        zoomControl: true,
+        scrollWheelZoom: true
+    }).setView([initialLat, initialLng], initialZoom);
 
-    // Clean CARTO light tiles matching platform aesthetic
+    // Clean CARTO light tiles
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; CARTO',
         maxZoom: 19
     }).addTo(leafletMap);
 
-    // Add approximate CIT Campus Boundary Polygon
-    const campusBoundary = L.polygon(CIT_BOUNDARY_COORDS, {
+    // Add Layer Group for All Campus Routes
+    allCampusRoutesLayerGroup = L.layerGroup().addTo(leafletMap);
+
+    // Render CIT Campus Boundary Polygon
+    renderCampusBoundary();
+
+    // Render Central CIT Pulse Marker
+    renderCITMainPulseMarker();
+
+    // Render all 27 Building Markers
+    renderAllBuildingMarkers();
+
+    // Camera flight sequence if normal motion
+    if (!prefersReducedMotion) {
+        runCameraFlightSequence();
+    }
+}
+
+function renderCampusBoundary() {
+    campusBoundaryLayer = L.polygon(CIT_BOUNDARY_COORDS, {
         color: '#0284C7',
         fillColor: '#38BDF8',
-        fillOpacity: 0.12,
-        weight: 2,
-        dashArray: '5, 6'
+        fillOpacity: 0.10,
+        weight: 2.5,
+        dashArray: '6, 6'
     }).addTo(leafletMap);
 
-    campusBoundary.bindTooltip('<strong>CIT Campus Area</strong><br><span style="font-size:0.75rem; color:#64748B;">Approximate Campus Boundary (Demo)</span>', {
+    campusBoundaryLayer.bindTooltip('<strong>CIT Campus Area</strong><br><span style="font-size:0.75rem; color:#64748B;">Approximate Campus Boundary (Demo)</span>', {
         sticky: true,
         direction: 'top'
     });
+}
 
-    // Create Premium Animated CIT Marker with Pulse & Glow
+function renderCITMainPulseMarker() {
     const citDivIcon = L.divIcon({
         className: 'cit-main-marker',
         html: `
@@ -294,19 +453,18 @@ function initCITMap() {
                 🏛️ ${CIT_COORDS.shortName}
             </div>
         `,
-        iconSize: [80, 36],
-        iconAnchor: [40, 18]
+        iconSize: [84, 38],
+        iconAnchor: [42, 19]
     });
 
     citMainMarker = L.marker([CIT_COORDS.lat, CIT_COORDS.lng], { icon: citDivIcon }).addTo(leafletMap);
 
-    // Rich Tooltip on Hover
     citMainMarker.bindTooltip(`
         <div style="font-family:'Inter', sans-serif; padding:4px 2px; text-align:left;">
             <div style="font-weight:800; font-size:0.88rem; color:#0F172A;">${CIT_COORDS.name}</div>
             <div style="font-weight:700; font-size:0.78rem; color:#2563EB;">${CIT_COORDS.shortName}</div>
             <div style="font-size:0.75rem; color:#475569; margin-top:2px;">Hope College / Peelamedu</div>
-            <div style="font-size:0.72rem; color:#64748B;">Coimbatore, Tamil Nadu</div>
+            <div style="font-size:0.72rem; color:#64748B;">Coimbatore, Tamil Nadu - 641014</div>
         </div>
     `, {
         direction: 'top',
@@ -314,91 +472,106 @@ function initCITMap() {
         opacity: 0.98
     });
 
-    // Rich Popup on Click
     citMainMarker.bindPopup(`
-        <div style="color:#0F172A; font-family:'Inter', sans-serif; min-width:240px; padding:4px 0;">
+        <div style="color:#0F172A; font-family:'Inter', sans-serif; min-width:250px; padding:4px 0;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                <span style="font-size:1.4rem;">🏛️</span>
+                <span style="font-size:1.5rem;">🏛️</span>
                 <div>
-                    <h4 style="margin:0; font-size:0.95rem; font-weight:800; color:#1E3A8A;">${CIT_COORDS.name}</h4>
-                    <span style="font-size:0.74rem; font-weight:700; color:#2563EB; background:#EFF6FF; padding:2px 6px; border-radius:4px;">${CIT_COORDS.shortName} • Autonomous</span>
+                    <h4 style="margin:0; font-size:0.98rem; font-weight:800; color:#1E3A8A;">${CIT_COORDS.name}</h4>
+                    <span style="font-size:0.74rem; font-weight:700; color:#2563EB; background:#EFF6FF; padding:2px 6px; border-radius:4px;">Autonomous • Anna University</span>
                 </div>
             </div>
             <p style="margin:0 0 6px; font-size:0.8rem; color:#475569; line-height:1.4;">
                 📍 <strong>Address:</strong> ${CIT_COORDS.address}
             </p>
-            <p style="margin:0 0 8px; font-size:0.78rem; color:#64748B;">
-                Civil Aerodrome Post, Hope College / Peelamedu corridor on Avinashi Road.
-            </p>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; background:#F8FAFC; padding:8px; border-radius:6px; font-size:0.76rem; border:1px solid #E2E8F0;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; background:#F8FAFC; padding:8px; border-radius:6px; font-size:0.76rem; border:1px solid #E2E8F0; margin-bottom:8px;">
                 <div><span style="color:#64748B;">AI Engine:</span> <strong style="color:#16A34A;">Online</strong></div>
+                <div><span style="color:#64748B;">Buildings:</span> <strong>27 Mapped</strong></div>
                 <div><span style="color:#64748B;">Telemetry:</span> <strong style="color:#0284C7;">Live GPS</strong></div>
-                <div><span style="color:#64748B;">Departments:</span> <strong>7 Core</strong></div>
-                <div><span style="color:#64748B;">Students:</span> <strong>4,500+</strong></div>
+                <div><span style="color:#64748B;">Routes:</span> <strong>All Active</strong></div>
             </div>
-            <div style="margin-top:8px; text-align:right;">
-                <a href="{% url 'common:home' %}" style="font-size:0.76rem; color:#2563EB; font-weight:700; text-decoration:none;">Open Digital Twin ➔</a>
-            </div>
+            <button class="btn btn-primary btn-sm" style="width:100%; font-size:0.78rem;" onclick="toggleAllCampusRoutes()">
+                🛣️ Toggle Campus Walkways & Roads
+            </button>
         </div>
     `);
+}
 
-    // Fetch campus locations from database API
-    fetch('{% url "common:api_map_locations" %}')
-        .then(res => res.json())
-        .then(locations => {
-            locations.forEach(loc => {
-                const marker = L.circleMarker([loc.latitude, loc.longitude], {
-                    radius: 7,
-                    fillColor: getCategoryColor(loc.category),
-                    color: '#FFFFFF',
-                    weight: 2,
-                    opacity: 1,
-                    fillOpacity: 0.9
-                }).addTo(leafletMap);
+function renderAllBuildingMarkers() {
+    CIT_LOCATIONS.forEach(loc => {
+        const catClass = getCategoryClass(loc.category);
+        const iconSymbol = loc.icon || '📍';
 
-                marker.bindPopup(`
-                    <div style="color:#0F172A; font-family:'Inter', sans-serif;">
-                        <h4 style="margin: 0 0 4px; font-size: 0.95rem; font-weight:700; color:#0F172A;">${loc.name}</h4>
-                        <p style="margin: 0 0 4px; font-size: 0.8rem; color: #475569;">
-                            <strong>Code:</strong> ${loc.code} | <strong>Category:</strong> ${loc.category}
-                        </p>
-                        <p style="margin: 0; font-size: 0.76rem; color: #64748B;">
-                            ${loc.description || 'CIT Campus Landmark'}
-                        </p>
+        const customIcon = L.divIcon({
+            className: 'cit-bldg-marker',
+            html: `
+                <div class="cit-bldg-icon-wrap ${catClass}">
+                    ${iconSymbol}
+                </div>
+                <div class="cit-bldg-label-chip">
+                    ${loc.name}
+                </div>
+            `,
+            iconSize: [34, 34],
+            iconAnchor: [17, 17],
+            popupAnchor: [0, -18]
+        });
+
+        const marker = L.marker([loc.latitude, loc.longitude], { icon: customIcon }).addTo(leafletMap);
+
+        const verifiedBadge = loc.is_verified 
+            ? `<span style="font-size:0.68rem; background:#F0FDF4; color:#15803D; padding:2px 6px; border-radius:10px; font-weight:700;">Verified Landmark</span>`
+            : `<span style="font-size:0.68rem; background:#FFFBEB; color:#B45309; padding:2px 6px; border-radius:10px; font-weight:700;">Campus Component</span>`;
+
+        marker.bindPopup(`
+            <div style="color:#0F172A; font-family:'Inter', sans-serif; min-width:240px; padding:2px 0;">
+                <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px; gap:8px;">
+                    <div>
+                        <h4 style="margin:0 0 2px; font-size:0.95rem; font-weight:800; color:#0F172A;">${iconSymbol} ${loc.name}</h4>
+                        <span style="font-size:0.72rem; color:#2563EB; font-weight:700;">${loc.code} • ${loc.category}</span>
                     </div>
-                `);
+                    ${verifiedBadge}
+                </div>
+                <p style="margin:0 0 8px; font-size:0.78rem; color:#475569; line-height:1.4;">
+                    ${loc.description || 'Designated CIT Campus Facility'}
+                </p>
+                <div style="display:flex; justify-content:space-between; background:#F8FAFC; padding:6px 8px; border-radius:6px; font-size:0.74rem; border:1px solid #E2E8F0; margin-bottom:8px;">
+                    <span><strong>Floors:</strong> ${loc.floor_count || 1}</span>
+                    <span><strong>Capacity:</strong> ${loc.capacity || 100}</span>
+                    <span><strong>Status:</strong> <span style="color:#16A34A; font-weight:700;">${loc.status || 'Active'}</span></span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <button class="btn btn-primary btn-sm" style="font-size:0.78rem; width:100%;" onclick="drawRouteToBuilding('${loc.code}')">
+                        🚶 Show Route from Main Gate
+                    </button>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn btn-secondary btn-sm" style="font-size:0.74rem; flex:1;" onclick="setRouteOrigin('${loc.code}')">
+                            🧭 Set as Origin
+                        </button>
+                        <button class="btn btn-secondary btn-sm" style="font-size:0.74rem; flex:1;" onclick="centerOnLocation('${loc.code}')">
+                            🎯 Center
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `);
 
-                allLocationMarkers.push({ data: loc, marker: marker });
-            });
-        })
-        .catch(err => console.error("Map locations fetch failed:", err));
-
-    // Smooth Camera Flight Animation (Step sequence to CIT)
-    if (!prefersReducedMotion) {
-        runCameraFlightSequence();
-    }
+        locationMarkersMap[loc.code] = {
+            data: loc,
+            marker: marker
+        };
+    });
 }
 
 function runCameraFlightSequence() {
-    // Sequence:
-    // 1. Regional Coimbatore view (12)
-    // 2. Smoothly move toward Hope College / Peelamedu (15)
-    // 3. Smoothly zoom and center on Coimbatore Institute of Technology (17)
     setTimeout(() => {
         if (!leafletMap) return;
-        leafletMap.flyTo([11.0275, 77.0180], 15, {
-            duration: 1.2,
-            easeLinearity: 0.25
-        });
+        leafletMap.flyTo([11.0275, 77.0180], 15, { duration: 1.2, easeLinearity: 0.25 });
 
         setTimeout(() => {
             if (!leafletMap) return;
-            leafletMap.flyTo([CIT_COORDS.lat, CIT_COORDS.lng], CIT_COORDS.zoom, {
-                duration: 1.2,
-                easeLinearity: 0.25
-            });
+            leafletMap.flyTo([CIT_COORDS.lat, CIT_COORDS.lng], CIT_COORDS.zoom, { duration: 1.2, easeLinearity: 0.25 });
 
-            // Open CIT marker popup slightly after arrival to welcome the user
             setTimeout(() => {
                 if (citMainMarker) {
                     citMainMarker.openPopup();
@@ -410,12 +583,296 @@ function runCameraFlightSequence() {
 
 function focusCITCampus() {
     if (!leafletMap) return;
-    leafletMap.flyTo([CIT_COORDS.lat, CIT_COORDS.lng], CIT_COORDS.zoom, {
-        duration: 1.0
-    });
+    leafletMap.flyTo([CIT_COORDS.lat, CIT_COORDS.lng], CIT_COORDS.zoom, { duration: 1.0 });
     if (citMainMarker) {
         citMainMarker.openPopup();
     }
+}
+
+// -------------------------------------------------------------
+// Campus Routing Engine (Waypoint Graph Navigation)
+// -------------------------------------------------------------
+
+function getWaypointPath(startWp, endWp) {
+    if (startWp === endWp) return [CIT_WAYPOINTS[startWp]];
+
+    // Internal walkway graph connections
+    const graph = {
+        "WP_GATE": ["WP_ADMIN_ROUND", "WP_WEST_PARK_LANE"],
+        "WP_WEST_PARK_LANE": ["WP_GATE", "WP_ADMIN_ROUND"],
+        "WP_ADMIN_ROUND": ["WP_GATE", "WP_WEST_PARK_LANE", "WP_QUAD_CENTRE", "WP_AUDI_LANE"],
+        "WP_AUDI_LANE": ["WP_ADMIN_ROUND", "WP_EAST_AVENUE"],
+        "WP_QUAD_CENTRE": ["WP_ADMIN_ROUND", "WP_EAST_AVENUE", "WP_SOUTH_SPINE"],
+        "WP_EAST_AVENUE": ["WP_QUAD_CENTRE", "WP_AUDI_LANE", "WP_SPORTS_ROAD"],
+        "WP_SOUTH_SPINE": ["WP_QUAD_CENTRE", "WP_HOSTEL_JUNC", "WP_SPORTS_ROAD"],
+        "WP_HOSTEL_JUNC": ["WP_SOUTH_SPINE", "WP_SPORTS_ROAD"],
+        "WP_SPORTS_ROAD": ["WP_EAST_AVENUE", "WP_SOUTH_SPINE", "WP_HOSTEL_JUNC"]
+    };
+
+    // Breadth-first search for shortest waypoint sequence
+    const queue = [[startWp]];
+    const visited = new Set([startWp]);
+
+    while (queue.length > 0) {
+        const path = queue.shift();
+        const node = path[path.length - 1];
+
+        if (node === endWp) {
+            return path.map(wp => CIT_WAYPOINTS[wp]);
+        }
+
+        const neighbors = graph[node] || [];
+        for (const next of neighbors) {
+            if (!visited.has(next)) {
+                visited.add(next);
+                queue.push([...path, next]);
+            }
+        }
+    }
+
+    // Fallback direct waypoints
+    return [CIT_WAYPOINTS[startWp], CIT_WAYPOINTS[endWp]];
+}
+
+function calculateRoutePoints(locA, locB) {
+    const wpA = locA.nearest_waypoint || "WP_QUAD_CENTRE";
+    const wpB = locB.nearest_waypoint || "WP_QUAD_CENTRE";
+
+    const intermediateCoords = getWaypointPath(wpA, wpB);
+
+    return [
+        [locA.latitude, locA.longitude],
+        ...intermediateCoords,
+        [locB.latitude, locB.longitude]
+    ];
+}
+
+function calculatePathDistanceMeters(points) {
+    let totalMeters = 0;
+    for (let i = 0; i < points.length - 1; i++) {
+        const p1 = L.latLng(points[i][0], points[i][1]);
+        const p2 = L.latLng(points[i + 1][0], points[i + 1][1]);
+        totalMeters += p1.distanceTo(p2);
+    }
+    return Math.round(totalMeters);
+}
+
+function drawRouteBetweenLocations(locA, locB) {
+    clearActiveRoute();
+
+    const points = calculateRoutePoints(locA, locB);
+    const distanceMeters = calculatePathDistanceMeters(points);
+    const walkTimeMins = Math.max(1, Math.round(distanceMeters / 75)); // Average walking speed ~75m/min
+
+    // Glowing underlying halo
+    const routeHalo = L.polyline(points, {
+        color: '#38BDF8',
+        weight: 8,
+        opacity: 0.45,
+        lineCap: 'round'
+    });
+
+    // Flowing animated dashed route
+    const routeLine = L.polyline(points, {
+        color: '#2563EB',
+        weight: 4,
+        opacity: 0.95,
+        dashArray: '8, 8',
+        className: 'cit-animated-route',
+        lineCap: 'round'
+    });
+
+    activeRouteLayer = L.featureGroup([routeHalo, routeLine]).addTo(leafletMap);
+
+    // Zoom & focus to fit entire route
+    leafletMap.fitBounds(activeRouteLayer.getBounds(), {
+        padding: [60, 60],
+        maxZoom: 18,
+        animate: true,
+        duration: 1.0
+    });
+
+    // Update Route Telemetry HUD
+    const hud = document.getElementById('citRouteHud');
+    hud.style.display = 'flex';
+    document.getElementById('hudRouteTitle').textContent = `${locA.name} ➔ ${locB.name}`;
+    document.getElementById('hudRouteDist').textContent = `${distanceMeters} m`;
+    document.getElementById('hudRouteTime').textContent = `~${walkTimeMins} mins walk`;
+    document.getElementById('hudRouteSteps').innerHTML = `
+        <strong>Route:</strong> Start at ${locA.name} &bull; Proceed along designated campus walkway &bull; Arrive at ${locB.name}.
+    `;
+
+    // Update Navigator Bar Status
+    document.getElementById('routeStatusBadge').innerHTML = `
+        <span style="color:#16A34A; font-weight:800;">✓ Active Route:</span> ${distanceMeters}m (~${walkTimeMins} min)
+    `;
+    document.getElementById('btnClearRouteBtn').style.display = 'inline-block';
+
+    // Sync dropdown selections
+    document.getElementById('routeStartSelect').value = locA.code;
+    document.getElementById('routeDestSelect').value = locB.code;
+}
+
+function drawRouteToBuilding(destCode) {
+    const mainGate = CIT_LOCATIONS.find(l => l.code === 'GATE-MAIN') || CIT_LOCATIONS[0];
+    const destLoc = CIT_LOCATIONS.find(l => l.code === destCode);
+    if (!destLoc) return;
+
+    // Switch to 2D view if currently in 3D
+    switchMapView('2d');
+
+    drawRouteBetweenLocations(mainGate, destLoc);
+
+    // Close any open popups to display clean route
+    leafletMap.closePopup();
+}
+
+function clearActiveRoute() {
+    if (activeRouteLayer && leafletMap) {
+        leafletMap.removeLayer(activeRouteLayer);
+        activeRouteLayer = null;
+    }
+    const hud = document.getElementById('citRouteHud');
+    if (hud) hud.style.display = 'none';
+
+    const clearBtn = document.getElementById('btnClearRouteBtn');
+    if (clearBtn) clearBtn.style.display = 'none';
+
+    document.getElementById('routeStatusBadge').textContent = 'Select any two campus locations to navigate';
+}
+
+function setRouteOrigin(code) {
+    document.getElementById('routeStartSelect').value = code;
+    document.getElementById('routeStatusBadge').textContent = 'Origin set! Now select destination and click Find Route';
+    leafletMap.closePopup();
+}
+
+function centerOnLocation(code) {
+    const item = locationMarkersMap[code];
+    if (item && leafletMap) {
+        leafletMap.flyTo([item.data.latitude, item.data.longitude], 18, { duration: 0.8 });
+        item.marker.openPopup();
+    }
+}
+
+function populateRouteDropdowns() {
+    const startSelect = document.getElementById('routeStartSelect');
+    const destSelect = document.getElementById('routeDestSelect');
+    if (!startSelect || !destSelect) return;
+
+    startSelect.innerHTML = '';
+    destSelect.innerHTML = '';
+
+    CIT_LOCATIONS.forEach(loc => {
+        const optA = document.createElement('option');
+        optA.value = loc.code;
+        optA.textContent = `${loc.icon || ''} ${loc.name}`;
+        if (loc.code === 'GATE-MAIN') optA.selected = true;
+        startSelect.appendChild(optA);
+
+        const optB = document.createElement('option');
+        optB.value = loc.code;
+        optB.textContent = `${loc.icon || ''} ${loc.name}`;
+        if (loc.code === 'DEPT-CSE') optB.selected = true;
+        destSelect.appendChild(optB);
+    });
+}
+
+function calculateSelectedRoute() {
+    const codeA = document.getElementById('routeStartSelect').value;
+    const codeB = document.getElementById('routeDestSelect').value;
+
+    if (codeA === codeB) {
+        alert("Please select different start and destination locations.");
+        return;
+    }
+
+    const locA = CIT_LOCATIONS.find(l => l.code === codeA);
+    const locB = CIT_LOCATIONS.find(l => l.code === codeB);
+
+    if (locA && locB) {
+        drawRouteBetweenLocations(locA, locB);
+    }
+}
+
+function toggleAllCampusRoutes() {
+    areAllRoutesVisible = !areAllRoutesVisible;
+    const btn = document.getElementById('btnToggleRoutes');
+
+    if (!areAllRoutesVisible) {
+        allCampusRoutesLayerGroup.clearLayers();
+        btn.textContent = '🛣️ Show All Campus Routes';
+        btn.className = 'btn btn-secondary btn-sm';
+        return;
+    }
+
+    btn.textContent = '✕ Hide Campus Routes';
+    btn.className = 'btn btn-primary btn-sm';
+
+    // Draw full waypoint road network
+    const edges = CIT_CONFIG.internal_road_edges || [
+        ["WP_GATE", "WP_ADMIN_ROUND"],
+        ["WP_GATE", "WP_WEST_PARK_LANE"],
+        ["WP_ADMIN_ROUND", "WP_QUAD_CENTRE"],
+        ["WP_ADMIN_ROUND", "WP_AUDI_LANE"],
+        ["WP_QUAD_CENTRE", "WP_EAST_AVENUE"],
+        ["WP_QUAD_CENTRE", "WP_SOUTH_SPINE"],
+        ["WP_AUDI_LANE", "WP_EAST_AVENUE"],
+        ["WP_EAST_AVENUE", "WP_SPORTS_ROAD"],
+        ["WP_SOUTH_SPINE", "WP_HOSTEL_JUNC"],
+        ["WP_SOUTH_SPINE", "WP_SPORTS_ROAD"],
+        ["WP_HOSTEL_JUNC", "WP_SPORTS_ROAD"]
+    ];
+
+    allCampusRoutesLayerGroup.clearLayers();
+
+    edges.forEach(([u, v]) => {
+        const ptU = CIT_WAYPOINTS[u];
+        const ptV = CIT_WAYPOINTS[v];
+        if (ptU && ptV) {
+            L.polyline([ptU, ptV], {
+                color: '#0284C7',
+                weight: 3.5,
+                opacity: 0.65,
+                dashArray: '5, 6'
+            }).addTo(allCampusRoutesLayerGroup);
+        }
+    });
+
+    // Also draw individual spurs from each building to its nearest waypoint
+    CIT_LOCATIONS.forEach(loc => {
+        const wp = CIT_WAYPOINTS[loc.nearest_waypoint];
+        if (wp) {
+            L.polyline([[loc.latitude, loc.longitude], wp], {
+                color: '#38BDF8',
+                weight: 2,
+                opacity: 0.45,
+                dashArray: '3, 4'
+            }).addTo(allCampusRoutesLayerGroup);
+        }
+    });
+}
+
+// -------------------------------------------------------------
+// Category Filtering & Search
+// -------------------------------------------------------------
+
+function filterByCategory(category, btnElement) {
+    // Update active button styling
+    document.querySelectorAll('.cit-filter-btn').forEach(b => b.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
+
+    Object.values(locationMarkersMap).forEach(({ data, marker }) => {
+        if (category === 'ALL' || data.category === category) {
+            if (!leafletMap.hasLayer(marker)) {
+                leafletMap.addLayer(marker);
+            }
+        } else {
+            if (leafletMap.hasLayer(marker)) {
+                leafletMap.removeLayer(marker);
+            }
+        }
+    });
 }
 
 function initSearchListener() {
@@ -433,40 +890,53 @@ function executeMapSearch() {
     const q = (input.value || '').toLowerCase().trim();
     if (!q) return;
 
-    // Check if query refers to CIT or Coimbatore Institute of Technology
-    if (q.includes('cit') || q.includes('coimbatore institute') || q.includes('college') || q.includes('campus')) {
+    if (q.includes('cit') || q.includes('coimbatore institute') || q.includes('campus') || q.includes('college')) {
         focusCITCampus();
         return;
     }
 
-    // Search landmark markers
-    const match = allLocationMarkers.find(m => 
-        m.data.name.toLowerCase().includes(q) ||
-        m.data.code.toLowerCase().includes(q) ||
-        m.data.category.toLowerCase().includes(q) ||
-        (m.data.description && m.data.description.toLowerCase().includes(q))
+    const match = CIT_LOCATIONS.find(loc => 
+        loc.name.toLowerCase().includes(q) ||
+        loc.code.toLowerCase().includes(q) ||
+        loc.category.toLowerCase().includes(q) ||
+        (loc.description && loc.description.toLowerCase().includes(q))
     );
 
     if (match) {
-        leafletMap.flyTo([match.data.latitude, match.data.longitude], 18, { duration: 0.8 });
-        match.marker.openPopup();
+        centerOnLocation(match.code);
     } else {
-        // Fallback: stay focused on CIT campus center
         focusCITCampus();
     }
 }
 
-function getCategoryColor(category) {
+// -------------------------------------------------------------
+// 3D Twin Synchronization
+// -------------------------------------------------------------
+
+function selectLocationFrom3D(code) {
+    switchMapView('2d');
+    centerOnLocation(code);
+}
+
+function navigateToFrom3D(code) {
+    switchMapView('2d');
+    drawRouteToBuilding(code);
+}
+
+function getCategoryClass(category) {
     switch (category) {
-        case 'ACADEMIC_BLOCK': return '#0284C7';
-        case 'DEPARTMENT': return '#2563EB';
-        case 'LABORATORY': return '#8B5CF6';
-        case 'CANTEEN': return '#EF4444';
-        case 'PARKING': return '#10B981';
-        case 'BUS_STOP': return '#F59E0B';
-        case 'AUDITORIUM': return '#6366F1';
-        case 'HOSTEL': return '#EC4899';
-        default: return '#0284C7';
+        case 'ACADEMIC': return 'cat-academic';
+        case 'DEPARTMENT': return 'cat-department';
+        case 'LIBRARY': return 'cat-library';
+        case 'FOOD': return 'cat-food';
+        case 'PARKING': return 'cat-parking';
+        case 'TRANSPORT': return 'cat-transport';
+        case 'HOSTEL': return 'cat-hostel';
+        case 'SPORTS': return 'cat-sports';
+        case 'RESEARCH': return 'cat-research';
+        case 'FACILITIES': return 'cat-facilities';
+        case 'EVENT': return 'cat-event';
+        default: return 'cat-academic';
     }
 }
 
@@ -487,7 +957,7 @@ function switchMapView(mode) {
         btn2d.className = 'btn btn-primary btn-sm';
         btn3d.className = 'btn btn-secondary btn-sm';
         if (leafletMap) {
-            leafletMap.invalidateSize();
+            setTimeout(() => { leafletMap.invalidateSize(); }, 50);
         }
     }
 }
