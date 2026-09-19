@@ -69,7 +69,7 @@ def event_register(request, pk):
         # Create notification
         from apps.notifications.models import Notification
         Notification.objects.create(
-            user=request.user,
+            user=request.user,  
             title="Event Registration Confirmed",
             message=f"You are registered for {event.title} on {event.start_time.strftime('%b %d, %H:%M')}.",
             category=Notification.Category.EVENT_REMINDER

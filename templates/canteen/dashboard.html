@@ -26,6 +26,9 @@
         </div>
     </div>
 
+    <!-- AI Data Flow Pipeline -->
+    {% ai_data_flow "Historical Dining Trends" "Ridge Demand Regressor" "Predicted Meal Headcount" "Kitchen Portion Sizing" "Minimal Food Surplus Waste" %}
+
     <!-- Forecast Cards for Today's Meals -->
     <div style="margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
         <h3 style="font-size: 1.35rem; font-weight: 800;">Today's AI Preparation Forecast ({{ today|date:"l, M d" }})</h3>

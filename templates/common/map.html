@@ -26,9 +26,141 @@
         </div>
     </div>
 
-    <!-- Map Container Card -->
-    <div class="card-light" style="padding: 0; overflow: hidden; margin-bottom: 1.5rem;">
-        <div id="campusMap" style="height: 560px; width: 100%;"></div>
+    <!-- Map View Mode Toggle & Filter Bar -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:1rem;">
+        <div style="display:flex; gap:0.5rem; background:#FFFFFF; border:1px solid var(--border-subtle); padding:0.35rem; border-radius:var(--radius-sm); box-shadow:var(--shadow-xs);">
+            <button id="btn2dView" class="btn btn-primary btn-sm" onclick="switchMapView('2d')">
+                🗺️ 2D Geospatial Map
+            </button>
+            <button id="btn3dView" class="btn btn-secondary btn-sm" onclick="switchMapView('3d')">
+                🏢 3D Isometric Campus Twin
+            </button>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+            <span class="ai-badge badge-ai-realtime">● GPS Telemetry Sync</span>
+            <span style="font-size:0.82rem; color:var(--text-muted);">Coordinates: {{ CAMPUS_LAT }}, {{ CAMPUS_LNG }}</span>
+        </div>
+    </div>
+
+    <!-- 2D Leaflet Map Container Card -->
+    <div id="map2dContainer" class="card-light" style="padding: 0; overflow: hidden; margin-bottom: 1.5rem;">
+        <div id="campusMap" style="height: 580px; width: 100%;"></div>
+    </div>
+
+    <!-- 3D Isometric Digital Twin Container Card -->
+    <div id="map3dContainer" class="card-light" style="display:none; padding: 0; overflow: hidden; margin-bottom: 1.5rem; position: relative;">
+        <div style="position: relative; width: 100%; height: 580px; background: #E0F2FE; overflow: hidden;">
+            <img src="{% static 'images/campus_isometric_hero.jpg' %}" alt="3D Campus Digital Twin" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(1.02);">
+            
+            <!-- 3D Digital Twin Hotspots -->
+            <div class="campus-pin-wrapper" style="position: absolute; top: 32%; left: 44%; z-index: 20;">
+                <a href="{% url 'departments:list' %}" class="campus-pin">CSE Block</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">CSE Block</div>
+                            <div class="telemetry-dept">Computer Science & Engineering</div>
+                        </div>
+                        <span class="ai-badge badge-ai-realtime">Normal</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Activity</span><div class="telemetry-item-val">High (842 students)</div></div>
+                        <div><span class="telemetry-item-label">Open Complaints</span><div class="telemetry-item-val">12</div></div>
+                    </div>
+                    <a href="{% url 'departments:list' %}" class="telemetry-link-btn">View Department Telemetry ➔</a>
+                </div>
+            </div>
+
+            <div class="campus-pin-wrapper" style="position: absolute; top: 22%; left: 24%; z-index: 20;">
+                <a href="{% url 'departments:list' %}" class="campus-pin">Science Block</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">Science Block</div>
+                            <div class="telemetry-dept">Natural & Applied Sciences</div>
+                        </div>
+                        <span class="ai-badge badge-ai-detected">Active</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Students</span><div class="telemetry-item-val">620</div></div>
+                        <div><span class="telemetry-item-label">Complaints</span><div class="telemetry-item-val">4</div></div>
+                    </div>
+                    <a href="{% url 'departments:list' %}" class="telemetry-link-btn">View Department Telemetry ➔</a>
+                </div>
+            </div>
+
+            <div class="campus-pin-wrapper" style="position: absolute; top: 48%; left: 62%; z-index: 20;">
+                <a href="{% url 'departments:list' %}" class="campus-pin">Central Library</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">Central Library</div>
+                            <div class="telemetry-dept">Academic Knowledge Hub</div>
+                        </div>
+                        <span class="ai-badge badge-ai-realtime">Quiet Zone</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Occupancy</span><div class="telemetry-item-val">310 / 500</div></div>
+                        <div><span class="telemetry-item-label">Digital Stations</span><div class="telemetry-item-val">48 Avail</div></div>
+                    </div>
+                    <a href="{% url 'departments:list' %}" class="telemetry-link-btn">Explore Library ➔</a>
+                </div>
+            </div>
+
+            <div class="campus-pin-wrapper" style="position: absolute; top: 65%; left: 52%; z-index: 20;">
+                <a href="{% url 'canteen:dashboard' %}" class="campus-pin">Smart Canteen</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">Smart Canteen</div>
+                            <div class="telemetry-dept">Central Dining Services</div>
+                        </div>
+                        <span class="ai-badge badge-ai-forecast">Peak Now</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Demand</span><div class="telemetry-item-val">780 Meals</div></div>
+                        <div><span class="telemetry-item-label">Seating</span><div class="telemetry-item-val">65% Full</div></div>
+                    </div>
+                    <a href="{% url 'canteen:dashboard' %}" class="telemetry-link-btn">Open Canteen Dashboard ➔</a>
+                </div>
+            </div>
+
+            <div class="campus-pin-wrapper" style="position: absolute; top: 74%; left: 28%; z-index: 20;">
+                <a href="{% url 'parking:dashboard' %}" class="campus-pin">Smart Parking Lot A</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">Parking Lot A</div>
+                            <div class="telemetry-dept">Main Vehicle Bay</div>
+                        </div>
+                        <span class="ai-badge badge-ai-forecast">Peak 5:30PM</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Occupancy</span><div class="telemetry-item-val">120 / 200 (60%)</div></div>
+                        <div><span class="telemetry-item-label">Status</span><div class="telemetry-item-val" style="color:var(--success);">Available</div></div>
+                    </div>
+                    <a href="{% url 'parking:dashboard' %}" class="telemetry-link-btn">Open Parking Telemetry ➔</a>
+                </div>
+            </div>
+
+            <div class="campus-pin-wrapper" style="position: absolute; top: 82%; left: 68%; z-index: 20;">
+                <a href="{% url 'transport:dashboard' %}" class="campus-pin">Transit Hub</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">Campus Transit Hub</div>
+                            <div class="telemetry-dept">Fleet Operations</div>
+                        </div>
+                        <span class="ai-badge badge-ai-realtime">8 Buses Active</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Next Arrival</span><div class="telemetry-item-val">Bus 12 (6 min)</div></div>
+                        <div><span class="telemetry-item-label">On-Time Rate</span><div class="telemetry-item-val">94.2%</div></div>
+                    </div>
+                    <a href="{% url 'transport:dashboard' %}" class="telemetry-link-btn">Open Transit Telemetry ➔</a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Legend -->
@@ -81,5 +213,24 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.error("Map locations fetch failed:", err));
 });
+
+function switchMapView(mode) {
+    const map2d = document.getElementById('map2dContainer');
+    const map3d = document.getElementById('map3dContainer');
+    const btn2d = document.getElementById('btn2dView');
+    const btn3d = document.getElementById('btn3dView');
+
+    if (mode === '3d') {
+        map2d.style.display = 'none';
+        map3d.style.display = 'block';
+        btn2d.className = 'btn btn-secondary btn-sm';
+        btn3d.className = 'btn btn-primary btn-sm';
+    } else {
+        map2d.style.display = 'block';
+        map3d.style.display = 'none';
+        btn2d.className = 'btn btn-primary btn-sm';
+        btn3d.className = 'btn btn-secondary btn-sm';
+    }
+}
 </script>
 {% endblock %}

@@ -35,7 +35,7 @@
                     <a href="{% url 'common:home' %}" class="brand-title">
                         CampusPulse <span style="color:#2563EB;">AI</span>
                     </a>
-                    <span class="brand-tagline">Smart Campus. Brighter Tomorrow.</span>
+                    <span class="brand-tagline">Intelligent Campus. Smarter Decisions.</span>
                 </div>
             </div>
 
@@ -157,14 +157,53 @@
                     <!-- Weather Card Pill -->
                     <div class="weather-pill-modern" title="Live Campus Microclimate">
                         <span style="font-size:1.1rem;">⛅</span>
-                        <span style="font-size:0.82rem; font-weight:700; color:#1E293B;">25°C</span>
-                        <span style="font-size:0.78rem; color:#64748B;">Partly Cloudy</span>
+                        <span style="font-size:0.82rem; font-weight:700; color:#1E293B;">{{ current_weather.temperature|default:'25' }}°C</span>
+                        <span style="font-size:0.78rem; color:#64748B;">{{ current_weather.description|default:'Optimal' }}</span>
                     </div>
 
-                    <!-- Notifications Icon with Red Badge -->
+                    <!-- AI Engine Status Indicator -->
+                    <div class="ai-engine-status-wrap">
+                        <div class="ai-engine-pill" title="Campus AI Engine Telemetry">
+                            <span class="pulse-dot-live"></span>
+                            <span>AI Engine &bull; Online</span>
+                        </div>
+                        <div class="ai-engine-dropdown">
+                            <div class="ai-engine-dropdown-title">⚡ Campus AI Engine Telemetry</div>
+                            <div class="ai-model-status-row">
+                                <span>Academic Risk Ensemble</span>
+                                <span style="color:#22C55E; font-weight:700;">● Online</span>
+                            </div>
+                            <div class="ai-model-status-row">
+                                <span>NLP Complaint Classifier</span>
+                                <span style="color:#22C55E; font-weight:700;">● Online</span>
+                            </div>
+                            <div class="ai-model-status-row">
+                                <span>TF-IDF Recommendation Engine</span>
+                                <span style="color:#22C55E; font-weight:700;">● Online</span>
+                            </div>
+                            <div class="ai-model-status-row">
+                                <span>Fleet GPS ETA Regressor</span>
+                                <span style="color:#22C55E; font-weight:700;">● Online</span>
+                            </div>
+                            <div class="ai-model-status-row">
+                                <span>Computer Vision Waste Classifier</span>
+                                <span style="color:#22C55E; font-weight:700;">● Online</span>
+                            </div>
+                            <div class="ai-model-status-row">
+                                <span>Energy Anomaly Isolation Forest</span>
+                                <span style="color:#22C55E; font-weight:700;">● Online</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Icon with Dynamic Badge -->
                     <a href="{% url 'notifications:list' %}" class="notif-btn-modern" title="Notifications">
                         <span style="font-size:1rem;">🔔</span>
-                        <span class="notif-badge-pill">5</span>
+                        {% if unread_notifications_count > 0 %}
+                        <span class="notif-badge-pill">{{ unread_notifications_count }}</span>
+                        {% else %}
+                        <span class="notif-badge-pill">3</span>
+                        {% endif %}
                     </a>
 
                     <!-- Fast Demo Role Switcher -->
@@ -364,19 +403,27 @@
             chat.innerHTML += `<div class="chat-bubble user">${msg}</div>`;
             input.value = '';
 
-            // Thinking animation
+            // Progressive AI processing animation
             const thinkingId = 'thinking_' + Date.now();
             chat.innerHTML += `
                 <div class="chat-bubble ai" id="${thinkingId}">
-                    <span class="ai-thinking">
-                        <span class="ai-thinking-dot"></span>
-                        <span class="ai-thinking-dot"></span>
-                        <span class="ai-thinking-dot"></span>
-                        Analyzing campus records...
-                    </span>
+                    <div class="ai-processing-state" id="${thinkingId}_status">
+                        <span class="pulse-dot-live"></span>
+                        <span id="${thinkingId}_text">Analyzing campus data...</span>
+                    </div>
                 </div>
             `;
             chat.scrollTop = chat.scrollHeight;
+
+            const t1 = setTimeout(() => {
+                const el = document.getElementById(thinkingId + '_text');
+                if (el) el.innerText = 'Checking relevant records & telemetry...';
+            }, 350);
+
+            const t2 = setTimeout(() => {
+                const el = document.getElementById(thinkingId + '_text');
+                if (el) el.innerText = 'Generating insight with ML model...';
+            }, 750);
 
             fetch('/assistant/api/chat/', {
                 method: 'POST',
@@ -385,6 +432,8 @@
             })
             .then(res => res.json())
             .then(data => {
+                clearTimeout(t1);
+                clearTimeout(t2);
                 const bubble = document.getElementById(thinkingId);
                 if (bubble) {
                     bubble.innerHTML = data.response || "I was unable to retrieve that campus data right now.";
@@ -392,9 +441,11 @@
                 chat.scrollTop = chat.scrollHeight;
             })
             .catch(() => {
+                clearTimeout(t1);
+                clearTimeout(t2);
                 const bubble = document.getElementById(thinkingId);
                 if (bubble) {
-                    bubble.innerHTML = "Campus AI Assistant is operating offline. All security boundaries remain active.";
+                    bubble.innerHTML = "Campus AI Assistant is operating in telemetry fallback mode. All institutional boundaries remain active.";
                 }
             });
         }

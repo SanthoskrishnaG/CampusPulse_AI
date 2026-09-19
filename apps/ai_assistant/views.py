@@ -18,7 +18,7 @@ def assistant_query_api(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body) if request.body else request.POST
-            query = data.get('query', '').strip()
+            query = (data.get('query') or data.get('message') or '').strip()
             if not query:
                 return JsonResponse({'status': 'error', 'message': 'Empty query.'}, status=400)
 

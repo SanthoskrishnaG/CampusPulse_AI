@@ -15,7 +15,7 @@
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
                 Complaints AI<br>
-                <span class="gradient-ai" style="font-size: 1.85rem;">Intelligent Redressal & Routing.</span>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Report. Route. Resolve.</span>
             </h1>
             <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
                 TF-IDF + Logistic Regression NLP classification automatically parses student grievances into department queues with priority scoring and SLA monitoring.
@@ -26,17 +26,8 @@
         </div>
     </div>
 
-    <!-- AI Data Flow Pipeline Indicator -->
-    <div class="card-light" style="padding: 0.9rem 1.5rem; margin-bottom: 1.5rem; background: #FFFFFF; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-        <div style="display: flex; align-items: center; gap: 0.65rem; font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">
-            <span style="color: var(--brand-electric);">Complaint Ingest</span>
-            <span>➔</span>
-            <span class="ai-badge ai-prediction">NLP Vectorizer</span>
-            <span>➔</span>
-            <span class="ai-badge ai-insight">Department Triage</span>
-            <span>➔</span>
-            <span style="color: var(--success);">SLA Resolution</span>
-        </div>
+    <!-- AI Data Flow Pipeline -->
+    {% ai_data_flow "Student Grievance Text" "TF-IDF + Logistic NLP" "Category & Priority Inference" "Automated Department Queue" "Speedy Resolution & Feedback" %}
 
         <div style="display: flex; gap: 0.75rem;">
             <a href="{% url 'complaints:submit' %}" class="btn btn-primary btn-sm">+ Lodge Grievance</a>

@@ -2279,3 +2279,641 @@ a:hover {
   }
 }
 
+/* ==========================================================================
+   CampusPulse AI — Light 3D AI Component System
+   ========================================================================== */
+
+/* 1. Reusable AI Visual Badges */
+.ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: var(--transition-fast);
+}
+
+.badge-ai-prediction {
+  background: rgba(25, 199, 242, 0.12);
+  color: #0284C7;
+  border: 1px solid rgba(25, 199, 242, 0.3);
+}
+
+.badge-ai-insight {
+  background: rgba(124, 131, 253, 0.12);
+  color: #4F46E5;
+  border: 1px solid rgba(124, 131, 253, 0.3);
+}
+
+.badge-ai-recommendation {
+  background: rgba(79, 156, 249, 0.12);
+  color: #2563EB;
+  border: 1px solid rgba(79, 156, 249, 0.3);
+}
+
+.badge-ai-detected {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16A34A;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge-ai-forecast {
+  background: rgba(245, 158, 11, 0.12);
+  color: #D97706;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-ai-classification {
+  background: rgba(168, 85, 247, 0.12);
+  color: #9333EA;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.badge-ai-confidence {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.badge-ai-realtime {
+  background: rgba(34, 197, 94, 0.12);
+  color: #15803D;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.badge-ai-monitoring {
+  background: rgba(2, 132, 199, 0.1);
+  color: #0369A1;
+  border: 1px solid rgba(2, 132, 199, 0.25);
+}
+
+.badge-ai-alert {
+  background: rgba(239, 68, 68, 0.12);
+  color: #DC2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* 2. Micro-Animations & 3D Floating */
+@keyframes float3D {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.float-subtle {
+  animation: float3D 4s ease-in-out infinite;
+}
+
+@keyframes pulseLiveDot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+.pulse-dot-live {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22C55E;
+  display: inline-block;
+  animation: pulseLiveDot 2s infinite;
+}
+
+/* 3. AI Data Flow Stepper */
+.ai-data-flow-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+  gap: 0.75rem;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 105px;
+}
+
+.flow-step-icon {
+  font-size: 1.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.flow-step-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.flow-step-sub {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.highlight-model {
+  background: linear-gradient(135deg, rgba(25, 199, 242, 0.08) 0%, rgba(124, 131, 253, 0.08) 100%);
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(25, 199, 242, 0.25);
+}
+
+.highlight-action {
+  background: rgba(34, 197, 94, 0.08);
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.flow-connector {
+  position: relative;
+  font-size: 0.85rem;
+  color: #94A3B8;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes pulseConnector {
+  0% { opacity: 0.3; transform: translateX(-3px); }
+  50% { opacity: 1; transform: translateX(3px); }
+  100% { opacity: 0.3; transform: translateX(-3px); }
+}
+
+.flow-pulse {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--brand-cyan);
+  margin-right: 4px;
+  animation: pulseConnector 2s infinite ease-in-out;
+}
+
+/* 4. Interactive 3D Campus Digital Twin & Telemetry Popovers */
+.campus-pin-wrapper {
+  position: absolute;
+  z-index: 20;
+}
+
+.campus-pin-wrapper.pin-cse      { top: 34%; left: 44%; }
+.campus-pin-wrapper.pin-science  { top: 22%; left: 24%; }
+.campus-pin-wrapper.pin-library  { top: 46%; left: 62%; }
+.campus-pin-wrapper.pin-canteen  { top: 64%; left: 52%; }
+.campus-pin-wrapper.pin-hostel   { top: 28%; left: 76%; }
+.campus-pin-wrapper.pin-parking  { top: 74%; left: 28%; }
+.campus-pin-wrapper.pin-bus      { top: 82%; left: 68%; }
+.campus-pin-wrapper.pin-gate     { top: 84%; left: 14%; }
+.campus-pin-wrapper.pin-park     { top: 50%; left: 38%; }
+
+.campus-pin {
+  position: absolute;
+  background: #FFFFFF;
+  color: #0F172A;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.15);
+  border: 1.5px solid var(--brand-cyan);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  z-index: 10;
+  user-select: none;
+}
+
+.campus-pin::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand-cyan);
+  display: inline-block;
+}
+
+.campus-pin:hover {
+  transform: translateY(-4px) scale(1.05);
+  background: #0F172A;
+  color: #FFFFFF;
+  border-color: #38BDF8;
+  box-shadow: 0 8px 24px rgba(25, 199, 242, 0.35);
+  z-index: 30;
+}
+
+.campus-pin:hover::before {
+  background: #38BDF8;
+  box-shadow: 0 0 8px #38BDF8;
+}
+
+/* Rich Telemetry Tooltip Card */
+.building-telemetry-modal {
+  position: absolute;
+  width: 250px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 14px 34px -4px rgba(15, 23, 42, 0.18), 0 4px 10px rgba(15, 23, 42, 0.06);
+  padding: 0.9rem;
+  z-index: 40;
+  pointer-events: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.campus-pin-wrapper:hover .building-telemetry-modal,
+.building-telemetry-modal.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.telemetry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 0.4rem;
+}
+
+.telemetry-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+.telemetry-dept {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.telemetry-item-label {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+.telemetry-item-val {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.telemetry-link-btn {
+  display: block;
+  text-align: center;
+  background: #F0F9FF;
+  color: #0284C7;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #BAE6FD;
+  transition: var(--transition-fast);
+}
+
+.telemetry-link-btn:hover {
+  background: #0284C7;
+  color: #FFFFFF;
+}
+
+/* 5. Campus AI Intelligence Core */
+.ai-intelligence-core-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  margin-bottom: 2.25rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-core-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.ai-core-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.ai-core-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.ai-core-diagram-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
+.ai-core-hub {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #19C7F2 0%, #4F9CF9 50%, #7C83FD 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 0.78rem;
+  box-shadow: 0 0 35px rgba(25, 199, 242, 0.45);
+  position: relative;
+  z-index: 5;
+}
+
+.ai-core-nodes-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.85rem;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+  .ai-core-nodes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.ai-core-subnode {
+  background: #F8FAFC;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.5rem;
+  text-align: center;
+  transition: var(--transition-fast);
+}
+
+.ai-core-subnode:hover {
+  background: #FFFFFF;
+  border-color: var(--brand-cyan);
+  box-shadow: 0 4px 12px rgba(25, 199, 242, 0.15);
+  transform: translateY(-2px);
+}
+
+.ai-core-subnode-icon {
+  font-size: 1.25rem;
+  margin-bottom: 0.2rem;
+}
+
+.ai-core-subnode-name {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ai-core-subnode-status {
+  font-size: 0.65rem;
+  color: var(--success);
+  font-weight: 600;
+}
+
+/* 6. AI Engine Status in Header */
+.ai-engine-status-wrap {
+  position: relative;
+}
+
+.ai-engine-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #F0FDF4;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.ai-engine-pill:hover {
+  background: #DCFCE7;
+}
+
+.ai-engine-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 260px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-lg);
+  padding: 0.85rem;
+  z-index: 200;
+  display: none;
+}
+
+.ai-engine-status-wrap:hover .ai-engine-dropdown,
+.ai-engine-dropdown.open {
+  display: block;
+}
+
+.ai-engine-dropdown-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #F1F5F9;
+  padding-bottom: 0.35rem;
+}
+
+.ai-model-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+/* 7. Campus Intelligence & Sustainability Score Card */
+.score-cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+  .score-cards-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.score-panel-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+}
+
+.score-dial {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 6px solid #E0F2FE;
+  border-top-color: var(--brand-cyan);
+  border-right-color: var(--brand-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: 'Outfit', sans-serif;
+  flex-shrink: 0;
+}
+
+.score-green {
+  border-top-color: #22C55E;
+  border-right-color: #10B981;
+}
+
+/* 8. AI Alert Center */
+.ai-alert-banner {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  border: 1px solid #FDE68A;
+  border-radius: var(--radius-md);
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-xs);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ai-alert-list {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ai-alert-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #92400E;
+  font-weight: 600;
+}
+
+/* 9. Floating 3D AI Button & Progressive Processing States */
+.floating-ai-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid var(--brand-cyan);
+  box-shadow: 0 8px 28px rgba(25, 199, 242, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-ai-btn:hover {
+  transform: scale(1.08) translateY(-3px);
+  box-shadow: 0 12px 34px rgba(25, 199, 242, 0.55);
+}
+
+.floating-ai-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 0.15rem 0.45rem;
+  border-radius: 10px;
+  border: 2px solid #FFFFFF;
+}
+
+.ai-processing-state {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--brand-blue);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.6rem 0.85rem;
+  background: #EFF6FF;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .float-subtle,
+  .pulse-dot-live,
+  .flow-pulse,
+  .floating-ai-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+

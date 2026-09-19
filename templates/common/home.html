@@ -48,20 +48,55 @@
                 </div>
             </div>
 
-            <!-- 3D Isometric Campus Map with Interactive Floating Pins -->
+            <!-- 3D Isometric Campus Map with Interactive Floating Pins & Live Telemetry -->
             <div class="hero-campus-visual">
                 <div class="campus-isometric-frame">
                     <img src="{% static 'images/campus_isometric_hero.jpg' %}" alt="CampusPulse AI Digital Twin" class="campus-hero-img">
                     
-                    <!-- Floating Building Pins matching reference -->
-                    <div class="campus-pin pin-science" title="Science Block">Science Block</div>
-                    <div class="campus-pin pin-cse" title="CSE Block">CSE Block</div>
-                    <div class="campus-pin pin-library" title="Central Library">Library</div>
-                    <div class="campus-pin pin-park" title="Central Park">Central Park</div>
-                    <div class="campus-pin pin-canteen" title="Smart Canteen">Canteen</div>
-                    <div class="campus-pin pin-hostel" title="Student Hostel">Hostel</div>
-                    <div class="campus-pin pin-gate" title="Main Gate">Main Gate</div>
-                    <div class="campus-pin pin-bus" title="Bus Stop">Bus Stop</div>
+                    <!-- Interactive 3D Digital Twin Hotspots -->
+                    {% for spot in building_hotspots %}
+                    <div class="campus-pin-wrapper pin-{{ spot.id }}" data-top="{{ spot.top }}" data-left="{{ spot.left }}">
+                        <a href="{{ spot.url }}" class="campus-pin">
+                            {{ spot.name }}
+                        </a>
+                        <div class="building-telemetry-modal">
+                            <div class="telemetry-header">
+                                <div>
+                                    <div class="telemetry-title">{{ spot.name }}</div>
+                                    <div class="telemetry-dept">{{ spot.dept }}</div>
+                                </div>
+                                <span class="ai-badge badge-ai-realtime">{{ spot.ai_status }}</span>
+                            </div>
+                            <div class="telemetry-grid">
+                                <div>
+                                    <div class="telemetry-item-label">Activity</div>
+                                    <div class="telemetry-item-val">{{ spot.activity }}</div>
+                                </div>
+                                <div>
+                                    <div class="telemetry-item-label">Occupancy / Count</div>
+                                    <div class="telemetry-item-val">{{ spot.students }}</div>
+                                </div>
+                                <div>
+                                    <div class="telemetry-item-label">Open Complaints</div>
+                                    <div class="telemetry-item-val">{{ spot.complaints }}</div>
+                                </div>
+                                <div>
+                                    <div class="telemetry-item-label">AI Status</div>
+                                    <div class="telemetry-item-val" style="color: var(--success);">{{ spot.ai_status }}</div>
+                                </div>
+                            </div>
+                            <a href="{{ spot.url }}" class="telemetry-link-btn">
+                                Open {{ spot.name }} Telemetry ➔
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <script>
+                        document.querySelectorAll('.campus-pin-wrapper[data-top]').forEach(function(pin) {
+                            if (pin.dataset.top) pin.style.top = pin.dataset.top;
+                            if (pin.dataset.left) pin.style.left = pin.dataset.left;
+                        });
+                    </script>
 
                     <!-- Script Tag Badge -->
                     <div class="hero-script-tag">
@@ -219,6 +254,187 @@
                 <div class="kpi-mini-label">Parking Occupancy</div>
                 <div class="kpi-mini-val">{{ parking_pct|default:"68" }}%</div>
                 <div class="kpi-mini-trend trend-sub">{{ occupied_slots|default:120 }} / {{ total_slots|default:200 }} slots</div>
+            </div>
+        </div>
+
+        <!-- 9. Canteen Demand -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box" style="background:#FEF3C7; color:#D97706;">
+                🍽️
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Canteen Demand</div>
+                <div class="kpi-mini-val">{{ canteen_demand|default:780 }}</div>
+                <div class="kpi-mini-trend trend-green">↑ 4% <span class="trend-sub">meals forecast</span></div>
+            </div>
+        </div>
+
+        <!-- 10. Energy Usage -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box" style="background:#FEF9C3; color:#CA8A04;">
+                ⚡
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">Energy Usage</div>
+                <div class="kpi-mini-val">{{ energy_kwh|default:"42.4" }} <span style="font-size:0.75rem; font-weight:500;">kWh</span></div>
+                <div class="kpi-mini-trend trend-green">• Baseline nominal</div>
+            </div>
+        </div>
+
+        <!-- 11. AI Alerts -->
+        <div class="kpi-mini-card">
+            <div class="kpi-mini-icon-box" style="background:#FEE2E2; color:#DC2626;">
+                🛡️
+            </div>
+            <div class="kpi-mini-content">
+                <div class="kpi-mini-label">AI Alerts</div>
+                <div class="kpi-mini-val">{{ ai_alerts_count|default:4 }} <span style="font-size:0.75rem; font-weight:500;">Active</span></div>
+                <div class="kpi-mini-trend" style="color:var(--brand-electric); font-weight:700;">● Real-Time AI</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         AI ALERT CENTER BANNER
+         ========================================================================== -->
+    <div class="ai-alert-banner">
+        <div style="display:flex; align-items:center; gap:0.65rem;">
+            <span style="font-size:1.25rem;">⚠️</span>
+            <span style="font-weight:800; font-size:0.85rem; color:#92400E; text-transform:uppercase; letter-spacing:0.04em;">AI Alert Center:</span>
+        </div>
+        <div class="ai-alert-list">
+            {% for alert in ai_alerts %}
+            <div class="ai-alert-chip">
+                <span>{{ alert.icon }}</span>
+                <span>{{ alert.text }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'analytics:dashboard' %}" style="font-size:0.78rem; font-weight:700; color:#B45309; text-decoration:underline;">View Telemetry ➔</a>
+    </div>
+
+    <!-- ==========================================================================
+         CAMPUS INTELLIGENCE & SUSTAINABILITY SCORES
+         ========================================================================== -->
+    <div class="score-cards-row">
+        <!-- Campus Intelligence Score -->
+        <div class="score-panel-card">
+            <div style="max-width: 70%;">
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.35rem;">
+                    <span class="ai-badge badge-ai-confidence">Composite Metric</span>
+                    <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Continuous Telemetry</span>
+                </div>
+                <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:0.35rem;">Campus Intelligence Score</h3>
+                <p style="font-size:0.8rem; color:var(--text-secondary); line-height:1.45;">
+                    Synthesized from Academic retention predictions (92.8%), on-time transport fleet reliability (94.2%), complaint resolution velocity (86%), and building sensor telemetry.
+                </p>
+            </div>
+            <div class="score-dial">
+                {{ campus_intelligence_score|default:88 }}<span style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">/100</span>
+            </div>
+        </div>
+
+        <!-- Campus Sustainability Score -->
+        <div class="score-panel-card">
+            <div style="max-width: 70%;">
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.35rem;">
+                    <span class="ai-badge badge-ai-detected">Eco Target Met</span>
+                    <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Green Campus 2026</span>
+                </div>
+                <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:0.35rem;">Campus Sustainability Score</h3>
+                <p style="font-size:0.8rem; color:var(--text-secondary); line-height:1.45;">
+                    Computed from sub-station energy anomaly avoidance (94 kWh saved), Computer Vision waste sorting accuracy (92.4%), and canteen food waste reduction.
+                </p>
+            </div>
+            <div class="score-dial score-green">
+                {{ sustainability_score|default:91 }}<span style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">/100</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         CAMPUS AI INTELLIGENCE CORE COMPONENT
+         ========================================================================== -->
+    <div class="ai-intelligence-core-card">
+        <div class="ai-core-header">
+            <div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.3rem;">
+                    <span class="ai-badge badge-ai-realtime">● Real-Time AI Core</span>
+                    <span style="font-size:0.75rem; color:var(--text-muted);">Central Intelligent Operating Layer</span>
+                </div>
+                <h3 class="ai-core-title">Campus AI Intelligence Core</h3>
+                <p class="ai-core-subtitle">Intelligently synchronizing academic models, campus transit, security vision, dining demand, and facilities in real time.</p>
+            </div>
+            <div style="text-align:right;">
+                <span style="font-size:0.82rem; font-weight:700; color:#0284C7;">Status: Fully Operational</span><br>
+                <span style="font-size:0.72rem; color:var(--text-muted);">Latency: 42ms &bull; 6 Models Online</span>
+            </div>
+        </div>
+
+        <!-- Reusable AI Data Flow Pipeline -->
+        {% ai_data_flow "Campus Telemetry" "Neural Ensembles" "Risk & ETA Predictions" "Intelligent Recommendations" "Proactive Interventions" %}
+
+        <!-- Connected Campus Operational Nodes -->
+        <div class="ai-core-nodes-grid">
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">🎓</div>
+                <div class="ai-core-subnode-name">Students</div>
+                <div class="ai-core-subnode-status">Active Telemetry</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">🏛️</div>
+                <div class="ai-core-subnode-name">Departments</div>
+                <div class="ai-core-subnode-status">Synchronized</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">🛡️</div>
+                <div class="ai-core-subnode-name">Academic Risk</div>
+                <div class="ai-core-subnode-status">Ensemble Active</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">🚌</div>
+                <div class="ai-core-subnode-name">Transport Fleet</div>
+                <div class="ai-core-subnode-status">Live GPS Polling</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">🅿️</div>
+                <div class="ai-core-subnode-name">Smart Parking</div>
+                <div class="ai-core-subnode-status">Predictive Bays</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">🍽️</div>
+                <div class="ai-core-subnode-name">Canteen Food</div>
+                <div class="ai-core-subnode-status">Demand Forecast</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">⚡</div>
+                <div class="ai-core-subnode-name">Energy Grid</div>
+                <div class="ai-core-subnode-status">Anomaly Scan</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">♻️</div>
+                <div class="ai-core-subnode-name">Waste CV</div>
+                <div class="ai-core-subnode-status">Vision Active</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">🛠️</div>
+                <div class="ai-core-subnode-name">Complaints NLP</div>
+                <div class="ai-core-subnode-status">Auto-Triage</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">📅</div>
+                <div class="ai-core-subnode-name">Events & Clubs</div>
+                <div class="ai-core-subnode-status">Engagement Sync</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">🚀</div>
+                <div class="ai-core-subnode-name">Projects AI</div>
+                <div class="ai-core-subnode-status">Teammate Match</div>
+            </div>
+            <div class="ai-core-subnode">
+                <div class="ai-core-subnode-icon">💬</div>
+                <div class="ai-core-subnode-name">AI Assistant</div>
+                <div class="ai-core-subnode-status">LLM Connected</div>
             </div>
         </div>
     </div>
