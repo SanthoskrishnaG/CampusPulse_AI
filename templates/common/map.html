@@ -339,6 +339,7 @@
 {% endblock %}
 
 {% block scripts %}
+{{ CAMPUS_CONFIG|json_script:"cit-campus-config" }}
 <script>
 let leafletMap = null;
 let citMainMarker = null;
@@ -348,7 +349,8 @@ let allCampusRoutesLayerGroup = null;
 let areAllRoutesVisible = false;
 
 // Master Campus Configuration from Centralized Server Settings
-const CIT_CONFIG = {{ CAMPUS_CONFIG_JSON|default:'{}'|safe }};
+const citConfigElement = document.getElementById('cit-campus-config');
+const CIT_CONFIG = citConfigElement ? JSON.parse(citConfigElement.textContent || '{}') : {};
 
 // Fallback in case context processor has empty dict
 const CIT_COORDS = {

@@ -142,11 +142,20 @@ sudo systemctl restart nginx
 
 ---
 
-## 4. Windows Development & Demonstration Quickstart
+## 4. Windows Development & Production WSGI Quickstart
 
-For local evaluation or project presentations on Windows:
+### Development Mode (with hot-reload):
 ```powershell
-cd c:\Users\Santhoskrishna\Documents\CampusPulse_AI
-python manage.py runserver 127.0.0.1:8000
+python manage.py runserver
 ```
+
+### Production WSGI Mode (Waitress):
+```powershell
+waitress-serve --listen=127.0.0.1:8000 config.wsgi:application
+```
+Or launch using the Windows script:
+```cmd
+start_production.bat
+```
+
 Open `http://127.0.0.1:8000` in your web browser. Use the header **Demo Role Switcher** to seamlessly navigate through all 12 roles without logging in and out.

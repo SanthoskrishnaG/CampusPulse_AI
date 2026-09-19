@@ -6,3 +6,12 @@ python manage.py train_models
 
 # 3. Re-seed fresh demo data (500+ students, events, IoT telemetry)
 python manage.py seed_demo_data
+
+# 4. Start Development Server (with official Django 6.1 warning suppression)
+start_dev.bat
+# or in PowerShell: .\start_dev.ps1
+# or: $env:DJANGO_RUNSERVER_HIDE_WARNING="true"; python manage.py runserver
+
+# 5. Start Production WSGI Server (Waitress - no development warning)
+waitress-serve --listen=127.0.0.1:8000 config.wsgi:application
+# or run: start_production.bat

@@ -5,6 +5,17 @@ import sys
 
 def main():
     """Run administrative tasks."""
+    # Load environment variables from .env if present
+    from pathlib import Path
+    env_path = Path(__file__).resolve().parent / '.env'
+    if env_path.exists():
+        with open(env_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, val = line.split('=', 1)
+                    os.environ.setdefault(key.strip(), val.strip())
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
     try:
         from django.core.management import execute_from_command_line

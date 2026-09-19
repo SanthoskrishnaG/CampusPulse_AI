@@ -22,7 +22,7 @@ def department_dashboard(request):
 
     student_count = Student.objects.filter(department=current_dept).count() if current_dept else 0
     faculty_count = Faculty.objects.filter(department=current_dept).count() if current_dept else 0
-    complaints_count = Complaint.objects.filter(department=current_dept.name).count() if current_dept else 0
+    complaints_count = Complaint.objects.filter(target_department__icontains=current_dept.name).count() if current_dept else 0
 
     high_risk_count = 0
     medium_risk_count = 0

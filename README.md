@@ -118,10 +118,38 @@ python manage.py seed_demo_data
 python manage.py test tests
 ```
 
-### 8. Start Development Server
+### 8. Running the Application
+
+#### DEVELOPMENT
+Preferred Windows startup:
+```cmd
+start_dev.bat
+```
+*(or `./start_dev.ps1` in PowerShell)*
+
+The startup script sets the official Django 6.1 environment variable:
 ```powershell
+$env:DJANGO_RUNSERVER_HIDE_WARNING="true"
 python manage.py runserver
 ```
+This cleanly hides the development-server warning during local development while preserving all genuine migration warnings, system check errors, and tracebacks.
+
+> [!NOTE]
+> Setting `DJANGO_RUNSERVER_HIDE_WARNING=true` only suppresses the development warning banner; it does **not** make `runserver` a production server. For production deployments or production-like local execution, use the WSGI server below.
+
+#### PRODUCTION-LIKE LOCAL SERVER
+Run:
+```powershell
+waitress-serve --listen=127.0.0.1:8000 config.wsgi:application
+```
+This starts the application using **Waitress** instead of Django's development server, removing the development server warning and serving assets via the production WSGI interface.
+
+Alternatively, on Windows you can simply run:
+```cmd
+start_production.bat
+```
+*(or `./start_production.ps1` in PowerShell)*
+
 Open your browser at **`http://127.0.0.1:8000/`**.
 
 ---
