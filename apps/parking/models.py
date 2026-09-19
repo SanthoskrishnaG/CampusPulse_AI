@@ -4,8 +4,8 @@ class ParkingLot(models.Model):
     name = models.CharField(max_length=100)
     code = models.CharField(max_length=30, unique=True, help_text="e.g. PKG-NORTH, PKG-AUDITORIUM")
     total_slots = models.PositiveIntegerField(default=60)
-    latitude = models.FloatField(default=12.9720)
-    longitude = models.FloatField(default=77.5950)
+    latitude = models.FloatField(default=11.0285)
+    longitude = models.FloatField(default=77.0270)
     is_active = models.BooleanField(default=True)
 
     class Meta:

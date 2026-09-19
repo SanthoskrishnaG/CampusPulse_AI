@@ -16,7 +16,7 @@ class BusRoute(models.Model):
         return f"{self.code}: {self.name}"
 
 class Bus(models.Model):
-    bus_number = models.CharField(max_length=30, unique=True, help_text="e.g. KA-01-CP-1001")
+    bus_number = models.CharField(max_length=30, unique=True, help_text="e.g. TN-38-CIT-1001")
     route = models.ForeignKey(BusRoute, on_delete=models.SET_NULL, null=True, blank=True, related_name='buses')
     driver_name = models.CharField(max_length=100)
     driver_phone = models.CharField(max_length=20, blank=True)

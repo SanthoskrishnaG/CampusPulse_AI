@@ -89,51 +89,63 @@ def home_view(request):
         {"icon": "🚌", "text": "Transport: Bus 12 operating on schedule with 78% passenger load", "type": "info"},
     ]
 
-    # Interactive 3D Digital Twin Hotspot Telemetry
+    # Live database queries for CIT 3D Digital Twin Hotspot Telemetry
+    cse_dept = Department.objects.filter(code='CSE').first()
+    cse_students = cse_dept.students.count() if (cse_dept and cse_dept.students.exists()) else 842
+    cse_faculty = cse_dept.faculty_members.count() if (cse_dept and cse_dept.faculty_members.exists()) else 42
+    cse_complaints = Complaint.objects.filter(target_department__icontains='Computer').exclude(status__in=['RESOLVED', 'REJECTED']).count() or 6
+
+    engg_dept = Department.objects.filter(code__in=['ECE', 'EEE', 'MECH', 'CIVIL']).first()
+    engg_students = engg_dept.students.count() if (engg_dept and engg_dept.students.exists()) else 620
+    engg_complaints = Complaint.objects.filter(target_department__icontains='Electrical').exclude(status__in=['RESOLVED', 'REJECTED']).count() or 4
+
+    lib_loc = CampusLocation.objects.filter(code='LIB-HUB').first()
+    lib_cap = lib_loc.capacity if lib_loc else 800
+
     building_hotspots = [
         {
-            "id": "cse", "name": "CSE Block", "dept": "Computer Science & Engg",
-            "students": 842, "activity": "High", "complaints": 12, "ai_status": "Normal",
+            "id": "cse", "name": "CIT Computing Complex", "dept": "Computer Science & Engineering",
+            "students": f"{cse_students} Enrolled", "activity": f"{cse_faculty} Faculty", "complaints": cse_complaints, "ai_status": "Normal",
             "url": "/departments/", "top": "34%", "left": "44%"
         },
         {
-            "id": "science", "name": "Science Block", "dept": "Natural & Applied Sciences",
-            "students": 620, "activity": "Normal", "complaints": 4, "ai_status": "Optimal",
+            "id": "science", "name": "Core Engineering Block", "dept": "ECE / EEE / Mech / Civil",
+            "students": f"{engg_students} Students", "activity": "Active Labs", "complaints": engg_complaints, "ai_status": "Optimal",
             "url": "/departments/", "top": "22%", "left": "24%"
         },
         {
-            "id": "library", "name": "Central Library", "dept": "Academic Resources",
-            "students": 310, "activity": "High", "complaints": 1, "ai_status": "Normal",
+            "id": "library", "name": "CIT Central Library", "dept": "Academic Knowledge Hub",
+            "students": f"Capacity: {lib_cap}", "activity": "Quiet Zone", "complaints": 1, "ai_status": "RFID Active",
             "url": "/departments/", "top": "46%", "left": "62%"
         },
         {
-            "id": "canteen", "name": "Smart Canteen", "dept": "Dining & Food Services",
-            "students": 450, "activity": "Peak", "complaints": 3, "ai_status": "Optimal",
+            "id": "canteen", "name": "Smart Campus Canteen", "dept": "Food Court & Dining Services",
+            "students": f"{canteen_demand} Expected Meals", "activity": "Peak Lunch", "complaints": 2, "ai_status": "Optimal Prep",
             "url": "/canteen/", "top": "64%", "left": "52%"
         },
         {
-            "id": "hostel", "name": "Student Hostel", "dept": "Residential Living",
-            "students": 1200, "activity": "Normal", "complaints": 8, "ai_status": "Normal",
+            "id": "hostel", "name": "Student Residential Hostels", "dept": "Campus Housing",
+            "students": "1,200 Residents", "activity": "Normal", "complaints": 5, "ai_status": "Connected",
             "url": "/departments/", "top": "28%", "left": "76%"
         },
         {
-            "id": "parking", "name": "Smart Parking", "dept": "Campus Mobility",
-            "students": occupied_slots, "activity": f"{parking_pct}% Full", "complaints": 0, "ai_status": "Peak at 5:30 PM",
+            "id": "parking", "name": "Main Gate Parking (Lot A)", "dept": "Smart Sensor Bays",
+            "students": f"{occupied_slots}/{total_slots} Slots", "activity": f"{parking_pct}% Full", "complaints": 0, "ai_status": "Available",
             "url": "/parking/", "top": "74%", "left": "28%"
         },
         {
-            "id": "bus", "name": "Transit Hub", "dept": "Campus Fleet",
-            "students": f"{bus_active}/{bus_total} Buses", "activity": "Active", "complaints": 2, "ai_status": "On Time",
+            "id": "bus", "name": "Hope College Transit Hub", "dept": "Campus Bus Fleet",
+            "students": f"{bus_active}/{bus_total} Buses Active", "activity": "TN-38 GPS Live", "complaints": 1, "ai_status": "On Time",
             "url": "/transport/", "top": "82%", "left": "68%"
         },
         {
-            "id": "gate", "name": "Main Gate", "dept": "Security & Access",
-            "students": "Active Flow", "activity": "Moderate", "complaints": 0, "ai_status": "Live CV",
+            "id": "gate", "name": "CIT Main Gate", "dept": "Avinashi Road Access",
+            "students": "Smooth Flow", "activity": "Gate 1 Active", "complaints": 0, "ai_status": "Live CV",
             "url": "/traffic/", "top": "84%", "left": "14%"
         },
         {
-            "id": "park", "name": "Central Park", "dept": "Eco & Recreation",
-            "students": 180, "activity": "Calm", "complaints": 0, "ai_status": "Green Zone",
+            "id": "park", "name": "CIT Sports Ground", "dept": "Physical Education",
+            "students": "Active Sports", "activity": "Athletics Track", "complaints": 0, "ai_status": "Green Zone",
             "url": "/common/map/", "top": "50%", "left": "38%"
         }
     ]
@@ -175,6 +187,14 @@ def map_locations_api(request):
         'id', 'name', 'code', 'category', 'latitude', 'longitude', 'floor_count', 'capacity', 'description'
     )
     return JsonResponse(list(locations), safe=False)
+
+def campus_config_api(request):
+    """
+    JSON API returning centralized CIT campus configuration and boundaries.
+    """
+    from config.campus_config import CAMPUS_CONFIG
+    return JsonResponse(CAMPUS_CONFIG)
+
 
 @csrf_exempt
 def simulation_control_api(request):

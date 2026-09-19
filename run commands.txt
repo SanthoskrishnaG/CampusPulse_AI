@@ -1,0 +1,8 @@
+# 1. Apply any pending database migrations
+python manage.py migrate
+
+# 2. Retrain all 6 ML/DL pipelines
+python manage.py train_models
+
+# 3. Re-seed fresh demo data (500+ students, events, IoT telemetry)
+python manage.py seed_demo_data

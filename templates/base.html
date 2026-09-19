@@ -35,7 +35,7 @@
                     <a href="{% url 'common:home' %}" class="brand-title">
                         CampusPulse <span style="color:#2563EB;">AI</span>
                     </a>
-                    <span class="brand-tagline">Intelligent Campus. Smarter Decisions.</span>
+                    <span class="brand-tagline">CIT Smart Campus • Coimbatore</span>
                 </div>
             </div>
 
@@ -155,10 +155,10 @@
 
                 <div class="topbar-right">
                     <!-- Weather Card Pill -->
-                    <div class="weather-pill-modern" title="Live Campus Microclimate">
+                    <div class="weather-pill-modern" title="Coimbatore Microclimate (CIT Campus: {{ CAMPUS_LAT }}, {{ CAMPUS_LNG }})">
                         <span style="font-size:1.1rem;">⛅</span>
-                        <span style="font-size:0.82rem; font-weight:700; color:#1E293B;">{{ current_weather.temperature|default:'25' }}°C</span>
-                        <span style="font-size:0.78rem; color:#64748B;">{{ current_weather.description|default:'Optimal' }}</span>
+                        <span style="font-size:0.82rem; font-weight:700; color:#1E293B;">{{ current_weather.temperature|default:'28' }}°C</span>
+                        <span style="font-size:0.78rem; color:#64748B;">Coimbatore • {{ current_weather.condition|default:'Pleasant' }}</span>
                     </div>
 
                     <!-- AI Engine Status Indicator -->

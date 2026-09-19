@@ -16,8 +16,10 @@ def campus_context(request):
 
     return {
         'CAMPUS_NAME': settings.CAMPUS_NAME,
+        'CAMPUS_SHORT_NAME': getattr(settings, 'CAMPUS_SHORT_NAME', 'CIT'),
         'CAMPUS_LAT': settings.CAMPUS_LAT,
         'CAMPUS_LNG': settings.CAMPUS_LNG,
+        'CAMPUS_CONFIG': getattr(settings, 'CAMPUS_CONFIG', {}),
         'current_weather': WeatherService.get_current_weather(),
         'unread_notifications_count': unread_notifications,
         'ROLES': User.Role,

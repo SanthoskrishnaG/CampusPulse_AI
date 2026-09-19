@@ -103,6 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
         attribution: '&copy; OpenStreetMap &copy; CARTO'
     }).addTo(map);
 
+    // CIT Main Gate Destination Pin
+    const citMarker = L.marker([defaultLat, defaultLng]).addTo(map);
+    citMarker.bindPopup(`
+        <div style="color:#0F172A; font-family:'Inter', sans-serif;">
+            <h4 style="margin:0 0 4px; font-weight:800; color:#1E3A8A;">🏛️ CIT Main Gate Fleet Terminal</h4>
+            <p style="margin:0; font-size:0.8rem; color:#475569;">Avinashi Road, Hope College / Peelamedu, Coimbatore</p>
+            <p style="margin:4px 0 0; font-size:0.78rem; color:#16A34A;">● Central Fleet Destination & Shuttle Bay</p>
+        </div>
+    `);
+
     const busMarkers = {};
 
     async function refreshTelemetry() {

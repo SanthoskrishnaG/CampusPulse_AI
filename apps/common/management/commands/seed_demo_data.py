@@ -109,21 +109,21 @@ class Command(BaseCommand):
         return departments
 
     def seed_locations(self):
-        self.stdout.write("-> Seeding Campus Geographic Locations...")
+        self.stdout.write("-> Seeding CIT Campus Geographic Locations...")
         locations = [
-            ("Alan Turing Computing Block", "BLK-A", CampusLocation.Category.ACADEMIC_BLOCK, 12.9718, 77.5942, 5, 600),
-            ("Ada Lovelace IT Complex", "BLK-B", CampusLocation.Category.ACADEMIC_BLOCK, 12.9722, 77.5948, 4, 500),
-            ("Tesla & EEE Research Wing", "BLK-C", CampusLocation.Category.ACADEMIC_BLOCK, 12.9712, 77.5955, 3, 400),
-            ("Central Artificial Intelligence Lab", "LAB-AI", CampusLocation.Category.LABORATORY, 12.9719, 77.5944, 2, 120),
-            ("Main University Auditorium", "AUD-MAIN", CampusLocation.Category.AUDITORIUM, 12.9725, 77.5938, 1, 1200),
-            ("Central Dining Hall & Canteen", "CAN-MAIN", CampusLocation.Category.CANTEEN, 12.9708, 77.5940, 2, 450),
-            ("North Parking Lot", "PKG-NORTH", CampusLocation.Category.PARKING, 12.9730, 77.5945, 1, 80),
-            ("East Parking Lot", "PKG-EAST", CampusLocation.Category.PARKING, 12.9715, 77.5960, 1, 70),
-            ("Main Gate Bus Terminal", "STOP-GATE1", CampusLocation.Category.BUS_STOP, 12.9702, 77.5935, 1, 200),
-            ("Library & Student Innovation Hub", "LIB-HUB", CampusLocation.Category.ACADEMIC_BLOCK, 12.9716, 77.5950, 4, 800),
+            ("Computing & IT Complex (CSE/IT)", "BLK-A", CampusLocation.Category.ACADEMIC_BLOCK, 11.0276, 77.0267, 5, 600),
+            ("CIT Centre for AI & IoT", "BLK-B", CampusLocation.Category.LABORATORY, 11.0278, 77.0269, 4, 500),
+            ("Core Engineering Block (ECE/EEE/Mech/Civil)", "BLK-C", CampusLocation.Category.ACADEMIC_BLOCK, 11.0271, 77.0279, 3, 400),
+            ("High Performance AI GPU Lab", "LAB-AI", CampusLocation.Category.LABORATORY, 11.0278, 77.0269, 2, 120),
+            ("Golden Jubilee Auditorium", "AUD-MAIN", CampusLocation.Category.AUDITORIUM, 11.0283, 77.0282, 1, 1200),
+            ("Smart Campus Canteen & Cafeteria", "CAN-MAIN", CampusLocation.Category.CANTEEN, 11.0266, 77.0264, 2, 450),
+            ("Main Gate Student Parking (Lot A)", "PKG-NORTH", CampusLocation.Category.PARKING, 11.0288, 77.0262, 1, 80),
+            ("East Engineering Faculty Parking (Lot B)", "PKG-EAST", CampusLocation.Category.PARKING, 11.0274, 77.0289, 1, 70),
+            ("CIT Hope College Transit Hub", "STOP-GATE1", CampusLocation.Category.BUS_STOP, 11.0289, 77.0270, 1, 200),
+            ("Central Library & Knowledge Centre", "LIB-HUB", CampusLocation.Category.ACADEMIC_BLOCK, 11.0274, 77.0273, 4, 800),
         ]
         for name, code, cat, lat, lng, floors, cap in locations:
-            CampusLocation.objects.get_or_create(
+            CampusLocation.objects.update_or_create(
                 code=code,
                 defaults={'name': name, 'category': cat, 'latitude': lat, 'longitude': lng, 'floor_count': floors, 'capacity': cap}
             )
@@ -530,43 +530,71 @@ class Command(BaseCommand):
             )
 
     def seed_transport(self):
-        self.stdout.write("-> Seeding Smart Bus Fleet & Simulated GPS Routes...")
+        self.stdout.write("-> Seeding Smart Bus Fleet & Simulated GPS Routes (Coimbatore)...")
         routes_data = [
-            ("Route 1 - City Center Express", "R-01", "City Railway Central", "Campus Main Terminal", 14.5, 40),
-            ("Route 2 - Metro Tech Corridor", "R-02", "South Metro Station", "Campus Main Terminal", 11.2, 30),
-            ("Route 3 - North Suburbs Shuttle", "R-03", "North Town Square", "Campus Main Terminal", 16.0, 45),
-            ("Route 4 - East Campus Ring Connector", "R-04", "East Junction", "Campus Main Terminal", 9.8, 25),
+            ("Route 1 - Gandhipuram Central Express", "R-01", "Gandhipuram Central Bus Stand", "CIT Main Gate Terminal", 7.2, 22),
+            ("Route 2 - Coimbatore Junction Railway Connector", "R-02", "Coimbatore Railway Junction", "CIT Main Gate Terminal", 8.8, 26),
+            ("Route 3 - Singanallur & Trichy Road Shuttle", "R-03", "Singanallur Bus Stand", "CIT Main Gate Terminal", 6.1, 19),
+            ("Route 4 - Airport & Sitra Link", "R-04", "Coimbatore International Airport", "CIT Main Gate Terminal", 4.5, 14),
         ]
         
-        bus_stops_data = [
-            ("Central Metro Station", 12.9650, 77.5850),
-            ("MG Road Junction", 12.9680, 77.5890),
-            ("Indiranagar 100ft Road", 12.9700, 77.5910),
-            ("Campus Outer Ring Gate", 12.9710, 77.5930),
-            ("Campus Terminal Main", 12.9716, 77.5946)
-        ]
+        bus_stops_map = {
+            "R-01": [
+                ("Gandhipuram Central", 11.0182, 76.9678),
+                ("Lakshmi Mills Junction", 11.0205, 76.9850),
+                ("Nava India Signal", 11.0232, 77.0010),
+                ("Peelamedu / Hope College", 11.0275, 77.0180),
+                ("CIT Main Gate Terminal", 11.0287, 77.0268),
+            ],
+            "R-02": [
+                ("Coimbatore Railway Junction", 10.9985, 76.9660),
+                ("Collectorate & District Court", 11.0060, 76.9740),
+                ("VOC Park / Stadium", 11.0110, 76.9810),
+                ("Fun Republic Mall / Krishnammal", 11.0260, 77.0120),
+                ("CIT Main Gate Terminal", 11.0287, 77.0268),
+            ],
+            "R-03": [
+                ("Singanallur Bus Stand", 11.0020, 77.0260),
+                ("Kallimadai Junction", 11.0120, 77.0280),
+                ("Tidel Park / Civil Aerodrome Road", 11.0230, 77.0310),
+                ("CIT East Gate", 11.0275, 77.0285),
+                ("CIT Main Gate Terminal", 11.0287, 77.0268),
+            ],
+            "R-04": [
+                ("Coimbatore International Airport (CJB)", 11.0300, 77.0434),
+                ("Sitra Junction", 11.0312, 77.0380),
+                ("KMCH Medical Center", 11.0295, 77.0330),
+                ("Civil Aerodrome Post Office", 11.0282, 77.0295),
+                ("CIT Main Gate Terminal", 11.0287, 77.0268),
+            ],
+        }
 
         for name, code, start, end, dist, dur in routes_data:
-            r, _ = BusRoute.objects.get_or_create(
+            r, _ = BusRoute.objects.update_or_create(
                 code=code,
                 defaults={'name': name, 'start_point': start, 'end_point': end, 'distance_km': dist, 'estimated_duration_mins': dur}
             )
             # Add stops
-            for seq, (sname, slat, slng) in enumerate(bus_stops_data, start=1):
-                BusStop.objects.get_or_create(
+            stops_list = bus_stops_map.get(code, [])
+            BusStop.objects.filter(route=r).delete()
+            for seq, (sname, slat, slng) in enumerate(stops_list, start=1):
+                BusStop.objects.create(
                     route=r,
                     sequence=seq,
-                    defaults={'name': f"{r.code} - {sname}", 'latitude': slat, 'longitude': slng, 'estimated_offset_mins': seq * 7}
+                    name=sname,
+                    latitude=slat,
+                    longitude=slng,
+                    estimated_offset_mins=seq * 5
                 )
 
-            # Assign 2-3 buses per route
+            # Assign 2-3 buses per route with Tamil Nadu plates (TN-38)
             for b_idx in range(1, 4):
-                bnum = f"KA-01-CP-{r.code[2:]}{b_idx:02d}"
-                Bus.objects.get_or_create(
+                bnum = f"TN-38-CIT-{r.code[2:]}{b_idx:02d}"
+                Bus.objects.update_or_create(
                     bus_number=bnum,
                     defaults={
                         'route': r,
-                        'driver_name': f"Driver {random.choice(['Murugan', 'Govind', 'Ramu', 'Satish'])}",
+                        'driver_name': f"Driver {random.choice(['Murugan', 'Govind', 'Ramu', 'Satish', 'Karthik', 'Suresh'])}",
                         'driver_phone': "+91-9876543210",
                         'capacity': 52,
                         'current_passengers': random.randint(20, 48),
@@ -575,11 +603,11 @@ class Command(BaseCommand):
                 )
 
     def seed_parking(self):
-        self.stdout.write("-> Seeding 3 Smart Parking Lots & 200+ Individual Sensor Bays...")
+        self.stdout.write("-> Seeding 3 Smart Parking Lots & 200+ Individual Sensor Bays (CIT)...")
         lots_data = [
-            ("North Academic Parking Lot", "PKG-NORTH", 80, 12.9730, 77.5945),
-            ("East Engineering Parking Lot", "PKG-EAST", 75, 12.9715, 77.5960),
-            ("Auditorium South Visitor Bay", "PKG-AUDI", 65, 12.9705, 77.5935),
+            ("Main Gate Student Parking (Lot A)", "PKG-NORTH", 80, 11.0288, 77.0262),
+            ("East Engineering Faculty Parking (Lot B)", "PKG-EAST", 75, 11.0274, 77.0289),
+            ("Auditorium Visitor Parking (Lot C)", "PKG-AUDI", 65, 11.0285, 77.0287),
         ]
         for name, code, total, lat, lng in lots_data:
             lot, _ = ParkingLot.objects.get_or_create(
