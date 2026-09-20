@@ -209,4 +209,5 @@ CAMPUS_SHORT_NAME = CAMPUS_CONFIG['short_name']
 CAMPUS_LAT = CAMPUS_CONFIG['latitude']
 CAMPUS_LNG = CAMPUS_CONFIG['longitude']
 WEATHER_API_BASE_URL = os.environ.get('WEATHER_API_BASE_URL', 'https://api.open-meteo.com/v1/forecast')
+DATA_MODE = os.environ.get('DATA_MODE', 'DEMO')  # Options: 'LIVE' or 'DEMO'
 

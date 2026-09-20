@@ -200,7 +200,21 @@ class CampusAIAssistant:
             )
 
         # 2. Academic Risk Questions (Permission-Guarded: Super Admin, College Admin, Dept Admin, Faculty only)
-        if any(w in q for w in ['risk', 'high-risk', 'high risk', 'at-risk', 'failing']):
+        if any(w in q for w in ['risk', 'high-risk', 'high risk', 'at-risk', 'failing', 'academic risk', 'attendance risk', 'marks risk']):
+            # If a logged-in student asks about their own risk
+            student = getattr(user, 'student_profile', None) if user and user.is_authenticated else None
+            if student and any(w in q for w in ['my', 'me', 'i am', 'am i']):
+                from ml.academic.predict import AcademicRiskPredictor
+                res = AcademicRiskPredictor.predict_student_risk(student)
+                factors_txt = "\n".join([f"  • {f}" for f in res['factors']])
+                return (
+                    f"📊 **Your Personalized Academic Risk Assessment**:\n\n"
+                    f"- **Status**: **{res['risk_level']}** (Estimated Index: {res['risk_score']}%, Confidence: {int(res['confidence']*100)}%)\n"
+                    f"- **Model**: `{res['model_name']} v{res['model_version']}`\n"
+                    f"- **Identified Indicators**:\n{factors_txt}\n\n"
+                    f"💡 **Advisory**: {res['recommended_action']}"
+                )
+
             if not (user.is_authenticated and (user.is_superuser or user.role in ['SUPER_ADMIN', 'COLLEGE_ADMIN', 'DEPARTMENT_ADMIN', 'FACULTY'])):
                 return (
                     "🔒 **Access Restricted**: Academic risk assessments are confidential and restricted to Faculty, "
@@ -293,14 +307,22 @@ class CampusAIAssistant:
             return "\n".join(lines)
 
         # 7. Canteen Food Demand Queries
-        if any(w in q for w in ['canteen', 'food', 'lunch', 'dinner', 'meal']):
+        if any(w in q for w in ['canteen', 'food', 'lunch', 'dinner', 'meal', 'waste']):
             today_weekday = timezone.now().date().weekday()
             pred = CanteenDemandPredictor.predict_meal_demand(today_weekday, 'LUNCH')
+            from ml.canteen.waste_predict import FoodWastePredictor
+            waste_pred = FoodWastePredictor.predict_waste(
+                meals_prepared=pred.get('recommended_prep', 350),
+                predicted_demand=pred.get('predicted_demand', 330),
+                meal_type='LUNCH',
+                day_of_week=today_weekday
+            )
             return (
                 f"🍽️ **Canteen Food Demand & Waste Intelligence**:\n\n"
-                f"- **Today's Lunch Forecast**: **{pred['predicted_demand']} meals** expected\n"
-                f"- **Kitchen Advice**: {pred['advice']}\n"
-                f"- **Leftover Waste Goal**: Keeping excess prep under {pred['expected_waste_kg']} kg."
+                f"- **Today's Lunch Demand**: **{pred['predicted_demand']} meals** expected (`{pred['model']} v{pred['version']}`)\n"
+                f"- **Recommended Kitchen Preparation**: **{pred['recommended_prep']} portions**\n"
+                f"- **Forecasted Leftover Waste**: **{waste_pred.get('predicted_waste_kg', 3.5)} kg**\n"
+                f"- **Kitchen Advisory**: {waste_pred.get('advice', 'Portioning within normal variance.')}"
             )
 
         # 8. Energy Anomaly Queries

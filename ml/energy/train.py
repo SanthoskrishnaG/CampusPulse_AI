@@ -63,8 +63,7 @@ def train_energy_anomaly_model():
         model_path=model_path,
         description="Unsupervised anomaly detection identifying nocturnal energy leaks and midday load spikes."
     )
-    print("Trained Energy Isolation Forest Anomaly Detector")
-    return model
+    return model, metrics
 
 if __name__ == '__main__':
     train_energy_anomaly_model()

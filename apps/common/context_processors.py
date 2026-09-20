@@ -43,5 +43,6 @@ def campus_context(request):
         'can_access_hostel': can_access_hostel,
         'student_profile': student_profile,
         'assigned_hostel': assigned_hostel,
+        'DATA_MODE': getattr(settings, 'DATA_MODE', 'DEMO'),
     }
 

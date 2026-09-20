@@ -79,10 +79,34 @@ def command_center_dashboard(request):
 def model_registry_view(request):
     """
     ML/DL Model Governance & Monitoring Dashboard:
-    Displays registered models, versions, evaluation metrics, and retraining controls.
+    Displays registered models, versions, evaluation metrics, live prediction volume,
+    latency telemetry, and retraining controls.
     """
+    from apps.analytics.models import MLPredictionLog, MLTrainingRun, ModelFeedback, ModelDriftRecord
     models_dict = ModelRegistry.get_all_models()
-    return render(request, 'analytics/model_registry.html', {'models': models_dict})
+
+    total_predictions = MLPredictionLog.objects.count()
+    recent_logs = list(MLPredictionLog.objects.all()[:50])
+    avg_latency = (
+        round(sum(l.latency_ms for l in recent_logs) / len(recent_logs), 1)
+        if recent_logs else 0.0
+    )
+
+    recent_training_runs = MLTrainingRun.objects.all()[:8]
+    recent_predictions = MLPredictionLog.objects.all()[:10]
+    recent_feedback = ModelFeedback.objects.all()[:5]
+    drift_records = ModelDriftRecord.objects.all()[:5]
+
+    context = {
+        'models': models_dict,
+        'total_predictions': total_predictions,
+        'avg_latency': avg_latency,
+        'recent_training_runs': recent_training_runs,
+        'recent_predictions': recent_predictions,
+        'recent_feedback': recent_feedback,
+        'drift_records': drift_records,
+    }
+    return render(request, 'analytics/model_registry.html', context)
 
 @login_required
 @role_required('SUPER_ADMIN', 'COLLEGE_ADMIN')
@@ -102,14 +126,23 @@ def trigger_model_retrain_api(request, model_name):
         elif 'Event' in model_name:
             from ml.events.train import train_event_attendance_model
             train_event_attendance_model()
+        elif 'Food_Waste' in model_name or 'Waste' in model_name:
+            from ml.canteen.waste_train import train_food_waste_model
+            train_food_waste_model()
         elif 'Canteen' in model_name:
             from ml.canteen.train import train_canteen_demand_model
             train_canteen_demand_model()
         elif 'Energy' in model_name:
             from ml.energy.train import train_energy_anomaly_model
             train_energy_anomaly_model()
+        elif 'Transport' in model_name:
+            from ml.transport.train import train_transport_models
+            train_transport_models()
+        elif 'Parking' in model_name:
+            from ml.parking.train import train_parking_model
+            train_parking_model()
 
-        messages.success(request, f"Successfully retrained and calibrated {model_name}!")
+        messages.success(request, f"Successfully retrained, evaluated, and deployed {model_name}!")
     except Exception as e:
         messages.error(request, f"Retraining failed: {str(e)}")
 

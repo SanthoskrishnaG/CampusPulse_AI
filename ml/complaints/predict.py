@@ -1,7 +1,11 @@
 import re
+import time
+import json
 import joblib
 import numpy as np
 from pathlib import Path
+from django.conf import settings
+from ml.utils.validation import validate_complaint_text
 
 MODEL_PATH = Path("models") / "complaint_classifier.joblib"
 
@@ -35,36 +39,35 @@ class ComplaintAITriage:
         return cls._cached_model
 
     @classmethod
-    def triage_complaint(cls, text):
+    def triage_complaint(cls, text: str, user=None):
         """
-        Analyzes natural language complaint text.
-        Returns: category, priority, target_department, location_extracted, confidence, sla_hours
+        Analyzes natural language complaint text using NLP pipeline.
+        Returns: category, priority, target_department, location_extracted, confidence, sla_hours.
+        Persists inference to MLPredictionLog.
         """
-        model_data = cls.get_model()
-        text_lower = text.lower()
+        start_time = time.time()
+        validated_text = validate_complaint_text(text)
+        text_lower = validated_text.lower()
 
-        if model_data:
-            pipeline = model_data['pipeline']
-            probs = pipeline.predict_proba([text])[0]
-            category = str(pipeline.predict([text])[0])
-            confidence = float(np.max(probs))
-        else:
-            # Heuristic category fallback
-            if any(k in text_lower for k in ['fan', 'light', 'ac', 'switch', 'power', 'socket']):
-                category = 'ELECTRICAL'
-            elif any(k in text_lower for k in ['water', 'tap', 'leak', 'flush', 'washroom', 'restroom']):
-                category = 'WATER'
-            elif any(k in text_lower for k in ['wifi', 'network', 'lan', 'internet']):
-                category = 'NETWORK'
-            elif any(k in text_lower for k in ['bus', 'route', 'driver']):
-                category = 'TRANSPORT'
-            elif any(k in text_lower for k in ['food', 'canteen', 'lunch']):
-                category = 'CANTEEN'
-            elif any(k in text_lower for k in ['parking', 'vehicle', 'car', 'bike']):
-                category = 'PARKING'
-            else:
-                category = 'INFRASTRUCTURE'
-            confidence = 0.82
+        model_data = cls.get_model()
+        if not model_data:
+            return {
+                'success': False,
+                'category': 'INFRASTRUCTURE',
+                'priority': 'MEDIUM',
+                'target_department': 'General Maintenance',
+                'location_extracted': 'Campus Premises',
+                'confidence': None,
+                'sla_hours': 24,
+                'message': "Prediction unavailable — complaint classification model requires training.",
+                'model_name': "Campus_Complaint_Classifier",
+                'model_version': "1.0.0"
+            }
+
+        pipeline = model_data['pipeline']
+        probs = pipeline.predict_proba([validated_text])[0]
+        category = str(pipeline.predict([validated_text])[0])
+        confidence = float(round(float(np.max(probs)), 3))
 
         # Priority Assessment
         if any(w in text_lower for w in URGENT_KEYWORDS):
@@ -73,7 +76,7 @@ class ComplaintAITriage:
         elif any(w in text_lower for w in HIGH_KEYWORDS):
             priority = 'HIGH'
             sla_hours = 12
-        elif len(text.split()) > 15:
+        elif len(validated_text.split()) > 15:
             priority = 'MEDIUM'
             sla_hours = 24
         else:
@@ -81,10 +84,9 @@ class ComplaintAITriage:
             sla_hours = 48
 
         # Entity Extraction: Location / Room / Block
-        location = ""
-        block_match = re.search(r'\b(block\s+[a-z0-9]+|tower\s+[a-z0-9]+)\b', text, re.IGNORECASE)
-        room_match = re.search(r'\b(room\s+[0-9]+|hall\s+[0-9]+|lab\s+[0-9]+|cabin\s+[0-9]+)\b', text, re.IGNORECASE)
-        place_match = re.search(r'\b(library|canteen|auditorium|cafeteria|parking lot|gate\s+[0-9]+)\b', text, re.IGNORECASE)
+        block_match = re.search(r'\b(block\s+[a-z0-9]+|tower\s+[a-z0-9]+)\b', validated_text, re.IGNORECASE)
+        room_match = re.search(r'\b(room\s+[0-9]+|hall\s+[0-9]+|lab\s+[0-9]+|cabin\s+[0-9]+)\b', validated_text, re.IGNORECASE)
+        place_match = re.search(r'\b(library|canteen|auditorium|cafeteria|parking lot|gate\s+[0-9]+)\b', validated_text, re.IGNORECASE)
 
         loc_parts = []
         if block_match:
@@ -95,14 +97,39 @@ class ComplaintAITriage:
             loc_parts.append(place_match.group(0).title())
 
         location = ", ".join(loc_parts) if loc_parts else "Campus Premises"
-
         target_department = DEPT_ROUTING.get(category, 'General Maintenance')
 
+        latency_ms = round((time.time() - start_time) * 1000.0, 2)
+        data_mode = getattr(settings, 'DATA_MODE', 'DEMO')
+
+        # Persist to MLPredictionLog
+        try:
+            from apps.analytics.models import MLPredictionLog
+            MLPredictionLog.objects.create(
+                model_name="Campus_Complaint_Classifier",
+                model_version=model_data.get('version', '1.0.0'),
+                task="NLP",
+                input_summary=json.dumps({'text_sample': validated_text[:120]}),
+                prediction=category,
+                confidence=confidence,
+                factors_json=json.dumps([f"Department: {target_department}", f"Priority: {priority}", f"Location: {location}"]),
+                latency_ms=latency_ms,
+                status=MLPredictionLog.Status.SUCCESS,
+                data_mode=data_mode,
+                user=user
+            )
+        except Exception:
+            pass
+
         return {
+            'success': True,
             'category': category,
             'priority': priority,
             'target_department': target_department,
             'location_extracted': location,
-            'confidence': round(confidence, 2),
-            'sla_hours': sla_hours
+            'confidence': confidence,
+            'sla_hours': sla_hours,
+            'latency_ms': latency_ms,
+            'model_name': "Campus_Complaint_Classifier",
+            'model_version': model_data.get('version', '1.0.0')
         }

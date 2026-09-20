@@ -1,6 +1,7 @@
 {
   "Academic_Risk_Classifier": {
     "version": "1.0.0",
+    "task": "CLASSIFICATION",
     "algorithm": "LogisticRegression",
     "metrics": {
       "accuracy": 0.98,
@@ -22,10 +23,12 @@
     ],
     "model_path": "models\\academic_risk_model.joblib",
     "description": "Predicts student academic risk (LOW/MEDIUM/HIGH) based on attendance, marks, CGPA, and temporal trend.",
+    "status": "PRODUCTION",
     "is_active": true
   },
   "Academic_Sequential_DL": {
     "version": "1.0.0",
+    "task": "CLASSIFICATION",
     "algorithm": "Multi-Layer Perceptron (Sequential Temporal Network)",
     "metrics": {
       "accuracy": 1.0,
@@ -45,10 +48,12 @@
     ],
     "model_path": "models\\academic_sequential_dl.joblib",
     "description": "Deep sequential learning model tracking week-by-week student learning trajectory (Week 1 -> 5).",
+    "status": "PRODUCTION",
     "is_active": true
   },
   "Campus_Complaint_Classifier": {
     "version": "1.0.0",
+    "task": "CLASSIFICATION",
     "algorithm": "TF-IDF + Logistic Regression",
     "metrics": {
       "accuracy": 1.0,
@@ -60,6 +65,7 @@
     ],
     "model_path": "models\\complaint_classifier.joblib",
     "description": "NLP triage model classifying natural language student complaints into category and target department.",
+    "status": "PRODUCTION",
     "is_active": true
   },
   "Event_Attendance_Forecaster": {
@@ -83,11 +89,14 @@
     "is_active": true
   },
   "Canteen_Food_Demand_Forecaster": {
-    "version": "1.0.0",
+    "version": "1.1.0",
+    "task": "REGRESSION",
     "algorithm": "RandomForestRegressor",
     "metrics": {
-      "mae": 9.93,
-      "r2_score": 0.9849
+      "mae": 10.18,
+      "rmse": 12.72,
+      "r2_score": 0.9853,
+      "test_samples": 250
     },
     "features": [
       "day_of_week",
@@ -97,11 +106,13 @@
       "student_base"
     ],
     "model_path": "models\\canteen_demand_model.joblib",
-    "description": "Predicts student food demand per meal type to minimize canteen kitchen leftover waste.",
+    "description": "Predicts student meal count demand per meal type using institutional footfall telemetry.",
+    "status": "PRODUCTION",
     "is_active": true
   },
   "Energy_Anomaly_Detector": {
     "version": "1.0.0",
+    "task": "CLASSIFICATION",
     "algorithm": "IsolationForest",
     "metrics": {
       "contamination": 0.06,
@@ -116,6 +127,74 @@
     ],
     "model_path": "models\\energy_isolation_forest.joblib",
     "description": "Unsupervised anomaly detection identifying nocturnal energy leaks and midday load spikes.",
+    "status": "PRODUCTION",
+    "is_active": true
+  },
+  "Food_Waste_Forecaster": {
+    "version": "1.0.0",
+    "task": "REGRESSION",
+    "algorithm": "GradientBoostingRegressor",
+    "metrics": {
+      "mae": 1.79,
+      "rmse": 2.33,
+      "r2_score": 0.8168,
+      "test_samples": 225
+    },
+    "features": [
+      "meals_prepared",
+      "predicted_demand",
+      "meal_type",
+      "day_of_week",
+      "is_event"
+    ],
+    "model_path": "models\\food_waste_model.joblib",
+    "description": "Predicts expected post-service kitchen food waste (kg) based on overproduction buffer.",
+    "status": "PRODUCTION",
+    "is_active": true
+  },
+  "Smart_Transport_ETA_Predictor": {
+    "version": "1.0.0",
+    "task": "REGRESSION",
+    "algorithm": "RandomForestRegressor",
+    "metrics": {
+      "mae": 2.43,
+      "rmse": 3.02,
+      "r2_score": 0.9729,
+      "test_samples": 300
+    },
+    "features": [
+      "distance_km",
+      "stop_sequence",
+      "is_peak_hour",
+      "hour",
+      "passenger_count",
+      "occupancy_pct"
+    ],
+    "model_path": "models\\transport_eta_model.joblib",
+    "description": "Forecasts actual transit arrival duration and peak traffic delays along CIT bus routes.",
+    "status": "PRODUCTION",
+    "is_active": true
+  },
+  "Smart_Parking_Occupancy_Forecaster": {
+    "version": "1.0.0",
+    "task": "REGRESSION",
+    "algorithm": "RandomForestRegressor",
+    "metrics": {
+      "mae": 3.47,
+      "rmse": 4.53,
+      "r2_score": 0.9738,
+      "test_samples": 250
+    },
+    "features": [
+      "total_slots",
+      "hour",
+      "day_of_week",
+      "is_event",
+      "is_weekend"
+    ],
+    "model_path": "models\\parking_occupancy_model.joblib",
+    "description": "Forecasts hourly parking bay vacancy and congestion levels across CIT parking zones.",
+    "status": "PRODUCTION",
     "is_active": true
   }
 }

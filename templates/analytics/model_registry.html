@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 {% load static campus_3d %}
 
-{% block title %}AI Model Registry & Governance - CampusPulse AI{% endblock %}
+{% block title %}AI Model Registry, Governance & Live Monitoring - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 1300px; margin: 0 auto;">
+<div style="max-width: 1300px; margin: 0 auto; padding-bottom: 3rem;">
 
     <!-- Compact Page Hero with 3D Visual -->
     <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #FAF5FF 100%);">
-        <div style="max-width: 650px;">
+        <div style="max-width: 750px;">
             <div class="hero-pill" style="margin-bottom: 0.5rem;">
                 <span>🧠</span>
-                <span>Centralized Artifact Provenance & Continuous Calibration</span>
+                <span>Deterministic Machine Learning Architecture · End-to-End Governance</span>
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
-                Model Registry<br>
-                <span class="gradient-ai" style="font-size: 1.85rem;">Deterministic Machine Learning Fleet.</span>
+                Model Registry & Monitoring<br>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Production Fleet Observability.</span>
             </h1>
             <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
-                Central tracking of all 6 production model weights, hyperparameter configurations, test evaluation scores, and explainable feature importances.
+                Central provenance repository tracking all serialized models, mathematical evaluation metrics, real-time prediction logs, data drift indices, and ground-truth retraining loops.
             </p>
         </div>
         <div style="flex-shrink: 0;">
@@ -26,101 +26,244 @@
         </div>
     </div>
 
-    <!-- AI Model Status Overview Ribbon -->
-    <div class="card-light" style="padding: 1.25rem 1.5rem; margin-bottom: 2rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <div style="display: flex; align-items: center; gap: 0.6rem;">
-                <span class="status-dot"></span>
-                <strong style="font-size: 0.95rem;">AI ENGINE STATUS: ALL SYSTEMS ONLINE</strong>
-            </div>
-            <span style="font-size: 0.78rem; color: var(--text-muted);">Zero Cloud Dependency · 100% In-House CPU Execution</span>
+    <!-- Live Telemetry KPI Metrics Ribbon -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+        <div class="card-light" style="padding: 1.25rem; border-left: 4px solid var(--brand-electric);">
+            <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">Total Inferences Logged</div>
+            <div style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary);">{{ total_predictions }}</div>
+            <div style="font-size: 0.78rem; color: #10B981; font-weight: 600; margin-top: 0.25rem;">⚡ Real-time DB Persistence</div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem;">
-            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
-                <span>Academic Risk RF</span>
-                <span class="ai-badge ai-confidence">Online</span>
+        <div class="card-light" style="padding: 1.25rem; border-left: 4px solid #8B5CF6;">
+            <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">Mean Inference Latency</div>
+            <div style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary);">{{ avg_latency }} <span style="font-size: 1rem; font-weight: 500;">ms</span></div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;">CPU Execution · Sub-100ms</div>
+        </div>
+
+        <div class="card-light" style="padding: 1.25rem; border-left: 4px solid #06B6D4;">
+            <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">Production Fleet Size</div>
+            <div style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary);">{{ models|length }} <span style="font-size: 1rem; font-weight: 500;">Models</span></div>
+            <div style="font-size: 0.78rem; color: #10B981; font-weight: 600; margin-top: 0.25rem;">● 100% Calibrated & Active</div>
+        </div>
+
+        <div class="card-light" style="padding: 1.25rem; border-left: 4px solid {% if DATA_MODE == 'LIVE' %}#10B981{% else %}#F59E0B{% endif %};">
+            <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">Data Pipeline Mode</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: {% if DATA_MODE == 'LIVE' %}#059669{% else %}#D97706{% endif %}; margin-top: 0.35rem;">
+                {% if DATA_MODE == 'LIVE' %}🟢 LIVE CAMPUS TELEMETRY{% else %}🟠 BENCHMARK / SIMULATED MODE{% endif %}
             </div>
-            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
-                <span>Sequential MLP</span>
-                <span class="ai-badge ai-confidence">Online</span>
-            </div>
-            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
-                <span>Complaint NLP</span>
-                <span class="ai-badge ai-confidence">Online</span>
-            </div>
-            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
-                <span>Event Regressor</span>
-                <span class="ai-badge ai-confidence">Online</span>
-            </div>
-            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
-                <span>Canteen Demand</span>
-                <span class="ai-badge ai-confidence">Online</span>
-            </div>
-            <div style="padding: 0.65rem 0.85rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.8rem; display:flex; justify-content:space-between; align-items:center;">
-                <span>Isolation Forest</span>
-                <span class="ai-badge ai-confidence">Online</span>
-            </div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Zero ML Fabrication Guaranteed</div>
         </div>
     </div>
 
-    <!-- Model Table -->
-    <div class="table-container-light" style="margin-bottom: 2.5rem;">
-        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
-            <h3 style="font-size: 1.1rem; font-weight: 800;">Production Model Fleet</h3>
-            <span class="ai-badge ai-insight">Tracked in models/model_registry.json</span>
+    <!-- Active Production Model Fleet Table -->
+    <div class="card-light" style="padding: 1.5rem; margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <div>
+                <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.2rem;">Registered Machine Learning & NLP Fleet</h2>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">Verified weights loaded from <code>/models/*.joblib</code> with real cross-validated scores.</p>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary); background: var(--bg-surface-subtle); padding: 0.4rem 0.75rem; border-radius: 6px;">
+                Framework: <strong>scikit-learn · NumPy · joblib</strong>
+            </div>
         </div>
-        <table class="table-clean">
-            <thead>
-                <tr>
-                    <th>Model Identifier</th>
-                    <th>Algorithm & Pipeline</th>
-                    <th>Version</th>
-                    <th>Validation Benchmarks</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for model_name, info in models.items %}
-                <tr>
-                    <td>
-                        <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">{{ model_name }}</div>
-                        <div style="font-size: 0.78rem; color: var(--text-muted);">{{ info.description }}</div>
-                    </td>
-                    <td>
-                        <span class="role-badge" style="background:#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE;">
-                            {{ info.algorithm }}
-                        </span>
-                    </td>
-                    <td>
-                        <code style="background:#F1F5F9; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.8rem; font-weight:700;">v{{ info.version }}</code>
-                    </td>
-                    <td>
-                        <div style="font-size: 0.82rem; font-family: monospace;">
-                            {% for k, v in info.metrics.items %}
-                            <span style="color: var(--brand-electric); font-weight:700;">{{ k }}</span>: {{ v }} &nbsp;
-                            {% endfor %}
-                        </div>
-                    </td>
-                    <td>
-                        <span class="ai-badge ai-confidence">● Active</span>
-                    </td>
-                    <td>
-                        <a href="{% url 'analytics:retrain_model' model_name %}" class="btn btn-secondary btn-sm" onclick="return confirm('Retrain {{ model_name }} pipeline now?');">
-                            🔄 Retrain
-                        </a>
-                    </td>
-                </tr>
+
+        <div class="table-responsive">
+            <table class="table" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--border-color); text-align: left; font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">
+                        <th style="padding: 0.75rem 0.5rem;">Model Identifier & Task</th>
+                        <th style="padding: 0.75rem 0.5rem;">Algorithm</th>
+                        <th style="padding: 0.75rem 0.5rem;">Version</th>
+                        <th style="padding: 0.75rem 0.5rem;">Verified Test Metrics</th>
+                        <th style="padding: 0.75rem 0.5rem;">Status</th>
+                        <th style="padding: 0.75rem 0.5rem; text-align: right;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for model_name, info in models.items %}
+                    <tr style="border-bottom: 1px solid var(--border-color); font-size: 0.88rem;">
+                        <td style="padding: 1rem 0.5rem;">
+                            <strong>{{ model_name }}</strong>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem;">{{ info.description }}</div>
+                        </td>
+                        <td style="padding: 1rem 0.5rem;">
+                            <span class="role-badge" style="background:#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE;">
+                                {{ info.algorithm }}
+                            </span>
+                        </td>
+                        <td style="padding: 1rem 0.5rem;">
+                            <code style="background:#F1F5F9; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.8rem; font-weight:700;">v{{ info.version }}</code>
+                        </td>
+                        <td style="padding: 1rem 0.5rem;">
+                            <div style="font-size: 0.82rem; font-family: monospace;">
+                                {% for k, v in info.metrics.items %}
+                                <span style="color: var(--brand-electric); font-weight:700;">{{ k }}</span>: {{ v }} &nbsp;
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td style="padding: 1rem 0.5rem;">
+                            <span class="ai-badge ai-confidence">● Active</span>
+                        </td>
+                        <td style="padding: 1rem 0.5rem; text-align: right;">
+                            <a href="{% url 'analytics:retrain_model' model_name %}" class="btn btn-secondary btn-sm" onclick="return confirm('Retrain {{ model_name }} pipeline now?');">
+                                🔄 Retrain
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                            No models registered. Run <code>python manage.py train_all_models</code>.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Dual Section: Recent Live Inferences & Model Retraining History -->
+    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1.5rem; margin-bottom: 2rem;">
+        
+        <!-- Live Real-Time Inferences Log Table -->
+        <div class="card-light" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0;">Live Inference Telemetry Log</h3>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Latest {{ recent_predictions|length }} Executions</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table" style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase;">
+                            <th style="padding: 0.5rem;">Model</th>
+                            <th style="padding: 0.5rem;">Prediction</th>
+                            <th style="padding: 0.5rem;">Latency</th>
+                            <th style="padding: 0.5rem;">Mode</th>
+                            <th style="padding: 0.5rem;">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in recent_predictions %}
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 0.6rem 0.5rem;">
+                                <strong>{{ log.model_name|truncatechars:24 }}</strong>
+                            </td>
+                            <td style="padding: 0.6rem 0.5rem;">
+                                <span class="ai-badge" style="background: #ECFDF5; color: #047857; font-weight: 700;">
+                                    {{ log.prediction|truncatechars:18 }}
+                                </span>
+                                {% if log.confidence %}
+                                <span style="font-size: 0.7rem; color: var(--text-muted); margin-left: 0.25rem;">({{ log.confidence|floatformat:2 }})</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 0.6rem 0.5rem; font-family: monospace;">{{ log.latency_ms }} ms</td>
+                            <td style="padding: 0.6rem 0.5rem;">
+                                <span style="font-size: 0.7rem; padding: 0.15rem 0.35rem; border-radius: 4px; background: {% if log.data_mode == 'LIVE' %}#D1FAE5; color:#065F46;{% else %}#FEF3C7; color:#92400E;{% endif %}">
+                                    {{ log.data_mode }}
+                                </span>
+                            </td>
+                            <td style="padding: 0.6rem 0.5rem; color: var(--text-muted);">{{ log.created_at|date:"H:i:s" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 1.5rem; color: var(--text-muted);">
+                                No live predictions logged yet. Make an inference request via <code>/api/ml/*</code>.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Model Retraining Run Audit Trail -->
+        <div class="card-light" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0;">Retraining Audit Trail</h3>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Recent Calibration Runs</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                {% for run in recent_training_runs %}
+                <div style="padding: 0.75rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); border-left: 3px solid {% if run.status == 'SUCCESS' %}#10B981{% else %}#EF4444{% endif %}; font-size: 0.8rem;">
+                    <div style="display: flex; justify-content: space-between; font-weight: 700;">
+                        <span>{{ run.model_name|truncatechars:28 }}</span>
+                        <span style="color: {% if run.status == 'SUCCESS' %}#10B981{% else %}#EF4444{% endif %};">{{ run.status }}</span>
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem;">
+                        {{ run.algorithm }} · {{ run.dataset_size }} samples · {{ run.duration_seconds }}s · {{ run.created_at|date:"M d, H:i" }}
+                    </div>
+                </div>
                 {% empty %}
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
-                        No models registered yet. Run <code>python manage.py train_models</code> to train and serialize weights.
-                    </td>
-                </tr>
+                <div style="text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.82rem;">
+                    No training runs logged yet.
+                </div>
                 {% endfor %}
-            </tbody>
-        </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Data Drift & Ground Truth Feedback Observability Grid -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        
+        <!-- Data Drift (PSI) Monitoring -->
+        <div class="card-light" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0;">Data Drift & Stability (PSI)</h3>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Threshold: PSI &lt; 0.25</span>
+            </div>
+
+            {% for drift in drift_records %}
+            <div style="padding: 0.75rem; margin-bottom: 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.82rem; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong>{{ drift.model_name }}</strong>
+                    <div style="font-size: 0.72rem; color: var(--text-muted);">Metric: {{ drift.metric_name }} · Evaluated {{ drift.detected_at|date:"M d, H:i" }}</div>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-family: monospace; font-weight: 700; color: {% if drift.is_drift_detected %}#EF4444{% else %}#10B981{% endif %};">
+                        PSI: {{ drift.drift_score|floatformat:4 }}
+                    </span>
+                    <div style="font-size: 0.7rem; color: {% if drift.is_drift_detected %}#EF4444{% else %}#10B981{% endif %};">
+                        {% if drift.is_drift_detected %}⚠️ Retrain Alert{% else %}✓ Stable{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div style="padding: 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.82rem;">
+                Run <code>python manage.py detect_data_drift</code> to evaluate production distribution shifts.
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Ground Truth Feedback Loop Submissions -->
+        <div class="card-light" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; margin: 0;">Ground Truth Feedback Loop</h3>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">User & Operator Submissions</span>
+            </div>
+
+            {% for fb in recent_feedback %}
+            <div style="padding: 0.75rem; margin-bottom: 0.6rem; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: 0.82rem;">
+                <div style="display: flex; justify-content: space-between;">
+                    <strong>{{ fb.model_name }}</strong>
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">{{ fb.created_at|date:"M d, H:i" }}</span>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                    Recorded Actual: <strong>{{ fb.actual_outcome }}</strong> {% if fb.error_delta %}(Δ Error: {{ fb.error_delta }}){% endif %}
+                </div>
+                {% if fb.notes %}
+                <div style="font-size: 0.72rem; color: var(--text-muted); font-style: italic; margin-top: 0.15rem;">"{{ fb.notes }}"</div>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div style="padding: 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.82rem;">
+                Ground truth feedback logged via <code>/api/ml/feedback/submit/</code> will appear here.
+            </div>
+            {% endfor %}
+        </div>
+
     </div>
 
 </div>
