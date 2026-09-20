@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Hostel Master Analytics - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="padding: 1.5rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #D97706; margin-bottom: 2px;">
+                Institutional Operations & Housing
+            </div>
+            <h1 style="font-size: 1.7rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                🏛️ CIT Hostel Facilities Command Center & Master Analytics
+            </h1>
+        </div>
+        <div style="font-size: 0.85rem; background: #FEF3C7; color: #B45309; padding: 4px 12px; border-radius: 20px; font-weight: 700;">
+            Administrative Access Level
+        </div>
+    </div>
+
+    <!-- Summary KPI Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-bottom: 2rem;">
+        <div class="card" style="padding: 1.3rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Total Capacity</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #2563EB; margin-top: 4px;">{{ total_capacity }} <span style="font-size: 0.9rem; font-weight: 500;">Beds</span></div>
+            <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">Across 4 CIT Residential Buildings</div>
+        </div>
+
+        <div class="card" style="padding: 1.3rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Current Occupancy</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #16A34A; margin-top: 4px;">{{ total_occupied }} <span style="font-size: 0.9rem; font-weight: 500;">({{ overall_occupancy }}%)</span></div>
+            <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">{{ total_available }} Vacant Beds Available</div>
+        </div>
+
+        <div class="card" style="padding: 1.3rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Active Complaints</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #DC2626; margin-top: 4px;">{{ open_complaints }}</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">Pending Chief Warden triage</div>
+        </div>
+
+        <div class="card" style="padding: 1.3rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Maintenance Work Orders</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #D97706; margin-top: 4px;">{{ pending_maintenance }}</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">Electrician & Plumbing queue</div>
+        </div>
+    </div>
+
+    <!-- Individual 4 Hostel Buildings Breakdown -->
+    <div class="card" style="padding: 1.8rem; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 1.8rem;">
+        <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); margin: 0 0 1.2rem;">
+            CIT Residential Hostel Buildings Directory
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem;">
+            {% for h in hostels %}
+            <div style="border: 1px solid #E2E8F0; border-radius: 14px; padding: 1.3rem; background: #F8FAFC;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem;">
+                    <div>
+                        <strong style="font-size: 1.05rem; color: var(--text-primary);">
+                            {% if h.category == 'boys' %}🏠{% else %}🏡{% endif %} {{ h.name }}
+                        </strong>
+                        <div style="font-size: 0.75rem; color: #2563EB; font-weight: 700;">
+                            {{ h.code }} • {{ h.get_category_display }} • {{ h.floor_count }} Floors
+                        </div>
+                    </div>
+                    <span style="font-size: 0.72rem; font-weight: 700; background: #ECFDF5; color: #047857; padding: 2px 8px; border-radius: 10px;">
+                        Active
+                    </span>
+                </div>
+
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0 0 0.8rem; line-height: 1.4;">
+                    {{ h.description|truncatewords:15 }}
+                </p>
+
+                <div style="margin-bottom: 0.8rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
+                        <span>Capacity: <strong>{{ h.capacity }}</strong></span>
+                        <span>Occupied: <strong>{{ h.occupied_count }} ({{ h.occupancy_percentage }}%)</strong></span>
+                    </div>
+                    <div style="height: 6px; border-radius: 3px; background: #E2E8F0; overflow: hidden;">
+                        <div style="height: 100%; width: {{ h.occupancy_percentage }}%; background: #2563EB;"></div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid #E2E8F0; padding-top: 0.6rem;">
+                    📞 Warden: {{ h.warden_name }} ({{ h.warden_contact }})
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Hostel Facilities - {{ hostel.name }}{% endblock %}
+
+{% block content %}
+<div style="padding: 1.5rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #2563EB; margin-bottom: 2px;">
+                <a href="{% url 'hostel:dashboard' %}" style="color: #2563EB; text-decoration: none;">← Hostel Dashboard</a>
+            </div>
+            <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                {{ hostel.name }} Amenities & Living Facilities
+            </h1>
+        </div>
+        <a href="{% url 'hostel:maintenance' %}" class="btn btn-primary btn-sm" style="border-radius: 8px;">
+            ⚡ Report Facility Issue
+        </a>
+    </div>
+
+    <!-- Category Groups -->
+    {% for category_name, items in facilities_by_category.items %}
+    <div class="card" style="padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+        <h2 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0 0 1rem;">
+            {{ category_name }}
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+            {% for item in items %}
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 1rem; border-radius: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 1.6rem;">{{ item.icon }}</span>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">{{ item.name }}</div>
+                    <div style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 6px;">{{ item.description|default:"Available 24/7 for residents" }}</div>
+                    <span style="font-size: 0.7rem; font-weight: 700; color: #16A34A; background: #ECFDF5; padding: 2px 8px; border-radius: 12px;">
+                        ● {{ item.status }}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="card" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+        No facilities recorded for this building.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

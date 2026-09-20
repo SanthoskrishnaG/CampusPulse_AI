@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ hostel.name }} - Hostel Resident Dashboard - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="padding: 1.5rem 0;">
+    <!-- Top Hero Banner -->
+    <div class="card" style="padding: 1.8rem 2rem; border-radius: 18px; margin-bottom: 1.8rem; background: linear-gradient(135deg, rgba(2,132,199,0.06), rgba(37,99,235,0.03)); border: 1px solid rgba(37,99,235,0.15);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+                    <span style="font-size: 1.8rem;">{% if hostel.category == 'boys' %}🏠{% else %}🏡{% endif %}</span>
+                    <h1 style="font-size: 1.7rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                        {{ hostel.name }}
+                    </h1>
+                    <span style="background: {% if hostel.category == 'boys' %}#EFF6FF; color:#1D4ED8{% else %}#FDF2F8; color:#BE185D{% endif %}; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;">
+                        {{ hostel.get_category_display }}
+                    </span>
+                    <span style="background: #ECFDF5; color: #047857; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;">
+                        {{ hostel.code }} • Verified CIT Residential Landmark
+                    </span>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0; max-width: 680px;">
+                    {{ hostel.description|default:"Official residential hall for students at Coimbatore Institute of Technology (CIT)." }}
+                </p>
+            </div>
+
+            <!-- Action Quick links -->
+            <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                <a href="{% url 'common:map' %}" class="btn btn-secondary btn-sm" style="font-size: 0.82rem; border-radius: 8px;">
+                    🗺️ Show on CIT Map
+                </a>
+                <a href="{% url 'hostel:maintenance' %}" class="btn btn-primary btn-sm" style="font-size: 0.82rem; border-radius: 8px;">
+                    ⚡ Request Maintenance
+                </a>
+                <a href="{% url 'hostel:complaints' %}" class="btn btn-secondary btn-sm" style="font-size: 0.82rem; border-radius: 8px;">
+                    🛠️ Report Issue
+                </a>
+                {% if user.is_superuser or user.role == 'SUPER_ADMIN' or user.role == 'COLLEGE_ADMIN' %}
+                <a href="{% url 'hostel:admin_analytics' %}" class="btn btn-warning btn-sm" style="font-size: 0.82rem; border-radius: 8px;">
+                    📊 Master Analytics
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-bottom: 2rem;">
+        <!-- Card 1: My Room -->
+        <div class="card" style="padding: 1.3rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Assigned Room</span>
+                <span style="font-size: 1.3rem;">🛏️</span>
+            </div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: #2563EB;">
+                {{ student.room_number|default:"B-204" }}
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px;">
+                Floor {{ room_info.floor|default:2 }} • {{ room_info.get_room_type_display|default:"Double Sharing" }}
+            </div>
+        </div>
+
+        <!-- Card 2: Occupancy Rate -->
+        <div class="card" style="padding: 1.3rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Total Capacity</span>
+                <span style="font-size: 1.3rem;">👥</span>
+            </div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary);">
+                {{ hostel.capacity }} <span style="font-size: 0.85rem; font-weight: 500; color: var(--text-muted);">Beds</span>
+            </div>
+            <div style="margin-top: 6px;">
+                <div style="height: 6px; border-radius: 3px; background: #E2E8F0; overflow: hidden;">
+                    <div style="height: 100%; width: {{ hostel.occupancy_percentage }}%; background: #10B981;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">
+                    <span>{{ hostel.occupied_count }} Occupied</span>
+                    <span><strong>{{ hostel.occupancy_percentage }}%</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Active Grievances -->
+        <div class="card" style="padding: 1.3rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Active Tickets</span>
+                <span style="font-size: 1.3rem;">🔧</span>
+            </div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: #D97706;">
+                {{ my_maintenance.count|add:my_complaints.count }}
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px;">
+                {{ my_maintenance.count }} Maintenance • {{ my_complaints.count }} Complaints
+            </div>
+        </div>
+
+        <!-- Card 4: 24/7 Security Desk -->
+        <div class="card" style="padding: 1.3rem; border-radius: 14px; border: 1px solid var(--border-color); background: #FAF5FF;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: #7E22CE; text-transform: uppercase;">Hostel Desk</span>
+                <span style="font-size: 1.3rem;">🛡️</span>
+            </div>
+            <div style="font-size: 0.95rem; font-weight: 800; color: #6B21A8;">
+                {{ hostel.warden_name }}
+            </div>
+            <div style="font-size: 0.78rem; color: #7E22CE; margin-top: 4px;">
+                📞 {{ hostel.security_contact }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content 2-Column Layout -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.8rem;">
+        <!-- Left Column: Announcements, Mess, Facilities -->
+        <div>
+            <!-- Section: Today's Mess Highlights -->
+            <div class="card" style="padding: 1.6rem; border-radius: 16px; margin-bottom: 1.8rem; border: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.3rem;">🍽️</span>
+                        <h2 style="font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                            Today's Hostel Mess Schedule ({{ today_mess.day_of_week|default:"Today" }})
+                        </h2>
+                    </div>
+                    <a href="{% url 'hostel:mess' %}" style="font-size: 0.8rem; color: #2563EB; font-weight: 700; text-decoration: none;">
+                        Weekly Timetable ➔
+                    </a>
+                </div>
+
+                {% if today_mess %}
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.8rem;">
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 0.9rem; border-radius: 10px;">
+                        <div style="font-size: 0.72rem; font-weight: 700; color: #2563EB; text-transform: uppercase;">Breakfast</div>
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 4px;">{{ today_mess.breakfast }}</div>
+                    </div>
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 0.9rem; border-radius: 10px;">
+                        <div style="font-size: 0.72rem; font-weight: 700; color: #16A34A; text-transform: uppercase;">Lunch</div>
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 4px;">{{ today_mess.lunch }}</div>
+                    </div>
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 0.9rem; border-radius: 10px;">
+                        <div style="font-size: 0.72rem; font-weight: 700; color: #D97706; text-transform: uppercase;">Snacks</div>
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 4px;">{{ today_mess.snacks }}</div>
+                    </div>
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 0.9rem; border-radius: 10px;">
+                        <div style="font-size: 0.72rem; font-weight: 700; color: #9333EA; text-transform: uppercase;">Dinner</div>
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-top: 4px;">{{ today_mess.dinner }}</div>
+                    </div>
+                </div>
+                {% else %}
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">Regular dining hall meal service is active.</p>
+                {% endif %}
+            </div>
+
+            <!-- Section: Resident Announcements -->
+            <div class="card" style="padding: 1.6rem; border-radius: 16px; margin-bottom: 1.8rem; border: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.3rem;">📢</span>
+                        <h2 style="font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                            Resident Notice Board
+                        </h2>
+                    </div>
+                </div>
+
+                {% if announcements %}
+                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                    {% for a in announcements %}
+                    <div style="border-left: 4px solid {% if a.priority == 'URGENT' %}#DC2626{% elif a.priority == 'WARNING' %}#D97706{% else %}#2563EB{% endif %}; background: #F8FAFC; padding: 0.9rem 1.1rem; border-radius: 0 10px 10px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <strong style="font-size: 0.9rem; color: var(--text-primary);">{{ a.title }}</strong>
+                            <span style="font-size: 0.72rem; color: var(--text-muted);">{{ a.created_at|date:"M d, H:i" }}</span>
+                        </div>
+                        <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                            {{ a.content }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.88rem;">
+                    No urgent announcements posted today.
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Section: Facilities Grid Preview -->
+            <div class="card" style="padding: 1.6rem; border-radius: 16px; border: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.3rem;">✨</span>
+                        <h2 style="font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                            Hostel Facilities & Amenities
+                        </h2>
+                    </div>
+                    <a href="{% url 'hostel:facilities' %}" style="font-size: 0.8rem; color: #2563EB; font-weight: 700; text-decoration: none;">
+                        Full Directory ➔
+                    </a>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem;">
+                    {% for f in facilities %}
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 0.75rem 0.9rem; background: #F8FAFC; border-radius: 10px; border: 1px solid #E2E8F0;">
+                        <span style="font-size: 1.3rem;">{{ f.icon }}</span>
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.82rem; color: var(--text-primary);">{{ f.name }}</div>
+                            <div style="font-size: 0.7rem; color: #16A34A; font-weight: 600;">{{ f.status }}</div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div style="color: var(--text-muted); font-size: 0.85rem;">Standard CIT amenities active.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Roommates, Tickets, Quick Navigation -->
+        <div>
+            <!-- Section: Quick Navigation Links -->
+            <div class="card" style="padding: 1.4rem; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+                <h3 style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary); margin: 0 0 1rem;">
+                    Hostel Services
+                </h3>
+                <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                    <a href="{% url 'hostel:rooms' %}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 8px; justify-content: flex-start; padding: 0.6rem 0.9rem;">
+                        🏢 <span>Floor & Room Directory</span>
+                    </a>
+                    <a href="{% url 'hostel:mess' %}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 8px; justify-content: flex-start; padding: 0.6rem 0.9rem;">
+                        🍽️ <span>Dining Hall & Mess Menu</span>
+                    </a>
+                    <a href="{% url 'hostel:maintenance' %}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 8px; justify-content: flex-start; padding: 0.6rem 0.9rem;">
+                        ⚡ <span>Maintenance Requests</span>
+                    </a>
+                    <a href="{% url 'hostel:complaints' %}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 8px; justify-content: flex-start; padding: 0.6rem 0.9rem;">
+                        📝 <span>Grievance Reporting</span>
+                    </a>
+                    <a href="{% url 'hostel:events' %}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 8px; justify-content: flex-start; padding: 0.6rem 0.9rem;">
+                        🏆 <span>Hostel Community Events</span>
+                    </a>
+                    <a href="{% url 'hostel:emergency' %}" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 8px; justify-content: flex-start; padding: 0.6rem 0.9rem; color: #DC2626;">
+                        🚨 <span>Emergency Contacts</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Section: Roommates Card -->
+            {% if roommates %}
+            <div class="card" style="padding: 1.4rem; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+                <h3 style="font-size: 0.95rem; font-weight: 800; color: var(--text-primary); margin: 0 0 0.8rem;">
+                    Room {{ student.room_number }} Residents
+                </h3>
+                <div style="display: flex; flex-direction: column; gap: 0.7rem;">
+                    {% for r in roommates %}
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.82rem;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: #E2E8F0; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                            {{ r.first_name|slice:":1" }}
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; color: var(--text-primary);">{{ r.get_display_name }}</div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted);">{{ r.department.code }} • Sem {{ r.semester }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Section: 24/7 Contacts Directory -->
+            <div class="card" style="padding: 1.4rem; border-radius: 16px; border: 1px solid var(--border-color); background: #FFFBFB;">
+                <h3 style="font-size: 0.95rem; font-weight: 800; color: #991B1B; margin: 0 0 0.8rem;">
+                    🚨 Emergency Support
+                </h3>
+                <div style="font-size: 0.8rem; line-height: 1.6; color: #475569;">
+                    <div><strong>Chief Warden:</strong> {{ hostel.warden_contact }}</div>
+                    <div><strong>Hostel Security:</strong> {{ hostel.security_contact }}</div>
+                    <div><strong>Campus Clinic:</strong> {{ hostel.medical_contact }}</div>
+                    <div style="margin-top: 8px; font-size: 0.74rem; color: #64748B;">
+                        Security guards on duty 24/7 at Hostel Front Turnstiles.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

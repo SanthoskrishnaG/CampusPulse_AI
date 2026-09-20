@@ -53,6 +53,10 @@ def role_redirect_view(request):
     elif role == User.Role.FACULTY:
         return redirect('faculty:dashboard')
     elif role in [User.Role.STUDENT, User.Role.CLUB_MEMBER]:
+        student_profile = getattr(user, 'student_profile', None)
+        # If student has not yet completed accommodation setup, route to onboarding wizard
+        if student_profile and not student_profile.is_accommodation_configured:
+            return redirect('accounts:accommodation_setup')
         return redirect('students:dashboard')
     elif role == User.Role.CLUB_ADMIN:
         return redirect('clubs:dashboard')
@@ -66,6 +70,69 @@ def role_redirect_view(request):
         return redirect('traffic:dashboard')
     else:
         return redirect('analytics:dashboard')
+
+@login_required
+def accommodation_setup_view(request):
+    """
+    Student-Only Accommodation Setup & Onboarding Wizard.
+    Strictly restricted from Faculty users.
+    """
+    user = request.user
+    # Faculty members must never be asked accommodation questions
+    if user.role == User.Role.FACULTY:
+        messages.info(request, "Faculty accounts are not eligible for student residential accommodations.")
+        return redirect('faculty:dashboard')
+
+    if user.role not in [User.Role.STUDENT, User.Role.CLUB_MEMBER] and not user.is_superuser:
+        return redirect('accounts:role_redirect')
+
+    student_profile = getattr(user, 'student_profile', None)
+    if not student_profile:
+        messages.warning(request, "Student record not associated with this account.")
+        return redirect('students:dashboard')
+
+    from apps.hostel.models import Hostel
+
+    if request.method == 'POST':
+        accom_type = request.POST.get('accommodation_type')
+        if accom_type == 'day_scholar':
+            student_profile.accommodation_type = 'day_scholar'
+            student_profile.hostel_category = None
+            student_profile.assigned_hostel = None
+            student_profile.room_number = ''
+            student_profile.is_accommodation_configured = True
+            student_profile.save()
+            messages.success(request, "Campus profile updated: Registered as Day Scholar. Access to academic facilities is active.")
+            return redirect('students:dashboard')
+        elif accom_type == 'hostel':
+            category = request.POST.get('hostel_category')
+            hostel_id = request.POST.get('assigned_hostel')
+            room_number = request.POST.get('room_number', '').strip()
+
+            if not category or not hostel_id:
+                messages.error(request, "Please select both your hostel category and specific assigned building.")
+            else:
+                hostel = Hostel.objects.filter(id=hostel_id, category=category).first()
+                if not hostel:
+                    messages.error(request, "Invalid hostel selection for the chosen category.")
+                else:
+                    student_profile.accommodation_type = 'hostel'
+                    student_profile.hostel_category = category
+                    student_profile.assigned_hostel = hostel
+                    student_profile.room_number = room_number or f"{hostel.code}-101"
+                    student_profile.is_accommodation_configured = True
+                    student_profile.save()
+                    messages.success(request, f"Welcome to {hostel.name}! Your room ({student_profile.room_number}) and Hostel Facilities are now unlocked.")
+                    return redirect('students:dashboard')
+
+    boys_hostels = Hostel.objects.filter(category=Hostel.Category.BOYS, is_active=True)
+    girls_hostels = Hostel.objects.filter(category=Hostel.Category.GIRLS, is_active=True)
+
+    return render(request, 'accounts/accommodation_setup.html', {
+        'student': student_profile,
+        'boys_hostels': boys_hostels,
+        'girls_hostels': girls_hostels,
+    })
 
 @login_required
 def profile_view(request):

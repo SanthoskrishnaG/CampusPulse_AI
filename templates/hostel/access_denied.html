@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Access Restricted - Hostel Facilities{% endblock %}
+
+{% block content %}
+<div style="max-width: 650px; margin: 4rem auto; padding: 0 1rem; text-align: center;">
+    <div class="card" style="padding: 3rem 2rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.06); border: 1px solid #FECACA; background: #FFFDFD;">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background: #FEE2E2; color: #DC2626; font-size: 2.2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+            🔒
+        </div>
+        
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: #991B1B; margin-bottom: 0.8rem;">
+            Hostel Access Restricted
+        </h2>
+        
+        <p style="font-size: 0.95rem; color: #475569; line-height: 1.6; margin-bottom: 1.5rem;">
+            {{ reason|default:"You do not have permission to access hostel facilities." }}
+        </p>
+
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1rem; margin-bottom: 2rem; text-align: left; font-size: 0.85rem; color: #64748B;">
+            <div style="font-weight: 700; color: #1E293B; margin-bottom: 4px;">Institutional Residential Policy:</div>
+            CIT Hostel living quarters, room registries, mess portals, and internal facility maintenance tools are strictly reserved for authorized hostel residents.
+        </div>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            {% if user.role == 'FACULTY' %}
+            <a href="{% url 'faculty:dashboard' %}" class="btn btn-primary" style="padding: 0.7rem 1.5rem; border-radius: 10px;">
+                Return to Faculty Dashboard
+            </a>
+            {% else %}
+            <a href="{% url 'students:dashboard' %}" class="btn btn-primary" style="padding: 0.7rem 1.5rem; border-radius: 10px;">
+                Return to Student Dashboard
+            </a>
+            <a href="{% url 'accounts:accommodation_setup' %}" class="btn btn-secondary" style="padding: 0.7rem 1.5rem; border-radius: 10px;">
+                Update Accommodation Status
+            </a>
+            {% endif %}
+            <a href="{% url 'common:map' %}" class="btn btn-secondary" style="padding: 0.7rem 1.5rem; border-radius: 10px;">
+                View Campus Map
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

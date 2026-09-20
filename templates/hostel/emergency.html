@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Emergency Contacts - {{ hostel.name }}{% endblock %}
+
+{% block content %}
+<div style="padding: 1.5rem 0; max-width: 800px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #2563EB; margin-bottom: 2px;">
+                <a href="{% url 'hostel:dashboard' %}" style="color: #2563EB; text-decoration: none;">← Hostel Dashboard</a>
+            </div>
+            <h1 style="font-size: 1.6rem; font-weight: 800; color: #991B1B; margin: 0;">
+                🚨 24/7 Hostel Emergency Directory
+            </h1>
+        </div>
+    </div>
+
+    <!-- Emergency Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-bottom: 2rem;">
+        <div class="card" style="padding: 1.5rem; border-radius: 16px; border: 2px solid #FECACA; background: #FFFBFB;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">👨‍💼</div>
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #991B1B; margin: 0 0 4px;">Hostel Warden Desk</h3>
+            <div style="font-size: 0.82rem; color: #64748B; margin-bottom: 0.8rem;">{{ hostel.warden_name }}</div>
+            <div style="font-size: 1.1rem; font-weight: 800; color: #DC2626;">{{ hostel.warden_contact }}</div>
+            <div style="font-size: 0.72rem; color: #94A3B8; margin-top: 4px;">Available 07:00 AM - 10:00 PM for urgent queries.</div>
+        </div>
+
+        <div class="card" style="padding: 1.5rem; border-radius: 16px; border: 2px solid #FED7AA; background: #FFFDF8;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛡️</div>
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #C2410C; margin: 0 0 4px;">Hostel Security Guard</h3>
+            <div style="font-size: 0.82rem; color: #64748B; margin-bottom: 0.8rem;">Front Turnstile & RFID Gate</div>
+            <div style="font-size: 1.1rem; font-weight: 800; color: #EA580C;">{{ hostel.security_contact }}</div>
+            <div style="font-size: 0.72rem; color: #94A3B8; margin-top: 4px;">Active 24 Hours on-site security patrol.</div>
+        </div>
+
+        <div class="card" style="padding: 1.5rem; border-radius: 16px; border: 2px solid #BBF7D0; background: #F8FFF9;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏥</div>
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #15803D; margin: 0 0 4px;">CIT Health Centre</h3>
+            <div style="font-size: 0.82rem; color: #64748B; margin-bottom: 0.8rem;">Campus Medical Clinic & Ambulance</div>
+            <div style="font-size: 1.1rem; font-weight: 800; color: #16A34A;">{{ hostel.medical_contact }}</div>
+            <div style="font-size: 0.72rem; color: #94A3B8; margin-top: 4px;">Resident medical officer & first responder.</div>
+        </div>
+
+        <div class="card" style="padding: 1.5rem; border-radius: 16px; border: 2px solid #BFDBFE; background: #F8FAFF;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚒</div>
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #1D4ED8; margin: 0 0 4px;">Peelamedu Emergency</h3>
+            <div style="font-size: 0.82rem; color: #64748B; margin-bottom: 0.8rem;">Police & Fire Station (Local)</div>
+            <div style="font-size: 1.1rem; font-weight: 800; color: #2563EB;">112 / 108</div>
+            <div style="font-size: 0.72rem; color: #94A3B8; margin-top: 4px;">National Emergency Support Services.</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

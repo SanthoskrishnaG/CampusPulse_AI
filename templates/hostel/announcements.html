@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hostel Announcements - {{ hostel.name }} - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 0 auto; padding: 1.5rem 0;">
+    <!-- Hero Header -->
+    <div class="card" style="padding: 1.8rem 2rem; border-radius: 18px; margin-bottom: 1.8rem; background: linear-gradient(135deg, rgba(2,132,199,0.06), rgba(37,99,235,0.03)); border: 1px solid rgba(37,99,235,0.15); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.35rem;">
+                <span style="font-size: 1.6rem;">📢</span>
+                <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                    Hostel Announcements Bulletin
+                </h1>
+                <span style="background: #EFF6FF; color: #1D4ED8; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;">
+                    {{ hostel.name }} ({{ hostel.code }})
+                </span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">
+                Official residential notices, scheduled maintenance alerts, and warden directives for authorized residents.
+            </p>
+        </div>
+        <div style="display: flex; gap: 0.6rem;">
+            <a href="{% url 'hostel:dashboard' %}" class="btn btn-secondary btn-sm" style="border-radius: 8px;">
+                « Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Announcements List -->
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        {% for a in announcements %}
+        <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color); border-left: 4px solid {% if a.priority == 'URGENT' %}#DC2626{% elif a.priority == 'WARNING' %}#D97706{% else %}#2563EB{% endif %};">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; gap: 1rem; flex-wrap: wrap;">
+                <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0 0 4px;">
+                        {{ a.title }}
+                    </h3>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">
+                        Posted on {{ a.created_at|date:"M d, Y • h:i A" }} • 
+                        Target: {% if a.hostel %}{{ a.hostel.name }}{% else %}All CIT Hostels{% endif %}
+                    </div>
+                </div>
+                <span style="font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; background: {% if a.priority == 'URGENT' %}#FEF2F2; color:#DC2626{% elif a.priority == 'WARNING' %}#FFFBEB; color:#D97706{% else %}#EFF6FF; color:#2563EB{% endif %};">
+                    {{ a.get_priority_display }}
+                </span>
+            </div>
+
+            <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                {{ a.content }}
+            </p>
+        </div>
+        {% empty %}
+        <div class="card" style="padding: 3rem; text-align: center; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">✨</div>
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.3rem;">
+                No active announcements
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+                All systems and facilities in {{ hostel.name }} are operating normally.
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

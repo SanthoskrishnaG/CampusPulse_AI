@@ -50,6 +50,52 @@
                 <input type="text" class="form-select-light" value="{{ user.department.name|default:'General Campus' }}" style="width:100%; padding:0.65rem 0.95rem; background:#F8FAFC;" readonly>
             </div>
 
+            {% if student_profile and user.role != 'FACULTY' %}
+            <div style="background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                    <div style="font-size:0.85rem; font-weight:700; color:var(--text-primary); text-transform:uppercase; letter-spacing:0.04em;">
+                        🏠 Campus Accommodation
+                    </div>
+                    <a href="{% url 'accounts:accommodation_setup' %}" class="btn btn-secondary btn-sm" style="font-size:0.75rem; padding:0.3rem 0.75rem;">
+                        Edit Accommodation
+                    </a>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; font-size:0.85rem;">
+                    <div>
+                        <span style="color:var(--text-muted); display:block; font-size:0.75rem; text-transform:uppercase;">Status:</span>
+                        <strong style="color:var(--text-primary);">
+                            {% if student_profile.accommodation_type == 'hostel' %}
+                            🛏️ Hostel Student
+                            {% else %}
+                            🎒 Day Scholar
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                    {% if student_profile.accommodation_type == 'hostel' %}
+                    <div>
+                        <span style="color:var(--text-muted); display:block; font-size:0.75rem; text-transform:uppercase;">Hostel Category:</span>
+                        <strong>{{ student_profile.get_hostel_category_display|default:'Not Specified' }}</strong>
+                    </div>
+                    <div>
+                        <span style="color:var(--text-muted); display:block; font-size:0.75rem; text-transform:uppercase;">Assigned Building:</span>
+                        <strong style="color:#2563EB;">{{ student_profile.assigned_hostel.name|default:'Pending Allocation' }}</strong>
+                    </div>
+                    <div>
+                        <span style="color:var(--text-muted); display:block; font-size:0.75rem; text-transform:uppercase;">Room Number:</span>
+                        <strong>{{ student_profile.room_number|default:'Not Assigned' }}</strong>
+                    </div>
+                    {% else %}
+                    <div>
+                        <span style="color:var(--text-muted); display:block; font-size:0.75rem; text-transform:uppercase;">Residential Clearance:</span>
+                        <span style="color:var(--text-muted);">Non-Residential / Commuter</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
             <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">
                 <span>Save Profile Updates</span>
                 <span>➔</span>

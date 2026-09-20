@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Hostel Community Events - {{ hostel.name }}{% endblock %}
+
+{% block content %}
+<div style="padding: 1.5rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #2563EB; margin-bottom: 2px;">
+                <a href="{% url 'hostel:dashboard' %}" style="color: #2563EB; text-decoration: none;">← Hostel Dashboard</a>
+            </div>
+            <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                Hostel Community Events & Gatherings
+            </h1>
+        </div>
+    </div>
+
+    <!-- Events List -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem;">
+        {% for ev in events %}
+        <div class="card" style="padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                    {{ ev.title }}
+                </h3>
+                <span style="font-size: 0.72rem; font-weight: 700; background: #EFF6FF; color: #2563EB; padding: 2px 8px; border-radius: 8px;">
+                    {{ ev.hostel.code }}
+                </span>
+            </div>
+            <div style="font-size: 0.8rem; color: #16A34A; font-weight: 700; margin-bottom: 0.5rem;">
+                📅 {{ ev.event_date|date:"l, F d, Y • h:i A" }}
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem; line-height: 1.4;">
+                {{ ev.description }}
+            </p>
+            <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid #E2E8F0; padding-top: 0.6rem;">
+                📍 Venue: <strong>{{ ev.location }}</strong> • Organized by: {{ ev.organizer }}
+            </div>
+        </div>
+        {% empty %}
+        <div class="card" style="padding: 2.5rem; text-align: center; color: var(--text-muted); grid-column: 1 / -1;">
+            No upcoming events scheduled for this hostel block.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

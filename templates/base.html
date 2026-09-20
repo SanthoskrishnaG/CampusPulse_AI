@@ -101,6 +101,12 @@
                 <a href="{% url 'energy:dashboard' %}" class="nav-link {% if 'energy' in request.path %}active{% endif %}">
                     <span class="nav-icon">💡</span><span>Energy Monitoring</span>
                 </a>
+                {% if can_access_hostel %}
+                <a href="{% url 'hostel:dashboard' %}" class="nav-link {% if 'hostel' in request.path %}active{% endif %}">
+                    <span class="nav-icon">🏠</span><span>Hostel Facilities</span>
+                </a>
+                {% endif %}
+
 
                 <div class="nav-section-title">Analytics & Admin</div>
                 <a href="{% url 'analytics:dashboard' %}" class="nav-link {% if 'analytics' in request.path %}active{% endif %}">

@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Campus Walkway Route - {{ hostel.name }} - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 0 auto; padding: 1.5rem 0;">
+    <!-- Hero Header -->
+    <div class="card" style="padding: 1.8rem 2rem; border-radius: 18px; margin-bottom: 1.8rem; background: linear-gradient(135deg, rgba(2,132,199,0.06), rgba(37,99,235,0.03)); border: 1px solid rgba(37,99,235,0.15); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.35rem;">
+                <span style="font-size: 1.6rem;">🚶</span>
+                <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                    Pedestrian Waypoint Navigation: {{ hostel.name }}
+                </h1>
+                <span style="background: #EFF6FF; color: #1D4ED8; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;">
+                    {{ hostel.code }} • Paved Walkways
+                </span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">
+                Turn-by-turn internal routes connecting CIT Main Gate, Academic Blocks, Central Library, and Canteen to {{ hostel.name }}.
+            </p>
+        </div>
+        <div style="display: flex; gap: 0.6rem;">
+            <a href="{% url 'common:map' %}" class="btn btn-primary btn-sm" style="border-radius: 8px;">
+                🗺️ Open Interactive 2D Map
+            </a>
+            <a href="{% url 'hostel:dashboard' %}" class="btn btn-secondary btn-sm" style="border-radius: 8px;">
+                « Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Precomputed Corridor Routes -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.2rem;">
+        <!-- Route 1: Main Gate -> Hostel -->
+        <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                    🚪 Main Gate ➔ {{ hostel.name }}
+                </h3>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #16A34A; background: #F0FDF4; padding: 2px 8px; border-radius: 10px;">
+                    ~420 m • 5 mins
+                </span>
+            </div>
+            <ol style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0; padding-left: 1.2rem;">
+                <li>Start at CIT Main Entrance Gate on Avinashi Road.</li>
+                <li>Proceed south past Administration Roundabout.</li>
+                <li>Cross Central Academic Quad onto South Living Spine.</li>
+                <li>Turn at Residential Junction toward {{ hostel.name }}.</li>
+                <li>Arrive at main reception & biometric entrance.</li>
+            </ol>
+            <div style="margin-top: 1rem;">
+                <a href="{% url 'common:map' %}" class="btn btn-secondary btn-sm" style="width: 100%; text-align: center; display: block; font-size: 0.8rem;">
+                    View on Campus Map ➔
+                </a>
+            </div>
+        </div>
+
+        <!-- Route 2: Academic Block -> Hostel -->
+        <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                    🏫 Academic Quad ➔ {{ hostel.name }}
+                </h3>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #16A34A; background: #F0FDF4; padding: 2px 8px; border-radius: 10px;">
+                    ~280 m • 3.5 mins
+                </span>
+            </div>
+            <ol style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0; padding-left: 1.2rem;">
+                <li>Exit Lecture Hall Quad or Department corridors.</li>
+                <li>Head south along shaded pedestrian avenue.</li>
+                <li>Pass Student Health Centre on your right.</li>
+                <li>Turn onto residential gate path into {{ hostel.name }}.</li>
+            </ol>
+            <div style="margin-top: 1rem;">
+                <a href="{% url 'common:map' %}" class="btn btn-secondary btn-sm" style="width: 100%; text-align: center; display: block; font-size: 0.8rem;">
+                    View on Campus Map ➔
+                </a>
+            </div>
+        </div>
+
+        <!-- Route 3: Central Library -> Hostel -->
+        <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                    📚 Central Library ➔ {{ hostel.name }}
+                </h3>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #16A34A; background: #F0FDF4; padding: 2px 8px; border-radius: 10px;">
+                    ~310 m • 4 mins
+                </span>
+            </div>
+            <ol style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0; padding-left: 1.2rem;">
+                <li>Exit Library front steps toward Central Quad.</li>
+                <li>Proceed past Computing Complex to South Walkway.</li>
+                <li>Cross east walkway spur into {{ hostel.name }} perimeter.</li>
+            </ol>
+            <div style="margin-top: 1rem;">
+                <a href="{% url 'common:map' %}" class="btn btn-secondary btn-sm" style="width: 100%; text-align: center; display: block; font-size: 0.8rem;">
+                    View on Campus Map ➔
+                </a>
+            </div>
+        </div>
+
+        <!-- Route 4: Canteen -> Hostel -->
+        <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                    🍽️ Smart Canteen ➔ {{ hostel.name }}
+                </h3>
+                <span style="font-size: 0.75rem; font-weight: 700; color: #16A34A; background: #F0FDF4; padding: 2px 8px; border-radius: 10px;">
+                    ~160 m • 2 mins
+                </span>
+            </div>
+            <ol style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0; padding-left: 1.2rem;">
+                <li>Exit Food Court via South Living Quad gate.</li>
+                <li>Direct pedestrian pathway directly connects to {{ hostel.name }}.</li>
+                <li>Enter via resident gate card reader.</li>
+            </ol>
+            <div style="margin-top: 1rem;">
+                <a href="{% url 'common:map' %}" class="btn btn-secondary btn-sm" style="width: 100%; text-align: center; display: block; font-size: 0.8rem;">
+                    View on Campus Map ➔
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

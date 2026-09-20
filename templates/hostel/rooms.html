@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Room Directory - {{ hostel.name }}{% endblock %}
+
+{% block content %}
+<div style="padding: 1.5rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #2563EB; margin-bottom: 2px;">
+                <a href="{% url 'hostel:dashboard' %}" style="color: #2563EB; text-decoration: none;">← Hostel Dashboard</a>
+            </div>
+            <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                {{ hostel.name }} Floor & Room Directory
+            </h1>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted);">
+            Your Room: <strong style="color: #2563EB;">{{ student.room_number|default:"Unassigned" }}</strong>
+        </div>
+    </div>
+
+    <!-- Room Blocks -->
+    {% for block in blocks %}
+    <div class="card" style="padding: 1.5rem; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                🏢 {{ block.name }} ({{ block.floor_count }} Floors)
+            </h2>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">{{ block.rooms.count }} Rooms Configured</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.8rem;">
+            {% for room in block.rooms.all %}
+            <div style="border: 1px solid {% if room.room_number == student.room_number %}#2563EB{% else %}#E2E8F0{% endif %}; background: {% if room.room_number == student.room_number %}#EFF6FF{% else %}#F8FAFC{% endif %}; border-radius: 10px; padding: 0.9rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <strong style="font-size: 0.95rem; color: var(--text-primary);">{{ room.room_number }}</strong>
+                    {% if room.room_number == student.room_number %}
+                    <span style="font-size: 0.65rem; background: #2563EB; color: white; padding: 1px 6px; border-radius: 6px; font-weight: 700;">YOU</span>
+                    {% endif %}
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">
+                    Floor {{ room.floor }} • {{ room.get_room_type_display }}
+                </div>
+                <div style="font-size: 0.72rem; color: #16A34A; font-weight: 700;">
+                    {{ room.occupied }}/{{ room.capacity }} Occupants
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="card" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+        Standard double and triple-sharing residential layout across {{ hostel.floor_count }} floors.
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

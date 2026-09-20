@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Hostel Resident Attendance - {{ hostel.name }} - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="max-width: 1100px; margin: 0 auto; padding: 1.5rem 0;">
+    <!-- Hero Header -->
+    <div class="card" style="padding: 1.8rem 2rem; border-radius: 18px; margin-bottom: 1.8rem; background: linear-gradient(135deg, rgba(2,132,199,0.06), rgba(37,99,235,0.03)); border: 1px solid rgba(37,99,235,0.15); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.35rem;">
+                <span style="font-size: 1.6rem;">📋</span>
+                <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                    Evening Roll-Call & Attendance History
+                </h1>
+                <span style="background: #ECFDF5; color: #047857; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;">
+                    Biometric & Roll-Call Registry
+                </span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">
+                Daily residential curfew verification (8:30 PM roll-call) for {{ hostel.name }}.
+            </p>
+        </div>
+        <div style="display: flex; gap: 0.6rem;">
+            <a href="{% url 'hostel:dashboard' %}" class="btn btn-secondary btn-sm" style="border-radius: 8px;">
+                « Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Student Status Card -->
+    <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Resident Identity</span>
+                <div style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); margin-top: 2px;">
+                    {{ student.get_display_name }} ({{ student.student_id }})
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+                    {{ hostel.name }} • Room: <strong>{{ student.room_number|default:'Assigned' }}</strong>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Curfew Compliance</span>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #16A34A; margin-top: 2px;">
+                    98.2% Standing
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                    CIT Residential Biometric Gateway Sync
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Table -->
+    <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color); overflow-x: auto;">
+        <h3 style="font-size: 1.05rem; font-weight: 800; color: var(--text-primary); margin: 0 0 1rem;">
+            Recent Roll-Call Logs
+        </h3>
+
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); text-align: left; color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase;">
+                    <th style="padding: 0.75rem 0.5rem;">Date</th>
+                    <th style="padding: 0.75rem 0.5rem;">Status</th>
+                    <th style="padding: 0.75rem 0.5rem;">Verified By</th>
+                    <th style="padding: 0.75rem 0.5rem;">Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.85rem 0.5rem; font-weight: 600;">{{ r.date|date:"M d, Y (D)" }}</td>
+                    <td style="padding: 0.85rem 0.5rem;">
+                        <span style="font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 10px; background: {% if r.status == 'PRESENT' %}#ECFDF5; color:#047857;{% elif r.status == 'LATE' %}#FFFBEB; color:#B45309;{% elif r.status == 'ON_LEAVE' %}#EFF6FF; color:#1D4ED8;{% else %}#FEF2F2; color:#DC2626;{% endif %}">
+                            {{ r.get_status_display }}
+                        </span>
+                    </td>
+                    <td style="padding: 0.85rem 0.5rem; color: var(--text-secondary);">{{ r.verified_by }}</td>
+                    <td style="padding: 0.85rem 0.5rem; color: var(--text-muted);">{{ r.remarks|default:"Standard evening roll-call" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                        No individual attendance exceptions logged. Your residential record is clean.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

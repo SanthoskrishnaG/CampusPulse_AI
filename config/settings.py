@@ -22,10 +22,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'campuspulse-development-secret-key-20
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 't')
 
 # Hosts configuration: defaults to local loopback, extensible via environment variable
-allowed_hosts_env = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost')
+allowed_hosts_env = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost,testserver')
 ALLOWED_HOSTS = [h.strip() for h in allowed_hosts_env.split(',') if h.strip()]
 if not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 # Application definition
 INSTALLED_APPS = [
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'apps.notifications',
     'apps.analytics',
     'apps.ai_assistant',
+    'apps.hostel',
 ]
 
 MIDDLEWARE = [

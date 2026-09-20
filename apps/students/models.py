@@ -33,9 +33,64 @@ class Student(models.Model):
     interests = models.TextField(blank=True, help_text="Comma-separated interests (e.g. Robotics, NLP, Cyber Security)")
     career_interests = models.TextField(blank=True, help_text="Target role (e.g. Data Scientist, Cloud Architect)")
     backlog_count = models.PositiveIntegerField(default=0)
+
+    # Campus Accommodation & Hostel Living
+    class AccommodationType(models.TextChoices):
+        HOSTEL = 'hostel', 'Hostel Student'
+        DAY_SCHOLAR = 'day_scholar', 'Day Scholar'
+
+    class HostelCategory(models.TextChoices):
+        BOYS = 'boys', 'Boys Hostel'
+        GIRLS = 'girls', 'Girls Hostel'
+
+    accommodation_type = models.CharField(
+        max_length=20,
+        choices=AccommodationType.choices,
+        default=AccommodationType.DAY_SCHOLAR,
+        help_text="Hostel Student or Day Scholar"
+    )
+    hostel_category = models.CharField(
+        max_length=10,
+        choices=HostelCategory.choices,
+        null=True,
+        blank=True,
+        help_text="boys or girls"
+    )
+    assigned_hostel = models.ForeignKey(
+        'hostel.Hostel',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='resident_students'
+    )
+    room_number = models.CharField(max_length=20, blank=True, help_text="e.g. B-204")
+    is_accommodation_configured = models.BooleanField(
+        default=False,
+        help_text="Whether student completed accommodation onboarding"
+    )
+
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        super().clean()
+        from django.core.exceptions import ValidationError
+        if self.accommodation_type == self.AccommodationType.DAY_SCHOLAR:
+            self.hostel_category = None
+            self.assigned_hostel = None
+            self.room_number = ''
+        elif self.accommodation_type == self.AccommodationType.HOSTEL:
+            if not self.hostel_category or self.hostel_category not in [self.HostelCategory.BOYS, self.HostelCategory.GIRLS]:
+                raise ValidationError({'hostel_category': "Hostel students must select either Boys Hostel or Girls Hostel category."})
+            if self.assigned_hostel:
+                expected_cat = 'boys' if self.hostel_category == self.HostelCategory.BOYS else 'girls'
+                if self.assigned_hostel.category != expected_cat:
+                    raise ValidationError({'assigned_hostel': f"Selected hostel '{self.assigned_hostel.name}' does not match your category ({self.get_hostel_category_display()})."})
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['student_id']

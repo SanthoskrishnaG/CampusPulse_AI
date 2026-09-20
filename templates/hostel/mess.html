@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Hostel Dining & Mess Schedule - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="padding: 1.5rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #2563EB; margin-bottom: 2px;">
+                <a href="{% url 'hostel:dashboard' %}" style="color: #2563EB; text-decoration: none;">← Hostel Dashboard</a>
+            </div>
+            <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                Hostel Dining Hall & Weekly Mess Timetable
+            </h1>
+        </div>
+        <div style="font-size: 0.82rem; background: #ECFDF5; color: #047857; padding: 4px 12px; border-radius: 20px; font-weight: 700;">
+            🍽️ Integrated with CIT Smart Canteen AI
+        </div>
+    </div>
+
+    <!-- Timings Banner -->
+    <div class="card" style="padding: 1.2rem 1.5rem; border-radius: 14px; margin-bottom: 1.8rem; border: 1px solid var(--border-color); background: #F8FAFC;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; text-align: center;">
+            <div>
+                <div style="font-size: 0.72rem; font-weight: 700; color: #2563EB; text-transform: uppercase;">Breakfast</div>
+                <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary); margin-top: 2px;">07:30 AM – 09:00 AM</div>
+            </div>
+            <div style="border-left: 1px solid #E2E8F0;"></div>
+            <div>
+                <div style="font-size: 0.72rem; font-weight: 700; color: #16A34A; text-transform: uppercase;">Lunch</div>
+                <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary); margin-top: 2px;">12:30 PM – 02:00 PM</div>
+            </div>
+            <div style="border-left: 1px solid #E2E8F0;"></div>
+            <div>
+                <div style="font-size: 0.72rem; font-weight: 700; color: #D97706; text-transform: uppercase;">Evening Tea</div>
+                <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary); margin-top: 2px;">04:30 PM – 05:30 PM</div>
+            </div>
+            <div style="border-left: 1px solid #E2E8F0;"></div>
+            <div>
+                <div style="font-size: 0.72rem; font-weight: 700; color: #9333EA; text-transform: uppercase;">Dinner</div>
+                <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary); margin-top: 2px;">07:30 PM – 09:00 PM</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Days Grid -->
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        {% for m in menus %}
+        <div class="card" style="padding: 1.4rem; border-radius: 14px; border: 1px solid {% if m.day_of_week == today_day %}#2563EB{% else %}var(--border-color){% endif %}; background: {% if m.day_of_week == today_day %}#F0F7FF{% else %}var(--card-bg, #ffffff){% endif %};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h3 style="font-size: 1.1rem; font-weight: 800; margin: 0; color: var(--text-primary);">
+                    📅 {{ m.day_of_week }}
+                </h3>
+                {% if m.day_of_week == today_day %}
+                <span style="font-size: 0.72rem; font-weight: 800; background: #2563EB; color: white; padding: 2px 8px; border-radius: 10px;">TODAY</span>
+                {% endif %}
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; font-size: 0.82rem;">
+                <div style="background: white; border: 1px solid #E2E8F0; padding: 0.75rem; border-radius: 8px;">
+                    <strong style="color: #2563EB;">Breakfast:</strong>
+                    <div style="margin-top: 3px; color: var(--text-secondary);">{{ m.breakfast }}</div>
+                </div>
+                <div style="background: white; border: 1px solid #E2E8F0; padding: 0.75rem; border-radius: 8px;">
+                    <strong style="color: #16A34A;">Lunch:</strong>
+                    <div style="margin-top: 3px; color: var(--text-secondary);">{{ m.lunch }}</div>
+                </div>
+                <div style="background: white; border: 1px solid #E2E8F0; padding: 0.75rem; border-radius: 8px;">
+                    <strong style="color: #D97706;">Snacks & Tea:</strong>
+                    <div style="margin-top: 3px; color: var(--text-secondary);">{{ m.snacks }}</div>
+                </div>
+                <div style="background: white; border: 1px solid #E2E8F0; padding: 0.75rem; border-radius: 8px;">
+                    <strong style="color: #9333EA;">Dinner:</strong>
+                    <div style="margin-top: 3px; color: var(--text-secondary);">{{ m.dinner }}</div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="card" style="padding: 2rem; text-align: center; color: var(--text-muted);">
+            Mess menus being updated for the current academic session.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

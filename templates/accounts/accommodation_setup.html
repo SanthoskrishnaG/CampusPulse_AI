@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Campus Accommodation Setup - CampusPulse AI{% endblock %}
+
+{% block content %}
+<div style="max-width: 760px; margin: 2rem auto; padding: 0 1rem;">
+    <!-- Header Hero -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 20px; background: linear-gradient(135deg, #0284C7, #2563EB); color: white; font-size: 2rem; margin-bottom: 1rem; box-shadow: 0 10px 25px rgba(37,99,235,0.25);">
+            🏠
+        </div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">
+            Campus Accommodation Onboarding
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; max-width: 540px; margin: 0 auto;">
+            Configure your residential status for <strong>Coimbatore Institute of Technology (CIT)</strong>. This activates tailored campus services, living facilities, and map routing.
+        </p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card" style="padding: 2.2rem; border-radius: 18px; box-shadow: 0 12px 30px rgba(0,0,0,0.06); border: 1px solid var(--border-color);">
+        <form method="POST" id="accommodationForm">
+            {% csrf_token %}
+
+            <!-- STEP 1: Main Type Question -->
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; font-weight: 700; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.8rem;">
+                    1. What is your campus accommodation type?
+                </label>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <!-- Option A: Hostel Student -->
+                    <label id="cardHostel" class="accom-card" style="border: 2px solid var(--border-color); border-radius: 14px; padding: 1.4rem; cursor: pointer; transition: all 0.25s ease; text-align: center; display: block; position: relative;">
+                        <input type="radio" name="accommodation_type" value="hostel" id="radioHostel" style="display: none;" onchange="handleTypeChange('hostel')">
+                        <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🛏️</div>
+                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.3rem;">Hostel Student</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                            Living in CIT Campus Residential Hostels (Boys / Girls Blocks)
+                        </div>
+                    </label>
+
+                    <!-- Option B: Day Scholar -->
+                    <label id="cardDayScholar" class="accom-card" style="border: 2px solid var(--border-color); border-radius: 14px; padding: 1.4rem; cursor: pointer; transition: all 0.25s ease; text-align: center; display: block; position: relative;">
+                        <input type="radio" name="accommodation_type" value="day_scholar" id="radioDayScholar" style="display: none;" onchange="handleTypeChange('day_scholar')">
+                        <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🎒</div>
+                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.3rem;">Day Scholar</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
+                            Commuting from home via bus, personal vehicle, or city transit
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- STEP 2: Hostel Specifics (Hidden by default, shown if hostel selected) -->
+            <div id="hostelStepSection" style="display: none; border-top: 1px dashed var(--border-color); padding-top: 1.8rem; margin-top: 1.5rem;">
+                <!-- Gender Category -->
+                <div style="margin-bottom: 1.8rem;">
+                    <label style="display: block; font-weight: 700; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.8rem;">
+                        2. Which hostel category are you assigned to?
+                    </label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <label id="cardBoys" class="gender-card" style="border: 2px solid var(--border-color); border-radius: 12px; padding: 1.1rem; cursor: pointer; transition: all 0.2s ease; text-align: center;">
+                            <input type="radio" name="hostel_category" value="boys" id="radioBoys" style="display: none;" onchange="handleCategoryChange('boys')">
+                            <span style="font-size: 1.5rem;">👨‍🎓</span>
+                            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-top: 4px;">Boys Hostel</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Blocks 1 & 2</div>
+                        </label>
+
+                        <label id="cardGirls" class="gender-card" style="border: 2px solid var(--border-color); border-radius: 12px; padding: 1.1rem; cursor: pointer; transition: all 0.2s ease; text-align: center;">
+                            <input type="radio" name="hostel_category" value="girls" id="radioGirls" style="display: none;" onchange="handleCategoryChange('girls')">
+                            <span style="font-size: 1.5rem;">👩‍🎓</span>
+                            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-top: 4px;">Girls Hostel</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">Blocks 1 & 2</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Specific Hostel Building Selection -->
+                <div id="hostelBuildingSection" style="display: none; margin-bottom: 1.8rem;">
+                    <label style="display: block; font-weight: 700; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.8rem;">
+                        3. Select your assigned CIT Hostel Building:
+                    </label>
+
+                    <!-- Boys Hostels Dropdown -->
+                    <div id="boysHostelList" style="display: none;">
+                        <select name="assigned_hostel" id="selectBoysHostel" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.95rem; font-weight: 600;">
+                            <option value="">-- Choose Assigned Boys Hostel --</option>
+                            {% for h in boys_hostels %}
+                            <option value="{{ h.id }}" {% if student.assigned_hostel_id == h.id %}selected{% endif %}>
+                                🏠 {{ h.name }} ({{ h.code }}) • Capacity: {{ h.capacity }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Girls Hostels Dropdown -->
+                    <div id="girlsHostelList" style="display: none;">
+                        <select name="assigned_hostel" id="selectGirlsHostel" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.95rem; font-weight: 600;" disabled>
+                            <option value="">-- Choose Assigned Girls Hostel --</option>
+                            {% for h in girls_hostels %}
+                            <option value="{{ h.id }}" {% if student.assigned_hostel_id == h.id %}selected{% endif %}>
+                                🏡 {{ h.name }} ({{ h.code }}) • Capacity: {{ h.capacity }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Room Number (Optional / Configurable) -->
+                <div id="roomNumberSection" style="display: none; margin-bottom: 1.8rem;">
+                    <label style="display: block; font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.4rem;">
+                        Assigned Room Number:
+                    </label>
+                    <input type="text" name="room_number" value="{{ student.room_number|default:'' }}" placeholder="e.g. B-204, G-102" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.95rem;">
+                    <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 4px;">
+                        Room details are private to you and authorized hostel authorities.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: flex-end;">
+                <a href="{% url 'students:dashboard' %}" class="btn btn-secondary" style="padding: 0.75rem 1.4rem; border-radius: 10px;">
+                    Skip for now
+                </a>
+                <button type="submit" id="btnSubmit" class="btn btn-primary" style="padding: 0.75rem 2rem; border-radius: 10px; font-weight: 700; background: linear-gradient(135deg, #0284C7, #2563EB); border: none; color: white;" disabled>
+                    Save & Continue ➔
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function handleTypeChange(type) {
+    const cardHostel = document.getElementById('cardHostel');
+    const cardDay = document.getElementById('cardDayScholar');
+    const hostelSection = document.getElementById('hostelStepSection');
+    const btnSubmit = document.getElementById('btnSubmit');
+
+    if (type === 'hostel') {
+        cardHostel.style.borderColor = '#2563EB';
+        cardHostel.style.background = 'rgba(37, 99, 235, 0.05)';
+        cardDay.style.borderColor = 'var(--border-color)';
+        cardDay.style.background = 'transparent';
+        hostelSection.style.display = 'block';
+
+        // Check if subfields valid
+        validateForm();
+    } else {
+        cardDay.style.borderColor = '#16A34A';
+        cardDay.style.background = 'rgba(22, 163, 74, 0.05)';
+        cardHostel.style.borderColor = 'var(--border-color)';
+        cardHostel.style.background = 'transparent';
+        hostelSection.style.display = 'none';
+
+        // Day scholar is immediately submittable
+        btnSubmit.disabled = false;
+    }
+}
+
+function handleCategoryChange(cat) {
+    const cardBoys = document.getElementById('cardBoys');
+    const cardGirls = document.getElementById('cardGirls');
+    const buildingSec = document.getElementById('hostelBuildingSection');
+    const boysList = document.getElementById('boysHostelList');
+    const girlsList = document.getElementById('girlsHostelList');
+    const selectBoys = document.getElementById('selectBoysHostel');
+    const selectGirls = document.getElementById('selectGirlsHostel');
+    const roomSec = document.getElementById('roomNumberSection');
+
+    buildingSec.style.display = 'block';
+    roomSec.style.display = 'block';
+
+    if (cat === 'boys') {
+        cardBoys.style.borderColor = '#2563EB';
+        cardBoys.style.background = 'rgba(37, 99, 235, 0.06)';
+        cardGirls.style.borderColor = 'var(--border-color)';
+        cardGirls.style.background = 'transparent';
+
+        boysList.style.display = 'block';
+        girlsList.style.display = 'none';
+        selectBoys.disabled = false;
+        selectGirls.disabled = true;
+    } else {
+        cardGirls.style.borderColor = '#EC4899';
+        cardGirls.style.background = 'rgba(236, 72, 153, 0.06)';
+        cardBoys.style.borderColor = 'var(--border-color)';
+        cardBoys.style.background = 'transparent';
+
+        girlsList.style.display = 'block';
+        boysList.style.display = 'none';
+        selectGirls.disabled = false;
+        selectBoys.disabled = true;
+    }
+
+    validateForm();
+}
+
+function validateForm() {
+    const isHostel = document.getElementById('radioHostel').checked;
+    const isDay = document.getElementById('radioDayScholar').checked;
+    const btn = document.getElementById('btnSubmit');
+
+    if (isDay) {
+        btn.disabled = false;
+        return;
+    }
+
+    if (isHostel) {
+        const isBoys = document.getElementById('radioBoys').checked;
+        const isGirls = document.getElementById('radioGirls').checked;
+        const selectBoys = document.getElementById('selectBoysHostel');
+        const selectGirls = document.getElementById('selectGirlsHostel');
+
+        if (isBoys && selectBoys.value) {
+            btn.disabled = false;
+            return;
+        }
+        if (isGirls && selectGirls.value) {
+            btn.disabled = false;
+            return;
+        }
+    }
+
+    btn.disabled = true;
+}
+
+document.getElementById('selectBoysHostel').addEventListener('change', validateForm);
+document.getElementById('selectGirlsHostel').addEventListener('change', validateForm);
+
+// Pre-select existing state if editing
+window.addEventListener('DOMContentLoaded', () => {
+    {% if student.accommodation_type == 'hostel' %}
+    document.getElementById('radioHostel').checked = true;
+    handleTypeChange('hostel');
+    {% if student.hostel_category == 'boys' %}
+    document.getElementById('radioBoys').checked = true;
+    handleCategoryChange('boys');
+    {% elif student.hostel_category == 'girls' %}
+    document.getElementById('radioGirls').checked = true;
+    handleCategoryChange('girls');
+    {% endif %}
+    {% elif student.accommodation_type == 'day_scholar' %}
+    document.getElementById('radioDayScholar').checked = true;
+    handleTypeChange('day_scholar');
+    {% endif %}
+});
+</script>
+{% endblock %}

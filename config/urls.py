@@ -39,6 +39,8 @@ urlpatterns = [
     path('canteen/', include('apps.canteen.urls', namespace='canteen')),
     path('energy/', include('apps.energy.urls', namespace='energy')),
     path('waste/', include('apps.waste.urls', namespace='waste')),
+    path('hostel/', include('apps.hostel.urls', namespace='hostel')),
+    path('api/hostel/', include('apps.hostel.api_urls')),
 
     # AI Intelligence & Notification
     path('assistant/', include('apps.ai_assistant.urls', namespace='ai_assistant')),

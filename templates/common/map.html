@@ -96,7 +96,7 @@
     <!-- Category Filter Bar (All 27 Buildings/Components Categorized) -->
     <div class="cit-filter-bar" id="categoryFilterBar">
         <button class="cit-filter-btn active" onclick="filterByCategory('ALL', this)">
-            <span>🌐 All Locations</span> <span class="cit-filter-count" id="countAll">27</span>
+            <span>🌐 All Locations</span> <span class="cit-filter-count" id="countAll">29</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('DEPARTMENT', this)">
             <span>🏢 Departments</span> <span class="cit-filter-count">6</span>
@@ -123,7 +123,7 @@
             <span>🚌 Transit</span> <span class="cit-filter-count">2</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('HOSTEL', this)">
-            <span>🏠 Hostels</span> <span class="cit-filter-count">2</span>
+            <span>🏠 Hostels</span> <span class="cit-filter-count">4</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('SPORTS', this)">
             <span>⚽ Sports & Grounds</span> <span class="cit-filter-count">2</span>
@@ -263,7 +263,7 @@
             </div>
 
             <div class="campus-pin-wrapper pin-bus" data-top="82%" data-left="68%">
-                <a href="javascript:void(0)" onclick="selectLocationFrom3D('TRANSIT-HUB')" class="campus-pin">Hope College Transit Hub</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('TRANSIT-HUB')" class="campus-pin">CIT Transit Hub</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -277,6 +277,107 @@
                         <div><span class="telemetry-item-label">Fleet Status</span><div class="telemetry-item-val" style="color:var(--brand-blue);">TN-38 Live GPS</div></div>
                     </div>
                     <a href="javascript:void(0)" onclick="navigateToFrom3D('TRANSIT-HUB')" class="telemetry-link-btn">🚶 Navigate to Transit Hub on 2D Map ➔</a>
+                </div>
+            </div>
+
+            <!-- 4 Distinct 3D Hostel Buildings (Boys 1, Boys 2, Girls 1, Girls 2) -->
+            <div class="campus-pin-wrapper pin-hostel" data-top="72%" data-left="40%">
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('BH-1')" class="campus-pin" style="background:#1D4ED8; border-color:#60A5FA;">🏠 Boys Hostel 1</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">Boys Hostel 1 (BH-1)</div>
+                            <div class="telemetry-dept">CIT Residential Complex • Senior Hall</div>
+                        </div>
+                        <span class="ai-badge badge-ai-realtime">Active</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Capacity</span><div class="telemetry-item-val">420 Beds</div></div>
+                        <div><span class="telemetry-item-label">Access</span><div class="telemetry-item-val" style="color:var(--brand-blue);">Residents Only</div></div>
+                    </div>
+                    {% if can_access_hostel %}
+                    <a href="/hostel/" class="telemetry-link-btn" style="margin-bottom:4px;">🏠 Open Resident Portal ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('BH-1')" class="telemetry-link-btn">🚶 Navigate to BH-1 on 2D Map ➔</a>
+                    {% else %}
+                    <div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">
+                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="campus-pin-wrapper pin-hostel" data-top="80%" data-left="44%">
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('BH-2')" class="campus-pin" style="background:#1D4ED8; border-color:#60A5FA;">🏠 Boys Hostel 2</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">Boys Hostel 2 (BH-2)</div>
+                            <div class="telemetry-dept">CIT Residential Complex • Junior Hall</div>
+                        </div>
+                        <span class="ai-badge badge-ai-realtime">Active</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Capacity</span><div class="telemetry-item-val">380 Beds</div></div>
+                        <div><span class="telemetry-item-label">Access</span><div class="telemetry-item-val" style="color:var(--brand-blue);">Residents Only</div></div>
+                    </div>
+                    {% if can_access_hostel %}
+                    <a href="/hostel/" class="telemetry-link-btn" style="margin-bottom:4px;">🏠 Open Resident Portal ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('BH-2')" class="telemetry-link-btn">🚶 Navigate to BH-2 on 2D Map ➔</a>
+                    {% else %}
+                    <div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">
+                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="campus-pin-wrapper pin-hostel" data-top="68%" data-left="76%">
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('GH-1')" class="campus-pin" style="background:#BE185D; border-color:#F472B6;">🏡 Girls Hostel 1</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">Girls Hostel 1 (GH-1)</div>
+                            <div class="telemetry-dept">CIT Residential Complex • Senior Hall</div>
+                        </div>
+                        <span class="ai-badge badge-ai-realtime">Active</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Capacity</span><div class="telemetry-item-val">350 Beds</div></div>
+                        <div><span class="telemetry-item-label">Access</span><div class="telemetry-item-val" style="color:#BE185D;">Residents Only</div></div>
+                    </div>
+                    {% if can_access_hostel %}
+                    <a href="/hostel/" class="telemetry-link-btn" style="margin-bottom:4px;">🏡 Open Resident Portal ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('GH-1')" class="telemetry-link-btn">🚶 Navigate to GH-1 on 2D Map ➔</a>
+                    {% else %}
+                    <div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">
+                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="campus-pin-wrapper pin-hostel" data-top="76%" data-left="80%">
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('GH-2')" class="campus-pin" style="background:#BE185D; border-color:#F472B6;">🏡 Girls Hostel 2</a>
+                <div class="building-telemetry-modal">
+                    <div class="telemetry-header">
+                        <div>
+                            <div class="telemetry-title">Girls Hostel 2 (GH-2)</div>
+                            <div class="telemetry-dept">CIT Residential Complex • Junior Hall</div>
+                        </div>
+                        <span class="ai-badge badge-ai-realtime">Active</span>
+                    </div>
+                    <div class="telemetry-grid">
+                        <div><span class="telemetry-item-label">Capacity</span><div class="telemetry-item-val">320 Beds</div></div>
+                        <div><span class="telemetry-item-label">Access</span><div class="telemetry-item-val" style="color:#BE185D;">Residents Only</div></div>
+                    </div>
+                    {% if can_access_hostel %}
+                    <a href="/hostel/" class="telemetry-link-btn" style="margin-bottom:4px;">🏡 Open Resident Portal ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('GH-2')" class="telemetry-link-btn">🚶 Navigate to GH-2 on 2D Map ➔</a>
+                    {% else %}
+                    <div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">
+                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -351,6 +452,18 @@ let areAllRoutesVisible = false;
 // Master Campus Configuration from Centralized Server Settings
 const citConfigElement = document.getElementById('cit-campus-config');
 const CIT_CONFIG = citConfigElement ? JSON.parse(citConfigElement.textContent || '{}') : {};
+
+// Current User State & Role-Based Hostel Permissions
+const CURRENT_USER = {
+    isAuthenticated: {{ user.is_authenticated|yesno:"true,false" }},
+    role: "{{ user.role|default:'' }}",
+    canAccessHostel: {{ can_access_hostel|yesno:"true,false" }},
+    accommodationType: "{% if student_profile %}{{ student_profile.accommodation_type }}{% endif %}",
+    hostelCategory: "{% if student_profile %}{{ student_profile.hostel_category }}{% endif %}",
+    assignedHostelCode: "{% if assigned_hostel %}{{ assigned_hostel.code }}{% endif %}",
+    assignedHostelName: "{% if assigned_hostel %}{{ assigned_hostel.name }}{% endif %}",
+    roomNumber: "{% if student_profile %}{{ student_profile.room_number }}{% endif %}"
+};
 
 // Fallback in case context processor has empty dict
 const CIT_COORDS = {
@@ -525,6 +638,59 @@ function renderAllBuildingMarkers() {
             ? `<span style="font-size:0.68rem; background:#F0FDF4; color:#15803D; padding:2px 6px; border-radius:10px; font-weight:700;">Verified Landmark</span>`
             : `<span style="font-size:0.68rem; background:#FFFBEB; color:#B45309; padding:2px 6px; border-radius:10px; font-weight:700;">Campus Component</span>`;
 
+        const isHostel = loc.category === 'HOSTEL';
+        let hostelAccessBlock = '';
+        const canRouteToThis = !isHostel || (CURRENT_USER.canAccessHostel || CURRENT_USER.role === 'SUPER_ADMIN' || CURRENT_USER.role === 'COLLEGE_ADMIN');
+
+        if (isHostel) {
+            if (!CURRENT_USER.isAuthenticated) {
+                hostelAccessBlock = `
+                    <div style="margin:6px 0; padding:6px 8px; background:#F8FAFC; border-left:3px solid #64748B; border-radius:4px; font-size:0.75rem; color:#475569;">
+                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                    </div>
+                `;
+            } else if (CURRENT_USER.role === 'FACULTY') {
+                hostelAccessBlock = `
+                    <div style="margin:6px 0; padding:6px 8px; background:#FEF2F2; border-left:3px solid #DC2626; border-radius:4px; font-size:0.75rem; color:#991B1B;">
+                        🔒 <strong>Access Notice:</strong> Hostel facilities are restricted to authorized hostel students.
+                    </div>
+                `;
+            } else if (CURRENT_USER.accommodationType === 'DAY_SCHOLAR') {
+                hostelAccessBlock = `
+                    <div style="margin:6px 0; padding:6px 8px; background:#EFF6FF; border-left:3px solid #2563EB; border-radius:4px; font-size:0.75rem; color:#1E40AF;">
+                        ℹ️ <strong>Access Notice:</strong> Hostel facilities are available only to authorized hostel students.
+                    </div>
+                `;
+            } else if (CURRENT_USER.canAccessHostel) {
+                const isMyHostel = (CURRENT_USER.assignedHostelCode && (CURRENT_USER.assignedHostelCode === loc.code || loc.code.includes(CURRENT_USER.assignedHostelCode)));
+                hostelAccessBlock = `
+                    <div style="margin:6px 0; padding:6px 8px; background:#F0FDF4; border-left:3px solid #16A34A; border-radius:4px; font-size:0.75rem; color:#166534;">
+                        ${isMyHostel ? `✅ <strong>Your Assigned Building:</strong> Room ${CURRENT_USER.roomNumber || 'Assigned'}<br>` : ''}
+                        <span>🏢 Resident amenities & dining accessible.</span>
+                    </div>
+                    <a href="/hostel/" class="btn btn-primary btn-sm" style="margin-bottom:6px; width:100%; font-size:0.76rem; text-align:center; display:block; text-decoration:none; padding:4px 0;">
+                        🏠 Resident Hostel Portal
+                    </a>
+                `;
+            } else if (CURRENT_USER.role === 'SUPER_ADMIN' || CURRENT_USER.role === 'COLLEGE_ADMIN') {
+                hostelAccessBlock = `
+                    <a href="/hostel/admin-analytics/" class="btn btn-primary btn-sm" style="margin:6px 0; width:100%; font-size:0.76rem; text-align:center; display:block; text-decoration:none; padding:4px 0;">
+                        📊 Hostel Management Analytics
+                    </a>
+                `;
+            }
+        }
+
+        const routeButtonHtml = canRouteToThis ? `
+            <button class="btn btn-primary btn-sm" style="font-size:0.78rem; width:100%;" onclick="drawRouteToBuilding('${loc.code}')">
+                🚶 Show Route from Main Gate
+            </button>
+        ` : `
+            <button class="btn btn-secondary btn-sm" style="font-size:0.78rem; width:100%; opacity:0.6; cursor:not-allowed;" title="Hostel route restricted to authorized residents" disabled>
+                🔒 Route Restricted to Residents
+            </button>
+        `;
+
         marker.bindPopup(`
             <div style="color:#0F172A; font-family:'Inter', sans-serif; min-width:240px; padding:2px 0;">
                 <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px; gap:8px;">
@@ -542,10 +708,9 @@ function renderAllBuildingMarkers() {
                     <span><strong>Capacity:</strong> ${loc.capacity || 100}</span>
                     <span><strong>Status:</strong> <span style="color:#16A34A; font-weight:700;">${loc.status || 'Active'}</span></span>
                 </div>
+                ${hostelAccessBlock}
                 <div style="display:flex; flex-direction:column; gap:6px;">
-                    <button class="btn btn-primary btn-sm" style="font-size:0.78rem; width:100%;" onclick="drawRouteToBuilding('${loc.code}')">
-                        🚶 Show Route from Main Gate
-                    </button>
+                    ${routeButtonHtml}
                     <div style="display:flex; gap:6px;">
                         <button class="btn btn-secondary btn-sm" style="font-size:0.74rem; flex:1;" onclick="setRouteOrigin('${loc.code}')">
                             🧭 Set as Origin
@@ -791,6 +956,16 @@ function calculateSelectedRoute() {
 
     const locA = CIT_LOCATIONS.find(l => l.code === codeA);
     const locB = CIT_LOCATIONS.find(l => l.code === codeB);
+
+    if (locB && locB.category === 'HOSTEL') {
+        const canRoute = CURRENT_USER.canAccessHostel || CURRENT_USER.role === 'SUPER_ADMIN' || CURRENT_USER.role === 'COLLEGE_ADMIN';
+        if (!canRoute) {
+            alert(CURRENT_USER.role === 'FACULTY' 
+                ? "Hostel facilities are restricted to authorized hostel students." 
+                : "Hostel facilities are available only to authorized hostel students.");
+            return;
+        }
+    }
 
     if (locA && locB) {
         drawRouteBetweenLocations(locA, locB);

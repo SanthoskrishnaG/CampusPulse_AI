@@ -34,49 +34,172 @@ class CampusAIAssistant:
                 f"You can view the full live geospatial campus telemetry on the [CIT Smart Campus Map](/map/)."
             )
 
-        if 'main gate' in q or 'entrance gate' in q or 'campus gate' in q:
-            gate = CAMPUS_CONFIG['landmarks']['main_gate']
+        def _get_loc(loc_id):
+            for item in CAMPUS_CONFIG.get('locations', []):
+                if item.get('id') == loc_id:
+                    return item
+            return {}
+
+        # 0. CIT College Location & Campus Facilities Queries
+        if any(w in q for w in ['where is my college', 'where is cit', 'college location', 'cit address', 'where is the college', 'about cit', 'show the cit campus', 'show cit campus']):
             return (
-                f"🚪 **{gate['name']} ({gate['code']})**:\n\n"
-                f"- 📍 **Location**: Avinashi Road, Hope College side (Coordinates: `{gate['latitude']}, {gate['longitude']}`)\n"
-                f"- ℹ️ **Details**: {gate['description']}\n"
+                f"🏛️ **{CAMPUS_CONFIG['name']} ({CAMPUS_CONFIG['short_name']})**\n\n"
+                f"- 📍 **Official Address**: {CAMPUS_CONFIG['address']}\n"
+                f"- 🗺️ **Locality**: {CAMPUS_CONFIG['locality']}, {CAMPUS_CONFIG['city']}, {CAMPUS_CONFIG['state']} - {CAMPUS_CONFIG['postal_code']}\n"
+                f"- 🌐 **Coordinates**: `{CAMPUS_CONFIG['latitude']}, {CAMPUS_CONFIG['longitude']}`\n"
+                f"- 🎓 **Institution Type**: Premier Government-Aided Autonomous Institution affiliated with Anna University.\n\n"
+                f"You can view the full live geospatial campus telemetry on the [CIT Smart Campus Map](/map/)."
+            )
+
+        if 'main gate' in q or 'entrance gate' in q or 'campus gate' in q:
+            gate = _get_loc('main_gate')
+            return (
+                f"🚪 **{gate.get('name', 'CIT Main Gate')} ({gate.get('code', 'GATE-MAIN')})**:\n\n"
+                f"- 📍 **Location**: Avinashi Road, Hope College side (Coordinates: `{gate.get('latitude', 11.0292)}, {gate.get('longitude', 77.0268)}`)\n"
+                f"- ℹ️ **Details**: {gate.get('description', 'Main campus entrance on Avinashi Road')}\n"
                 f"- 🚌 **Transit Access**: Connected to CIT Hope College Bus Bay with direct links to Gandhipuram, Railway Station, Singanallur, and Coimbatore Airport.\n\n"
                 f"View on the [Geospatial Campus Map](/map/)."
             )
 
         if 'cse department' in q or 'cse block' in q or 'computer science department' in q or 'where is cse' in q:
-            cse = CAMPUS_CONFIG['landmarks']['cse_block']
+            cse = _get_loc('cse_dept')
             dept = Department.objects.filter(code='CSE').first()
             students = dept.students.count() if (dept and dept.students.exists()) else 842
             return (
-                f"💻 **{cse['name']} ({cse['code']})**:\n\n"
-                f"- 📍 **Location**: Central Academic Quad (`{cse['latitude']}, {cse['longitude']}`)\n"
-                f"- ℹ️ **Facilities**: {cse['description']}\n"
+                f"💻 **{cse.get('name', 'CSE Department')} ({cse.get('code', 'DEPT-CSE')})**:\n\n"
+                f"- 📍 **Location**: Central Academic Quad (`{cse.get('latitude', 11.0278)}, {cse.get('longitude', 77.0266)}`)\n"
+                f"- ℹ️ **Facilities**: {cse.get('description', 'High performance computing and AI research labs')}\n"
                 f"- 👨‍🎓 **Current Enrollment**: **{students} Students** with high performance AI GPU labs.\n\n"
                 f"Explore department metrics on the [CSE Department Page](/departments/)."
             )
 
         if ('where is' in q or 'location of' in q) and ('canteen' in q or 'cafeteria' in q or 'dining' in q):
-            can = CAMPUS_CONFIG['landmarks']['canteen']
+            can = _get_loc('canteen_main')
             return (
-                f"🍽️ **{can['name']} ({can['code']})**:\n\n"
-                f"- 📍 **Location**: Near Student Living Quad (`{can['latitude']}, {can['longitude']}`)\n"
-                f"- ℹ️ **Details**: {can['description']}\n"
+                f"🍽️ **{can.get('name', 'CIT Smart Canteen')} ({can.get('code', 'CAN-MAIN')})**:\n\n"
+                f"- 📍 **Location**: Near Student Living Quad (`{can.get('latitude', 11.0268)}, {can.get('longitude', 77.0275)}`)\n"
+                f"- ℹ️ **Details**: {can.get('description', 'Central dining hall and campus food court')}\n"
                 f"- 📊 **Live Telemetry**: Automated meal demand forecasting and waste monitoring.\n\n"
                 f"Check today's meal forecast on the [Canteen Dashboard](/canteen/dashboard/)."
             )
 
         if ('where is' in q or 'location of' in q) and ('library' in q or 'digital knowledge' in q):
-            lib = CAMPUS_CONFIG['landmarks']['library']
+            lib = _get_loc('library_central')
             return (
-                f"📚 **{lib['name']} ({lib['code']})**:\n\n"
-                f"- 📍 **Location**: Central Knowledge Quad (`{lib['latitude']}, {lib['longitude']}`)\n"
-                f"- ℹ️ **Details**: {lib['description']}\n"
+                f"📚 **{lib.get('name', 'Central Library')} ({lib.get('code', 'LIB-CENTRAL')})**:\n\n"
+                f"- 📍 **Location**: Central Knowledge Quad (`{lib.get('latitude', 11.0272)}, {lib.get('longitude', 77.0276)}`)\n"
+                f"- ℹ️ **Details**: {lib.get('description', 'Central library and digital learning center')}\n"
                 f"- 📖 **Features**: RFID autonomous issue desks, digital research stations, and 60,000+ technical volumes.\n\n"
                 f"Explore library location on the [Campus Map](/map/)."
             )
 
-        # 1. Academic Risk Questions (Permission-Guarded: Super Admin, College Admin, Dept Admin, Faculty only)
+        # 1. Hostel Facility Queries (Strict RBAC Guarded)
+        hostel_keywords = [
+            'hostel', 'warden', 'hostel room', 'mess menu', 'hostel mess',
+            'hostel facility', 'hostel facilities', 'show hostel facilities',
+            'hostel maintenance', 'how do i reach my hostel', 'reach my hostel',
+            'hostel route', 'route to hostel', 'what facilities are available in my hostel',
+            'report a maintenance issue', 'report maintenance'
+        ]
+        if any(w in q for w in hostel_keywords):
+            if not user.is_authenticated:
+                return "🔒 **Authentication Required**: Please sign in to access your assigned hostel details and facilities."
+
+            # Check Faculty restriction
+            if getattr(user, 'role', '') == 'FACULTY':
+                return "Hostel facilities are restricted to authorized hostel students."
+
+            # Check Administrator access
+            if user.is_superuser or getattr(user, 'role', '') in ['SUPER_ADMIN', 'COLLEGE_ADMIN']:
+                from apps.hostel.models import Hostel
+                hostels = Hostel.objects.filter(is_active=True)
+                lines = [
+                    "🏢 **CIT Hostel Administrative Summary**:\n",
+                    "There are **4 official residential halls** on the CIT campus:"
+                ]
+                for h in hostels:
+                    lines.append(f"- **{h.name} ({h.code})**: {h.occupied_count()}/{h.capacity} occupants ({h.occupancy_percentage()}% occupancy) • Warden: {h.warden_name} ({h.warden_contact})")
+                lines.append("\nManage residential operations on the [Hostel Analytics Command Center](/hostel/admin-analytics/).")
+                return "\n".join(lines)
+
+            # Check Student accommodation
+            student = getattr(user, 'student_profile', None)
+            if not student:
+                return "Hostel facilities are available only to authorized hostel students."
+
+            if student.accommodation_type in ['DAY_SCHOLAR', 'day_scholar']:
+                return "Hostel facilities are available only to authorized hostel students."
+
+            if student.accommodation_type not in ['HOSTEL', 'hostel'] or not student.assigned_hostel:
+                return (
+                    "ℹ️ **Setup Required**: You have not completed your residential onboarding yet. "
+                    "Please visit your [Accommodation Setup](/accounts/accommodation-setup/) to register your hostel room."
+                )
+
+            h = student.assigned_hostel
+            facilities = h.facilities.all()
+            fac_names = ", ".join([f.name for f in facilities[:6]]) if facilities.exists() else "Wi-Fi, RO Water, Study Hall, Solar Hot Water, Power Backup"
+
+            if 'how do i reach' in q or 'reach my hostel' in q or 'route' in q:
+                return (
+                    f"🚶 **Route to {h.name} ({h.code})**:\n\n"
+                    f"1. Start at **CIT Main Gate** (Avinashi Road entrance).\n"
+                    f"2. Follow the pedestrian walkway past the Administration Roundabout.\n"
+                    f"3. Cross the Central Academic Quad onto the South Living Spine.\n"
+                    f"4. Turn toward the Residential Living Junction leading directly to **{h.name}**.\n\n"
+                    f"Total distance: ~420 meters (approx. 5 minutes walk). "
+                    f"You can view the full animated route on the [CIT Smart Campus Map](/map/)."
+                )
+
+            if 'facility' in q or 'facilities' in q or 'amenities' in q:
+                facility_list = [f"- **{f.name}** ({f.get_category_display()}): {f.description or f.status}" for f in facilities]
+                items_str = "\n".join(facility_list) if facility_list else f"- {fac_names}"
+                return (
+                    f"🌟 **Authorized Facilities in {h.name} ({h.code})**:\n\n"
+                    f"{items_str}\n\n"
+                    f"Explore all amenities in detail on your [Hostel Facilities Portal](/hostel/facilities/)."
+                )
+
+            if 'maintenance' in q or 'repair' in q or 'report' in q or 'ticket' in q:
+                return (
+                    f"🛠️ **Report a Maintenance Issue ({h.name})**:\n\n"
+                    f"To request electrical, plumbing, carpentry, or Wi-Fi repairs for **Room {student.room_number or 'Assigned'}**:\n"
+                    f"1. Open the [Hostel Maintenance Request Form](/hostel/maintenance/) to submit a rapid service ticket.\n"
+                    f"2. For formal grievances, visit the [Hostel Complaints Tracker](/hostel/complaints/).\n"
+                    f"3. For urgent emergency repairs, contact Chief Warden {h.warden_name} at **{h.warden_contact}**."
+                )
+
+            if 'warden' in q:
+                return (
+                    f"📞 **Warden Contact for {h.name} ({h.code})**:\n\n"
+                    f"- 👤 **Chief Warden**: {h.warden_name}\n"
+                    f"- 📱 **Contact**: {h.warden_contact}\n"
+                    f"- 🏢 **Office**: Ground Floor Warden Office, {h.name}\n\n"
+                    f"For emergencies, visit the [Hostel Emergency Directory](/hostel/emergency/)."
+                )
+
+            if 'mess' in q or 'menu' in q or 'food' in q:
+                return (
+                    f"🍽️ **Dining Hall Schedule for {h.name}**:\n\n"
+                    f"- 🍳 **Breakfast**: 07:15 AM - 08:45 AM\n"
+                    f"- 🍛 **Lunch**: 12:30 PM - 02:00 PM\n"
+                    f"- ☕ **Evening Tea & Snacks**: 05:00 PM - 06:00 PM\n"
+                    f"- 🍲 **Dinner**: 07:45 PM - 09:15 PM\n\n"
+                    f"View full 7-day nutritional timetable on your [Hostel Mess Schedule](/hostel/mess/)."
+                )
+
+            # Default Hostel resident summary ("Where is my hostel?")
+            return (
+                f"🏠 **Your Residential Information ({h.name})**:\n\n"
+                f"- 🏢 **Assigned Building**: **{h.name} ({h.code})**\n"
+                f"- 🚪 **Room Number**: **{student.room_number or 'Room Assigned'}**\n"
+                f"- 📍 **CIT Campus Coordinates**: `{h.latitude}, {h.longitude}`\n"
+                f"- 👤 **Warden**: {h.warden_name} ({h.warden_contact})\n"
+                f"- 🌟 **Amenities**: {fac_names}\n\n"
+                f"Navigate directly via the [CIT Campus Map](/map/) or explore resident services on your [Hostel Dashboard](/hostel/)."
+            )
+
+        # 2. Academic Risk Questions (Permission-Guarded: Super Admin, College Admin, Dept Admin, Faculty only)
         if any(w in q for w in ['risk', 'high-risk', 'high risk', 'at-risk', 'failing']):
             if not (user.is_authenticated and (user.is_superuser or user.role in ['SUPER_ADMIN', 'COLLEGE_ADMIN', 'DEPARTMENT_ADMIN', 'FACULTY'])):
                 return (
