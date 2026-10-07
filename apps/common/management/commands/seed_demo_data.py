@@ -32,6 +32,7 @@ class Command(BaseCommand):
 
         with transaction.atomic():
             self.seed_rbac_users()
+            self.seed_facilities()
             departments = self.seed_departments()
             self.seed_locations()
             faculty_list = self.seed_faculty(departments)
@@ -82,6 +83,32 @@ class Command(BaseCommand):
                 u.is_superuser = True
             u.save()
 
+
+    def seed_facilities(self):
+        self.stdout.write("-> Seeding Classrooms, Labs, and Event Halls...")
+        from apps.common.models import Facility
+        
+        # 300 Classrooms
+        for i in range(300):
+            Facility.objects.get_or_create(
+                name=f"Room {100 + i}",
+                defaults={'facility_type': 'CLASSROOM', 'capacity': 60, 'has_ac': (i % 5 == 0)}
+            )
+            
+        # 25 Labs
+        for i in range(25):
+            Facility.objects.get_or_create(
+                name=f"Specialized Lab {i+1}",
+                defaults={'facility_type': 'LAB', 'capacity': 40, 'has_ac': True}
+            )
+            
+        # 10 Event Halls
+        for i in range(10):
+            Facility.objects.get_or_create(
+                name=f"Event Hall {i+1}",
+                defaults={'facility_type': 'EVENT_HALL', 'capacity': 200 + (i*50), 'has_ac': True}
+            )
+
     def seed_departments(self):
         self.stdout.write("-> Creating 7 Academic Departments...")
         dept_data = [
@@ -92,6 +119,8 @@ class Command(BaseCommand):
             ('Mechanical Engineering', 'MECH', 'Dr. Harish Patel', 'mech@campuspulse.local', 'Newton Workshop Center', 2002),
             ('Civil Engineering', 'CIVIL', 'Dr. V. Narayanan', 'civil@campuspulse.local', 'Visvesvaraya Block', 2003),
             ('Artificial Intelligence & Data Science', 'AIDS', 'Dr. Shalini Gupta', 'aids@campuspulse.local', 'AI Innovation Center', 2021),
+            ('Aerospace Engineering', 'AERO', 'Dr. Kiran Reddy', 'aero@campuspulse.local', 'Space Tech Block', 2025),
+            ('Biotechnology', 'BIOTECH', 'Dr. Sumita Rao', 'biotech@campuspulse.local', 'Bio Sciences Block', 2024),
         ]
         departments = []
         for name, code, hod, email, building, year in dept_data:
@@ -404,7 +433,7 @@ class Command(BaseCommand):
         ]
 
         now = timezone.now()
-        for i in range(105):
+        for i in range(1550):
             etype = random.choice(event_types)[0]
             title = f"{random.choice(titles)} (Session {i+1})"
             days_offset = random.randint(-40, 30) # Past and future

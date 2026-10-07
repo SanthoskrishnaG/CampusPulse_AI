@@ -84,3 +84,29 @@ class WeatherCache(models.Model):
 
     def __str__(self):
         return f"{self.temperature}°C - {self.weather_description} at {self.fetched_at}"
+
+class Facility(models.Model):
+    class Type(models.TextChoices):
+        CLASSROOM = 'CLASSROOM', 'Classroom'
+        LAB = 'LAB', 'Laboratory'
+        EVENT_HALL = 'EVENT_HALL', 'Event Hall'
+        
+    name = models.CharField(max_length=150)
+    facility_type = models.CharField(max_length=50, choices=Type.choices)
+    capacity = models.PositiveIntegerField(default=50)
+    has_ac = models.BooleanField(default=False)
+    building = models.CharField(max_length=150, blank=True)
+    
+    def __str__(self):
+        return f"{self.name} ({self.get_facility_type_display()})"
+
+class HallBooking(models.Model):
+    hall = models.ForeignKey(Facility, on_delete=models.CASCADE, limit_choices_to={'facility_type': 'EVENT_HALL'})
+    booked_by = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    purpose = models.CharField(max_length=200)
+    is_approved = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.hall.name} booked by {self.booked_by.username}"

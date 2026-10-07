@@ -143,3 +143,34 @@ class AcademicRiskPredictor:
             'model_name': "Academic_Risk_Classifier",
             'model_version': model_data.get('version', '1.0.0')
         }
+
+    @classmethod
+    def batch_assess_all_students(cls):
+        from apps.students.models import Student
+        students = Student.objects.all()
+        results = {
+            "processed": 0,
+            "successful": 0,
+            "skipped": 0,
+            "low_risk": 0,
+            "medium_risk": 0,
+            "high_risk": 0
+        }
+        for student in students:
+            results["processed"] += 1
+            try:
+                res = cls.predict_student_risk(student)
+                if res.get('success'):
+                    results["successful"] += 1
+                    risk_level = res.get('risk_level', '').lower()
+                    if 'low' in risk_level:
+                        results["low_risk"] += 1
+                    elif 'medium' in risk_level:
+                        results["medium_risk"] += 1
+                    elif 'high' in risk_level:
+                        results["high_risk"] += 1
+                else:
+                    results["skipped"] += 1
+            except Exception as e:
+                results["skipped"] += 1
+        return results

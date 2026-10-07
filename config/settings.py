@@ -211,3 +211,6 @@ CAMPUS_LNG = CAMPUS_CONFIG['longitude']
 WEATHER_API_BASE_URL = os.environ.get('WEATHER_API_BASE_URL', 'https://api.open-meteo.com/v1/forecast')
 DATA_MODE = os.environ.get('DATA_MODE', 'DEMO')  # Options: 'LIVE' or 'DEMO'
 
+GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', '')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+

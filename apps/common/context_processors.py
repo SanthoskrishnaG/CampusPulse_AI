@@ -43,6 +43,7 @@ def campus_context(request):
         'can_access_hostel': can_access_hostel,
         'student_profile': student_profile,
         'assigned_hostel': assigned_hostel,
+        'GOOGLE_MAPS_API_KEY': getattr(settings, 'GOOGLE_MAPS_API_KEY', ''),
         'DATA_MODE': getattr(settings, 'DATA_MODE', 'DEMO'),
     }
 

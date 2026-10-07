@@ -515,19 +515,12 @@ function initCITMap() {
     const initialLng = prefersReducedMotion ? CIT_COORDS.lng : (CIT_CONFIG.regional_lng || 76.9558);
     const initialZoom = prefersReducedMotion ? CIT_COORDS.zoom : (CIT_CONFIG.regional_zoom || 12);
 
-    leafletMap = L.map('campusMap', {
-        zoomControl: true,
-        scrollWheelZoom: true
-    }).setView([initialLat, initialLng], initialZoom);
+    leafletMap = new google.maps.Map(document.getElementById('campusMap'), { center: {lat: initialLat, lng: initialLng}, zoom: initialZoom, mapId: 'CIT_CAMPUS_MAP_ID', disableDefaultUI: true, zoomControl: true });
 
-    // Clean CARTO light tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19
-    }).addTo(leafletMap);
+    // Google Maps natively handles the base tiles
 
     // Add Layer Group for All Campus Routes
-    allCampusRoutesLayerGroup = L.layerGroup().addTo(leafletMap);
+    allCampusRoutesLayerGroup = [];
 
     // Render CIT Campus Boundary Polygon
     renderCampusBoundary();
@@ -545,34 +538,20 @@ function initCITMap() {
 }
 
 function renderCampusBoundary() {
-    campusBoundaryLayer = L.polygon(CIT_BOUNDARY_COORDS, {
-        color: '#0284C7',
-        fillColor: '#38BDF8',
-        fillOpacity: 0.10,
-        weight: 2.5,
-        dashArray: '6, 6'
-    }).addTo(leafletMap);
+    campusBoundaryLayer = new google.maps.Polygon({ paths: CIT_BOUNDARY_COORDS.map(c => ({lat: c[0], lng: c[1]})), strokeColor: '#0284C7', strokeOpacity: 1.0, strokeWeight: 2.5, fillColor: '#38BDF8', fillOpacity: 0.10, map: leafletMap });
 
-    campusBoundaryLayer.bindTooltip('<strong>CIT Campus Area</strong><br><span style="font-size:0.75rem; color:#64748B;">Approximate Campus Boundary (Demo)</span>', {
-        sticky: true,
-        direction: 'top'
-    });
+    // Polygon tooltip removed for GMaps compatibility
 }
 
 function renderCITMainPulseMarker() {
-    const citDivIcon = L.divIcon({
-        className: 'cit-main-marker',
-        html: `
+    const citContent = document.createElement('div'); citContent.innerHTML = `
             <div class="cit-marker-pulse"></div>
             <div class="cit-marker-pin" id="citMainPin">
                 🏛️ ${CIT_COORDS.shortName}
             </div>
-        `,
-        iconSize: [84, 38],
-        iconAnchor: [42, 19]
-    });
+        `; citContent.className = 'cit-main-marker';
 
-    citMainMarker = L.marker([CIT_COORDS.lat, CIT_COORDS.lng], { icon: citDivIcon }).addTo(leafletMap);
+    citMainMarker = new google.maps.marker.AdvancedMarkerElement({ map: leafletMap, position: {lat: CIT_COORDS.lat, lng: CIT_COORDS.lng}, content: citContent });
 
     citMainMarker.bindTooltip(`
         <div style="font-family:'Inter', sans-serif; padding:4px 2px; text-align:left;">
