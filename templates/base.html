@@ -226,7 +226,7 @@
                     </select>
 
                     <!-- User Profile Avatar & Dropdown -->
-                    <div class="user-profile-modern" onclick="window.location.href='{% url 'accounts:profile' %}';">
+                    <div class="user-profile-modern" data-url="{% url 'accounts:profile' %}" onclick="window.location.href=this.dataset.url;">
                         <div class="user-avatar-blue">
                             {{ user.first_name|default:'A'|slice:":1"|upper }}
                         </div>

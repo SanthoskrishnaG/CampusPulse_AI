@@ -99,8 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const map = L.map('transportMap').setView([defaultLat, defaultLng], 15);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap &copy; CARTO'
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
     // CIT Main Gate Destination Pin

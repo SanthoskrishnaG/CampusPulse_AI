@@ -232,20 +232,24 @@ document.getElementById('selectGirlsHostel').addEventListener('change', validate
 
 // Pre-select existing state if editing
 window.addEventListener('DOMContentLoaded', () => {
-    {% if student.accommodation_type == 'hostel' %}
-    document.getElementById('radioHostel').checked = true;
-    handleTypeChange('hostel');
-    {% if student.hostel_category == 'boys' %}
-    document.getElementById('radioBoys').checked = true;
-    handleCategoryChange('boys');
-    {% elif student.hostel_category == 'girls' %}
-    document.getElementById('radioGirls').checked = true;
-    handleCategoryChange('girls');
-    {% endif %}
-    {% elif student.accommodation_type == 'day_scholar' %}
-    document.getElementById('radioDayScholar').checked = true;
-    handleTypeChange('day_scholar');
-    {% endif %}
+    const accommodationType = "{{ student.accommodation_type|default:'' }}";
+    const hostelCategory = "{{ student.hostel_category|default:'' }}";
+
+    if (accommodationType === 'hostel') {
+        document.getElementById('radioHostel').checked = true;
+        handleTypeChange('hostel');
+        
+        if (hostelCategory === 'boys') {
+            document.getElementById('radioBoys').checked = true;
+            handleCategoryChange('boys');
+        } else if (hostelCategory === 'girls') {
+            document.getElementById('radioGirls').checked = true;
+            handleCategoryChange('girls');
+        }
+    } else if (accommodationType === 'day_scholar') {
+        document.getElementById('radioDayScholar').checked = true;
+        handleTypeChange('day_scholar');
+    }
 });
 </script>
 {% endblock %}

@@ -43,13 +43,13 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Overall Attendance</span>
-                <div class="kpi-icon-wrap" style="color:{% if student.overall_attendance_rate < 75 %}var(--danger){% else %}var(--success){% endif %}; background:{% if student.overall_attendance_rate < 75 %}#FEF2F2{% else %}#F0FDF4{% endif %};">📅</div>
+                <div class="kpi-icon-wrap" style="color:{% if student.attendance_percentage < 75 %}var(--danger){% else %}var(--success){% endif %}; background:{% if student.attendance_percentage < 75 %}#FEF2F2{% else %}#F0FDF4{% endif %};">📅</div>
             </div>
-            <div class="kpi-value" style="color:{% if student.overall_attendance_rate < 75 %}var(--danger){% else %}var(--success){% endif %};">
-                {{ student.overall_attendance_rate|floatformat:1 }}%
+            <div class="kpi-value" style="color:{% if student.attendance_percentage < 75 %}var(--danger){% else %}var(--success){% endif %};">
+                {{ student.attendance_percentage|floatformat:1 }}%
             </div>
-            <div class="kpi-trend {% if student.overall_attendance_rate < 75 %}negative{% else %}positive{% endif %}">
-                <span>{% if student.overall_attendance_rate < 75 %}⚠️ Below 75% Statutory Floor{% else %}✓ Compliant Standing{% endif %}</span>
+            <div class="kpi-trend {% if student.attendance_percentage < 75 %}negative{% else %}positive{% endif %}">
+                <span>{% if student.attendance_percentage < 75 %}⚠️ Below 75% Statutory Floor{% else %}✓ Compliant Standing{% endif %}</span>
             </div>
         </div>
 
