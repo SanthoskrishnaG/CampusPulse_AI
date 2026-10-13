@@ -34,16 +34,17 @@
 
             <!-- AI Extraction Matrix -->
             <div style="border-top: 1px solid var(--border-subtle); padding-top: 1.25rem;">
-                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
-                    🤖 AI Auto-Triage Diagnostics
+                <h4 style="font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; display:flex; align-items:center; gap:0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                    AI Auto-Triage Diagnostics
                 </h4>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem; color: var(--text-secondary);">
-                    <div>🏷️ <b>Predicted Category:</b> {{ complaint.get_category_display }}</div>
-                    <div>⚡ <b>Priority Rating:</b> <span class="badge badge-{% if complaint.priority == 'URGENT' %}high{% elif complaint.priority == 'HIGH' %}medium{% else %}low{% endif %}">{{ complaint.get_priority_display }}</span></div>
-                    <div>🏢 <b>Target Division:</b> {{ complaint.target_department }}</div>
-                    <div>📍 <b>Extracted Location:</b> {{ complaint.location_extracted|default:"Campus Premises" }}</div>
-                    <div>🎯 <b>Model Confidence:</b> {{ complaint.confidence|floatformat:2 }}</div>
-                    <div>⏱️ <b>Enforced SLA:</b> {{ complaint.sla_hours }} Hours Max</div>
+                    <div><b>Predicted Category:</b> {{ complaint.get_category_display }}</div>
+                    <div><b>Priority Rating:</b> <span class="badge badge-{% if complaint.priority == 'URGENT' %}high{% elif complaint.priority == 'HIGH' %}medium{% else %}low{% endif %}">{{ complaint.get_priority_display }}</span></div>
+                    <div><b>Target Division:</b> {{ complaint.target_department }}</div>
+                    <div><b>Extracted Location:</b> {{ complaint.location_extracted|default:"Campus Premises" }}</div>
+                    <div><b>Model Confidence:</b> {{ complaint.confidence|floatformat:2 }}</div>
+                    <div><b>Enforced SLA:</b> {{ complaint.sla_hours }} Hours Max</div>
                 </div>
             </div>
         </div>
@@ -51,7 +52,7 @@
         <!-- Status History Timeline -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">📜 Workflow & Audit Timeline</h3>
+                <h3 class="card-title" style="display:flex; align-items:center; gap:0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Workflow & Audit Timeline</h3>
             </div>
             {% for h in history %}
             <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle); display: flex; gap: 1rem;">
@@ -70,7 +71,7 @@
     <div>
         <div class="card" style="border: 1px solid var(--border-glow);">
             <div class="card-header">
-                <h3 class="card-title">⚙️ Update Ticket Status</h3>
+                <h3 class="card-title" style="display:flex; align-items:center; gap:0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Update Ticket Status</h3>
             </div>
 
             <form method="POST" action="{% url 'complaints:update_status' complaint.pk %}">

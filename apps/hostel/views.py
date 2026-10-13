@@ -9,7 +9,8 @@ from apps.students.models import Student
 from .models import (
     Hostel, HostelBlock, HostelRoom, HostelFacility,
     HostelAnnouncement, HostelComplaint, HostelMaintenanceRequest,
-    HostelMessMenu, HostelEvent, HostelMessFeedback, HostelAttendance
+    HostelMessMenu, HostelEvent, HostelMessFeedback, HostelAttendance,
+    HostelOutPass, HostelMessAttendance
 )
 from .decorators import hostel_access_required
 
@@ -596,3 +597,202 @@ def api_hostel_route(request, hostel_code):
         'code': hostel.code,
         'waypoints': route_waypoints
     })
+
+
+@login_required
+@hostel_access_required
+def outpass_view(request):
+    """
+    Hostel Resident Out-Pass Portal.
+    Allows students to request day outings, weekend leaves, and emergency passes with QR verification.
+    Allows wardens and administrators to review, approve/reject, or mark out-passes returned.
+    """
+    hostel = _get_student_hostel(request)
+    student = getattr(request.user, 'student_profile', None)
+    is_admin = request.user.is_superuser or request.user.role in [User.Role.SUPER_ADMIN, User.Role.COLLEGE_ADMIN]
+
+    if request.method == 'POST':
+        if not student:
+            messages.error(request, "Student profile required to submit an out-pass request.")
+            return redirect('hostel:outpass')
+
+        pass_type = request.POST.get('pass_type', HostelOutPass.PassType.LOCAL_OUTING)
+        destination = request.POST.get('destination', '').strip()
+        reason = request.POST.get('reason', '').strip()
+        contact_phone = request.POST.get('contact_phone', '').strip() or '+91 98401 23456'
+        parent_phone = request.POST.get('parent_phone', '').strip() or '+91 94440 98765'
+        dep_str = request.POST.get('departure_time')
+        ret_str = request.POST.get('expected_return_time')
+
+        now = timezone.now()
+        try:
+            from django.utils.dateparse import parse_datetime
+            departure_time = parse_datetime(dep_str) if dep_str else now
+            expected_return_time = parse_datetime(ret_str) if ret_str else now + timezone.timedelta(hours=4)
+        except Exception:
+            departure_time = now
+            expected_return_time = now + timezone.timedelta(hours=4)
+
+        if not departure_time:
+            departure_time = now
+        if not expected_return_time:
+            expected_return_time = now + timezone.timedelta(hours=4)
+
+        if destination and reason:
+            import random
+            rand_code = random.randint(1000, 9999)
+            pass_code = f"OP-2026-CIT-{rand_code}"
+            
+            auto_approve = (pass_type == HostelOutPass.PassType.LOCAL_OUTING)
+            status = HostelOutPass.Status.APPROVED if auto_approve else HostelOutPass.Status.PENDING
+
+            outpass = HostelOutPass.objects.create(
+                pass_code=pass_code,
+                student=student,
+                hostel=hostel or student.assigned_hostel or Hostel.objects.first(),
+                pass_type=pass_type,
+                destination=destination,
+                reason=reason,
+                contact_phone=contact_phone,
+                parent_phone=parent_phone,
+                departure_time=departure_time,
+                expected_return_time=expected_return_time,
+                status=status,
+                approval_notes="Auto-verified digital pass for daytime outing." if auto_approve else "Awaiting warden review."
+            )
+            if auto_approve:
+                messages.success(request, f"Out-Pass {outpass.pass_code} approved! Present your QR pass at Main Gate.")
+            else:
+                messages.success(request, f"Out-Pass {outpass.pass_code} submitted. Warden notification sent.")
+            return redirect('hostel:outpass')
+        else:
+            messages.error(request, "Please enter destination and reason for the out-pass.")
+
+    if is_admin:
+        all_outpasses = HostelOutPass.objects.filter(hostel=hostel).select_related('student', 'student__user')
+        my_outpasses = all_outpasses[:20]
+        pending_outpasses = all_outpasses.filter(status=HostelOutPass.Status.PENDING)
+    else:
+        my_outpasses = HostelOutPass.objects.filter(student=student) if student else []
+        pending_outpasses = []
+
+    return render(request, 'hostel/outpass.html', {
+        'hostel': hostel,
+        'student': student,
+        'my_outpasses': my_outpasses,
+        'pending_outpasses': pending_outpasses,
+        'is_admin': is_admin,
+        'pass_types': HostelOutPass.PassType.choices,
+        'statuses': HostelOutPass.Status.choices,
+    })
+
+
+@login_required
+def outpass_action_view(request, pass_id):
+    """Warden / Admin quick action for approving, rejecting, or marking an outpass returned."""
+    user = request.user
+    if not (user.is_superuser or user.role in [User.Role.SUPER_ADMIN, User.Role.COLLEGE_ADMIN]):
+        messages.error(request, "Only authorized wardens can manage out-passes.")
+        return redirect('hostel:outpass')
+
+    outpass = get_object_or_404(HostelOutPass, id=pass_id)
+    action = request.POST.get('action')
+
+    if action == 'approve':
+        outpass.status = HostelOutPass.Status.APPROVED
+        outpass.approved_by = user
+        outpass.approval_notes = f"Approved by {user.get_full_name() or user.username} on {timezone.now().strftime('%d %b %H:%M')}."
+        outpass.save()
+        messages.success(request, f"Out-Pass {outpass.pass_code} for {outpass.student.get_display_name()} approved.")
+    elif action == 'reject':
+        outpass.status = HostelOutPass.Status.REJECTED
+        outpass.approved_by = user
+        outpass.approval_notes = f"Rejected by {user.get_full_name() or user.username}."
+        outpass.save()
+        messages.warning(request, f"Out-Pass {outpass.pass_code} rejected.")
+    elif action == 'return':
+        outpass.status = HostelOutPass.Status.COMPLETED
+        outpass.actual_return_time = timezone.now()
+        outpass.save()
+        messages.success(request, f"Student {outpass.student.get_display_name()} marked returned.")
+
+    return redirect('hostel:outpass')
+
+
+@login_required
+@hostel_access_required
+def room_allocate_view(request):
+    """
+    Room Allocation & Reallocation for Hostels.
+    Warden / Admin can assign resident students to available rooms.
+    """
+    user = request.user
+    is_admin = user.is_superuser or user.role in [User.Role.SUPER_ADMIN, User.Role.COLLEGE_ADMIN]
+    hostel = _get_student_hostel(request)
+
+    if request.method == 'POST' and is_admin:
+        student_id = request.POST.get('student_id')
+        room_number = request.POST.get('room_number')
+
+        target_student = Student.objects.filter(student_id=student_id).first()
+        target_room = HostelRoom.objects.filter(hostel=hostel, room_number=room_number).first()
+
+        if target_student and target_room:
+            target_student.assigned_hostel = hostel
+            target_student.room_number = room_number
+            target_student.accommodation_type = Student.AccommodationType.HOSTEL
+            target_student.save()
+
+            current_occupants = Student.objects.filter(assigned_hostel=hostel, room_number=room_number).count()
+            target_room.occupied = current_occupants
+            target_room.is_available = (current_occupants < target_room.capacity)
+            target_room.save()
+
+            messages.success(request, f"Student {target_student.get_display_name()} assigned to {hostel.code} Room {room_number}.")
+        else:
+            messages.error(request, "Student or room record not found.")
+        return redirect('hostel:rooms')
+
+    return redirect('hostel:rooms')
+
+
+@login_required
+def api_mess_checkin(request):
+    """Real-time mess meal check-in API."""
+    if request.method != 'POST':
+        return JsonResponse({'status': 'error', 'message': 'POST required'}, status=405)
+
+    student = getattr(request.user, 'student_profile', None)
+    if not student or not student.assigned_hostel:
+        return JsonResponse({'status': 'error', 'message': 'Resident student profile required.'}, status=403)
+
+    meal_type = request.POST.get('meal_type', HostelMessAttendance.MealType.LUNCH)
+    diet = request.POST.get('diet', 'Vegetarian')
+    today = timezone.now().date()
+
+    record, created = HostelMessAttendance.objects.update_or_create(
+        student=student,
+        date=today,
+        meal_type=meal_type,
+        defaults={
+            'hostel': student.assigned_hostel,
+            'is_present': True,
+            'special_diet': diet
+        }
+    )
+
+    headcount = HostelMessAttendance.objects.filter(
+        hostel=student.assigned_hostel,
+        date=today,
+        meal_type=meal_type,
+        is_present=True
+    ).count()
+
+    return JsonResponse({
+        'status': 'success',
+        'message': f"Checked in for {record.get_meal_type_display()}!",
+        'meal_type': meal_type,
+        'kitchen_headcount': headcount,
+        'date': str(today)
+    })
+

@@ -275,3 +275,71 @@ class HostelAttendance(models.Model):
     def __str__(self):
         return f"{self.date} - {self.student.student_id}: {self.get_status_display()}"
 
+
+class HostelOutPass(models.Model):
+    class PassType(models.TextChoices):
+        LOCAL_OUTING = 'LOCAL_OUTING', 'Local Day Outing (Coimbatore)'
+        HOME_VISIT = 'HOME_VISIT', 'Home Visit / Weekend Leave'
+        EMERGENCY = 'EMERGENCY', 'Medical / Family Emergency'
+        ACADEMIC = 'ACADEMIC', 'Inter-Collegiate Project / Conference'
+
+    class Status(models.TextChoices):
+        PENDING = 'PENDING', 'Pending Warden Approval'
+        APPROVED = 'APPROVED', 'Approved (Pass Active)'
+        REJECTED = 'REJECTED', 'Rejected'
+        DEPARTED = 'DEPARTED', 'Departed (Checked Out)'
+        COMPLETED = 'COMPLETED', 'Returned (Completed)'
+        OVERDUE = 'OVERDUE', 'Overdue Return'
+
+    pass_code = models.CharField(max_length=30, unique=True, help_text="e.g. OP-2026-CIT-1042")
+    student = models.ForeignKey('students.Student', on_delete=models.CASCADE, related_name='hostel_outpasses')
+    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='outpasses')
+    pass_type = models.CharField(max_length=20, choices=PassType.choices, default=PassType.LOCAL_OUTING)
+    destination = models.CharField(max_length=255, help_text="Destination city/address")
+    reason = models.TextField()
+    contact_phone = models.CharField(max_length=20)
+    parent_phone = models.CharField(max_length=20, blank=True)
+    departure_time = models.DateTimeField()
+    expected_return_time = models.DateTimeField()
+    actual_return_time = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
+    approved_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='approved_outpasses')
+    approval_notes = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.pass_code} - {self.student.student_id} [{self.get_status_display()}]"
+
+    def is_currently_overdue(self):
+        if self.status in [self.Status.APPROVED, self.Status.DEPARTED]:
+            return timezone.now() > self.expected_return_time
+        return False
+
+
+class HostelMessAttendance(models.Model):
+    class MealType(models.TextChoices):
+        BREAKFAST = 'BREAKFAST', 'Breakfast (7:30 - 9:00 AM)'
+        LUNCH = 'LUNCH', 'Lunch (12:30 - 2:00 PM)'
+        SNACKS = 'SNACKS', 'Evening Snacks (4:30 - 5:30 PM)'
+        DINNER = 'DINNER', 'Dinner (7:30 - 9:00 PM)'
+
+    student = models.ForeignKey('students.Student', on_delete=models.CASCADE, related_name='mess_attendances')
+    hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, related_name='mess_attendances')
+    date = models.DateField(default=timezone.now)
+    meal_type = models.CharField(max_length=20, choices=MealType.choices, default=MealType.LUNCH)
+    is_present = models.BooleanField(default=True)
+    special_diet = models.CharField(max_length=50, blank=True, help_text="e.g. Vegetarian, Jain, Sick Diet")
+    check_in_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('student', 'date', 'meal_type')
+        ordering = ['-date', 'meal_type']
+
+    def __str__(self):
+        return f"{self.date} {self.get_meal_type_display()} - {self.student.student_id}"
+
+

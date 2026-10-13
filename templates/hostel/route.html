@@ -9,7 +9,7 @@
     <div class="card" style="padding: 1.8rem 2rem; border-radius: 18px; margin-bottom: 1.8rem; background: linear-gradient(135deg, rgba(2,132,199,0.06), rgba(37,99,235,0.03)); border: 1px solid rgba(37,99,235,0.15); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.35rem;">
-                <span style="font-size: 1.6rem;">🚶</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#2563EB;"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
                 <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0;">
                     Pedestrian Waypoint Navigation: {{ hostel.name }}
                 </h1>
@@ -22,11 +22,12 @@
             </p>
         </div>
         <div style="display: flex; gap: 0.6rem;">
-            <a href="{% url 'common:map' %}" class="btn btn-primary btn-sm" style="border-radius: 8px;">
-                🗺️ Open Interactive 2D Map
+            <a href="{% url 'common:map' %}" class="btn btn-primary btn-sm" style="border-radius: 8px; display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+                <span>Open Interactive 2D Map</span>
             </a>
             <a href="{% url 'hostel:dashboard' %}" class="btn btn-secondary btn-sm" style="border-radius: 8px;">
-                « Dashboard
+                &laquo; Dashboard
             </a>
         </div>
     </div>
@@ -37,7 +38,7 @@
         <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
                 <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-primary); margin: 0;">
-                    🚪 Main Gate ➔ {{ hostel.name }}
+                    Main Gate &rarr; {{ hostel.name }}
                 </h3>
                 <span style="font-size: 0.75rem; font-weight: 700; color: #16A34A; background: #F0FDF4; padding: 2px 8px; border-radius: 10px;">
                     ~420 m • 5 mins
@@ -52,7 +53,7 @@
             </ol>
             <div style="margin-top: 1rem;">
                 <a href="{% url 'common:map' %}" class="btn btn-secondary btn-sm" style="width: 100%; text-align: center; display: block; font-size: 0.8rem;">
-                    View on Campus Map ➔
+                    View on Campus Map &rarr;
                 </a>
             </div>
         </div>
@@ -61,7 +62,7 @@
         <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
                 <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-primary); margin: 0;">
-                    🏫 Academic Quad ➔ {{ hostel.name }}
+                    Academic Quad &rarr; {{ hostel.name }}
                 </h3>
                 <span style="font-size: 0.75rem; font-weight: 700; color: #16A34A; background: #F0FDF4; padding: 2px 8px; border-radius: 10px;">
                     ~280 m • 3.5 mins
@@ -75,7 +76,7 @@
             </ol>
             <div style="margin-top: 1rem;">
                 <a href="{% url 'common:map' %}" class="btn btn-secondary btn-sm" style="width: 100%; text-align: center; display: block; font-size: 0.8rem;">
-                    View on Campus Map ➔
+                    View on Campus Map &rarr;
                 </a>
             </div>
         </div>
@@ -84,7 +85,7 @@
         <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
                 <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-primary); margin: 0;">
-                    📚 Central Library ➔ {{ hostel.name }}
+                    Central Library &rarr; {{ hostel.name }}
                 </h3>
                 <span style="font-size: 0.75rem; font-weight: 700; color: #16A34A; background: #F0FDF4; padding: 2px 8px; border-radius: 10px;">
                     ~310 m • 4 mins
@@ -97,7 +98,7 @@
             </ol>
             <div style="margin-top: 1rem;">
                 <a href="{% url 'common:map' %}" class="btn btn-secondary btn-sm" style="width: 100%; text-align: center; display: block; font-size: 0.8rem;">
-                    View on Campus Map ➔
+                    View on Campus Map &rarr;
                 </a>
             </div>
         </div>
@@ -106,7 +107,7 @@
         <div class="card" style="padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
                 <h3 style="font-size: 1rem; font-weight: 800; color: var(--text-primary); margin: 0;">
-                    🍽️ Smart Canteen ➔ {{ hostel.name }}
+                    Smart Canteen &rarr; {{ hostel.name }}
                 </h3>
                 <span style="font-size: 0.75rem; font-weight: 700; color: #16A34A; background: #F0FDF4; padding: 2px 8px; border-radius: 10px;">
                     ~160 m • 2 mins
@@ -119,7 +120,7 @@
             </ol>
             <div style="margin-top: 1rem;">
                 <a href="{% url 'common:map' %}" class="btn btn-secondary btn-sm" style="width: 100%; text-align: center; display: block; font-size: 0.8rem;">
-                    View on Campus Map ➔
+                    View on Campus Map &rarr;
                 </a>
             </div>
         </div>

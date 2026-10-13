@@ -28,20 +28,24 @@
                 <div class="hero-cta-buttons">
                     <a href="{% url 'accounts:login' %}" class="btn-hero-primary">
                         <span>Enter Campus Portal</span>
-                        <span style="font-size:1.05rem;">➔</span>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
                     </a>
                     <a href="{% url 'common:map' %}" class="btn-hero-secondary">
-                        <span style="color:#2563EB;">▶</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#2563EB" stroke="none">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
                         <span>Watch Demo</span>
                     </a>
                 </div>
 
                 <div class="hero-social-proof">
                     <div class="avatar-stack">
-                        <span class="avatar-face" style="background:#3B82F6;">👨‍🎓</span>
-                        <span class="avatar-face" style="background:#10B981;">👩‍🔬</span>
-                        <span class="avatar-face" style="background:#F59E0B;">👨‍🏫</span>
-                        <span class="avatar-face" style="background:#8B5CF6;">👩‍💼</span>
+                        <span class="avatar-face" style="background:#3B82F6; font-size:0.75rem; font-weight:700; color:#fff;" title="Student Body">ST</span>
+                        <span class="avatar-face" style="background:#10B981; font-size:0.75rem; font-weight:700; color:#fff;" title="Faculty">FC</span>
+                        <span class="avatar-face" style="background:#F59E0B; font-size:0.75rem; font-weight:700; color:#fff;" title="Research & Labs">RS</span>
+                        <span class="avatar-face" style="background:#8B5CF6; font-size:0.75rem; font-weight:700; color:#fff;" title="Administration">AD</span>
                         <span class="avatar-face avatar-count">+5K</span>
                     </div>
                     <span class="social-proof-text">Trusted by Students, Faculty & Administrators</span>
@@ -86,7 +90,7 @@
                                 </div>
                             </div>
                             <a href="{{ spot.url }}" class="telemetry-link-btn">
-                                Open {{ spot.name }} Telemetry ➔
+                                Open {{ spot.name }} Telemetry &rarr;
                             </a>
                         </div>
                     </div>
@@ -105,193 +109,323 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Campus AI Assistant Right Panel -->
-        <div class="campus-ai-panel">
-            <div class="ai-panel-header">
-                <div class="ai-header-icon">
-                    🤖
-                </div>
-                <div class="ai-header-title">
-                    <h3>Campus AI Assistant</h3>
-                    <p>Ask anything about your campus...</p>
-                </div>
+    <!-- ==========================================================================
+         CAMPUS AI OPERATIONS & SUBSYSTEMS HEALTH COMMAND BAR
+         Real-Time Telemetry across:
+         1) Hostel Facilities & Residents (Allocations, Out-Passes, Mess)
+         2) Complaints AI Engine & SLA Triage (NLP Auto-Routing & Escalation)
+         3) Academic Risk Early-Warning Predictor (Student Analytics & Interventions)
+         4) Smart Fleet & Transport Tracker (Routes R-01 to R-04 Live GPS)
+         ========================================================================== -->
+    <div class="card-light" style="padding: 1.25rem 1.75rem; margin-bottom: 1.75rem; background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%); border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+                <span class="live-pill" style="background:#ECFDF5; color:#047857; border: 1px solid #A7F3D0;"><span class="pulse-dot" style="background:#10B981;"></span> CAMPUS OPERATIONS HEALTH</span>
+                <span style="font-weight: 800; font-size: 1.05rem; color: #0F172A;">CIT Subsystems Command Telemetry</span>
+                <span class="ai-badge ai-confidence" id="telemetryHealthBadge" style="font-size: 0.75rem;">98% Optimal Status</span>
             </div>
-
-            <!-- Quick Inquiry Pills -->
-            <div class="ai-quick-inquiries">
-                <button class="ai-query-pill" onclick="sendHeroPrompt('How many high-risk students are there in CSE?')">
-                    <span class="query-pill-icon">🔍</span>
-                    <span>How many high-risk students are there in CSE?</span>
-                </button>
-                <button class="ai-query-pill" onclick="sendHeroPrompt('What are today\'s events?')">
-                    <span class="query-pill-icon">📋</span>
-                    <span>What are today's events?</span>
-                </button>
-                <button class="ai-query-pill" onclick="sendHeroPrompt('Show bus locations')">
-                    <span class="query-pill-icon">🚌</span>
-                    <span>Show bus locations</span>
-                </button>
-                <button class="ai-query-pill" onclick="sendHeroPrompt('Which clubs have upcoming events?')">
-                    <span class="query-pill-icon">👥</span>
-                    <span>Which clubs have upcoming events?</span>
-                </button>
-                <button class="ai-query-pill" onclick="sendHeroPrompt('Is parking available near Block A?')">
-                    <span class="query-pill-icon">🅿️</span>
-                    <span>Is parking available near Block A?</span>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 0.78rem; color: var(--text-muted);" id="telemetryPulseTime">Telemetry Live</span>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="refreshCampusHealthTelemetry()" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 4px 10px; font-size: 0.75rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                    </svg>
+                    <span>Refresh</span>
                 </button>
             </div>
+        </div>
 
-            <!-- Chat Display & Input Bar with Robot Mascot -->
-            <div class="ai-chat-bottom-wrapper">
-                <div id="heroAiResponse" class="hero-ai-response-box" style="display:none;"></div>
-                
-                <div class="ai-input-bar">
-                    <input type="text" id="heroAiInput" placeholder="Type your question..." onkeydown="if(event.key==='Enter') executeHeroAiSearch()">
-                    <button class="ai-send-btn" onclick="executeHeroAiSearch()" title="Send">➔</button>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+            
+            <!-- 1. Hostel Portal & Facilities -->
+            <a href="{% url 'hostel:rooms' %}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 1.1rem 1.15rem; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 16px rgba(0,0,0,0.06)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; gap: 0.5rem;">
+                        <span style="font-size: 0.74rem; font-weight: 800; color: #4F46E5; background: #EEF2FF; padding: 2px 8px; border-radius: 10px; white-space: nowrap;">1. HOSTEL & FACILITIES</span>
+                        <span style="font-size: 0.74rem; color: #10B981; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
+                            <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span> Online
+                        </span>
+                    </div>
+                    <div style="font-size: 0.92rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Resident Living & Mess Hub</div>
                 </div>
-                
-                <!-- 3D Floating Robot Mascot -->
-                <img src="{% static 'images/ai_robot_mascot.png' %}" alt="AI Companion Robot" class="ai-robot-floating-img" onclick="toggleAiDrawer()" title="Campus AI Mascot">
-            </div>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
+                        <span>Rooms</span>
+                        <strong id="healthHostelOccupancy" style="color: #0F172A;">100% Occupied</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
+                        <span>Digital Out-Passes</span>
+                        <strong id="healthHostelOutpasses" style="color: #0F172A;">8 Pending</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
+                        <span>Mess Check-Ins</span>
+                        <strong id="healthHostelMeals" style="color: #0F172A;">160 Logged</strong>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 2. Complaints AI Engine -->
+            <a href="{% url 'complaints:dashboard' %}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 1.1rem 1.15rem; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 16px rgba(0,0,0,0.06)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; gap: 0.5rem;">
+                        <span style="font-size: 0.74rem; font-weight: 800; color: #DC2626; background: #FEF2F2; padding: 2px 8px; border-radius: 10px; white-space: nowrap;">2. COMPLAINTS AI</span>
+                        <span style="font-size: 0.74rem; color: #10B981; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
+                            <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span> Triage Active
+                        </span>
+                    </div>
+                    <div style="font-size: 0.92rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">NLP Routing & SLA Escalator</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
+                        <span>Active Tickets</span>
+                        <strong id="healthComplaintsOpen" style="color: #0F172A;">40 In Triage</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
+                        <span>SLA Priority</span>
+                        <strong id="healthComplaintsEscalated" style="color: #0F172A;">Auto-Escalated</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
+                        <span>Real-time Copilot</span>
+                        <strong style="color: #0F172A;">TF-IDF & Naive Bayes</strong>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 3. Academic Risk AI -->
+            <a href="{% url 'academics:risk_dashboard' %}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 1.1rem 1.15rem; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 16px rgba(0,0,0,0.06)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; gap: 0.5rem;">
+                        <span style="font-size: 0.74rem; font-weight: 800; color: #D97706; background: #FFFBEB; padding: 2px 8px; border-radius: 10px; white-space: nowrap;">3. ACADEMIC RISK AI</span>
+                        <span style="font-size: 0.74rem; color: #10B981; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
+                            <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span> Deep DL Active
+                        </span>
+                    </div>
+                    <div style="font-size: 0.92rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Predictive Early-Warning</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
+                        <span>Cohort Scanned</span>
+                        <strong id="healthAcademicsCohort" style="color: #0F172A;">3,098 Records</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
+                        <span>High-Risk Alerts</span>
+                        <strong id="healthAcademicsAlerts" style="color: #0F172A;">240 Flagged</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
+                        <span>Interventions</span>
+                        <strong id="healthAcademicsDispatched" style="color: #0F172A;">120 Dispatched</strong>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 4. Smart Fleet & Transport -->
+            <a href="{% url 'transport:dashboard' %}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 1.1rem 1.15rem; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 16px rgba(0,0,0,0.06)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; gap: 0.5rem;">
+                        <span style="font-size: 0.74rem; font-weight: 800; color: #0284C7; background: #F0F9FF; padding: 2px 8px; border-radius: 10px; white-space: nowrap;">4. FLEET TRACKER</span>
+                        <span style="font-size: 0.74rem; color: #10B981; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
+                            <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span> GPS Simulated
+                        </span>
+                    </div>
+                    <div style="font-size: 0.92rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Coimbatore Corridors R-01 - R-04</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
+                        <span>Active Fleet</span>
+                        <strong id="healthTransportBuses" style="color: #0F172A;">12 Buses Live</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
+                        <span>Corridors</span>
+                        <strong style="color: #0F172A;">Gandhipuram, Jct, Airport</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
+                        <span>Sim Multiplier</span>
+                        <strong id="healthTransportSpeed" style="color: #0F172A;">1x to 10x</strong>
+                    </div>
+                </div>
+            </a>
+
         </div>
     </div>
 
     <!-- ==========================================================================
-         2. KPI METRICS STRIP (8 Cards in a row matching reference)
+         2. KPI METRICS STRIP (Clean Outline SVG Icons)
          ========================================================================== -->
     <div class="kpi-strip">
         <!-- 1. Total Students -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'students:list' %}" class="kpi-mini-card" title="Navigate to Students Directory">
             <div class="kpi-mini-icon-box kpi-blue">
-                🎓
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                    <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Total Students</div>
                 <div class="kpi-mini-val">{{ student_count|default:"5,492" }}</div>
                 <div class="kpi-mini-trend trend-green">↑ 12% <span class="trend-sub">from last semester</span></div>
             </div>
-        </div>
+        </a>
 
         <!-- 2. Departments -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'departments:list' %}" class="kpi-mini-card" title="Navigate to Departments">
             <div class="kpi-mini-icon-box kpi-teal">
-                🏛️
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+                    <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+                    <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+                    <path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Departments</div>
                 <div class="kpi-mini-val">{{ dept_count|default:"12" }}</div>
                 <div class="kpi-mini-trend trend-neutral">0% <span class="trend-sub">no change</span></div>
             </div>
-        </div>
+        </a>
 
         <!-- 3. Faculty -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'faculty:list' %}" class="kpi-mini-card" title="Navigate to Faculty Directory">
             <div class="kpi-mini-icon-box kpi-purple">
-                👨‍🏫
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Faculty</div>
                 <div class="kpi-mini-val">{{ faculty_count|default:"284" }}</div>
                 <div class="kpi-mini-trend trend-green">↑ 6% <span class="trend-sub">this month</span></div>
             </div>
-        </div>
+        </a>
 
         <!-- 4. Ongoing Events -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'events:list' %}" class="kpi-mini-card" title="Navigate to Events & Workshops">
             <div class="kpi-mini-icon-box kpi-green">
-                📅
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="4" rx="2"/>
+                    <path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Ongoing Events</div>
                 <div class="kpi-mini-val">{{ event_count|default:"105" }}</div>
                 <div class="kpi-mini-trend trend-green">↑ 8% <span class="trend-sub">this month</span></div>
             </div>
-        </div>
+        </a>
 
         <!-- 5. Active Clubs -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'clubs:list' %}" class="kpi-mini-card" title="Navigate to Campus Clubs">
             <div class="kpi-mini-icon-box kpi-yellow">
-                ✨
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 21a8 8 0 0 0-16 0"/>
+                    <circle cx="10" cy="8" r="5"/>
+                    <path d="M22 20c0-3.37-2-6.5-5-8a5 5 0 0 0-.45-8.3"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Active Clubs</div>
                 <div class="kpi-mini-val">{{ club_count|default:"28" }}</div>
                 <div class="kpi-mini-trend trend-green">↑ 3 <span class="trend-sub">new clubs</span></div>
             </div>
-        </div>
+        </a>
 
         <!-- 6. Open Complaints -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'complaints:dashboard' %}" class="kpi-mini-card" title="Navigate to Complaints AI Dashboard">
             <div class="kpi-mini-icon-box kpi-pink">
-                📢
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="8" height="4" x="8" y="2" rx="1"/>
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                    <path d="M12 11h4"/><path d="M12 16h4"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Open Complaints</div>
                 <div class="kpi-mini-val">{{ complaint_count|default:"24" }}</div>
                 <div class="kpi-mini-trend trend-green">↓ 18% <span class="trend-sub">from last month</span></div>
             </div>
-        </div>
+        </a>
 
         <!-- 7. Buses on Route -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'transport:dashboard' %}" class="kpi-mini-card" title="Navigate to Smart Transport Fleet">
             <div class="kpi-mini-icon-box kpi-cyan">
-                🚌
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h20"/><path d="M4 18v3"/><path d="M20 18v3"/>
+                    <rect width="20" height="15" x="2" y="3" rx="2"/>
+                    <circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Buses on Route</div>
                 <div class="kpi-mini-val">{{ bus_active|default:8 }} / {{ bus_total|default:10 }}</div>
                 <div class="kpi-mini-trend trend-red">• 2 delayed</div>
             </div>
-        </div>
+        </a>
 
         <!-- 8. Parking Occupancy -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'parking:dashboard' %}" class="kpi-mini-card" title="Navigate to Smart Parking">
             <div class="kpi-mini-icon-box kpi-indigo">
-                🅿️
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2"/>
+                    <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Parking Occupancy</div>
                 <div class="kpi-mini-val">{{ parking_pct|default:"68" }}%</div>
                 <div class="kpi-mini-trend trend-sub">{{ occupied_slots|default:120 }} / {{ total_slots|default:200 }} slots</div>
             </div>
-        </div>
+        </a>
 
         <!-- 9. Canteen Demand -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'canteen:dashboard' %}" class="kpi-mini-card" title="Navigate to Canteen & Food Dashboard">
             <div class="kpi-mini-icon-box" style="background:#FEF3C7; color:#D97706;">
-                🍽️
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/>
+                    <path d="M15 11v11"/>
+                    <path d="M5 2v8a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V2"/>
+                    <path d="M8 13v9"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Canteen Demand</div>
                 <div class="kpi-mini-val">{{ canteen_demand|default:780 }}</div>
                 <div class="kpi-mini-trend trend-green">↑ 4% <span class="trend-sub">meals forecast</span></div>
             </div>
-        </div>
+        </a>
 
         <!-- 10. Energy Usage -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'energy:dashboard' %}" class="kpi-mini-card" title="Navigate to Energy Monitoring">
             <div class="kpi-mini-icon-box" style="background:#FEF9C3; color:#CA8A04;">
-                ⚡
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">Energy Usage</div>
                 <div class="kpi-mini-val">{{ energy_kwh|default:"42.4" }} <span style="font-size:0.75rem; font-weight:500;">kWh</span></div>
                 <div class="kpi-mini-trend trend-green">• Baseline nominal</div>
             </div>
-        </div>
+        </a>
 
         <!-- 11. AI Alerts -->
-        <div class="kpi-mini-card">
+        <a href="{% url 'analytics:dashboard' %}" class="kpi-mini-card" title="Navigate to Campus Command Center">
             <div class="kpi-mini-icon-box" style="background:#FEE2E2; color:#DC2626;">
-                🛡️
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M12 8v4"/><path d="M12 16h.01"/>
+                </svg>
             </div>
             <div class="kpi-mini-content">
                 <div class="kpi-mini-label">AI Alerts</div>
                 <div class="kpi-mini-val">{{ ai_alerts_count|default:4 }} <span style="font-size:0.75rem; font-weight:500;">Active</span></div>
                 <div class="kpi-mini-trend" style="color:var(--brand-electric); font-weight:700;">● Real-Time AI</div>
             </div>
-        </div>
+        </a>
     </div>
 
     <!-- ==========================================================================
@@ -299,18 +433,27 @@
          ========================================================================== -->
     <div class="ai-alert-banner">
         <div style="display:flex; align-items:center; gap:0.65rem;">
-            <span style="font-size:1.25rem;">⚠️</span>
+            <span style="display:inline-flex; align-items:center; color:#D97706;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+            </span>
             <span style="font-weight:800; font-size:0.85rem; color:#92400E; text-transform:uppercase; letter-spacing:0.04em;">AI Alert Center:</span>
         </div>
         <div class="ai-alert-list">
             {% for alert in ai_alerts %}
             <div class="ai-alert-chip">
-                <span>{{ alert.icon }}</span>
+                <span style="display:inline-flex; align-items:center; color:#B45309;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                </span>
                 <span>{{ alert.text }}</span>
             </div>
             {% endfor %}
         </div>
-        <a href="{% url 'analytics:dashboard' %}" style="font-size:0.78rem; font-weight:700; color:#B45309; text-decoration:underline;">View Telemetry ➔</a>
+        <a href="{% url 'analytics:dashboard' %}" style="font-size:0.78rem; font-weight:700; color:#B45309; text-decoration:underline;">View Telemetry &rarr;</a>
     </div>
 
     <!-- ==========================================================================
@@ -353,13 +496,13 @@
     </div>
 
     <!-- ==========================================================================
-         CAMPUS AI INTELLIGENCE CORE COMPONENT
+         CAMPUS AI INTELLIGENCE CORE COMPONENT (Clickable & Fully Navigable)
          ========================================================================== -->
     <div class="ai-intelligence-core-card">
         <div class="ai-core-header">
             <div>
                 <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.3rem;">
-                    <span class="ai-badge badge-ai-realtime">● Real-Time AI Core</span>
+                    <span class="ai-badge badge-ai-realtime">Real-Time AI Core</span>
                     <span style="font-size:0.75rem; color:var(--text-muted);">Central Intelligent Operating Layer</span>
                 </div>
                 <h3 class="ai-core-title">Campus AI Intelligence Core</h3>
@@ -371,71 +514,186 @@
             </div>
         </div>
 
-        <!-- Reusable AI Data Flow Pipeline -->
-        {% ai_data_flow "Campus Telemetry" "Neural Ensembles" "Risk & ETA Predictions" "Intelligent Recommendations" "Proactive Interventions" %}
+        <!-- Interactive AI Data Flow Pipeline -->
+        <div class="ai-data-flow-stepper" title="Click any pipeline stage to view deep telemetry">
+            <!-- 1. Campus Telemetry -->
+            <a href="{% url 'analytics:dashboard' %}" class="flow-step flow-step-link" title="Navigate to Campus Operations & Telemetry Command Center">
+                <span class="flow-step-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                </span>
+                <span class="flow-step-title">Campus Telemetry</span>
+                <span class="flow-step-sub">Telemetry Hub &rarr;</span>
+            </a>
+            <div class="flow-connector" aria-hidden="true"><span class="flow-pulse"></span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+            <!-- 2. Neural Ensembles -->
+            <a href="{% url 'analytics:model_registry' %}" class="flow-step flow-step-link highlight-model" title="Navigate to Neural Ensembles & Model Registry">
+                <span class="flow-step-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 21v-2"/><path d="M9 3v2"/></svg>
+                </span>
+                <span class="flow-step-title">Neural Ensembles</span>
+                <span class="flow-step-sub">AI Registry &rarr;</span>
+            </a>
+            <div class="flow-connector" aria-hidden="true"><span class="flow-pulse"></span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+            <!-- 3. Risk & ETA Predictions -->
+            <a href="{% url 'academics:risk_dashboard' %}" class="flow-step flow-step-link" title="Navigate to Academic Risk AI & Predictions">
+                <span class="flow-step-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                </span>
+                <span class="flow-step-title">Risk & ETA Predictions</span>
+                <span class="flow-step-sub">Inference Core &rarr;</span>
+            </a>
+            <div class="flow-connector" aria-hidden="true"><span class="flow-pulse"></span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+            <!-- 4. Intelligent Recommendations -->
+            <a href="{% url 'recommendations:hub' %}" class="flow-step flow-step-link" title="Navigate to AI Recommendations">
+                <span class="flow-step-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                </span>
+                <span class="flow-step-title">Intelligent Recommendations</span>
+                <span class="flow-step-sub">AI Guidance &rarr;</span>
+            </a>
+            <div class="flow-connector" aria-hidden="true"><span class="flow-pulse"></span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+            <!-- 5. Proactive Interventions -->
+            <a href="{% url 'academics:risk_dashboard' %}" class="flow-step flow-step-link highlight-action" title="Navigate to Proactive Interventions & Risk Workflows">
+                <span class="flow-step-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </span>
+                <span class="flow-step-title">Proactive Interventions</span>
+                <span class="flow-step-sub">Early Alerts &rarr;</span>
+            </a>
+        </div>
 
-        <!-- Connected Campus Operational Nodes -->
+        <!-- Connected Campus Operational Nodes (12 Clickable Module Cards) -->
         <div class="ai-core-nodes-grid">
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">🎓</div>
+            <a href="{% url 'students:list' %}" class="ai-core-subnode" title="Navigate to Students Directory">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Students</div>
                 <div class="ai-core-subnode-status">Active Telemetry</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">🏛️</div>
+            </a>
+            <a href="{% url 'departments:list' %}" class="ai-core-subnode" title="Navigate to Departments">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+                        <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+                        <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+                        <path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Departments</div>
                 <div class="ai-core-subnode-status">Synchronized</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">🛡️</div>
+            </a>
+            <a href="{% url 'academics:risk_dashboard' %}" class="ai-core-subnode" title="Navigate to Academic Risk AI">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M12 8v4"/><path d="M12 16h.01"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Academic Risk</div>
                 <div class="ai-core-subnode-status">Ensemble Active</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">🚌</div>
+            </a>
+            <a href="{% url 'transport:dashboard' %}" class="ai-core-subnode" title="Navigate to Smart Transport Fleet">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h20"/><path d="M4 18v3"/><path d="M20 18v3"/>
+                        <rect width="20" height="15" x="2" y="3" rx="2"/>
+                        <circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Transport Fleet</div>
                 <div class="ai-core-subnode-status">Live GPS Polling</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">🅿️</div>
+            </a>
+            <a href="{% url 'parking:dashboard' %}" class="ai-core-subnode" title="Navigate to Smart Parking">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="18" x="3" y="3" rx="2"/>
+                        <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Smart Parking</div>
                 <div class="ai-core-subnode-status">Predictive Bays</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">🍽️</div>
+            </a>
+            <a href="{% url 'canteen:dashboard' %}" class="ai-core-subnode" title="Navigate to Canteen Food">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/>
+                        <path d="M15 11v11"/>
+                        <path d="M5 2v8a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V2"/>
+                        <path d="M8 13v9"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Canteen Food</div>
                 <div class="ai-core-subnode-status">Demand Forecast</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">⚡</div>
+            </a>
+            <a href="{% url 'energy:dashboard' %}" class="ai-core-subnode" title="Navigate to Energy Grid Monitoring">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Energy Grid</div>
                 <div class="ai-core-subnode-status">Anomaly Scan</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">♻️</div>
+            </a>
+            <a href="{% url 'waste:dashboard' %}" class="ai-core-subnode" title="Navigate to Waste Segregation">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/>
+                        <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/>
+                        <path d="m14 16 3 3 3-3"/>
+                        <path d="M8.293 13.596 5.5 9.5 8.293 5.404"/>
+                        <path d="m17.5 9.5-3.5-6h-3.83a1.83 1.83 0 0 0-1.57.881 1.785 1.785 0 0 0-.004 1.784L10 9"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Waste CV</div>
                 <div class="ai-core-subnode-status">Vision Active</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">🛠️</div>
+            </a>
+            <a href="{% url 'complaints:dashboard' %}" class="ai-core-subnode" title="Navigate to Complaints NLP Triage">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="8" height="4" x="8" y="2" rx="1"/>
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        <path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Complaints NLP</div>
                 <div class="ai-core-subnode-status">Auto-Triage</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">📅</div>
+            </a>
+            <a href="{% url 'events:list' %}" class="ai-core-subnode" title="Navigate to Events & Campus Clubs">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9333EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="18" x="3" y="4" rx="2"/>
+                        <path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Events & Clubs</div>
                 <div class="ai-core-subnode-status">Engagement Sync</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">🚀</div>
+            </a>
+            <a href="{% url 'projects:list' %}" class="ai-core-subnode" title="Navigate to Projects & Teams AI">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+                        <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+                        <path d="M9 12H4s.55-3.03 2-4.5c1.62-1.63 5-2.5 5-2.5"/>
+                        <path d="M12 15v5s3.03-.55 4.5-2c1.63-1.62 2.5-5 2.5-5"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">Projects AI</div>
                 <div class="ai-core-subnode-status">Teammate Match</div>
-            </div>
-            <div class="ai-core-subnode">
-                <div class="ai-core-subnode-icon">💬</div>
+            </a>
+            <a href="{% url 'ai_assistant:chat' %}" class="ai-core-subnode" title="Navigate to Campus AI Companion">
+                <div class="ai-core-subnode-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="16" height="12" x="4" y="8" rx="2"/>
+                        <path d="M12 2v6"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M9 13v2"/><path d="M15 13v2"/>
+                    </svg>
+                </div>
                 <div class="ai-core-subnode-name">AI Assistant</div>
                 <div class="ai-core-subnode-status">LLM Connected</div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -628,64 +886,74 @@
 
             <div class="campus-status-list">
                 <!-- Status Row: Buses -->
-                <div class="status-row-item">
+                <a href="{% url 'transport:dashboard' %}" class="status-row-item status-row-link" title="Open Smart Transport Dashboard">
                     <div class="status-row-left">
-                        <span class="status-icon-pill" style="background:#EFF6FF; color:#2563EB;">🚌</span>
+                        <span class="status-icon-pill" style="background:#EFF6FF; color:#2563EB;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.6 19 6 17.8 6H5.2C4 6 2.9 6.6 2.6 7.8L1.2 12.8c-.1.4-.2.8-.2 1.2 0 .4.1.8.2 1.2C1.5 16.3 2 18 2 18h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>
+                        </span>
                         <span class="status-name">Campus Buses</span>
                     </div>
                     <div class="status-row-right">
                         <span class="status-state-green">● 8 / 10 Active</span>
-                        <span class="status-badge-red">✖ 2 Delayed</span>
+                        <span class="status-badge-red">2 Delayed</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Status Row: Parking -->
-                <div class="status-row-item">
+                <a href="{% url 'parking:dashboard' %}" class="status-row-item status-row-link" title="Open Smart Parking Dashboard">
                     <div class="status-row-left">
-                        <span class="status-icon-pill" style="background:#F0FDF4; color:#10B981;">🅿️</span>
+                        <span class="status-icon-pill" style="background:#F0FDF4; color:#10B981;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+                        </span>
                         <span class="status-name">Parking Lots</span>
                     </div>
                     <div class="status-row-right">
                         <span class="status-state-green">● 68% Occupancy</span>
                         <span class="status-sub-val">120 / 200 slots</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Status Row: Canteen -->
-                <div class="status-row-item">
+                <a href="{% url 'canteen:dashboard' %}" class="status-row-item status-row-link" title="Open Canteen & Food Management">
                     <div class="status-row-left">
-                        <span class="status-icon-pill" style="background:#FFFBEB; color:#F59E0B;">🍔</span>
+                        <span class="status-icon-pill" style="background:#FFFBEB; color:#F59E0B;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8Z"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 21.8 6.4-6.3"/><path d="m19 5-7 7"/></svg>
+                        </span>
                         <span class="status-name">Canteen</span>
                     </div>
                     <div class="status-row-right">
                         <span class="status-state-green">● Normal</span>
                         <span class="status-sub-val">Lunch serving now</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Status Row: Energy -->
-                <div class="status-row-item">
+                <a href="{% url 'energy:dashboard' %}" class="status-row-item status-row-link" title="Open Energy Monitoring Dashboard">
                     <div class="status-row-left">
-                        <span class="status-icon-pill" style="background:#FEF3C7; color:#D97706;">⚡</span>
+                        <span class="status-icon-pill" style="background:#FEF3C7; color:#D97706;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </span>
                         <span class="status-name">Electricity Usage</span>
                     </div>
                     <div class="status-row-right">
                         <span class="status-state-green">● Stable</span>
                         <span class="status-sub-val">No anomalies</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Status Row: Waste -->
-                <div class="status-row-item">
+                <a href="{% url 'waste:dashboard' %}" class="status-row-item status-row-link" title="Open Waste Management Dashboard">
                     <div class="status-row-left">
-                        <span class="status-icon-pill" style="background:#ECFDF5; color:#059669;">♻️</span>
+                        <span class="status-icon-pill" style="background:#ECFDF5; color:#059669;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.2a1.8 1.8 0 0 0 1.571-.88 1.786 1.786 0 0 0 .004-1.78L17 9.5"/><path d="M13 3.8a2 2 0 0 0-2 0L6.5 6.5"/><path d="M8.5 13H5l2-3.5"/><path d="M15.5 13H19l-2-3.5"/><path d="m11.5 5.5 1.5-2.5 1.5 2.5"/></svg>
+                        </span>
                         <span class="status-name">Waste Bins</span>
                     </div>
                     <div class="status-row-right">
                         <span class="status-state-green">● Normal</span>
                         <span class="status-sub-val">All systems working</span>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
 
@@ -698,9 +966,9 @@
 
             <div class="events-list-vertical">
                 <!-- Event 1 -->
-                <div class="event-item-row">
+                <a href="{% url 'events:list' %}" class="event-item-row event-item-link" title="View event details in Events calendar">
                     <div class="event-badge-icon" style="background:#E0F2FE; color:#0284C7;">
-                        🤖
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
                     </div>
                     <div class="event-details">
                         <h5 class="event-title">AI & Robotics Workshop</h5>
@@ -710,12 +978,12 @@
                         <span class="time-primary">Today</span>
                         <span class="time-secondary">10:00 AM</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Event 2 -->
-                <div class="event-item-row">
+                <a href="{% url 'events:list' %}" class="event-item-row event-item-link" title="View event details in Events calendar">
                     <div class="event-badge-icon" style="background:#F3E8FF; color:#7E22CE;">
-                        🎭
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
                     </div>
                     <div class="event-details">
                         <h5 class="event-title">Cultural Fest 2026</h5>
@@ -725,12 +993,12 @@
                         <span class="time-primary">Tomorrow</span>
                         <span class="time-secondary">4:00 PM</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Event 3 -->
-                <div class="event-item-row">
+                <a href="{% url 'events:list' %}" class="event-item-row event-item-link" title="View event details in Events calendar">
                     <div class="event-badge-icon" style="background:#FEF3C7; color:#B45309;">
-                        📊
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
                     </div>
                     <div class="event-details">
                         <h5 class="event-title">Data Science Hackathon</h5>
@@ -740,12 +1008,12 @@
                         <span class="time-primary">15 Sep</span>
                         <span class="time-secondary">9:00 AM</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Event 4 -->
-                <div class="event-item-row">
+                <a href="{% url 'events:list' %}" class="event-item-row event-item-link" title="View event details in Events calendar">
                     <div class="event-badge-icon" style="background:#DCFCE7; color:#15803D;">
-                        🌱
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
                     </div>
                     <div class="event-details">
                         <h5 class="event-title">Sustainability Awareness</h5>
@@ -755,7 +1023,7 @@
                         <span class="time-primary">16 Sep</span>
                         <span class="time-secondary">11:00 AM</span>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>
@@ -862,32 +1130,58 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function sendHeroPrompt(promptText) {
-    document.getElementById('heroAiInput').value = promptText;
-    executeHeroAiSearch();
+async function refreshCampusHealthTelemetry() {
+    try {
+        const res = await fetch('{% url "common:api_campus_health" %}');
+        const data = await res.json();
+        if (data.status === 'healthy') {
+            const h = data.subsystems;
+            const b = document.getElementById('telemetryHealthBadge');
+            if (b) b.textContent = `${data.health_index}% Optimal Status`;
+
+            const t = document.getElementById('telemetryPulseTime');
+            if (t) t.textContent = `Sync: ${new Date().toLocaleTimeString()}`;
+
+            if (h.hostel) {
+                const elOcc = document.getElementById('healthHostelOccupancy');
+                const elOut = document.getElementById('healthHostelOutpasses');
+                const elMeals = document.getElementById('healthHostelMeals');
+                if (elOcc) elOcc.textContent = `${h.hostel.occupancy_pct}% Occupied`;
+                if (elOut) elOut.textContent = `${h.hostel.pending_outpasses} Pending`;
+                if (elMeals) elMeals.textContent = `${h.hostel.today_meals} Logged`;
+            }
+
+            if (h.complaints) {
+                const elOpen = document.getElementById('healthComplaintsOpen');
+                const elEsc = document.getElementById('healthComplaintsEscalated');
+                if (elOpen) elOpen.textContent = `${h.complaints.open_tickets} In Triage`;
+                if (elEsc) elEsc.textContent = `${h.complaints.critical_escalated} Critical`;
+            }
+
+            if (h.academics) {
+                const elCoh = document.getElementById('healthAcademicsCohort');
+                const elAlt = document.getElementById('healthAcademicsAlerts');
+                const elDisp = document.getElementById('healthAcademicsDispatched');
+                if (elCoh) elCoh.textContent = `${h.academics.evaluated_cohort} Records`;
+                if (elAlt) elAlt.textContent = `${h.academics.high_risk_alerts} Flagged`;
+                if (elDisp) elDisp.textContent = `${h.academics.active_interventions} Dispatched`;
+            }
+
+            if (h.transport) {
+                const elBus = document.getElementById('healthTransportBuses');
+                const elSpd = document.getElementById('healthTransportSpeed');
+                if (elBus) elBus.textContent = h.transport.active_fleet;
+                if (elSpd) elSpd.textContent = `${h.transport.sim_speed} Velocity`;
+            }
+        }
+    } catch (err) {
+        console.error('Campus health telemetry sync failed:', err);
+    }
 }
 
-function executeHeroAiSearch() {
-    const input = document.getElementById('heroAiInput');
-    const msg = input.value.trim();
-    if (!msg) return;
-
-    const respBox = document.getElementById('heroAiResponse');
-    respBox.style.display = 'block';
-    respBox.innerHTML = '<span style="color:#2563EB;">🤖 Analyzing campus records...</span>';
-
-    fetch('/assistant/api/chat/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg })
-    })
-    .then(res => res.json())
-    .then(data => {
-        respBox.innerHTML = `<strong>Assistant:</strong> ${data.response || "No data returned."}`;
-    })
-    .catch(() => {
-        respBox.innerHTML = '<strong>Assistant:</strong> Operational in telemetry mode. Please verify network boundaries.';
-    });
-}
+document.addEventListener('DOMContentLoaded', () => {
+    refreshCampusHealthTelemetry();
+    setInterval(refreshCampusHealthTelemetry, 5000);
+});
 </script>
 {% endblock %}

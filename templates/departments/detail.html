@@ -11,7 +11,7 @@
             Building: {{ department.building }} | Established {{ department.established_year }}
         </p>
     </div>
-    <a href="{% url 'departments:dashboard' %}?dept={{ department.code }}" class="btn btn-primary">Department Dashboard ➔</a>
+    <a href="{% url 'departments:dashboard' %}?dept={{ department.code }}" class="btn btn-primary" style="display:flex; align-items:center; gap:0.4rem;">Department Dashboard <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div>
 
 <div class="card" style="margin-bottom: 2rem;">
@@ -24,7 +24,7 @@
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">📢 Notices & Announcements</h3>
+            <h3 class="card-title" style="display:flex; align-items:center; gap:0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg> Notices & Announcements</h3>
         </div>
         {% for a in announcements %}
         <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
@@ -38,7 +38,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">📂 Course Materials & Resources</h3>
+            <h3 class="card-title" style="display:flex; align-items:center; gap:0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 8 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Course Materials & Resources</h3>
         </div>
         {% for r in resources %}
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">

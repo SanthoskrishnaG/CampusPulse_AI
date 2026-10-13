@@ -25,7 +25,7 @@
         <div class="metric-value" style="color: {% if student.attendance_percentage < 75 %}var(--accent-rose){% else %}var(--accent-emerald){% endif %};">
             {{ student.attendance_percentage|floatformat:1 }}%
         </div>
-        <div class="metric-sub">{% if student.attendance_percentage < 75 %}⚠️ Attendance Shortage{% else %}Meets Criteria{% endif %}</div>
+        <div class="metric-sub">{% if student.attendance_percentage < 75 %}<span style="display:inline-flex; align-items:center; gap:3px; color:var(--accent-rose);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Attendance Shortage</span>{% else %}Meets Criteria{% endif %}</div>
     </div>
     <div class="metric-card">
         <div class="metric-label">AI Risk Assessment</div>
@@ -50,7 +50,7 @@
     <!-- Risk Details -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">🛡️ Academic Risk Diagnostics</h3>
+            <h3 class="card-title" style="display: flex; align-items: center; gap: 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-electric);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Academic Risk Diagnostics</h3>
             {% if risk_assessment %}
             <span class="badge badge-{{ risk_assessment.risk_level|lower }}">{{ risk_assessment.risk_level }}</span>
             {% endif %}
@@ -75,7 +75,7 @@
     <!-- Intervention Assignment Form -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">✍️ Assign Faculty Intervention</h3>
+            <h3 class="card-title" style="display: flex; align-items: center; gap: 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-cyan);"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>Assign Faculty Intervention</h3>
         </div>
         <form method="POST" action="{% url 'academics:create_intervention' student.student_id %}">
             {% csrf_token %}
@@ -101,7 +101,7 @@
 <!-- Past Interventions -->
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">📋 Registered Academic Interventions</h3>
+        <h3 class="card-title" style="display: flex; align-items: center; gap: 0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-primary);"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>Registered Academic Interventions</h3>
     </div>
     <div class="table-container">
         <table class="table">

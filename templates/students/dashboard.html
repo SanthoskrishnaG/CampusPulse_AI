@@ -9,13 +9,13 @@
     <!-- Compact Page Hero with 3D Visual -->
     <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 60%, #DCFCE7 100%);">
         <div style="max-width: 650px;">
-            <div class="hero-pill" style="margin-bottom: 0.5rem;">
-                <span>🎓</span>
-                <span>Individualized Learning Analytics & Student Experience</span>
+            <div class="hero-pill" style="margin-bottom: 0.5rem; display: inline-flex; align-items: center; gap: 0.4rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg>
+                <span>Individualized Learning Analytics &amp; Student Experience</span>
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
                 Student Intelligence Hub<br>
-                <span class="gradient-ai" style="font-size: 1.85rem;">Academic Progress & Guidance.</span>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Academic Progress &amp; Guidance.</span>
             </h1>
             <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
                 Continuous performance trajectory, attendance tracking, proactive faculty advisory, and skill recommendations.
@@ -32,7 +32,9 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Cumulative GPA</span>
-                <div class="kpi-icon-wrap">📊</div>
+                <div class="kpi-icon-wrap" style="display:flex; align-items:center; justify-content:center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                </div>
             </div>
             <div class="kpi-value">{{ student.current_cgpa|floatformat:2 }}</div>
             <div class="kpi-trend positive">
@@ -43,20 +45,24 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Overall Attendance</span>
-                <div class="kpi-icon-wrap" style="color:{% if student.attendance_percentage < 75 %}var(--danger){% else %}var(--success){% endif %}; background:{% if student.attendance_percentage < 75 %}#FEF2F2{% else %}#F0FDF4{% endif %};">📅</div>
+                <div class="kpi-icon-wrap" style="display:flex; align-items:center; justify-content:center; color:{% if student.attendance_percentage < 75 %}var(--danger){% else %}var(--success){% endif %}; background:{% if student.attendance_percentage < 75 %}#FEF2F2{% else %}#F0FDF4{% endif %};">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                </div>
             </div>
             <div class="kpi-value" style="color:{% if student.attendance_percentage < 75 %}var(--danger){% else %}var(--success){% endif %};">
                 {{ student.attendance_percentage|floatformat:1 }}%
             </div>
             <div class="kpi-trend {% if student.attendance_percentage < 75 %}negative{% else %}positive{% endif %}">
-                <span>{% if student.attendance_percentage < 75 %}⚠️ Below 75% Statutory Floor{% else %}✓ Compliant Standing{% endif %}</span>
+                <span>{% if student.attendance_percentage < 75 %}Below 75% Statutory Floor{% else %}Compliant Standing{% endif %}</span>
             </div>
         </div>
 
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">AI Academic Health</span>
-                <div class="kpi-icon-wrap">🛡️</div>
+                <div class="kpi-icon-wrap" style="display:flex; align-items:center; justify-content:center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
             </div>
             <div class="kpi-value">
                 {% if risk_assessment %}
@@ -75,7 +81,9 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Active Backlogs</span>
-                <div class="kpi-icon-wrap" style="color:var(--warning); background:#FFFBEB;">⚠️</div>
+                <div class="kpi-icon-wrap" style="display:flex; align-items:center; justify-content:center; color:var(--warning); background:#FFFBEB;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+                </div>
             </div>
             <div class="kpi-value" style="color:{% if student.past_failures_count > 0 %}var(--warning){% else %}var(--success){% endif %};">
                 {{ student.past_failures_count|default:0 }}
@@ -90,7 +98,10 @@
     <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; margin-bottom: 2.5rem;">
         <div class="card-light">
             <div class="card-header-clean">
-                <h3 class="card-title-clean">🌟 Student Experience Score</h3>
+                <h3 class="card-title-clean" style="display:flex; align-items:center; gap:0.5rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-primary);"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    Student Experience Score
+                </h3>
             </div>
             <div style="font-size: 2.5rem; font-weight: 800; color: var(--brand-electric); font-family: 'Outfit'; margin-bottom: 0.35rem;">
                 89 / 100
@@ -102,7 +113,10 @@
 
         <div class="card-light">
             <div class="card-header-clean">
-                <h3 class="card-title-clean">🎯 Profile Skills & Interests</h3>
+                <h3 class="card-title-clean" style="display:flex; align-items:center; gap:0.5rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-primary);"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    Profile Skills &amp; Interests
+                </h3>
             </div>
             <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
                 <div style="margin-bottom: 0.75rem;">
@@ -110,7 +124,7 @@
                     <span style="font-size: 0.82rem; color: var(--text-muted);">{{ student.skills|default:"Python, Machine Learning, Data Structures, Web Development" }}</span>
                 </div>
                 <div>
-                    <strong>Interests & Extracurriculars:</strong><br>
+                    <strong>Interests &amp; Extracurriculars:</strong><br>
                     <span style="font-size: 0.82rem; color: var(--text-muted);">{{ student.interests|default:"Robotics, Hackathons, AI Research, Open Source" }}</span>
                 </div>
             </div>
@@ -118,5 +132,86 @@
     </div>
     {% endif %}
 
+
+    <!-- Facilities & Campus Portal Grid -->
+    <div class="card-light" style="margin-bottom: 2.5rem;">
+        <div class="card-header-clean" style="margin-bottom: 1.5rem;">
+            <h3 class="card-title-clean" style="display:flex; align-items:center; gap:0.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-primary);"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>
+                Student Portal &amp; Campus Facilities
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Access centralized campus resources, facilities, and navigation.</p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+            <!-- Campus Map -->
+            <a href="{% url 'common:map' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s; cursor: pointer;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+                <span style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:#EFF6FF; color:#2563EB; margin-bottom: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg>
+                </span>
+                <span style="font-weight: 600; color: var(--text-primary);">Campus Map</span>
+            </a>
+            
+            <!-- Timetable & Academics -->
+            <a href="{% url 'students:list' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+                <span style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:#F0FDF4; color:#16A34A; margin-bottom: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                </span>
+                <span style="font-weight: 600; color: var(--text-primary);">Timetable</span>
+            </a>
+
+            <!-- Canteen -->
+            <a href="{% url 'canteen:dashboard' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+                <span style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:#FFFBEB; color:#D97706; margin-bottom: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8Z"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 21.8 6.4-6.3"/><path d="m19 5-7 7"/></svg>
+                </span>
+                <span style="font-weight: 600; color: var(--text-primary);">Canteen</span>
+            </a>
+
+            <!-- Library -->
+            <a href="{% url 'common:map' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+                <span style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:#F5F3FF; color:#7C3AED; margin-bottom: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+                </span>
+                <span style="font-weight: 600; color: var(--text-primary);">Library</span>
+            </a>
+
+            <!-- Transport & Bus -->
+            <a href="{% url 'transport:dashboard' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+                <span style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:#EFF6FF; color:#2563EB; margin-bottom: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.6 19 6 17.8 6H5.2C4 6 2.9 6.6 2.6 7.8L1.2 12.8c-.1.4-.2.8-.2 1.2 0 .4.1.8.2 1.2C1.5 16.3 2 18 2 18h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>
+                </span>
+                <span style="font-weight: 600; color: var(--text-primary);">Transport</span>
+            </a>
+
+            <!-- Smart Parking -->
+            <a href="{% url 'parking:dashboard' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+                <span style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:#F0FDF4; color:#16A34A; margin-bottom: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+                </span>
+                <span style="font-weight: 600; color: var(--text-primary);">Parking</span>
+            </a>
+
+            <!-- Complaints -->
+            <a href="{% url 'complaints:submit' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+                <span style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:#FEF2F2; color:#DC2626; margin-bottom: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/></svg>
+                </span>
+                <span style="font-weight: 600; color: var(--text-primary);">Complaints</span>
+            </a>
+
+            <!-- Conditional Hostel Access -->
+            {% if student.accommodation_type == 'hostel' %}
+            <a href="{% url 'hostel:dashboard' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #EEF2FF; border: 1px solid #C7D2FE; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#E0E7FF'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#EEF2FF'; this.style.transform='translateY(0)';">
+                <span style="display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:10px; background:#E0E7FF; color:#4338CA; margin-bottom: 0.75rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </span>
+                <span style="font-weight: 600; color: var(--brand-primary);">My Hostel</span>
+                <span style="font-size: 0.7rem; color: var(--brand-primary); margin-top: 0.25rem; font-weight: 500;">{{ student.assigned_hostel.code|default:"Access Portal" }}</span>
+            </a>
+            {% endif %}
+            
+        </div>
+    </div>
 </div>
 {% endblock %}

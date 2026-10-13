@@ -10,7 +10,7 @@
     <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #FAF5FF 100%);">
         <div style="max-width: 750px;">
             <div class="hero-pill" style="margin-bottom: 0.5rem;">
-                <span>🧠</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 0-5 5v14a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5Z"/></svg>
                 <span>Deterministic Machine Learning Architecture · End-to-End Governance</span>
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
@@ -31,7 +31,7 @@
         <div class="card-light" style="padding: 1.25rem; border-left: 4px solid var(--brand-electric);">
             <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">Total Inferences Logged</div>
             <div style="font-size: 1.85rem; font-weight: 800; color: var(--text-primary);">{{ total_predictions }}</div>
-            <div style="font-size: 0.78rem; color: #10B981; font-weight: 600; margin-top: 0.25rem;">⚡ Real-time DB Persistence</div>
+            <div style="font-size: 0.78rem; color: #10B981; font-weight: 600; margin-top: 0.25rem; display:inline-flex; align-items:center; gap:0.25rem;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Real-time DB Persistence</div>
         </div>
 
         <div class="card-light" style="padding: 1.25rem; border-left: 4px solid #8B5CF6;">
@@ -49,7 +49,7 @@
         <div class="card-light" style="padding: 1.25rem; border-left: 4px solid {% if DATA_MODE == 'LIVE' %}#10B981{% else %}#F59E0B{% endif %};">
             <div style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 0.25rem;">Data Pipeline Mode</div>
             <div style="font-size: 1.15rem; font-weight: 800; color: {% if DATA_MODE == 'LIVE' %}#059669{% else %}#D97706{% endif %}; margin-top: 0.35rem;">
-                {% if DATA_MODE == 'LIVE' %}🟢 LIVE CAMPUS TELEMETRY{% else %}🟠 BENCHMARK / SIMULATED MODE{% endif %}
+                {% if DATA_MODE == 'LIVE' %}● LIVE CAMPUS TELEMETRY{% else %}● BENCHMARK / SIMULATED MODE{% endif %}
             </div>
             <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Zero ML Fabrication Guaranteed</div>
         </div>
@@ -105,8 +105,9 @@
                             <span class="ai-badge ai-confidence">● Active</span>
                         </td>
                         <td style="padding: 1rem 0.5rem; text-align: right;">
-                            <a href="{% url 'analytics:retrain_model' model_name %}" class="btn btn-secondary btn-sm" onclick="return confirm('Retrain {{ model_name }} pipeline now?');">
-                                🔄 Retrain
+                            <a href="{% url 'analytics:retrain_model' model_name %}" class="btn btn-secondary btn-sm" onclick="return confirm('Retrain {{ model_name }} pipeline now?');" style="display:inline-flex; align-items:center; gap:0.35rem;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                                <span>Retrain</span>
                             </a>
                         </td>
                     </tr>
@@ -226,7 +227,7 @@
                         PSI: {{ drift.drift_score|floatformat:4 }}
                     </span>
                     <div style="font-size: 0.7rem; color: {% if drift.is_drift_detected %}#EF4444{% else %}#10B981{% endif %};">
-                        {% if drift.is_drift_detected %}⚠️ Retrain Alert{% else %}✓ Stable{% endif %}
+                        {% if drift.is_drift_detected %}Retrain Alert{% else %}Stable{% endif %}
                     </div>
                 </div>
             </div>

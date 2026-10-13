@@ -23,11 +23,11 @@
 
         <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
             <a href="{% url 'analytics:model_registry' %}" class="btn btn-secondary">
-                <span>🧠</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 21v-2"/><path d="M9 3v2"/></svg>
                 <span>Model Registry</span>
             </a>
             <a href="{% url 'academics:risk_dashboard' %}" class="btn btn-primary">
-                <span>🛡️</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
                 <span>Academic Risk AI</span>
             </a>
         </div>
@@ -43,7 +43,7 @@
                 <span style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; font-family: 'Outfit';">88</span>
             </div>
             <div>
-                <span class="ai-badge ai-insight" style="margin-bottom: 0.3rem;">🧠 Composite AI Metric</span>
+                <span class="ai-badge ai-insight" style="margin-bottom: 0.3rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:3px;"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 21v-2"/><path d="M9 3v2"/></svg>Composite AI Metric</span>
                 <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.2rem;">Campus Intelligence Score</h3>
                 <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
                     Evaluated from academic retention, transit punctuality, and automated complaint resolution SLA.
@@ -57,7 +57,7 @@
                 <span style="font-size: 1.6rem; font-weight: 800; color: #FFFFFF; font-family: 'Outfit';">92</span>
             </div>
             <div>
-                <span class="ai-badge ai-confidence" style="margin-bottom: 0.3rem;">🌱 Green Campus</span>
+                <span class="ai-badge ai-confidence" style="margin-bottom: 0.3rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:3px;"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>Green Campus</span>
                 <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.2rem;">Sustainability Score</h3>
                 <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
                     -18% canteen over-preparation waste, 0 nocturnal leaks detected, 94% recyclable waste sorted.
@@ -73,7 +73,7 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Enrolled Students</span>
-                <div class="kpi-icon-wrap">🎓</div>
+                <div class="kpi-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg></div>
             </div>
             <div class="kpi-value">{{ total_students|default:520 }}</div>
             <div class="kpi-trend positive">
@@ -85,7 +85,7 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">High Academic Risk</span>
-                <div class="kpi-icon-wrap" style="color:var(--danger); background:#FEF2F2;">🛡️</div>
+                <div class="kpi-icon-wrap" style="color:var(--danger); background:#FEF2F2;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div>
             </div>
             <div class="kpi-value" style="color:var(--danger);">{{ risk_high|default:0 }}</div>
             <div class="kpi-trend neutral">
@@ -97,7 +97,7 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Open Grievances</span>
-                <div class="kpi-icon-wrap" style="color:var(--warning); background:#FFFBEB;">🛠️</div>
+                <div class="kpi-icon-wrap" style="color:var(--warning); background:#FFFBEB;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg></div>
             </div>
             <div class="kpi-value" style="color:var(--warning);">{{ open_complaints|default:12 }}</div>
             <div class="kpi-trend negative">
@@ -108,7 +108,7 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Fleet Occupancy</span>
-                <div class="kpi-icon-wrap" style="color:var(--brand-cyan); background:#F0F9FF;">🚌</div>
+                <div class="kpi-icon-wrap" style="color:var(--brand-cyan); background:#F0F9FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="3" rx="2"/><circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/><path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h20"/><path d="M4 18v3"/><path d="M20 18v3"/></svg></div>
             </div>
             <div class="kpi-value" style="color:var(--brand-electric);">{{ avg_bus_occupancy|default:68 }}%</div>
             <div class="kpi-trend positive">
@@ -119,7 +119,7 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Parking Utilization</span>
-                <div class="kpi-icon-wrap" style="color:var(--success); background:#F0FDF4;">🚗</div>
+                <div class="kpi-icon-wrap" style="color:var(--success); background:#F0FDF4;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg></div>
             </div>
             <div class="kpi-value" style="color:var(--success);">{{ parking_occ_pct|default:72 }}%</div>
             <div class="kpi-trend neutral">
@@ -130,7 +130,7 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Energy Anomaly Alerts</span>
-                <div class="kpi-icon-wrap" style="color:{% if active_anomalies > 0 %}var(--danger){% else %}var(--success){% endif %};">⚡</div>
+                <div class="kpi-icon-wrap" style="color:{% if active_anomalies > 0 %}var(--danger){% else %}var(--success){% endif %};"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
             </div>
             <div class="kpi-value" style="color:{% if active_anomalies > 0 %}var(--danger){% else %}var(--success){% endif %};">
                 {{ active_anomalies|default:0 }}
@@ -210,7 +210,7 @@
         <div class="card-light">
             <div class="card-header-clean">
                 <div>
-                    <span class="ai-badge ai-prediction" style="margin-bottom:0.25rem;">✨ ML Classification</span>
+                    <span class="ai-badge ai-prediction" style="margin-bottom:0.25rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:3px;"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg>ML Classification</span>
                     <h3 class="card-title-clean">Academic Risk Cohort</h3>
                 </div>
             </div>
@@ -228,7 +228,7 @@
         <div class="card-light">
             <div class="card-header-clean">
                 <div>
-                    <span class="ai-badge ai-insight" style="margin-bottom:0.25rem;">📊 Multi-Horizon Stream</span>
+                    <span class="ai-badge ai-insight" style="margin-bottom:0.25rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:3px;"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>Multi-Horizon Stream</span>
                     <h3 class="card-title-clean">Campus Activity Overview</h3>
                 </div>
                 <select class="form-select-light" onchange="updateChartFilter(this.value)">

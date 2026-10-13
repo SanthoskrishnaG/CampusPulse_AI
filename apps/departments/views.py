@@ -20,7 +20,18 @@ def department_dashboard(request):
     from apps.complaints.models import Complaint
     from apps.academics.models import AcademicRiskAssessment
 
+
     student_count = Student.objects.filter(department=current_dept).count() if current_dept else 0
+    faculty_count = Faculty.objects.filter(department=current_dept).count() if current_dept else 0
+    complaints_count = Complaint.objects.filter(target_department__icontains=current_dept.name).count() if current_dept else 0
+
+    from apps.common.models import CampusLocation
+    from apps.events.models import Event
+    
+    lab_count = CampusLocation.objects.filter(category='LABORATORY', department_id=current_dept.id).count() if current_dept else 0
+    classroom_count = CampusLocation.objects.filter(category='ACADEMIC_BLOCK', department_id=current_dept.id).count() if current_dept else 0
+    event_count = Event.objects.filter(organizing_department=current_dept).count() if current_dept else 0
+
     faculty_count = Faculty.objects.filter(department=current_dept).count() if current_dept else 0
     complaints_count = Complaint.objects.filter(target_department__icontains=current_dept.name).count() if current_dept else 0
 
@@ -46,6 +57,9 @@ def department_dashboard(request):
         'low_risk_count': low_risk_count,
         'announcements': announcements,
         'resources': resources,
+        'lab_count': lab_count,
+        'classroom_count': classroom_count,
+        'event_count': event_count,
     }
     return render(request, 'departments/dashboard.html', context)
 

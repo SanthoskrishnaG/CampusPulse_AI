@@ -1,19 +1,23 @@
 {% extends 'base.html' %}
 
-{% block title %}Department Dashboard - CampusPulse AI{% endblock %}
+{% block title %}Department Operations Dashboard - CampusPulse AI{% endblock %}
 
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
     <div>
-        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🏛️ Department Operations Dashboard</h1>
+        <div class="hero-pill" style="margin-bottom: 0.5rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9h1"/><path d="M9 13h1"/><path d="M9 17h1"/></svg>
+            <span>Department Operations Hub</span>
+        </div>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">Command Center</h1>
         <p style="color: var(--text-secondary); font-size: 0.95rem;">
-            Academic risk breakdown, faculty allocations, and departmental tickets.
+            Academic risk breakdown, faculty allocations, facilities, and departmental tickets.
         </p>
     </div>
     
     <!-- Department Switcher -->
     <div>
-        <select onchange="window.location.href='?dept=' + this.value;" class="form-select" style="min-width: 200px;">
+        <select onchange="window.location.href='?dept=' + this.value;" class="form-select" style="min-width: 200px; padding: 0.75rem 1rem; border-radius: 12px; font-weight: 600; box-shadow: var(--shadow-sm);">
             {% for d in departments %}
             <option value="{{ d.code }}" {% if current_dept.code == d.code %}selected{% endif %}>{{ d.name }} ({{ d.code }})</option>
             {% endfor %}
@@ -22,34 +26,61 @@
 </div>
 
 {% if current_dept %}
-<div class="metric-grid">
-    <div class="metric-card">
+<div class="metric-grid" style="margin-bottom: 2.5rem;">
+    <a href="{% url 'students:list' %}" class="metric-card" style="text-decoration: none; cursor: pointer;">
         <div class="metric-label">Enrolled Students</div>
         <div class="metric-value">{{ student_count }}</div>
-        <div class="metric-sub">{{ current_dept.name }}</div>
-    </div>
-    <div class="metric-card">
+        <div class="metric-sub" style="color: var(--text-muted);">{{ current_dept.name }}</div>
+    </a>
+    
+    <a href="{% url 'faculty:list' %}" class="metric-card" style="text-decoration: none; cursor: pointer;">
         <div class="metric-label">Faculty Staff</div>
         <div class="metric-value" style="color: var(--accent-blue);">{{ faculty_count }}</div>
-        <div class="metric-sub">HOD: {{ current_dept.hod_name|default:"Prof. In-Charge" }}</div>
-    </div>
-    <div class="metric-card">
+        <div class="metric-sub" style="color: var(--text-muted);">HOD: {{ current_dept.hod_name|default:"Prof. In-Charge" }}</div>
+    </a>
+
+    <a href="{% url 'academics:risk_dashboard' %}" class="metric-card" style="text-decoration: none; cursor: pointer;">
         <div class="metric-label">High Academic Risk</div>
         <div class="metric-value" style="color: var(--accent-rose);">{{ high_risk_count }}</div>
-        <div class="metric-sub">{{ medium_risk_count }} Moderate | {{ low_risk_count }} Low Risk</div>
-    </div>
-    <div class="metric-card">
+        <div class="metric-sub" style="color: var(--text-muted);">{{ medium_risk_count }} Moderate | {{ low_risk_count }} Low Risk</div>
+    </a>
+
+    <a href="{% url 'complaints:list' %}" class="metric-card" style="text-decoration: none; cursor: pointer;">
         <div class="metric-label">Open Complaints</div>
         <div class="metric-value" style="color: var(--accent-amber);">{{ complaints_count }}</div>
-        <div class="metric-sub">Classroom & Lab Facilities</div>
-    </div>
+        <div class="metric-sub" style="color: var(--text-muted);">Classroom & Lab Facilities</div>
+    </a>
+</div>
+
+<!-- Facilities & Resources Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+    <a href="{% url 'departments:detail' current_dept.pk %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+        <div style="margin-bottom: 0.75rem; color: var(--brand-electric);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg></div>
+        <span style="font-weight: 600; color: var(--text-primary);">Classrooms</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">{{ classroom_count }} Verified</span>
+    </a>
+    <a href="{% url 'departments:detail' current_dept.pk %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+        <div style="margin-bottom: 0.75rem; color: var(--brand-cyan);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0-14 0"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.08-4.1a2 2 0 0 0-3.2 0L12 15"/></svg></div>
+        <span style="font-weight: 600; color: var(--text-primary);">Laboratories</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">{{ lab_count }} Verified</span>
+    </a>
+    <a href="{% url 'events:list' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+        <div style="margin-bottom: 0.75rem; color: var(--brand-primary);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <span style="font-weight: 600; color: var(--text-primary);">Events</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">{{ event_count }} Scheduled</span>
+    </a>
+    <a href="{% url 'projects:list' %}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; color: inherit; transition: all 0.2s;" onmouseover="this.style.background='#F1F5F9'; this.style.transform='translateY(-2px)';" onmouseout="this.style.background='#F8FAFC'; this.style.transform='translateY(0)';">
+        <div style="margin-bottom: 0.75rem; color: var(--brand-indigo, #6366F1);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <span style="font-weight: 600; color: var(--text-primary);">Projects</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Active Capstones</span>
+    </a>
 </div>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
     <!-- Announcements -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">📢 Department Notices</h3>
+    <div class="card-light">
+        <div class="card-header-clean">
+            <h3 class="card-title-clean" style="display:flex; align-items:center; gap:0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg> Department Notices</h3>
         </div>
         {% for a in announcements %}
         <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
@@ -58,25 +89,25 @@
             <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.3rem;">{{ a.created_at|date:"M d, Y" }}</div>
         </div>
         {% empty %}
-        <p style="color: var(--text-muted); font-size: 0.85rem;">No active department notices.</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; padding: 1rem 0;">No active department notices.</p>
         {% endfor %}
     </div>
 
     <!-- Academic Resources -->
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">📂 Syllabus & Lab Manuals</h3>
+    <div class="card-light">
+        <div class="card-header-clean">
+            <h3 class="card-title-clean" style="display:flex; align-items:center; gap:0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 8 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg> Syllabus & Lab Manuals</h3>
         </div>
         {% for r in resources %}
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
             <div>
-                <div style="font-weight: 600; font-size: 0.9rem;">{{ r.title }}</div>
+                <div style="font-weight: 600; font-size: 0.9rem; color: var(--brand-primary);">{{ r.title }}</div>
                 <div style="font-size: 0.75rem; color: var(--text-muted);">{{ r.get_resource_type_display }}</div>
             </div>
             <a href="{{ r.link|default:'#' }}" class="btn btn-secondary btn-sm" target="_blank">Download</a>
         </div>
         {% empty %}
-        <p style="color: var(--text-muted); font-size: 0.85rem;">No uploaded course materials.</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; padding: 1rem 0;">No uploaded course materials.</p>
         {% endfor %}
     </div>
 </div>

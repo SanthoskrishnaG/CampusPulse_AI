@@ -44,7 +44,8 @@ urlpatterns = [
     path('api/ml/', include('apps.analytics.api_urls')),
 
     # AI Intelligence & Notification
-    path('assistant/', include('apps.ai_assistant.urls', namespace='ai_assistant')),
+    path('ai-companion/', include('apps.ai_assistant.urls', namespace='ai_assistant')),
+    path('assistant/', include(('apps.ai_assistant.urls', 'ai_assistant_legacy'), namespace='ai_assistant_legacy')),
     path('notifications/', include('apps.notifications.urls', namespace='notifications')),
     path('analytics/', include('apps.analytics.urls', namespace='analytics')),
 ]

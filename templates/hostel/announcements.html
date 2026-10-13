@@ -9,7 +9,7 @@
     <div class="card" style="padding: 1.8rem 2rem; border-radius: 18px; margin-bottom: 1.8rem; background: linear-gradient(135deg, rgba(2,132,199,0.06), rgba(37,99,235,0.03)); border: 1px solid rgba(37,99,235,0.15); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.35rem;">
-                <span style="font-size: 1.6rem;">📢</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#2563EB;"><path d="m3 11 18-5v12L3 14v-3z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg>
                 <h1 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin: 0;">
                     Hostel Announcements Bulletin
                 </h1>
@@ -23,7 +23,7 @@
         </div>
         <div style="display: flex; gap: 0.6rem;">
             <a href="{% url 'hostel:dashboard' %}" class="btn btn-secondary btn-sm" style="border-radius: 8px;">
-                « Back to Dashboard
+                &laquo; Back to Dashboard
             </a>
         </div>
     </div>
@@ -53,7 +53,7 @@
         </div>
         {% empty %}
         <div class="card" style="padding: 3rem; text-align: center; border-radius: 14px; border: 1px solid var(--border-color);">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem;">✨</div>
+            <div style="display:flex; justify-content:center; margin-bottom: 0.75rem;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted);"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
             <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.3rem;">
                 No active announcements
             </h3>

@@ -81,12 +81,12 @@ def home_view(request):
     campus_intelligence_score = 88
     sustainability_score = 91
 
-    # AI Alert Center items
+    # AI Alert Center items (clean icon keys)
     ai_alerts = [
-        {"icon": "🚗", "text": "Smart Parking: Lot A occupancy expected to peak at 85% by 5:30 PM", "type": "warning"},
-        {"icon": "⚡", "text": "Energy AI: Block C telemetry indicates 8% above seasonal baseline", "type": "info"},
-        {"icon": "🍽️", "text": "Canteen AI: Tomorrow lunch demand projected at 760 meals (-3.2% food waste)", "type": "success"},
-        {"icon": "🚌", "text": "Transport: Bus 12 operating on schedule with 78% passenger load", "type": "info"},
+        {"icon": "parking", "text": "Smart Parking: Lot A occupancy expected to peak at 85% by 5:30 PM", "type": "warning"},
+        {"icon": "energy", "text": "Energy AI: Block C telemetry indicates 8% above seasonal baseline", "type": "info"},
+        {"icon": "canteen", "text": "Canteen AI: Tomorrow lunch demand projected at 760 meals (-3.2% food waste)", "type": "success"},
+        {"icon": "transport", "text": "Transport: Bus 12 operating on schedule with 78% passenger load", "type": "info"},
     ]
 
     # Live database queries for CIT 3D Digital Twin Hotspot Telemetry
@@ -177,7 +177,8 @@ def map_view(request):
     Interactive Leaflet AI Campus Map with all campus locations.
     """
     locations = CampusLocation.objects.filter(is_active=True)
-    return render(request, 'common/map.html', {'locations': locations})
+    from django.conf import settings
+    return render(request, 'common/map.html', {'locations': locations, 'GOOGLE_MAPS_API_KEY': getattr(settings, 'GOOGLE_MAPS_API_KEY', '')})
 
 def map_locations_api(request):
     """
@@ -194,6 +195,84 @@ def campus_config_api(request):
     """
     from config.campus_config import CAMPUS_CONFIG
     return JsonResponse(CAMPUS_CONFIG)
+
+def campus_health_api(request):
+    """
+    Unified Campus AI Health & Operations Telemetry API.
+    Aggregates live health scores, active workloads, and alerts across:
+    1) Hostel Residents & Facilities
+    2) Complaints AI Triage & SLA Escalation
+    3) Academic Risk Early-Warning Predictor
+    4) Smart Transport & Fleet Simulation
+    """
+    from apps.hostel.models import HostelRoom, HostelOutPass, HostelMessAttendance
+    from apps.complaints.models import Complaint
+    from apps.academics.models import AcademicRiskAssessment, AcademicIntervention
+    from apps.transport.models import Bus
+
+    # 1. Hostel Telemetry
+    total_rooms = HostelRoom.objects.count()
+    occupied_rooms = HostelRoom.objects.filter(occupied__gt=0).count()
+    hostel_occupancy_pct = round((occupied_rooms / max(total_rooms, 1)) * 100, 1)
+    pending_outpasses = HostelOutPass.objects.filter(status=HostelOutPass.Status.PENDING).count()
+    today_meals = HostelMessAttendance.objects.count()
+
+    # 2. Complaints Telemetry
+    open_complaints = Complaint.objects.exclude(status__in=['RESOLVED', 'REJECTED']).count()
+    escalated_complaints = Complaint.objects.filter(priority='CRITICAL').exclude(status__in=['RESOLVED', 'REJECTED']).count()
+    triaged_auto = Complaint.objects.filter(confidence__gte=0.7).count()
+
+    # 3. Academic Risk Telemetry
+    assessed_cohort = AcademicRiskAssessment.objects.count()
+    high_risk_students = AcademicRiskAssessment.objects.filter(risk_level='HIGH').count()
+    active_interventions = AcademicIntervention.objects.filter(
+        status__in=[AcademicIntervention.Status.PENDING, AcademicIntervention.Status.IN_PROGRESS]
+    ).count()
+
+    # 4. Fleet Telemetry
+    active_buses = Bus.objects.filter(is_active=True).count()
+    sim_speed = SIMULATION_STATE.get('speed', 1.0)
+    sim_running = SIMULATION_STATE.get('running', True)
+
+    overall_health = 98 if (escalated_complaints == 0 and pending_outpasses < 5) else 95
+
+    return JsonResponse({
+        'status': 'healthy',
+        'health_index': overall_health,
+        'subsystems': {
+            'hostel': {
+                'name': 'Hostel Resident Portal & Facilities',
+                'status': 'ONLINE',
+                'occupancy_pct': hostel_occupancy_pct,
+                'pending_outpasses': pending_outpasses,
+                'today_meals': today_meals,
+                'url': '/hostel/rooms/'
+            },
+            'complaints': {
+                'name': 'Complaints AI Engine & SLA Triage',
+                'status': 'ONLINE',
+                'open_tickets': open_complaints,
+                'critical_escalated': escalated_complaints,
+                'auto_triaged': triaged_auto,
+                'url': '/complaints/dashboard/'
+            },
+            'academics': {
+                'name': 'Academic Risk Predictor & Interventions',
+                'status': 'ONLINE',
+                'evaluated_cohort': assessed_cohort,
+                'high_risk_alerts': high_risk_students,
+                'active_interventions': active_interventions,
+                'url': '/academics/risk-dashboard/'
+            },
+            'transport': {
+                'name': 'Smart Transport & Fleet Tracker (R-01 - R-04)',
+                'status': 'ONLINE' if sim_running else 'PAUSED',
+                'active_fleet': f'{active_buses} Buses Active',
+                'sim_speed': f'{sim_speed}x',
+                'url': '/transport/dashboard/'
+            }
+        }
+    })
 
 
 @csrf_exempt
@@ -363,3 +442,15 @@ def global_search_api(request):
 
     return JsonResponse({'results': results})
 
+
+@csrf_exempt
+def campus_routing_api(request):
+    """
+    API to fetch nodes and edges for 2D pedestrian pathfinding.
+    """
+    from .models import CampusNode, CampusEdge
+    if request.method in ('GET', 'HEAD'):
+        nodes = list(CampusNode.objects.values('node_id', 'latitude', 'longitude', 'node_type'))
+        edges = list(CampusEdge.objects.values('from_node__node_id', 'to_node__node_id', 'distance', 'path_type', 'is_accessible', 'estimated_time'))
+        return JsonResponse({'status': 'success', 'nodes': nodes, 'edges': edges})
+    return JsonResponse({'status': 'error', 'message': 'Invalid method'}, status=405)

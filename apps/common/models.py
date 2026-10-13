@@ -110,3 +110,29 @@ class HallBooking(models.Model):
     
     def __str__(self):
         return f"{self.hall.name} booked by {self.booked_by.username}"
+
+class CampusNode(models.Model):
+    """
+    Graph node for 2D internal campus pedestrian navigation routing.
+    """
+    node_id = models.CharField(max_length=50, unique=True)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    node_type = models.CharField(max_length=50, default='pedestrian')
+
+    def __str__(self):
+        return self.node_id
+
+class CampusEdge(models.Model):
+    """
+    Graph edge connecting two CampusNodes for pathfinding.
+    """
+    from_node = models.ForeignKey(CampusNode, related_name='outgoing_edges', on_delete=models.CASCADE)
+    to_node = models.ForeignKey(CampusNode, related_name='incoming_edges', on_delete=models.CASCADE)
+    distance = models.FloatField(help_text='Distance in meters')
+    path_type = models.CharField(max_length=50, default='Walkway')
+    is_accessible = models.BooleanField(default=True)
+    estimated_time = models.IntegerField(help_text='Time in seconds', default=60)
+
+    def __str__(self):
+        return f"{self.from_node} -> {self.to_node}"

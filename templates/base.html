@@ -13,9 +13,14 @@
     
     <!-- Chart.js & Google Maps -->
     <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&libraries=places,geometry"></script>
+    
 
+    <!-- Leaflet GIS & Mapping -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Outline Icon Library -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="/static/css/style.css">
     {% block extra_head %}{% endblock %}
 </head>
@@ -41,93 +46,241 @@
 
             <nav class="sidebar-nav">
                 <a href="{% url 'common:home' %}" class="nav-link nav-link-pill {% if request.path == '/' or 'analytics' in request.path %}active-pill{% endif %}">
-                    <span class="nav-icon">📊</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="9" x="3" y="3" rx="1"/>
+                            <rect width="7" height="5" x="14" y="3" rx="1"/>
+                            <rect width="7" height="9" x="14" y="12" rx="1"/>
+                            <rect width="7" height="5" x="3" y="16" rx="1"/>
+                        </svg>
+                    </span>
                     <span>Dashboard</span>
                 </a>
 
                 <div class="nav-section-title">Institutional Core</div>
                 <a href="{% url 'departments:list' %}" class="nav-link {% if 'departments' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🏛️</span><span>Departments</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 22h16"/>
+                            <path d="M4 10h16"/>
+                            <path d="M6 10v12"/>
+                            <path d="M10 10v12"/>
+                            <path d="M14 10v12"/>
+                            <path d="M18 10v12"/>
+                            <path d="M12 2 2 7v3h20V7z"/>
+                        </svg>
+                    </span><span>Departments</span>
                 </a>
                 <a href="{% url 'faculty:list' %}" class="nav-link {% if 'faculty' in request.path %}active{% endif %}">
-                    <span class="nav-icon">👨‍🏫</span><span>Faculty</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </span><span>Faculty</span>
                 </a>
                 <a href="{% url 'students:list' %}" class="nav-link {% if 'students' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🎓</span><span>Students</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
+                        </svg>
+                    </span><span>Students</span>
                 </a>
                 <a href="{% url 'academics:risk_dashboard' %}" class="nav-link {% if 'academics' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🛡️</span><span>Academic Risk AI</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            <path d="M12 8v4"/>
+                            <path d="M12 16h.01"/>
+                        </svg>
+                    </span><span>Academic Risk AI</span>
+                </a>
+                <a href="{% url 'ai_assistant:chat' %}" class="nav-link {% if 'ai-companion' in request.path or 'assistant' in request.path %}active{% endif %}" id="navAiCompanion">
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="16" height="12" x="4" y="8" rx="2"/>
+                            <path d="M12 2v6"/>
+                            <path d="M2 14h2"/>
+                            <path d="M20 14h2"/>
+                            <path d="M9 13v2"/>
+                            <path d="M15 13v2"/>
+                        </svg>
+                    </span><span>AI Companion</span>
                 </a>
                 <a href="{% url 'common:map' %}" class="nav-link {% if request.resolver_match.view_name == 'common:map' %}active{% endif %}">
-                    <span class="nav-icon">🗺️</span><span>Campus Map</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/>
+                            <path d="M9 3v15"/>
+                            <path d="M15 6v15"/>
+                        </svg>
+                    </span><span>Campus Map</span>
                 </a>
 
                 <div class="nav-section-title">Student Engagement</div>
                 <a href="{% url 'events:list' %}" class="nav-link {% if 'events' in request.path %}active{% endif %}">
-                    <span class="nav-icon">📅</span><span>Events & Workshops</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                            <line x1="16" x2="16" y1="2" y2="6"/>
+                            <line x1="8" x2="8" y1="2" y2="6"/>
+                            <line x1="3" x2="21" y1="10" y2="10"/>
+                        </svg>
+                    </span><span>Events & Workshops</span>
                 </a>
                 <a href="{% url 'clubs:list' %}" class="nav-link {% if 'clubs' in request.path %}active{% endif %}">
-                    <span class="nav-icon">✨</span><span>Campus Clubs</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>
+                        </svg>
+                    </span><span>Campus Clubs</span>
                 </a>
                 <a href="{% url 'projects:list' %}" class="nav-link {% if 'projects' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🚀</span><span>Projects & Teams</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+                            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+                            <path d="M9 12H4s.55-3.03 2-4.5c1.62-1.63 5-2.5 5-2.5"/>
+                            <path d="M12 15v5s3.03-.55 4.5-2c1.63-1.62 2.5-5 2.5-5"/>
+                        </svg>
+                    </span><span>Projects & Teams</span>
                 </a>
                 <a href="{% url 'recommendations:hub' %}" class="nav-link {% if 'recommendations' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🎯</span><span>AI Recommendations</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <circle cx="12" cy="12" r="6"/>
+                            <circle cx="12" cy="12" r="2"/>
+                        </svg>
+                    </span><span>AI Recommendations</span>
                 </a>
                 <a href="{% url 'recommendations:hub' %}#career" class="nav-link">
-                    <span class="nav-icon">💼</span><span>Career Guidance</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                        </svg>
+                    </span><span>Career Guidance</span>
                 </a>
 
                 <div class="nav-section-title">Smart Campus Operations</div>
                 <a href="{% url 'complaints:list' %}" class="nav-link {% if 'complaints' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🛠️</span><span>Complaints AI</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                        </svg>
+                    </span><span>Complaints AI</span>
                 </a>
                 <a href="{% url 'transport:dashboard' %}" class="nav-link {% if 'transport' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🚌</span><span>Smart Transport</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M8 6v6"/>
+                            <path d="M16 6v6"/>
+                            <path d="M2 12h20"/>
+                            <path d="M4 18v3"/>
+                            <path d="M20 18v3"/>
+                            <rect width="20" height="15" x="2" y="3" rx="2"/>
+                            <circle cx="7" cy="15" r="1"/>
+                            <circle cx="17" cy="15" r="1"/>
+                        </svg>
+                    </span><span>Smart Transport</span>
                 </a>
                 <a href="{% url 'traffic:dashboard' %}" class="nav-link {% if 'traffic' in request.path %}active{% endif %}">
-                    <span class="nav-icon">📹</span><span>Traffic & Vehicles</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m22 8-6 4 6 4V8Z"/>
+                            <rect width="14" height="12" x="2" y="6" rx="2" ry="2"/>
+                        </svg>
+                    </span><span>Traffic & Vehicles</span>
                 </a>
                 <a href="{% url 'parking:dashboard' %}" class="nav-link {% if 'parking' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🚗</span><span>Smart Parking</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="18" x="3" y="3" rx="2"/>
+                            <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
+                        </svg>
+                    </span><span>Smart Parking</span>
                 </a>
                 <a href="{% url 'canteen:dashboard' %}" class="nav-link {% if 'canteen' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🍽️</span><span>Canteen & Food</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/>
+                            <path d="M15 11v11"/>
+                            <path d="M5 2v8a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V2"/>
+                            <path d="M8 13v9"/>
+                        </svg>
+                    </span><span>Canteen & Food</span>
                 </a>
                 <a href="{% url 'waste:dashboard' %}" class="nav-link {% if 'waste' in request.path %}active{% endif %}">
-                    <span class="nav-icon">♻️</span><span>Waste Segregation</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/>
+                            <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/>
+                            <path d="m14 16 3 3 3-3"/>
+                            <path d="M8.293 13.596 5.5 9.5 8.293 5.404"/>
+                            <path d="m17.5 9.5-3.5-6h-3.83a1.83 1.83 0 0 0-1.57.881 1.785 1.785 0 0 0-.004 1.784L10 9"/>
+                        </svg>
+                    </span><span>Waste Segregation</span>
                 </a>
                 <a href="{% url 'energy:dashboard' %}" class="nav-link {% if 'energy' in request.path %}active{% endif %}">
-                    <span class="nav-icon">💡</span><span>Energy Monitoring</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </span><span>Energy Monitoring</span>
                 </a>
                 {% if can_access_hostel %}
                 <a href="{% url 'hostel:dashboard' %}" class="nav-link {% if 'hostel' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🏠</span><span>Hostel Facilities</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </span><span>Hostel Facilities</span>
                 </a>
                 {% endif %}
 
-
                 <div class="nav-section-title">Analytics & Admin</div>
                 <a href="{% url 'analytics:dashboard' %}" class="nav-link {% if 'analytics' in request.path %}active{% endif %}">
-                    <span class="nav-icon">📈</span><span>Reports & Analytics</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3v18h18"/>
+                            <path d="m19 9-5 5-4-4-3 3"/>
+                        </svg>
+                    </span><span>Reports & Analytics</span>
                 </a>
                 <a href="{% url 'notifications:list' %}" class="nav-link {% if 'notifications' in request.path %}active{% endif %}">
-                    <span class="nav-icon">🔔</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                        </svg>
+                    </span>
                     <span>Notifications</span>
-                    {% if unread_notifications_count > 0 %}
-                    <span style="background:#EF4444; color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.45rem; border-radius:10px; margin-left:auto;">{{ unread_notifications_count }}</span>
-                    {% endif %}
-                </a>
-                <a href="{% url 'ai_assistant:chat' %}" class="nav-link {% if 'assistant' in request.path %}active{% endif %}">
-                    <span class="nav-icon">💬</span><span>AI Assistant</span>
+                    <span id="sidebarNotificationBadge" style="background:#EF4444; color:#fff; font-size:0.65rem; font-weight:700; padding:0.1rem 0.45rem; border-radius:10px; margin-left:auto; {% if unread_notifications_count == 0 %}display:none;{% endif %}">{{ unread_notifications_count }}</span>
                 </a>
                 <a href="{% url 'analytics:model_registry' %}" class="nav-link {% if 'models' in request.path %}active{% endif %}">
-                    <span class="nav-icon">⚙️</span><span>System Settings</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                    </span><span>System Settings</span>
                 </a>
                 {% if user.is_authenticated and user.is_super_admin %}
                 <a href="{% url 'common:audit_logs' %}" class="nav-link">
-                    <span class="nav-icon">📜</span><span>System Audit Logs</span>
+                    <span class="nav-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" x2="8" y1="13" y2="13"/>
+                            <line x1="16" x2="8" y1="17" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                    </span><span>System Audit Logs</span>
                 </a>
                 {% endif %}
             </nav>
@@ -148,12 +301,21 @@
                 <div class="topbar-left">
                     <!-- Mobile Hamburger -->
                     <button id="mobileMenuBtn" class="btn btn-secondary btn-sm" style="display:none; padding:0.4rem 0.6rem;" onclick="document.getElementById('sidebar').classList.toggle('mobile-open')">
-                        ☰
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" x2="20" y1="12" y2="12"/>
+                            <line x1="4" x2="20" y1="6" y2="6"/>
+                            <line x1="4" x2="20" y1="18" y2="18"/>
+                        </svg>
                     </button>
 
                     <!-- Global AI Search Trigger (Ctrl+K) -->
                     <div class="global-search-bar" onclick="openSearchModal()">
-                        <span style="color:var(--text-muted); font-size:0.9rem;">🔍</span>
+                        <span style="color:var(--text-muted); display:inline-flex; align-items:center;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.3-4.3"/>
+                            </svg>
+                        </span>
                         <input type="text" class="global-search-input" placeholder="Search students, events, classrooms, buses, complaints..." readonly>
                         <span class="search-kbd">Ctrl K</span>
                     </div>
@@ -162,7 +324,11 @@
                 <div class="topbar-right">
                     <!-- Weather Card Pill -->
                     <div class="weather-pill-modern" title="Coimbatore Microclimate (CIT Campus: {{ CAMPUS_LAT }}, {{ CAMPUS_LNG }})">
-                        <span style="font-size:1.1rem;">⛅</span>
+                        <span style="display:inline-flex; align-items:center; color:#0284C7;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-4.128"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/>
+                            </svg>
+                        </span>
                         <span style="font-size:0.82rem; font-weight:700; color:#1E293B;">{{ current_weather.temperature|default:'28' }}°C</span>
                         <span style="font-size:0.78rem; color:#64748B;">Coimbatore • {{ current_weather.condition|default:'Pleasant' }}</span>
                     </div>
@@ -174,7 +340,12 @@
                             <span>AI Engine &bull; Online</span>
                         </div>
                         <div class="ai-engine-dropdown">
-                            <div class="ai-engine-dropdown-title">⚡ Campus AI Engine Telemetry</div>
+                            <div class="ai-engine-dropdown-title" style="display:flex; align-items:center; gap:6px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                                </svg>
+                                <span>Campus AI Engine Telemetry</span>
+                            </div>
                             <div class="ai-model-status-row">
                                 <span>Academic Risk Ensemble</span>
                                 <span style="color:#22C55E; font-weight:700;">● Online</span>
@@ -203,26 +374,25 @@
                     </div>
 
                     <!-- Notifications Icon with Dynamic Badge -->
-                    <a href="{% url 'notifications:list' %}" class="notif-btn-modern" title="Notifications">
-                        <span style="font-size:1rem;">🔔</span>
-                        {% if unread_notifications_count > 0 %}
-                        <span class="notif-badge-pill">{{ unread_notifications_count }}</span>
-                        {% else %}
-                        <span class="notif-badge-pill">3</span>
-                        {% endif %}
+                    <a href="{% url 'notifications:list' %}" class="notif-btn-modern" title="Notifications" style="display:inline-flex; align-items:center; justify-content:center;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#475569;">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                        </svg>
+                        <span class="notif-badge-pill" id="navNotificationBadge" style="{% if unread_notifications_count == 0 %}display:none;{% endif %}">{{ unread_notifications_count }}</span>
                     </a>
 
                     <!-- Fast Demo Role Switcher -->
                     <select onchange="if(this.value) window.location.href='/accounts/demo-login/' + this.value + '/';" class="role-select-pill" title="Switch Demo Role Instantly">
                         <option value="">Role ▾</option>
-                        <option value="SUPER_ADMIN">👑 Super Admin</option>
-                        <option value="FACULTY">👨‍🏫 Faculty</option>
-                        <option value="STUDENT">🎓 Student</option>
-                        <option value="DEPARTMENT_ADMIN">🏛️ Dept Admin (HOD)</option>
-                        <option value="CLUB_ADMIN">✨ Club Lead</option>
-                        <option value="TRANSPORT_MANAGER">🚌 Transport Mgr</option>
-                        <option value="CANTEEN_MANAGER">🍽️ Canteen Mgr</option>
-                        <option value="MAINTENANCE_STAFF">🛠️ Maintenance</option>
+                        <option value="SUPER_ADMIN">Super Admin</option>
+                        <option value="FACULTY">Faculty</option>
+                        <option value="STUDENT">Student</option>
+                        <option value="DEPARTMENT_ADMIN">Dept Admin (HOD)</option>
+                        <option value="CLUB_ADMIN">Club Lead</option>
+                        <option value="TRANSPORT_MANAGER">Transport Mgr</option>
+                        <option value="CANTEEN_MANAGER">Canteen Mgr</option>
+                        <option value="MAINTENANCE_STAFF">Maintenance</option>
                     </select>
 
                     <!-- User Profile Avatar & Dropdown -->
@@ -241,6 +411,7 @@
 
             <!-- Page Content -->
             <main class="content-wrapper">
+                <div style="display:none;" id="globalCsrfContainer">{% csrf_token %}</div>
                 {% if messages %}
                 <div class="messages-container" style="margin-bottom:1.25rem;">
                     {% for message in messages %}
@@ -257,8 +428,12 @@
             <!-- App Footer -->
             <footer class="app-footer-modern">
                 <div class="footer-left">
-                    <span class="footer-brand">
-                        <span style="color:#2563EB;">🎓</span> CampusPulse AI <span style="color:#94A3B8; font-size:0.8rem; font-weight:400; margin-left:0.35rem;">v1.0.0</span>
+                    <span class="footer-brand" style="display:inline-flex; align-items:center; gap:0.4rem;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
+                        </svg>
+                        CampusPulse AI <span style="color:#94A3B8; font-size:0.8rem; font-weight:400; margin-left:0.35rem;">v1.0.0</span>
                     </span>
                 </div>
                 <div class="footer-center">
@@ -268,64 +443,28 @@
                     <span>People &bull; Progress &bull; A Better Campus</span>
                 </div>
                 <div class="footer-right">
-                    <span>Made with <span style="color:#EF4444;">❤️</span> for Education</span>
+                    <span>Made with <svg width="14" height="14" viewBox="0 0 24 24" fill="#EF4444" stroke="none" style="vertical-align:middle; display:inline-block;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg> for Education</span>
                 </div>
             </footer>
         </div>
     </div>
 
-    <!-- Floating 3D AI Assistant Widget -->
-    <div class="floating-ai-btn" id="floatingAiBtn" onclick="toggleAiDrawer()" title="Campus AI Assistant">
+    <!-- Floating 3D AI Assistant Widget (Navigates to dedicated AI Companion page) -->
+    <a href="{% url 'ai_assistant:chat' %}" class="floating-ai-btn" id="floatingAiBtn" title="Campus AI Companion" {% if 'ai-companion' in request.path or 'assistant' in request.path %}style="display:none;"{% endif %}>
         {% campus_3d_visual 'ai_mascot' 42 42 %}
         <span class="floating-ai-badge">AI</span>
-    </div>
-
-    <!-- AI Assistant Drawer -->
-    <div class="ai-drawer" id="aiDrawer">
-        <div class="ai-drawer-header">
-            <div style="display:flex; align-items:center; gap:0.65rem;">
-                <div style="width:36px; height:36px; border-radius:50%; background:var(--brand-gradient); display:flex; align-items:center; justify-content:center;">
-                    🤖
-                </div>
-                <div>
-                    <h4 style="font-size:0.95rem; font-weight:700;">Campus AI Assistant</h4>
-                    <span style="font-size:0.7rem; color:var(--text-muted);">Ask anything about your campus</span>
-                </div>
-            </div>
-            <button onclick="toggleAiDrawer()" style="background:none; border:none; font-size:1.25rem; color:var(--text-muted); cursor:pointer;">&times;</button>
-        </div>
-
-        <div class="ai-drawer-body" id="drawerChatMessages">
-            <div class="chat-bubble ai">
-                Hello <strong>{{ user.first_name|default:'there' }}</strong>! 👋 I am the CampusPulse AI Assistant. How can I help you today?
-            </div>
-            <div style="display:flex; flex-direction:column; gap:0.4rem; margin-top:0.5rem;">
-                <span style="font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Suggested Inquiries:</span>
-                <button class="btn btn-secondary btn-sm" style="text-align:left; justify-content:flex-start; font-size:0.75rem;" onclick="sendDrawerPrompt('What events are happening this week?')">
-                    📅 What events are happening this week?
-                </button>
-                <button class="btn btn-secondary btn-sm" style="text-align:left; justify-content:flex-start; font-size:0.75rem;" onclick="sendDrawerPrompt('Show current bus locations and ETAs')">
-                    🚌 Show current bus locations and ETAs
-                </button>
-                <button class="btn btn-secondary btn-sm" style="text-align:left; justify-content:flex-start; font-size:0.75rem;" onclick="sendDrawerPrompt('What is the current parking availability?')">
-                    🚗 What is the current parking availability?
-                </button>
-            </div>
-        </div>
-
-        <div class="ai-drawer-footer">
-            <div style="display:flex; gap:0.5rem;">
-                <input type="text" id="drawerInput" class="form-select-light" style="flex:1; border-radius:var(--radius-md); padding:0.6rem 0.85rem;" placeholder="Ask campus AI..." onkeydown="if(event.key==='Enter') sendDrawerMessage()">
-                <button class="btn btn-primary btn-sm" onclick="sendDrawerMessage()">Send</button>
-            </div>
-        </div>
-    </div>
+    </a>
 
     <!-- Global Search Modal (Ctrl + K) -->
     <div class="search-modal-backdrop" id="searchModal" onclick="if(event.target===this) closeSearchModal()">
         <div class="search-modal-box">
             <div class="search-modal-header">
-                <span style="font-size:1.1rem; color:var(--brand-cyan);">🔍</span>
+                <span style="color:var(--brand-cyan); display:inline-flex; align-items:center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.3-4.3"/>
+                    </svg>
+                </span>
                 <input type="text" id="modalSearchInput" class="search-modal-input" placeholder="Search students, events, classrooms, buses, complaints..." oninput="handleGlobalSearch(this.value)">
                 <span class="search-kbd" onclick="closeSearchModal()" style="cursor:pointer;">ESC</span>
             </div>
@@ -390,71 +529,67 @@
             }, 250);
         }
 
-        // Floating AI Assistant Drawer Toggle
-        function toggleAiDrawer() {
-            document.getElementById('aiDrawer').classList.toggle('open');
-        }
-
-        function sendDrawerPrompt(promptText) {
-            document.getElementById('drawerInput').value = promptText;
-            sendDrawerMessage();
-        }
-
-        function sendDrawerMessage() {
-            const input = document.getElementById('drawerInput');
-            const msg = input.value.trim();
-            if (!msg) return;
-
-            const chat = document.getElementById('drawerChatMessages');
-            chat.innerHTML += `<div class="chat-bubble user">${msg}</div>`;
-            input.value = '';
-
-            // Progressive AI processing animation
-            const thinkingId = 'thinking_' + Date.now();
-            chat.innerHTML += `
-                <div class="chat-bubble ai" id="${thinkingId}">
-                    <div class="ai-processing-state" id="${thinkingId}_status">
-                        <span class="pulse-dot-live"></span>
-                        <span id="${thinkingId}_text">Analyzing campus data...</span>
-                    </div>
-                </div>
-            `;
-            chat.scrollTop = chat.scrollHeight;
-
-            const t1 = setTimeout(() => {
-                const el = document.getElementById(thinkingId + '_text');
-                if (el) el.innerText = 'Checking relevant records & telemetry...';
-            }, 350);
-
-            const t2 = setTimeout(() => {
-                const el = document.getElementById(thinkingId + '_text');
-                if (el) el.innerText = 'Generating insight with ML model...';
-            }, 750);
-
-            fetch('/assistant/api/chat/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: msg })
-            })
-            .then(res => res.json())
-            .then(data => {
-                clearTimeout(t1);
-                clearTimeout(t2);
-                const bubble = document.getElementById(thinkingId);
-                if (bubble) {
-                    bubble.innerHTML = data.response || "I was unable to retrieve that campus data right now.";
+        // Global CSRF Cookie/Token Getter
+        window.getCookie = function(name) {
+            if (name === 'csrftoken') {
+                const tokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+                if (tokenInput && tokenInput.value) {
+                    return tokenInput.value;
                 }
-                chat.scrollTop = chat.scrollHeight;
-            })
-            .catch(() => {
-                clearTimeout(t1);
-                clearTimeout(t2);
-                const bubble = document.getElementById(thinkingId);
-                if (bubble) {
-                    bubble.innerHTML = "Campus AI Assistant is operating in telemetry fallback mode. All institutional boundaries remain active.";
+            }
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
-            });
-        }
+            }
+            return cookieValue;
+        };
+
+        // Global Real-Time Notification Badge Synchronization
+        window.updateNotificationBadges = function(count) {
+            const num = parseInt(count, 10) || 0;
+            const navBadge = document.getElementById('navNotificationBadge');
+            const sidebarBadge = document.getElementById('sidebarNotificationBadge');
+
+            if (navBadge) {
+                navBadge.textContent = num;
+                navBadge.style.display = num > 0 ? 'inline-block' : 'none';
+            }
+            if (sidebarBadge) {
+                sidebarBadge.textContent = num;
+                sidebarBadge.style.display = num > 0 ? 'inline-block' : 'none';
+            }
+        };
+
+        window.syncNotificationCount = async function() {
+            try {
+                const res = await fetch('{% url "notifications:api_unread_count" %}');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.status === 'ok') {
+                        window.updateNotificationBadges(data.count);
+                    }
+                }
+            } catch (err) {
+                // Keep current state on network failure without inventing mock counts
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+            {% if user.is_authenticated %}
+            window.syncNotificationCount();
+            setInterval(window.syncNotificationCount, 20000);
+            {% endif %}
+        });
     </script>
     {% block scripts %}{% endblock %}
 </body>

@@ -4,25 +4,47 @@
 {% block title %}Academic Risk AI & Early Intervention - CampusPulse AI{% endblock %}
 
 {% block content %}
+{% csrf_token %}
 <div style="max-width: 1300px; margin: 0 auto;">
 
     <!-- Compact Page Hero with 3D Visual -->
     <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #EEF2FF 100%);">
-        <div style="max-width: 650px;">
+        <div style="max-width: 700px;">
             <div class="hero-pill" style="margin-bottom: 0.5rem;">
-                <span>🛡️</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
                 <span>Dual-Tier Predictive Learning Analytics</span>
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
                 Academic Risk AI<br>
                 <span class="gradient-ai" style="font-size: 1.85rem;">Predict. Understand. Intervene.</span>
             </h1>
-            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5; margin-bottom: 1.25rem;">
                 Ensemble Random Forest & 5-Week sequential trajectory deep neural networks flagging early course failure risks before midterm examinations.
             </p>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <button id="btnAutoDispatch" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%); border: none; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25); display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    <span>Auto-Dispatch High-Risk Interventions</span>
+                </button>
+                <button id="btnRunInference" class="btn btn-secondary btn-sm" style="border: 1px solid #CBD5E1; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4.5c1.62-1.63 5-2.5 5-2.5"/><path d="M12 15v5s3.03-.55 4.5-2c1.63-1.62 2.5-5 2.5-5"/></svg>
+                    <span>Run ML Cohort Assessment</span>
+                </button>
+            </div>
         </div>
         <div style="flex-shrink: 0;">
             {% campus_3d_visual 'academic_risk' 160 110 %}
+        </div>
+    </div>
+
+    <!-- Live Status Banner -->
+    <div id="dispatchAlertBanner" style="display: none; padding: 1rem 1.25rem; border-radius: 12px; margin-bottom: 1.5rem; background: #FEF2F2; border: 1px solid #FCA5A5; color: #991B1B;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <strong id="dispatchAlertMsg">Automated interventions successfully triggered.</strong>
+            </div>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background:none; border:none; color:#991B1B; cursor:pointer; font-weight:700; font-size:1rem;">&times;</button>
         </div>
     </div>
 
@@ -30,13 +52,15 @@
     {% ai_data_flow "Student Attendance & Marks" "Ensemble Random Forest" "Course Failure Risk" "Faculty Mentoring" "Timely Intervention" %}
 
     <!-- Risk Metrics KPI Grid -->
-    <div class="kpi-grid">
+    <div class="kpi-grid" style="margin-bottom: 1.5rem;">
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Evaluated Cohort</span>
-                <div class="kpi-icon-wrap">🎓</div>
+                <div class="kpi-icon-wrap">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg>
+                </div>
             </div>
-            <div class="kpi-value">{{ total_assessed|default:500 }}</div>
+            <div class="kpi-value">{{ total_assessed|default:1550 }}</div>
             <div class="kpi-trend positive">
                 <span>Active Semesters 1-8</span>
             </div>
@@ -45,33 +69,52 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">High Risk Alert</span>
-                <div class="kpi-icon-wrap" style="color:var(--danger); background:#FEF2F2;">⚠️</div>
+                <div class="kpi-icon-wrap" style="color:var(--danger); background:#FEF2F2;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
             </div>
-            <div class="kpi-value" style="color:var(--danger);">{{ high_risk_count|default:12 }}</div>
+            <div class="kpi-value" style="color:var(--danger);">{{ high_risk_count|default:0 }}</div>
             <div class="kpi-trend negative">
-                <span>Faculty Mentoring Required</span>
+                <span>Critical Interventions Needed</span>
             </div>
         </div>
 
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Moderate Risk</span>
-                <div class="kpi-icon-wrap" style="color:var(--warning); background:#FFFBEB;">⚡</div>
+                <div class="kpi-icon-wrap" style="color:var(--warning); background:#FFFBEB;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
             </div>
-            <div class="kpi-value" style="color:var(--warning);">{{ med_risk_count|default:34 }}</div>
+            <div class="kpi-value" style="color:var(--warning);">{{ med_risk_count|default:0 }}</div>
             <div class="kpi-trend neutral">
-                <span>Attendance Follow-Up</span>
+                <span>Attendance Monitoring</span>
             </div>
         </div>
 
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Healthy Progression</span>
-                <div class="kpi-icon-wrap" style="color:var(--success); background:#F0FDF4;">✓</div>
+                <div class="kpi-icon-wrap" style="color:var(--success); background:#F0FDF4;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
             </div>
-            <div class="kpi-value" style="color:var(--success);">{{ low_risk_count|default:454 }}</div>
+            <div class="kpi-value" style="color:var(--success);">{{ low_risk_count|default:0 }}</div>
             <div class="kpi-trend positive">
                 <span>Standard Trajectory</span>
+            </div>
+        </div>
+
+        <div class="kpi-card-light">
+            <div class="kpi-header">
+                <span class="kpi-title">Active Interventions</span>
+                <div class="kpi-icon-wrap" style="color:#6366F1; background:#EEF2FF;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/></svg>
+                </div>
+            </div>
+            <div class="kpi-value" style="color:#4F46E5;">{{ active_interventions_count|default:0 }}</div>
+            <div class="kpi-trend positive">
+                <span>In-Flight Mentoring</span>
             </div>
         </div>
     </div>
@@ -114,40 +157,46 @@
                     <th>Risk Classification</th>
                     <th>Risk Score</th>
                     <th>Explainable AI Contributing Factors</th>
-                    <th>Action</th>
+                    <th style="text-align: right;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in assessments %}
                 <tr>
                     <td>
-                        <div style="font-weight: 700; font-size: 0.92rem;">
-                            {{ item.student.user.get_full_name|default:item.student.user.username }}
+                        <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">
+                            {{ item.student.user.get_full_name|default:item.student.student_id }}
                         </div>
-                        <div style="font-size: 0.78rem; color: var(--text-muted);">
-                            Roll: {{ item.student.roll_number }} · {{ item.student.department.code }} (Sem {{ item.student.current_semester }})
+                        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+                            ID: <code>{{ item.student.student_id }}</code> · {{ item.student.department.code }} (Sem {{ item.student.semester }})
+                        </div>
+                        <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">
+                            CGPA: <strong>{{ item.student.cgpa }}</strong> · Att: <strong>{{ item.student.attendance_percentage }}%</strong>
                         </div>
                     </td>
                     <td>
                         {% if item.risk_level == 'HIGH' %}
-                        <span class="ai-badge ai-alert">⚠️ HIGH RISK</span>
+                        <span class="ai-badge ai-alert" style="font-weight: 800;">High Risk</span>
                         {% elif item.risk_level == 'MEDIUM' %}
-                        <span class="ai-badge" style="background:#FFFBEB; border-color:#FDE68A; color:#B45309;">⚡ MODERATE</span>
+                        <span class="ai-badge" style="background:#FFFBEB; border-color:#FDE68A; color:#B45309; font-weight: 700;">Moderate Risk</span>
                         {% else %}
-                        <span class="ai-badge ai-confidence">✓ LOW RISK</span>
+                        <span class="ai-badge ai-confidence" style="font-weight: 700;">Low Risk</span>
                         {% endif %}
                     </td>
                     <td>
-                        <div style="font-weight: 800; font-size: 1rem; color: {% if item.risk_level == 'HIGH' %}var(--danger){% elif item.risk_level == 'MEDIUM' %}var(--warning){% else %}var(--success){% endif %};">
-                            {{ item.risk_score|floatformat:3 }}
+                        <div style="font-weight: 800; font-size: 1.05rem; color: {% if item.risk_level == 'HIGH' %}var(--danger){% elif item.risk_level == 'MEDIUM' %}var(--warning){% else %}var(--success){% endif %};">
+                            {{ item.risk_score|floatformat:1 }}%
+                        </div>
+                        <div style="width: 70px; height: 5px; background: #E2E8F0; border-radius: 3px; overflow: hidden; margin-top: 4px;">
+                            <div style="width: {{ item.risk_score }}%; height: 100%; background: {% if item.risk_level == 'HIGH' %}var(--danger){% elif item.risk_level == 'MEDIUM' %}var(--warning){% else %}var(--success){% endif %};"></div>
                         </div>
                     </td>
                     <td>
-                        <div style="font-size: 0.82rem; color: var(--text-secondary); max-width: 480px; line-height: 1.4;">
-                            {% if item.contributing_factors_list %}
-                            <ul style="padding-left: 1.2rem; margin: 0;">
-                                {% for factor in item.contributing_factors_list %}
-                                <li>{{ factor }}</li>
+                        <div style="font-size: 0.82rem; color: var(--text-secondary); max-width: 480px; line-height: 1.45;">
+                            {% if item.get_factors %}
+                            <ul style="padding-left: 1.15rem; margin: 0;">
+                                {% for factor in item.get_factors %}
+                                <li style="margin-bottom: 2px;">{{ factor }}</li>
                                 {% endfor %}
                             </ul>
                             {% else %}
@@ -155,9 +204,14 @@
                             {% endif %}
                         </div>
                     </td>
-                    <td>
-                        <a href="{% url 'students:detail' item.student.id %}" class="btn btn-secondary btn-sm">
-                            Inspect Profile ➔
+                    <td style="text-align: right; white-space: nowrap;">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="openStudentAnalyticsModal('{{ item.student.student_id }}')" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                            <span>Analytics Deep Dive</span>
+                        </button>
+                        <a href="{% url 'students:detail' item.student.student_id %}" class="btn btn-primary btn-sm" style="margin-left: 0.35rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+                            <span>Profile</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                         </a>
                     </td>
                 </tr>
@@ -174,5 +228,296 @@
         </table>
     </div>
 
+    <!-- Clean Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1.5rem; margin-bottom: 2rem;">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if selected_dept %}&dept={{ selected_dept }}{% endif %}{% if selected_risk %}&risk={{ selected_risk }}{% endif %}" class="btn btn-secondary btn-sm">◀ Previous</a>
+        {% endif %}
+
+        <span style="font-size: 0.85rem; color: var(--text-secondary); padding: 0 0.5rem;">
+            Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong> ({{ total_assessed }} students)
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if selected_dept %}&dept={{ selected_dept }}{% endif %}{% if selected_risk %}&risk={{ selected_risk }}{% endif %}" class="btn btn-secondary btn-sm">Next ▶</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
 </div>
+
+<!-- Interactive Student Analytics & Trajectory Modal -->
+<div id="analyticsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: #FFFFFF; border-radius: 16px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 2rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); position: relative;">
+        <button onclick="closeStudentAnalyticsModal()" style="position: absolute; top: 1.25rem; right: 1.25rem; background: none; border: none; font-size: 1.5rem; color: #64748B; cursor: pointer;">&times;</button>
+
+        <div id="analyticsModalLoading" style="text-align: center; padding: 3rem 1rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem; display: flex; justify-content: center;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+            </div>
+            <p style="font-weight: 600; color: var(--text-primary);">Loading student ML risk trajectory...</p>
+        </div>
+
+        <div id="analyticsModalContent" style="display: none;">
+            <!-- Modal Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #E2E8F0; padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
+                <div>
+                    <span id="modalDeptBadge" class="role-badge" style="background: #EEF2FF; color: #4F46E5; border: 1px solid #C7D2FE;">CSE</span>
+                    <h3 id="modalStudentName" style="font-size: 1.4rem; font-weight: 800; margin-top: 0.35rem; color: #0F172A;">Aarav Patel</h3>
+                    <div id="modalStudentMeta" style="font-size: 0.85rem; color: #64748B;">ID: STU2026-0001 · Semester 5 · CGPA 7.8</div>
+                </div>
+                <div style="text-align: right;">
+                    <div id="modalRiskBadge" class="ai-badge ai-alert" style="font-size: 0.9rem; padding: 0.35rem 0.85rem;">High Risk</div>
+                    <div id="modalRiskScore" style="font-size: 1.5rem; font-weight: 900; color: var(--danger); margin-top: 4px;">88.5%</div>
+                </div>
+            </div>
+
+            <!-- Explainable AI Drivers -->
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1E293B; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    <span>Explainable AI Primary Drivers</span>
+                </h4>
+                <ul id="modalFactorsList" style="padding-left: 1.2rem; margin: 0; font-size: 0.85rem; color: #475569; line-height: 1.6;">
+                </ul>
+                <div id="modalRecommendation" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed #CBD5E1; font-size: 0.82rem; color: #0284C7; font-weight: 600;">
+                </div>
+            </div>
+
+            <!-- 5-Week Temporal Trajectory -->
+            <div style="margin-bottom: 1.5rem;">
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1E293B; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    <span>5-Week Sequential Learning Trajectory (Deep LSTM/GRU)</span>
+                </h4>
+                <div class="table-container-light" style="margin-bottom: 0;">
+                    <table class="table-clean" style="font-size: 0.82rem;">
+                        <thead>
+                            <tr>
+                                <th>Week</th>
+                                <th>Attendance Rate</th>
+                                <th>Quiz Score</th>
+                                <th>Assignment Score</th>
+                                <th>LMS Engagement</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalTrajectoryTbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Interventions History -->
+            <div style="margin-bottom: 1.5rem;">
+                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1E293B; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/></svg>
+                    <span>Assigned Interventions</span>
+                </h4>
+                <div id="modalInterventionsList" style="font-size: 0.85rem; color: #64748B;">
+                </div>
+            </div>
+
+            <!-- Quick Action Form -->
+            <div style="border-top: 1px solid #E2E8F0; padding-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="closeStudentAnalyticsModal()">Close</button>
+                <a id="modalFullProfileBtn" href="#" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                    <span>Open Full Student Dossier</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btnAutoDispatch = document.getElementById('btnAutoDispatch');
+    const btnRunInference = document.getElementById('btnRunInference');
+    const alertBanner = document.getElementById('dispatchAlertBanner');
+    const alertMsg = document.getElementById('dispatchAlertMsg');
+
+    if (btnAutoDispatch) {
+        btnAutoDispatch.addEventListener('click', async () => {
+            btnAutoDispatch.disabled = true;
+            btnAutoDispatch.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Dispatching alerts & mentors...';
+
+            try {
+                const res = await fetch('{% url "academics:api_auto_interventions" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    alertMsg.textContent = data.message;
+                    alertBanner.style.display = 'block';
+                    alertBanner.style.background = '#ECFDF5';
+                    alertBanner.style.borderColor = '#6EE7B7';
+                    alertBanner.style.color = '#065F46';
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    alertMsg.textContent = data.message || 'Error executing automated interventions.';
+                    alertBanner.style.display = 'block';
+                }
+            } catch (err) {
+                console.error(err);
+                alertMsg.textContent = 'Server communication error.';
+                alertBanner.style.display = 'block';
+            } finally {
+                btnAutoDispatch.disabled = false;
+                btnAutoDispatch.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> <span>Auto-Dispatch High-Risk Interventions</span>';
+            }
+        });
+    }
+
+    if (btnRunInference) {
+        btnRunInference.addEventListener('click', async () => {
+            btnRunInference.disabled = true;
+            btnRunInference.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Running ML Model Pipeline...';
+
+            try {
+                const res = await fetch('{% url "academics:api_run_assessment" %}');
+                const data = await res.json();
+                if (data.status === 'success') {
+                    alertMsg.textContent = data.message;
+                    alertBanner.style.display = 'block';
+                    alertBanner.style.background = '#EFF6FF';
+                    alertBanner.style.borderColor = '#93C5FD';
+                    alertBanner.style.color = '#1E40AF';
+                    setTimeout(() => window.location.reload(), 1800);
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                btnRunInference.disabled = false;
+                btnRunInference.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4.5c1.62-1.63 5-2.5 5-2.5"/><path d="M12 15v5s3.03-.55 4.5-2c1.63-1.62 2.5-5 2.5-5"/></svg> <span>Run ML Cohort Assessment</span>';
+            }
+        });
+    }
+});
+
+function getCookie(name) {
+    if (name === 'csrftoken') {
+        const tokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (tokenInput && tokenInput.value) {
+            return tokenInput.value;
+        }
+    }
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+window.openStudentAnalyticsModal = async function(studentId) {
+    const modal = document.getElementById('analyticsModal');
+    const loading = document.getElementById('analyticsModalLoading');
+    const content = document.getElementById('analyticsModalContent');
+
+    modal.style.display = 'flex';
+    loading.style.display = 'block';
+    content.style.display = 'none';
+
+    try {
+        const res = await fetch(`/academics/api/student-analytics/${studentId}/`);
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            const s = data.student;
+            const a = data.assessment;
+
+            document.getElementById('modalDeptBadge').textContent = s.department_code;
+            document.getElementById('modalStudentName').textContent = s.name;
+            document.getElementById('modalStudentMeta').textContent = `ID: ${s.student_id} · Semester ${s.semester} · CGPA: ${s.cgpa} · Attendance: ${s.attendance_percentage}% · Backlogs: ${s.backlog_count}`;
+            document.getElementById('modalFullProfileBtn').href = `/students/${s.student_id}/`;
+
+            if (a) {
+                document.getElementById('modalRiskScore').textContent = `${a.risk_score}%`;
+                const badge = document.getElementById('modalRiskBadge');
+                if (a.risk_level === 'HIGH') {
+                    badge.className = 'ai-badge ai-alert';
+                    badge.textContent = 'High Risk';
+                } else if (a.risk_level === 'MEDIUM') {
+                    badge.className = 'ai-badge';
+                    badge.style.background = '#FFFBEB';
+                    badge.style.color = '#B45309';
+                    badge.textContent = 'Moderate Risk';
+                } else {
+                    badge.className = 'ai-badge ai-confidence';
+                    badge.textContent = 'Low Risk';
+                }
+
+                const fList = document.getElementById('modalFactorsList');
+                fList.innerHTML = '';
+                (a.factors || []).forEach(f => {
+                    const li = document.createElement('li');
+                    li.textContent = f;
+                    fList.appendChild(li);
+                });
+
+                document.getElementById('modalRecommendation').textContent = `Recommendation: ${a.recommended_action}`;
+            }
+
+            // Trajectory
+            const tbody = document.getElementById('modalTrajectoryTbody');
+            tbody.innerHTML = '';
+            if (data.weekly_records && data.weekly_records.length > 0) {
+                data.weekly_records.forEach(w => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>Week ${w.week}</strong></td>
+                        <td>${w.attendance}%</td>
+                        <td>${w.quiz}/100</td>
+                        <td>${w.assignment}/100</td>
+                        <td>${w.lms_hours} hrs</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#94A3B8;">No multi-week sequential records logged for this cohort.</td></tr>';
+            }
+
+            // Interventions
+            const iList = document.getElementById('modalInterventionsList');
+            iList.innerHTML = '';
+            if (data.interventions && data.interventions.length > 0) {
+                data.interventions.forEach(i => {
+                    const d = document.createElement('div');
+                    d.style.padding = '0.5rem 0.75rem';
+                    d.style.background = '#F8FAFC';
+                    d.style.borderRadius = '8px';
+                    d.style.marginBottom = '0.5rem';
+                    d.innerHTML = `<strong>${i.type}</strong> (${i.status}) - <span style="color:#64748B;">${i.date}</span><br><span style="font-size:0.8rem; color:#475569;">${i.notes}</span>`;
+                    iList.appendChild(d);
+                });
+            } else {
+                iList.innerHTML = '<span style="color:#94A3B8;">No prior interventions assigned.</span>';
+            }
+
+            loading.style.display = 'none';
+            content.style.display = 'block';
+        }
+    } catch (err) {
+        console.error(err);
+        loading.innerHTML = '<p style="color:var(--danger);">Error loading student analytics.</p>';
+    }
+};
+
+window.closeStudentAnalyticsModal = function() {
+    document.getElementById('analyticsModal').style.display = 'none';
+};
+</script>
 {% endblock %}

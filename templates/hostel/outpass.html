@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% load static campus_3d %}
+
+{% block title %}Hostel Out-Pass Portal - {{ hostel.name }} - CampusPulse AI{% endblock %}
+
+{% block extra_head %}
+<style>
+    .pass-card-approved { border-color: #16A34A !important; }
+    .pass-card-pending { border-color: #EAB308 !important; }
+    .pass-card-default { border-color: #94A3B8 !important; }
+
+    .pass-badge-approved { background: #F0FDF4; color: #15803D; }
+    .pass-badge-pending { background: #FEFCE8; color: #A16207; }
+    .pass-badge-completed { background: #EFF6FF; color: #1D4ED8; }
+    .pass-badge-rejected { background: #FEF2F2; color: #B91C1C; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 1280px; margin: 0 auto;">
+
+    <!-- Hero Banner -->
+    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #E0F2FE 100%);">
+        <div style="max-width: 700px;">
+            <div class="hero-pill" style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-blue);"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="7" y2="8.01"></line><line x1="7" y1="12" x2="7" y2="12.01"></line><line x1="7" y1="16" x2="7" y2="16.01"></line></svg>
+                <span>{{ hostel.name|default:"CIT Residential Complex" }} • Digital Gate Verification</span>
+            </div>
+            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
+                Resident Out-Pass Portal<br>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Digital Approvals & RFID Campus Gate Sync</span>
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
+                Instant QR-verified day outings, weekend leave requests, and parent notification sync with CIT security checkpoints.
+            </p>
+        </div>
+        <div style="flex-shrink: 0;">
+            <a href="{% url 'hostel:dashboard' %}" class="btn btn-secondary btn-sm">Resident Hub</a>
+        </div>
+    </div>
+
+    <!-- Admin / Warden Oversight: Pending Approval Queue -->
+    {% if is_admin and pending_outpasses %}
+    <div class="card-light" style="margin-bottom: 2rem; border-left: 4px solid #EAB308; background: #FEFCE8;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#854D0E;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #854D0E;">Pending Warden Approvals ({{ pending_outpasses.count }})</h3>
+            </div>
+            <span class="ai-badge badge-ai-forecast">Action Required</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem;">
+            {% for op in pending_outpasses %}
+            <div style="background: #FFFFFF; border: 1px solid #FEF08A; border-radius: 8px; padding: 1.25rem; box-shadow: var(--shadow-xs);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                    <div>
+                        <strong style="color: #0F172A; font-size: 1rem;">{{ op.student.get_display_name }}</strong>
+                        <div style="font-size: 0.78rem; color: #64748B;">{{ op.student.student_id }} • Room {{ op.student.room_number|default:"Hostel" }}</div>
+                    </div>
+                    <span class="role-badge" style="background: #EFF6FF; color: #1D4ED8;">{{ op.get_pass_type_display }}</span>
+                </div>
+
+                <div style="font-size: 0.82rem; color: #334155; margin-bottom: 0.75rem; line-height: 1.5;">
+                    <div><strong>Destination:</strong> {{ op.destination }}</div>
+                    <div><strong>Reason:</strong> {{ op.reason }}</div>
+                    <div><strong>Return by:</strong> {{ op.expected_return_time|date:"d M, H:i" }}</div>
+                    <div><strong>Parent Contact:</strong> {{ op.parent_phone|default:"On File" }}</div>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem;">
+                    <form method="POST" action="{% url 'hostel:outpass_action' op.id %}" style="flex: 1;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="approve">
+                        <button type="submit" class="btn btn-primary btn-sm" style="width: 100%; background: #16A34A; border-color: #16A34A;">Approve</button>
+                    </form>
+                    <form method="POST" action="{% url 'hostel:outpass_action' op.id %}" style="flex: 1;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="reject">
+                        <button type="submit" class="btn btn-secondary btn-sm" style="width: 100%; color: #DC2626;">Reject</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Main Grid: Active Pass / Request Form -->
+    <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.75rem; margin-bottom: 2rem;">
+
+        <!-- Left Column: Request Form -->
+        <div class="card-light">
+            <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#2563EB;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                <span>Request New Out-Pass</span>
+            </h3>
+            <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                Submit departure details. Daytime outings are verified immediately. Weekend/home visits notify parent and resident warden.
+            </p>
+
+            <form method="POST" action="{% url 'hostel:outpass' %}">
+                {% csrf_token %}
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Pass Type *</label>
+                        <select name="pass_type" class="form-input" style="width: 100%;" required>
+                            {% for val, label in pass_types %}
+                            <option value="{{ val }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Destination City / Address *</label>
+                        <input type="text" name="destination" class="form-input" placeholder="e.g. Gandhipuram / Home (Tiruppur)" style="width: 100%;" required>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Departure Date & Time *</label>
+                        <input type="datetime-local" name="departure_time" class="form-input" style="width: 100%;" required>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Expected Return Date & Time *</label>
+                        <input type="datetime-local" name="expected_return_time" class="form-input" style="width: 100%;" required>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Resident Mobile Number</label>
+                        <input type="text" name="contact_phone" class="form-input" value="+91 98401 23456" style="width: 100%;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Parent / Guardian Emergency Contact</label>
+                        <input type="text" name="parent_phone" class="form-input" value="+91 94440 98765" style="width: 100%;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #334155; margin-bottom: 0.35rem;">Reason for Leave / Outing *</label>
+                    <textarea name="reason" class="form-input" rows="3" placeholder="State specific purpose (e.g. IEEE project supplies purchase, family function, medical consultation)..." style="width: 100%;" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Generate & Submit Digital Out-Pass
+                </button>
+            </form>
+        </div>
+
+        <!-- Right Column: Active Pass Verification Display -->
+        <div>
+            {% for pass in my_outpasses|slice:":1" %}
+            <div class="card-light {% if pass.status == 'APPROVED' %}pass-card-approved{% elif pass.status == 'PENDING' %}pass-card-pending{% else %}pass-card-default{% endif %}" style="border: 2px solid #94A3B8; position: relative; background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <span style="font-size: 0.76rem; font-weight: 800; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase;">CIT Security Digital Pass</span>
+                    <span class="ai-badge {% if pass.status == 'APPROVED' %}badge-ai-realtime{% elif pass.status == 'PENDING' %}badge-ai-forecast{% else %}badge-ai-detected{% endif %}">
+                        ● {{ pass.get_status_display }}
+                    </span>
+                </div>
+
+                <div style="text-align: center; padding: 0.5rem 0 1rem; border-bottom: 1px dashed #CBD5E1; margin-bottom: 1rem;">
+                    <div style="font-size: 1.45rem; font-weight: 800; color: #1E3A8A; font-family: monospace; letter-spacing: 0.08em;">
+                        {{ pass.pass_code }}
+                    </div>
+                    <div style="font-size: 0.78rem; color: #64748B;">{{ pass.student.get_display_name }} ({{ pass.student.student_id }})</div>
+                    <div style="font-size: 0.75rem; color: #2563EB; font-weight: 700;">{{ pass.hostel.name }} • Room {{ pass.student.room_number|default:"Resident" }}</div>
+                </div>
+
+                <!-- Simulated QR Verification Code -->
+                <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                    <div style="background: #FFFFFF; padding: 8px; border: 1px solid #E2E8F0; border-radius: 8px; text-align: center;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data={{ pass.pass_code }}|{{ pass.student.student_id }}|CIT_HOSTEL" alt="Security QR Code" style="width: 130px; height: 130px; display: block;">
+                        <span style="font-size: 0.68rem; color: #64748B; margin-top: 4px; display: block;">Scan at CIT Main Gate Terminal</span>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.8rem; color: #334155; line-height: 1.6; margin-bottom: 1rem;">
+                    <div><strong>Destination:</strong> {{ pass.destination }}</div>
+                    <div><strong>Departure:</strong> {{ pass.departure_time|date:"d M, H:i" }}</div>
+                    <div><strong>Expected Return:</strong> {{ pass.expected_return_time|date:"d M, H:i" }}</div>
+                    {% if pass.approval_notes %}
+                    <div style="margin-top: 0.35rem; padding: 4px 8px; background: #F0FDF4; border-radius: 4px; font-size: 0.74rem; color: #166534;">
+                        Note: {{ pass.approval_notes }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if is_admin and pass.status == 'APPROVED' %}
+                <form method="POST" action="{% url 'hostel:outpass_action' pass.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="return">
+                    <button type="submit" class="btn btn-secondary btn-sm" style="width: 100%;">
+                        Mark Returned at Security Desk
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="card-light" style="text-align: center; padding: 3rem 1.5rem;">
+                <div style="display:flex; justify-content:center; margin-bottom: 0.75rem;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted);"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="7" y2="8.01"></line><line x1="7" y1="12" x2="7" y2="12.01"></line><line x1="7" y1="16" x2="7" y2="16.01"></line></svg></div>
+                <h4 style="font-weight: 800; margin-bottom: 0.35rem;">No Active Out-Pass</h4>
+                <p style="font-size: 0.84rem; color: var(--text-muted);">You are currently checked in inside CIT campus quarters.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <!-- Out-Pass History Table -->
+    <div class="card-light">
+        <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem;">Recent Out-Pass Activity Log</h3>
+        <div style="overflow-x: auto;">
+            <table class="table-clean" style="width: 100%; font-size: 0.85rem;">
+                <thead>
+                    <tr style="border-bottom: 2px solid var(--border-subtle); text-align: left;">
+                        <th style="padding: 0.6rem;">Pass ID</th>
+                        <th style="padding: 0.6rem;">Resident</th>
+                        <th style="padding: 0.6rem;">Type</th>
+                        <th style="padding: 0.6rem;">Destination</th>
+                        <th style="padding: 0.6rem;">Departure</th>
+                        <th style="padding: 0.6rem;">Return</th>
+                        <th style="padding: 0.6rem;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in my_outpasses %}
+                    <tr style="border-bottom: 1px solid var(--border-subtle);">
+                        <td style="padding: 0.6rem; font-weight: 700; font-family: monospace; color: #2563EB;">{{ p.pass_code }}</td>
+                        <td style="padding: 0.6rem;">{{ p.student.get_display_name }} ({{ p.student.room_number|default:"Res" }})</td>
+                        <td style="padding: 0.6rem;">{{ p.get_pass_type_display }}</td>
+                        <td style="padding: 0.6rem;">{{ p.destination }}</td>
+                        <td style="padding: 0.6rem;">{{ p.departure_time|date:"d M, H:i" }}</td>
+                        <td style="padding: 0.6rem;">{{ p.expected_return_time|date:"d M, H:i" }}</td>
+                        <td style="padding: 0.6rem;">
+                            <span class="role-badge {% if p.status == 'APPROVED' %}pass-badge-approved{% elif p.status == 'PENDING' %}pass-badge-pending{% elif p.status == 'COMPLETED' %}pass-badge-completed{% else %}pass-badge-rejected{% endif %}">
+                                {{ p.get_status_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 2rem; color: var(--text-muted);">No out-pass records logged yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

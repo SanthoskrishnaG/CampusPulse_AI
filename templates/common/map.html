@@ -10,7 +10,7 @@
     <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #E0F2FE 100%);">
         <div style="max-width: 720px;">
             <div class="hero-pill" style="margin-bottom: 0.5rem;">
-                <span>🗺️</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px;"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
                 <span>Coimbatore Institute of Technology • Hope College / Peelamedu</span>
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
@@ -23,7 +23,7 @@
             </p>
         </div>
         <div style="flex-shrink: 0;">
-            {% campus_3d_visual 'transport' 150 100 %}
+            
         </div>
     </div>
 
@@ -32,28 +32,26 @@
         <!-- 2D / 3D Mode Selector -->
         <div style="display:flex; gap:0.5rem; background:#FFFFFF; border:1px solid var(--border-subtle); padding:0.35rem; border-radius:var(--radius-sm); box-shadow:var(--shadow-xs);">
             <button id="btn2dView" class="btn btn-primary btn-sm" onclick="switchMapView('2d')">
-                🗺️ 2D Campus Map & Routes
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg> 2D Campus Map & Routes
             </button>
-            <button id="btn3dView" class="btn btn-secondary btn-sm" onclick="switchMapView('3d')">
-                🏢 3D Isometric Twin
-            </button>
+            
         </div>
 
         <!-- Campus Search Bar -->
         <div style="display:flex; align-items:center; gap:0.5rem; flex-grow:1; max-width:440px; margin:0 0.5rem;">
             <div style="position:relative; width:100%;">
                 <input type="text" id="mapSearchInput" class="form-input" placeholder="Search CIT, CSE, Library, Canteen, Parking..." style="width:100%; padding:0.45rem 2rem 0.45rem 0.85rem; font-size:0.85rem; border-radius:8px;">
-                <span style="position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--text-muted); cursor:pointer;" onclick="executeMapSearch()">🔍</span>
+                <span style="position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--text-muted); cursor:pointer;" onclick="executeMapSearch()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
             </div>
             <button class="btn btn-secondary btn-sm" style="white-space:nowrap; padding:0.45rem 0.75rem;" onclick="focusCITCampus()">
-                🎯 CIT
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-right:3px;"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg> CIT
             </button>
         </div>
 
         <!-- Route Network Toggle & Telemetry Status -->
         <div style="display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap;">
             <button id="btnToggleRoutes" class="btn btn-secondary btn-sm" style="font-weight:700;" onclick="toggleAllCampusRoutes()">
-                🛣️ Show All Campus Routes
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a4.5 4.5 0 0 0 4.5-4.5v0A4.5 4.5 0 0 0 17.5 10H14"></path><path d="m11 7 3 3-3 3"></path></svg> Show All Campus Routes
             </button>
             <span class="ai-badge badge-ai-realtime">● CIT GPS Sync</span>
         </div>
@@ -71,7 +69,7 @@
                 </select>
             </div>
 
-            <span style="color: var(--brand-blue); font-weight: 800;">➔</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-blue);"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
 
             <div style="display: flex; align-items: center; gap: 0.4rem;">
                 <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">To:</span>
@@ -81,10 +79,10 @@
             </div>
 
             <button class="btn btn-primary btn-sm" onclick="calculateSelectedRoute()">
-                🚶 Find Route
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg> Find Route
             </button>
             <button id="btnClearRouteBtn" class="btn btn-secondary btn-sm" style="display: none;" onclick="clearActiveRoute()">
-                ✕ Clear
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Clear
             </button>
         </div>
 
@@ -96,40 +94,40 @@
     <!-- Category Filter Bar (All 27 Buildings/Components Categorized) -->
     <div class="cit-filter-bar" id="categoryFilterBar">
         <button class="cit-filter-btn active" onclick="filterByCategory('ALL', this)">
-            <span>🌐 All Locations</span> <span class="cit-filter-count" id="countAll">29</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> All Locations</span> <span class="cit-filter-count" id="countAll">29</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('DEPARTMENT', this)">
-            <span>🏢 Departments</span> <span class="cit-filter-count">6</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="22.01"></line><line x1="15" y1="22" x2="15" y2="22.01"></line><line x1="9" y1="6" x2="9" y2="6.01"></line><line x1="15" y1="6" x2="15" y2="6.01"></line><line x1="9" y1="10" x2="9" y2="10.01"></line><line x1="15" y1="10" x2="15" y2="10.01"></line><line x1="9" y1="14" x2="9" y2="14.01"></line><line x1="15" y1="14" x2="15" y2="14.01"></line><line x1="9" y1="18" x2="9" y2="18.01"></line><line x1="15" y1="18" x2="15" y2="18.01"></line></svg> Departments</span> <span class="cit-filter-count">6</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('ACADEMIC', this)">
-            <span>🏫 Academic</span> <span class="cit-filter-count">1</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg> Academic</span> <span class="cit-filter-count">1</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('RESEARCH', this)">
-            <span>🤖 AI & Labs</span> <span class="cit-filter-count">3</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg> AI & Labs</span> <span class="cit-filter-count">3</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('LIBRARY', this)">
-            <span>📚 Library</span> <span class="cit-filter-count">1</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Library</span> <span class="cit-filter-count">1</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('FOOD', this)">
-            <span>🍽️ Canteen</span> <span class="cit-filter-count">1</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> Canteen</span> <span class="cit-filter-count">1</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('EVENT', this)">
-            <span>🎭 Auditorium & Halls</span> <span class="cit-filter-count">2</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Auditorium & Halls</span> <span class="cit-filter-count">2</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('PARKING', this)">
-            <span>🚗 Smart Parking</span> <span class="cit-filter-count">3</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M9 16V8h4a2 2 0 0 1 0 4H9"></path></svg> Smart Parking</span> <span class="cit-filter-count">3</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('TRANSPORT', this)">
-            <span>🚌 Transit</span> <span class="cit-filter-count">2</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="15"></line><line x1="15" y1="21" x2="15" y2="15"></line></svg> Transit</span> <span class="cit-filter-count">2</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('HOSTEL', this)">
-            <span>🏠 Hostels</span> <span class="cit-filter-count">4</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Hostels</span> <span class="cit-filter-count">4</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('SPORTS', this)">
-            <span>⚽ Sports & Grounds</span> <span class="cit-filter-count">2</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path></svg> Sports & Grounds</span> <span class="cit-filter-count">2</span>
         </button>
         <button class="cit-filter-btn" onclick="filterByCategory('FACILITIES', this)">
-            <span>🏥 Facilities & Security</span> <span class="cit-filter-count">4</span>
+            <span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Facilities & Security</span> <span class="cit-filter-count">4</span>
         </button>
     </div>
 
@@ -141,10 +139,10 @@
         <div id="citRouteHud" class="cit-route-hud" style="display: none;">
             <div class="hud-header">
                 <div class="hud-title">
-                    <span style="font-size: 1.1rem;">🚶</span>
-                    <span id="hudRouteTitle">Main Gate ➔ CSE Department</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-blue);"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+                    <span id="hudRouteTitle">Main Gate &rarr; CSE Department</span>
                 </div>
-                <button onclick="clearActiveRoute()" style="background: none; border: none; font-size: 1.1rem; color: var(--text-muted); cursor: pointer;">✕</button>
+                <button onclick="clearActiveRoute()" style="background: none; border: none; font-size: 1.1rem; color: var(--text-muted); cursor: pointer;" aria-label="Close">&times;</button>
             </div>
             <div class="hud-stats">
                 <div class="hud-stat-item">
@@ -186,7 +184,7 @@
                         <div><span class="telemetry-item-label">Students</span><div class="telemetry-item-val">842 Enrolled</div></div>
                         <div><span class="telemetry-item-label">AI Status</span><div class="telemetry-item-val" style="color:var(--success);">Optimal</div></div>
                     </div>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('DEPT-CSE')" class="telemetry-link-btn">🚶 Navigate to CSE on 2D Map ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('DEPT-CSE')" class="telemetry-link-btn">Navigate to CSE on 2D Map &rarr;</a>
                 </div>
             </div>
 
@@ -204,7 +202,7 @@
                         <div><span class="telemetry-item-label">Students</span><div class="telemetry-item-val">620 Active</div></div>
                         <div><span class="telemetry-item-label">Workshops</span><div class="telemetry-item-val">4 Scheduled</div></div>
                     </div>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('DEPT-ECE')" class="telemetry-link-btn">🚶 Navigate to Core Engg on 2D Map ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('DEPT-ECE')" class="telemetry-link-btn">Navigate to Core Engg on 2D Map &rarr;</a>
                 </div>
             </div>
 
@@ -222,7 +220,7 @@
                         <div><span class="telemetry-item-label">Occupancy</span><div class="telemetry-item-val">310 / 850</div></div>
                         <div><span class="telemetry-item-label">Digital Stations</span><div class="telemetry-item-val">48 Avail</div></div>
                     </div>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('LIB-CENTRAL')" class="telemetry-link-btn">🚶 Navigate to Library on 2D Map ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('LIB-CENTRAL')" class="telemetry-link-btn">Navigate to Library on 2D Map &rarr;</a>
                 </div>
             </div>
 
@@ -240,7 +238,7 @@
                         <div><span class="telemetry-item-label">Demand</span><div class="telemetry-item-val">780 Meals</div></div>
                         <div><span class="telemetry-item-label">Seating</span><div class="telemetry-item-val">65% Full</div></div>
                     </div>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('CAN-MAIN')" class="telemetry-link-btn">🚶 Navigate to Canteen on 2D Map ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('CAN-MAIN')" class="telemetry-link-btn">Navigate to Canteen on 2D Map &rarr;</a>
                 </div>
             </div>
 
@@ -258,7 +256,7 @@
                         <div><span class="telemetry-item-label">Occupancy</span><div class="telemetry-item-val">Available</div></div>
                         <div><span class="telemetry-item-label">Status</span><div class="telemetry-item-val" style="color:var(--success);">Sensor Monitored</div></div>
                     </div>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('PKG-STUDENT')" class="telemetry-link-btn">🚶 Navigate to Parking on 2D Map ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('PKG-STUDENT')" class="telemetry-link-btn">Navigate to Parking on 2D Map &rarr;</a>
                 </div>
             </div>
 
@@ -276,13 +274,13 @@
                         <div><span class="telemetry-item-label">Coimbatore Routes</span><div class="telemetry-item-val">4 Corridors</div></div>
                         <div><span class="telemetry-item-label">Fleet Status</span><div class="telemetry-item-val" style="color:var(--brand-blue);">TN-38 Live GPS</div></div>
                     </div>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('TRANSIT-HUB')" class="telemetry-link-btn">🚶 Navigate to Transit Hub on 2D Map ➔</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('TRANSIT-HUB')" class="telemetry-link-btn">Navigate to Transit Hub on 2D Map &rarr;</a>
                 </div>
             </div>
 
             <!-- 4 Distinct 3D Hostel Buildings (Boys 1, Boys 2, Girls 1, Girls 2) -->
             <div class="campus-pin-wrapper pin-hostel" data-top="72%" data-left="40%">
-                <a href="javascript:void(0)" onclick="selectLocationFrom3D('BH-1')" class="campus-pin" style="background:#1D4ED8; border-color:#60A5FA;">🏠 Boys Hostel 1</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('BH-1')" class="campus-pin" style="background:#1D4ED8; border-color:#60A5FA;">Boys Hostel 1</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -296,18 +294,18 @@
                         <div><span class="telemetry-item-label">Access</span><div class="telemetry-item-val" style="color:var(--brand-blue);">Residents Only</div></div>
                     </div>
                     {% if can_access_hostel %}
-                    <a href="/hostel/" class="telemetry-link-btn" style="margin-bottom:4px;">🏠 Open Resident Portal ➔</a>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('BH-1')" class="telemetry-link-btn">🚶 Navigate to BH-1 on 2D Map ➔</a>
+                    <a href="{% url 'hostel:dashboard' %}" class="telemetry-link-btn" style="margin-bottom:4px;">Open Resident Portal &rarr;</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('BH-1')" class="telemetry-link-btn">Navigate to BH-1 on 2D Map &rarr;</a>
                     {% else %}
                     <div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">
-                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-right:3px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> <em>Hostel facilities are available only to authorized hostel students.</em>
                     </div>
                     {% endif %}
                 </div>
             </div>
 
             <div class="campus-pin-wrapper pin-hostel" data-top="80%" data-left="44%">
-                <a href="javascript:void(0)" onclick="selectLocationFrom3D('BH-2')" class="campus-pin" style="background:#1D4ED8; border-color:#60A5FA;">🏠 Boys Hostel 2</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('BH-2')" class="campus-pin" style="background:#1D4ED8; border-color:#60A5FA;">Boys Hostel 2</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -321,18 +319,18 @@
                         <div><span class="telemetry-item-label">Access</span><div class="telemetry-item-val" style="color:var(--brand-blue);">Residents Only</div></div>
                     </div>
                     {% if can_access_hostel %}
-                    <a href="/hostel/" class="telemetry-link-btn" style="margin-bottom:4px;">🏠 Open Resident Portal ➔</a>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('BH-2')" class="telemetry-link-btn">🚶 Navigate to BH-2 on 2D Map ➔</a>
+                    <a href="{% url 'hostel:dashboard' %}" class="telemetry-link-btn" style="margin-bottom:4px;">Open Resident Portal &rarr;</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('BH-2')" class="telemetry-link-btn">Navigate to BH-2 on 2D Map &rarr;</a>
                     {% else %}
                     <div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">
-                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-right:3px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> <em>Hostel facilities are available only to authorized hostel students.</em>
                     </div>
                     {% endif %}
                 </div>
             </div>
 
             <div class="campus-pin-wrapper pin-hostel" data-top="68%" data-left="76%">
-                <a href="javascript:void(0)" onclick="selectLocationFrom3D('GH-1')" class="campus-pin" style="background:#BE185D; border-color:#F472B6;">🏡 Girls Hostel 1</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('GH-1')" class="campus-pin" style="background:#BE185D; border-color:#F472B6;">Girls Hostel 1</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -346,18 +344,18 @@
                         <div><span class="telemetry-item-label">Access</span><div class="telemetry-item-val" style="color:#BE185D;">Residents Only</div></div>
                     </div>
                     {% if can_access_hostel %}
-                    <a href="/hostel/" class="telemetry-link-btn" style="margin-bottom:4px;">🏡 Open Resident Portal ➔</a>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('GH-1')" class="telemetry-link-btn">🚶 Navigate to GH-1 on 2D Map ➔</a>
+                    <a href="{% url 'hostel:dashboard' %}" class="telemetry-link-btn" style="margin-bottom:4px;">Open Resident Portal &rarr;</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('GH-1')" class="telemetry-link-btn">Navigate to GH-1 on 2D Map &rarr;</a>
                     {% else %}
                     <div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">
-                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-right:3px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> <em>Hostel facilities are available only to authorized hostel students.</em>
                     </div>
                     {% endif %}
                 </div>
             </div>
 
             <div class="campus-pin-wrapper pin-hostel" data-top="76%" data-left="80%">
-                <a href="javascript:void(0)" onclick="selectLocationFrom3D('GH-2')" class="campus-pin" style="background:#BE185D; border-color:#F472B6;">🏡 Girls Hostel 2</a>
+                <a href="javascript:void(0)" onclick="selectLocationFrom3D('GH-2')" class="campus-pin" style="background:#BE185D; border-color:#F472B6;">Girls Hostel 2</a>
                 <div class="building-telemetry-modal">
                     <div class="telemetry-header">
                         <div>
@@ -371,11 +369,11 @@
                         <div><span class="telemetry-item-label">Access</span><div class="telemetry-item-val" style="color:#BE185D;">Residents Only</div></div>
                     </div>
                     {% if can_access_hostel %}
-                    <a href="/hostel/" class="telemetry-link-btn" style="margin-bottom:4px;">🏡 Open Resident Portal ➔</a>
-                    <a href="javascript:void(0)" onclick="navigateToFrom3D('GH-2')" class="telemetry-link-btn">🚶 Navigate to GH-2 on 2D Map ➔</a>
+                    <a href="{% url 'hostel:dashboard' %}" class="telemetry-link-btn" style="margin-bottom:4px;">Open Resident Portal &rarr;</a>
+                    <a href="javascript:void(0)" onclick="navigateToFrom3D('GH-2')" class="telemetry-link-btn">Navigate to GH-2 on 2D Map &rarr;</a>
                     {% else %}
                     <div style="font-size:0.75rem; color:var(--text-muted); padding:6px 0;">
-                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-right:3px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> <em>Hostel facilities are available only to authorized hostel students.</em>
                     </div>
                     {% endif %}
                 </div>
@@ -386,25 +384,25 @@
     <!-- Live Campus Data Flow Ticker (CIT Campus to AI Engine) -->
     <div class="map-data-flow-ticker">
         <span style="font-size:0.75rem; font-weight:800; color:#2563EB;">LIVE CIT DATA FLOW:</span>
-        <div class="flow-node">🏛️ CIT CAMPUS</div>
-        <span class="flow-arrow">➔</span>
-        <div class="flow-node">👨‍🎓 STUDENTS</div>
-        <span class="flow-arrow">➔</span>
-        <div class="flow-node">🏢 DEPARTMENTS</div>
-        <span class="flow-arrow">➔</span>
-        <div class="flow-node">📅 EVENTS</div>
-        <span class="flow-arrow">➔</span>
-        <div class="flow-node">🚌 TRANSPORT</div>
-        <span class="flow-arrow">➔</span>
-        <div class="flow-node">🚗 PARKING</div>
-        <span class="flow-arrow">➔</span>
-        <div class="flow-node">🍽️ CANTEEN</div>
-        <span class="flow-arrow">➔</span>
-        <div class="flow-node">⚡ ENERGY</div>
-        <span class="flow-arrow">➔</span>
-        <div class="flow-node">♻️ WASTE</div>
-        <span class="flow-arrow">➔</span>
-        <div class="flow-node" style="background:#EFF6FF; border-color:#93C5FD; color:#1D4ED8;">🧠 AI ENGINE</div>
+        <div class="flow-node">CIT CAMPUS</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">STUDENTS</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">DEPARTMENTS</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">EVENTS</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">TRANSPORT</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">PARKING</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">CANTEEN</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">ENERGY</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node">WASTE</div>
+        <span class="flow-arrow">&rarr;</span>
+        <div class="flow-node" style="background:#EFF6FF; border-color:#93C5FD; color:#1D4ED8;">AI ENGINE</div>
     </div>
 
     <!-- Map Legend -->
@@ -515,12 +513,42 @@ function initCITMap() {
     const initialLng = prefersReducedMotion ? CIT_COORDS.lng : (CIT_CONFIG.regional_lng || 76.9558);
     const initialZoom = prefersReducedMotion ? CIT_COORDS.zoom : (CIT_CONFIG.regional_zoom || 12);
 
-    leafletMap = new google.maps.Map(document.getElementById('campusMap'), { center: {lat: initialLat, lng: initialLng}, zoom: initialZoom, mapId: 'CIT_CAMPUS_MAP_ID', disableDefaultUI: true, zoomControl: true });
+    leafletMap = L.map('campusMap', {
+        zoomControl: true,
+        scrollWheelZoom: true
+    }).setView([initialLat, initialLng], initialZoom);
 
-    // Google Maps natively handles the base tiles
+    // High resolution Google Hybrid, Streets, OSM, and CARTO tile layers
+    const googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+        attribution: '&copy; Google Maps',
+        maxZoom: 20
+    });
+    const googleStreets = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        attribution: '&copy; Google Maps',
+        maxZoom: 20
+    });
+    const osmTile = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+    });
+    const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+        maxZoom: 19
+    });
+
+    // Default to Google Hybrid (shows actual Coimbatore Institute of Technology campus buildings & roads)
+    googleHybrid.addTo(leafletMap);
+
+    const baseTileLayers = {
+        "Google Satellite / Hybrid": googleHybrid,
+        "Google Streets": googleStreets,
+        "OpenStreetMap": osmTile,
+        "Clean Minimal (Carto)": cartoLight
+    };
+    L.control.layers(baseTileLayers, null, { position: 'topright' }).addTo(leafletMap);
 
     // Add Layer Group for All Campus Routes
-    allCampusRoutesLayerGroup = [];
+    allCampusRoutesLayerGroup = L.layerGroup().addTo(leafletMap);
 
     // Render CIT Campus Boundary Polygon
     renderCampusBoundary();
@@ -531,6 +559,9 @@ function initCITMap() {
     // Render all 27 Building Markers
     renderAllBuildingMarkers();
 
+    // Load and compile backend A* routing graph
+    initCampusRoutingGraph();
+
     // Camera flight sequence if normal motion
     if (!prefersReducedMotion) {
         runCameraFlightSequence();
@@ -538,20 +569,34 @@ function initCITMap() {
 }
 
 function renderCampusBoundary() {
-    campusBoundaryLayer = new google.maps.Polygon({ paths: CIT_BOUNDARY_COORDS.map(c => ({lat: c[0], lng: c[1]})), strokeColor: '#0284C7', strokeOpacity: 1.0, strokeWeight: 2.5, fillColor: '#38BDF8', fillOpacity: 0.10, map: leafletMap });
+    campusBoundaryLayer = L.polygon(CIT_BOUNDARY_COORDS, {
+        color: '#0284C7',
+        fillColor: '#38BDF8',
+        fillOpacity: 0.12,
+        weight: 2.5,
+        dashArray: '6, 6'
+    }).addTo(leafletMap);
 
-    // Polygon tooltip removed for GMaps compatibility
+    campusBoundaryLayer.bindTooltip('<strong>CIT Campus Area</strong><br><span style="font-size:0.75rem; color:#64748B;">Official Campus Boundary (Peelamedu)</span>', {
+        sticky: true,
+        direction: 'top'
+    });
 }
 
 function renderCITMainPulseMarker() {
-    const citContent = document.createElement('div'); citContent.innerHTML = `
+    const citDivIcon = L.divIcon({
+        className: 'cit-main-marker',
+        html: `
             <div class="cit-marker-pulse"></div>
             <div class="cit-marker-pin" id="citMainPin">
-                🏛️ ${CIT_COORDS.shortName}
+                ${CIT_COORDS.shortName}
             </div>
-        `; citContent.className = 'cit-main-marker';
+        `,
+        iconSize: [84, 38],
+        iconAnchor: [42, 19]
+    });
 
-    citMainMarker = new google.maps.marker.AdvancedMarkerElement({ map: leafletMap, position: {lat: CIT_COORDS.lat, lng: CIT_COORDS.lng}, content: citContent });
+    citMainMarker = L.marker([CIT_COORDS.lat, CIT_COORDS.lng], { icon: citDivIcon }).addTo(leafletMap);
 
     citMainMarker.bindTooltip(`
         <div style="font-family:'Inter', sans-serif; padding:4px 2px; text-align:left;">
@@ -569,14 +614,14 @@ function renderCITMainPulseMarker() {
     citMainMarker.bindPopup(`
         <div style="color:#0F172A; font-family:'Inter', sans-serif; min-width:250px; padding:4px 0;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                <span style="font-size:1.5rem;">🏛️</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#1E3A8A;"><path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2l10 8H2l10-8z"/></svg>
                 <div>
                     <h4 style="margin:0; font-size:0.98rem; font-weight:800; color:#1E3A8A;">${CIT_COORDS.name}</h4>
                     <span style="font-size:0.74rem; font-weight:700; color:#2563EB; background:#EFF6FF; padding:2px 6px; border-radius:4px;">Autonomous • Anna University</span>
                 </div>
             </div>
             <p style="margin:0 0 6px; font-size:0.8rem; color:#475569; line-height:1.4;">
-                📍 <strong>Address:</strong> ${CIT_COORDS.address}
+                <strong>Address:</strong> ${CIT_COORDS.address}
             </p>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; background:#F8FAFC; padding:8px; border-radius:6px; font-size:0.76rem; border:1px solid #E2E8F0; margin-bottom:8px;">
                 <div><span style="color:#64748B;">AI Engine:</span> <strong style="color:#16A34A;">Online</strong></div>
@@ -585,7 +630,7 @@ function renderCITMainPulseMarker() {
                 <div><span style="color:#64748B;">Routes:</span> <strong>All Active</strong></div>
             </div>
             <button class="btn btn-primary btn-sm" style="width:100%; font-size:0.78rem;" onclick="toggleAllCampusRoutes()">
-                🛣️ Toggle Campus Walkways & Roads
+                Toggle Campus Walkways & Roads
             </button>
         </div>
     `);
@@ -594,13 +639,13 @@ function renderCITMainPulseMarker() {
 function renderAllBuildingMarkers() {
     CIT_LOCATIONS.forEach(loc => {
         const catClass = getCategoryClass(loc.category);
-        const iconSymbol = loc.icon || '📍';
+        const iconSvg = getCategoryIconSvg(loc.category);
 
         const customIcon = L.divIcon({
             className: 'cit-bldg-marker',
             html: `
                 <div class="cit-bldg-icon-wrap ${catClass}">
-                    ${iconSymbol}
+                    ${iconSvg}
                 </div>
                 <div class="cit-bldg-label-chip">
                     ${loc.name}
@@ -625,36 +670,36 @@ function renderAllBuildingMarkers() {
             if (!CURRENT_USER.isAuthenticated) {
                 hostelAccessBlock = `
                     <div style="margin:6px 0; padding:6px 8px; background:#F8FAFC; border-left:3px solid #64748B; border-radius:4px; font-size:0.75rem; color:#475569;">
-                        🔒 <em>Hostel facilities are available only to authorized hostel students.</em>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-right:3px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> <em>Hostel facilities are available only to authorized hostel students.</em>
                     </div>
                 `;
             } else if (CURRENT_USER.role === 'FACULTY') {
                 hostelAccessBlock = `
                     <div style="margin:6px 0; padding:6px 8px; background:#FEF2F2; border-left:3px solid #DC2626; border-radius:4px; font-size:0.75rem; color:#991B1B;">
-                        🔒 <strong>Access Notice:</strong> Hostel facilities are restricted to authorized hostel students.
+                        <strong>Access Notice:</strong> Hostel facilities are restricted to authorized hostel students.
                     </div>
                 `;
             } else if (CURRENT_USER.accommodationType === 'DAY_SCHOLAR') {
                 hostelAccessBlock = `
                     <div style="margin:6px 0; padding:6px 8px; background:#EFF6FF; border-left:3px solid #2563EB; border-radius:4px; font-size:0.75rem; color:#1E40AF;">
-                        ℹ️ <strong>Access Notice:</strong> Hostel facilities are available only to authorized hostel students.
+                        <strong>Access Notice:</strong> Hostel facilities are available only to authorized hostel students.
                     </div>
                 `;
             } else if (CURRENT_USER.canAccessHostel) {
                 const isMyHostel = (CURRENT_USER.assignedHostelCode && (CURRENT_USER.assignedHostelCode === loc.code || loc.code.includes(CURRENT_USER.assignedHostelCode)));
                 hostelAccessBlock = `
                     <div style="margin:6px 0; padding:6px 8px; background:#F0FDF4; border-left:3px solid #16A34A; border-radius:4px; font-size:0.75rem; color:#166534;">
-                        ${isMyHostel ? `✅ <strong>Your Assigned Building:</strong> Room ${CURRENT_USER.roomNumber || 'Assigned'}<br>` : ''}
-                        <span>🏢 Resident amenities & dining accessible.</span>
+                        ${isMyHostel ? `<strong>Your Assigned Building:</strong> Room ${CURRENT_USER.roomNumber || 'Assigned'}<br>` : ''}
+                        <span>Resident amenities & dining accessible.</span>
                     </div>
                     <a href="/hostel/" class="btn btn-primary btn-sm" style="margin-bottom:6px; width:100%; font-size:0.76rem; text-align:center; display:block; text-decoration:none; padding:4px 0;">
-                        🏠 Resident Hostel Portal
+                        Resident Hostel Portal
                     </a>
                 `;
             } else if (CURRENT_USER.role === 'SUPER_ADMIN' || CURRENT_USER.role === 'COLLEGE_ADMIN') {
                 hostelAccessBlock = `
                     <a href="/hostel/admin-analytics/" class="btn btn-primary btn-sm" style="margin:6px 0; width:100%; font-size:0.76rem; text-align:center; display:block; text-decoration:none; padding:4px 0;">
-                        📊 Hostel Management Analytics
+                        Hostel Management Analytics
                     </a>
                 `;
             }
@@ -662,11 +707,11 @@ function renderAllBuildingMarkers() {
 
         const routeButtonHtml = canRouteToThis ? `
             <button class="btn btn-primary btn-sm" style="font-size:0.78rem; width:100%;" onclick="drawRouteToBuilding('${loc.code}')">
-                🚶 Show Route from Main Gate
+                Show Route from Main Gate
             </button>
         ` : `
             <button class="btn btn-secondary btn-sm" style="font-size:0.78rem; width:100%; opacity:0.6; cursor:not-allowed;" title="Hostel route restricted to authorized residents" disabled>
-                🔒 Route Restricted to Residents
+                Route Restricted to Residents
             </button>
         `;
 
@@ -674,7 +719,7 @@ function renderAllBuildingMarkers() {
             <div style="color:#0F172A; font-family:'Inter', sans-serif; min-width:240px; padding:2px 0;">
                 <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px; gap:8px;">
                     <div>
-                        <h4 style="margin:0 0 2px; font-size:0.95rem; font-weight:800; color:#0F172A;">${iconSymbol} ${loc.name}</h4>
+                        <h4 style="margin:0 0 2px; font-size:0.95rem; font-weight:800; color:#0F172A; display:flex; align-items:center; gap:6px;">${iconSvg} <span>${loc.name}</span></h4>
                         <span style="font-size:0.72rem; color:#2563EB; font-weight:700;">${loc.code} • ${loc.category}</span>
                     </div>
                     ${verifiedBadge}
@@ -692,10 +737,10 @@ function renderAllBuildingMarkers() {
                     ${routeButtonHtml}
                     <div style="display:flex; gap:6px;">
                         <button class="btn btn-secondary btn-sm" style="font-size:0.74rem; flex:1;" onclick="setRouteOrigin('${loc.code}')">
-                            🧭 Set as Origin
+                            Set as Origin
                         </button>
                         <button class="btn btn-secondary btn-sm" style="font-size:0.74rem; flex:1;" onclick="centerOnLocation('${loc.code}')">
-                            🎯 Center
+                            Center
                         </button>
                     </div>
                 </div>
@@ -739,10 +784,170 @@ function focusCITCampus() {
 // Campus Routing Engine (Waypoint Graph Navigation)
 // -------------------------------------------------------------
 
-function getWaypointPath(startWp, endWp) {
+// -------------------------------------------------------------
+// Campus Routing Engine: Multi-Node A* Pedestrian Pathfinding
+// -------------------------------------------------------------
+
+let campusGraph = null;
+let campusNodesMap = {};
+
+function initCampusRoutingGraph() {
+    fetch('/api/campus-routing/')
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success' && data.nodes && data.edges) {
+                window.campusNodes = data.nodes;
+                window.campusEdges = data.edges;
+
+                campusNodesMap = {};
+                data.nodes.forEach(n => {
+                    campusNodesMap[n.node_id] = n;
+                });
+
+                campusGraph = {};
+                data.nodes.forEach(n => {
+                    campusGraph[n.node_id] = [];
+                });
+
+                data.edges.forEach(e => {
+                    const fromId = e.from_node__node_id;
+                    const toId = e.to_node__node_id;
+                    if (campusGraph[fromId]) {
+                        campusGraph[fromId].push({
+                            to: toId,
+                            distance: e.distance,
+                            path_type: e.path_type || 'Walkway',
+                            is_accessible: e.is_accessible,
+                            estimated_time: e.estimated_time || Math.round(e.distance / 1.2)
+                        });
+                    }
+                });
+                console.log(`[CampusPulse AI] A* Navigation Graph compiled: ${data.nodes.length} nodes, ${data.edges.length} edges.`);
+            }
+        })
+        .catch(err => {
+            console.warn('[CampusPulse AI] Routing API deferred, running waypoint fallback:', err);
+        });
+}
+
+function getNodeForLocation(loc) {
+    if (!loc) return null;
+
+    // 1. Direct code match (e.g., LOC_DEPT_CSE)
+    const directCode = `LOC_${loc.code.replace(/-/g, '_').toUpperCase()}`;
+    if (campusNodesMap[directCode]) {
+        return directCode;
+    }
+
+    // 2. Nearest waypoint match (e.g., WP_GATE)
+    if (loc.nearest_waypoint && campusNodesMap[loc.nearest_waypoint]) {
+        return loc.nearest_waypoint;
+    }
+
+    // 3. Closest coordinate in graph
+    let closestId = null;
+    let closestDist = Infinity;
+    for (const [id, node] of Object.entries(campusNodesMap)) {
+        const d = Math.hypot(node.latitude - loc.latitude, node.longitude - loc.longitude);
+        if (d < closestDist) {
+            closestDist = d;
+            closestId = id;
+        }
+    }
+    return closestId;
+}
+
+function findAStarRoute(startNodeId, targetNodeId) {
+    if (!campusGraph || !campusNodesMap[startNodeId] || !campusNodesMap[targetNodeId]) {
+        return null;
+    }
+
+    if (startNodeId === targetNodeId) {
+        const node = campusNodesMap[startNodeId];
+        return {
+            nodeIds: [startNodeId],
+            coords: [[node.latitude, node.longitude]],
+            distance: 10,
+            estimated_time: 1
+        };
+    }
+
+    const startNode = campusNodesMap[startNodeId];
+    const targetNode = campusNodesMap[targetNodeId];
+
+    function heuristic(n1, n2) {
+        const R = 6371000;
+        const dLat = (n2.latitude - n1.latitude) * Math.PI / 180;
+        const dLon = (n2.longitude - n1.longitude) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(n1.latitude * Math.PI / 180) * Math.cos(n2.latitude * Math.PI / 180) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    const openSet = new Set([startNodeId]);
+    const cameFrom = {};
+    const gScore = {};
+    const fScore = {};
+
+    Object.keys(campusNodesMap).forEach(id => {
+        gScore[id] = Infinity;
+        fScore[id] = Infinity;
+    });
+
+    gScore[startNodeId] = 0;
+    fScore[startNodeId] = heuristic(startNode, targetNode);
+
+    while (openSet.size > 0) {
+        let current = null;
+        let lowestF = Infinity;
+        for (const nodeId of openSet) {
+            if (fScore[nodeId] < lowestF) {
+                lowestF = fScore[nodeId];
+                current = nodeId;
+            }
+        }
+
+        if (current === targetNodeId) {
+            const pathNodes = [current];
+            let curr = current;
+            while (cameFrom[curr]) {
+                curr = cameFrom[curr];
+                pathNodes.unshift(curr);
+            }
+            const totalDistMeters = Math.round(gScore[targetNodeId]);
+            return {
+                nodeIds: pathNodes,
+                coords: pathNodes.map(id => [campusNodesMap[id].latitude, campusNodesMap[id].longitude]),
+                distance: totalDistMeters,
+                estimated_time: Math.max(1, Math.round(totalDistMeters / 75))
+            };
+        }
+
+        openSet.delete(current);
+
+        const neighbors = campusGraph[current] || [];
+        for (const edge of neighbors) {
+            const neighborId = edge.to;
+            const neighborNode = campusNodesMap[neighborId];
+            if (!neighborNode) continue;
+
+            const tentativeG = gScore[current] + edge.distance;
+            if (tentativeG < gScore[neighborId]) {
+                cameFrom[neighborId] = current;
+                gScore[neighborId] = tentativeG;
+                fScore[neighborId] = tentativeG + heuristic(neighborNode, targetNode);
+                openSet.add(neighborId);
+            }
+        }
+    }
+
+    return null;
+}
+
+function getWaypointPathFallback(startWp, endWp) {
     if (startWp === endWp) return [CIT_WAYPOINTS[startWp]];
 
-    // Internal walkway graph connections
     const graph = {
         "WP_GATE": ["WP_ADMIN_ROUND", "WP_WEST_PARK_LANE"],
         "WP_WEST_PARK_LANE": ["WP_GATE", "WP_ADMIN_ROUND"],
@@ -755,7 +960,6 @@ function getWaypointPath(startWp, endWp) {
         "WP_SPORTS_ROAD": ["WP_EAST_AVENUE", "WP_SOUTH_SPINE", "WP_HOSTEL_JUNC"]
     };
 
-    // Breadth-first search for shortest waypoint sequence
     const queue = [[startWp]];
     const visited = new Set([startWp]);
 
@@ -775,17 +979,13 @@ function getWaypointPath(startWp, endWp) {
             }
         }
     }
-
-    // Fallback direct waypoints
     return [CIT_WAYPOINTS[startWp], CIT_WAYPOINTS[endWp]];
 }
 
-function calculateRoutePoints(locA, locB) {
+function calculateRoutePointsFallback(locA, locB) {
     const wpA = locA.nearest_waypoint || "WP_QUAD_CENTRE";
     const wpB = locB.nearest_waypoint || "WP_QUAD_CENTRE";
-
-    const intermediateCoords = getWaypointPath(wpA, wpB);
-
+    const intermediateCoords = getWaypointPathFallback(wpA, wpB);
     return [
         [locA.latitude, locA.longitude],
         ...intermediateCoords,
@@ -806,15 +1006,37 @@ function calculatePathDistanceMeters(points) {
 function drawRouteBetweenLocations(locA, locB) {
     clearActiveRoute();
 
-    const points = calculateRoutePoints(locA, locB);
-    const distanceMeters = calculatePathDistanceMeters(points);
-    const walkTimeMins = Math.max(1, Math.round(distanceMeters / 75)); // Average walking speed ~75m/min
+    let points = [];
+    let distanceMeters = 0;
+    let walkTimeMins = 1;
+    let routeMode = "Paved Pedestrian Walkway";
+
+    const startNodeId = getNodeForLocation(locA);
+    const destNodeId = getNodeForLocation(locB);
+
+    const aStarResult = (startNodeId && destNodeId) ? findAStarRoute(startNodeId, destNodeId) : null;
+
+    if (aStarResult && aStarResult.coords && aStarResult.coords.length >= 2) {
+        points = [
+            [locA.latitude, locA.longitude],
+            ...aStarResult.coords,
+            [locB.latitude, locB.longitude]
+        ];
+        distanceMeters = aStarResult.distance;
+        walkTimeMins = aStarResult.estimated_time;
+        routeMode = "A* Intelligent Pedestrian Path";
+    } else {
+        points = calculateRoutePointsFallback(locA, locB);
+        distanceMeters = calculatePathDistanceMeters(points);
+        walkTimeMins = Math.max(1, Math.round(distanceMeters / 75));
+        routeMode = "Campus Walkway Spine";
+    }
 
     // Glowing underlying halo
     const routeHalo = L.polyline(points, {
         color: '#38BDF8',
         weight: 8,
-        opacity: 0.45,
+        opacity: 0.5,
         lineCap: 'round'
     });
 
@@ -828,7 +1050,24 @@ function drawRouteBetweenLocations(locA, locB) {
         lineCap: 'round'
     });
 
-    activeRouteLayer = L.featureGroup([routeHalo, routeLine]).addTo(leafletMap);
+    // Start & Destination custom pulse pins
+    const startPin = L.circleMarker([locA.latitude, locA.longitude], {
+        radius: 7,
+        color: '#16A34A',
+        fillColor: '#22C55E',
+        fillOpacity: 0.9,
+        weight: 2
+    }).bindTooltip(`<strong>Start:</strong> ${locA.name}`, { direction: 'top' });
+
+    const endPin = L.circleMarker([locB.latitude, locB.longitude], {
+        radius: 8,
+        color: '#DC2626',
+        fillColor: '#EF4444',
+        fillOpacity: 0.9,
+        weight: 2
+    }).bindTooltip(`<strong>Destination:</strong> ${locB.name}`, { direction: 'top' });
+
+    activeRouteLayer = L.featureGroup([routeHalo, routeLine, startPin, endPin]).addTo(leafletMap);
 
     // Zoom & focus to fit entire route
     leafletMap.fitBounds(activeRouteLayer.getBounds(), {
@@ -840,23 +1079,32 @@ function drawRouteBetweenLocations(locA, locB) {
 
     // Update Route Telemetry HUD
     const hud = document.getElementById('citRouteHud');
-    hud.style.display = 'flex';
-    document.getElementById('hudRouteTitle').textContent = `${locA.name} ➔ ${locB.name}`;
-    document.getElementById('hudRouteDist').textContent = `${distanceMeters} m`;
-    document.getElementById('hudRouteTime').textContent = `~${walkTimeMins} mins walk`;
-    document.getElementById('hudRouteSteps').innerHTML = `
-        <strong>Route:</strong> Start at ${locA.name} &bull; Proceed along designated campus walkway &bull; Arrive at ${locB.name}.
-    `;
+    if (hud) {
+        hud.style.display = 'flex';
+        document.getElementById('hudRouteTitle').textContent = `${locA.name} &rarr; ${locB.name}`;
+        document.getElementById('hudRouteDist').textContent = `${distanceMeters} m`;
+        document.getElementById('hudRouteTime').textContent = `~${walkTimeMins} min${walkTimeMins > 1 ? 's' : ''} walk`;
+        document.getElementById('hudRouteMode').textContent = routeMode;
+        document.getElementById('hudRouteSteps').innerHTML = `
+            <strong>Route Guide:</strong> Depart <strong>${locA.name}</strong> &bull; Follow designated lighted pedestrian walkway &bull; Arrive at <strong>${locB.name}</strong>.
+        `;
+    }
 
     // Update Navigator Bar Status
-    document.getElementById('routeStatusBadge').innerHTML = `
-        <span style="color:#16A34A; font-weight:800;">✓ Active Route:</span> ${distanceMeters}m (~${walkTimeMins} min)
-    `;
-    document.getElementById('btnClearRouteBtn').style.display = 'inline-block';
+    const badge = document.getElementById('routeStatusBadge');
+    if (badge) {
+        badge.innerHTML = `
+            <span style="color:#16A34A; font-weight:800;">A* Active Route:</span> ${distanceMeters}m (~${walkTimeMins} min)
+        `;
+    }
+    const clearBtn = document.getElementById('btnClearRouteBtn');
+    if (clearBtn) clearBtn.style.display = 'inline-block';
 
     // Sync dropdown selections
-    document.getElementById('routeStartSelect').value = locA.code;
-    document.getElementById('routeDestSelect').value = locB.code;
+    const startSel = document.getElementById('routeStartSelect');
+    const destSel = document.getElementById('routeDestSelect');
+    if (startSel) startSel.value = locA.code;
+    if (destSel) destSel.value = locB.code;
 }
 
 function drawRouteToBuilding(destCode) {
@@ -912,13 +1160,13 @@ function populateRouteDropdowns() {
     CIT_LOCATIONS.forEach(loc => {
         const optA = document.createElement('option');
         optA.value = loc.code;
-        optA.textContent = `${loc.icon || ''} ${loc.name}`;
+        optA.textContent = loc.name;
         if (loc.code === 'GATE-MAIN') optA.selected = true;
         startSelect.appendChild(optA);
 
         const optB = document.createElement('option');
         optB.value = loc.code;
-        optB.textContent = `${loc.icon || ''} ${loc.name}`;
+        optB.textContent = loc.name;
         if (loc.code === 'DEPT-CSE') optB.selected = true;
         destSelect.appendChild(optB);
     });
@@ -957,12 +1205,12 @@ function toggleAllCampusRoutes() {
 
     if (!areAllRoutesVisible) {
         allCampusRoutesLayerGroup.clearLayers();
-        btn.textContent = '🛣️ Show All Campus Routes';
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a4.5 4.5 0 0 0 4.5-4.5v0A4.5 4.5 0 0 0 17.5 10H14"></path><path d="m11 7 3 3-3 3"></path></svg> Show All Campus Routes';
         btn.className = 'btn btn-secondary btn-sm';
         return;
     }
 
-    btn.textContent = '✕ Hide Campus Routes';
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:3px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Hide Campus Routes';
     btn.className = 'btn btn-primary btn-sm';
 
     // Draw full waypoint road network
@@ -1079,6 +1327,35 @@ function navigateToFrom3D(code) {
     drawRouteToBuilding(code);
 }
 
+function getCategoryIconSvg(category) {
+    switch (category) {
+        case 'ACADEMIC':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>';
+        case 'DEPARTMENT':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="22.01"></line><line x1="15" y1="22" x2="15" y2="22.01"></line><line x1="9" y1="6" x2="9" y2="6.01"></line><line x1="15" y1="6" x2="15" y2="6.01"></line><line x1="9" y1="10" x2="9" y2="10.01"></line><line x1="15" y1="10" x2="15" y2="10.01"></line><line x1="9" y1="14" x2="9" y2="14.01"></line><line x1="15" y1="14" x2="15" y2="14.01"></line><line x1="9" y1="18" x2="9" y2="18.01"></line><line x1="15" y1="18" x2="15" y2="18.01"></line></svg>';
+        case 'LIBRARY':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>';
+        case 'FOOD':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>';
+        case 'PARKING':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><path d="M9 16V8h4a2 2 0 0 1 0 4H9"></path></svg>';
+        case 'TRANSPORT':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="15"></line><line x1="15" y1="21" x2="15" y2="15"></line></svg>';
+        case 'HOSTEL':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>';
+        case 'SPORTS':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path></svg>';
+        case 'RESEARCH':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><circle cx="12" cy="5" r="2"></circle><path d="M12 7v4"></path></svg>';
+        case 'FACILITIES':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>';
+        case 'EVENT':
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+        default:
+            return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>';
+    }
+}
+
 function getCategoryClass(category) {
     switch (category) {
         case 'ACADEMIC': return 'cat-academic';
@@ -1119,3 +1396,4 @@ function switchMapView(mode) {
 }
 </script>
 {% endblock %}
+

@@ -1,4 +1,7 @@
+import json
+from datetime import timedelta
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -133,3 +136,83 @@ def update_complaint_status(request, pk):
         return redirect('complaints:detail', pk=complaint.pk)
 
     return redirect('complaints:detail', pk=complaint.pk)
+
+
+def escalate_overdue_complaints():
+    """
+    Automated Priority Escalation Engine.
+    Scans active tickets against their SLA deadlines.
+    Escalates priority, registers audit history, and alerts facility managers.
+    """
+    now = timezone.now()
+    open_complaints = Complaint.objects.exclude(status__in=[Complaint.Status.RESOLVED, Complaint.Status.REJECTED])
+    
+    escalated_count = 0
+    priority_order = [Complaint.Priority.LOW, Complaint.Priority.MEDIUM, Complaint.Priority.HIGH, Complaint.Priority.URGENT]
+    
+    for c in open_complaints:
+        deadline = c.created_at + timedelta(hours=c.sla_hours)
+        if now > deadline:
+            old_priority = c.priority
+            current_idx = priority_order.index(c.priority) if c.priority in priority_order else 1
+            if current_idx < len(priority_order) - 1:
+                new_priority = priority_order[current_idx + 1]
+                c.priority = new_priority
+                c.save()
+                
+                hours_overdue = max(1, int((now - deadline).total_seconds() // 3600))
+                ComplaintStatusHistory.objects.create(
+                    complaint=c,
+                    status=c.status,
+                    updated_by=None,
+                    comments=f"AI Auto-Escalation: SLA exceeded by {hours_overdue}h. Priority elevated from {old_priority} to {new_priority}."
+                )
+                
+                # Send high-priority notification to maintenance staff & admins
+                from apps.accounts.models import User
+                from apps.notifications.models import Notification
+                admin_users = User.objects.filter(role__in=['SUPER_ADMIN', 'COLLEGE_ADMIN', 'FACILITY_MANAGER', 'MAINTENANCE_STAFF'])[:10]
+                for admin in admin_users:
+                    Notification.objects.create(
+                        user=admin,
+                        title=f"🚨 Ticket Auto-Escalated: CMP-{c.id:04d}",
+                        message=f"{c.title} ({c.target_department}) breached SLA. Elevated to {new_priority}.",
+                        category=Notification.Category.COMPLAINT_UPDATE
+                    )
+                escalated_count += 1
+                
+    return escalated_count
+
+
+def api_triage_preview(request):
+    """
+    Real-time NLP Triage API preview for interactive complaint typing.
+    Returns predicted category, department routing, extracted location, confidence, and SLA hours.
+    """
+    text = request.GET.get('text') or request.POST.get('text') or ''
+    if not text.strip():
+        return JsonResponse({'status': 'empty', 'message': 'No text provided'})
+
+    triage = ComplaintAITriage.triage_complaint(text, user=request.user)
+    return JsonResponse({
+        'status': 'success',
+        'category': triage.get('category'),
+        'category_display': dict(Complaint.Category.choices).get(triage.get('category'), triage.get('category')),
+        'priority': triage.get('priority'),
+        'target_department': triage.get('target_department'),
+        'location_extracted': triage.get('location_extracted'),
+        'confidence': triage.get('confidence'),
+        'sla_hours': triage.get('sla_hours'),
+    })
+
+
+@login_required
+def api_escalate_complaints(request):
+    """Manual or scheduled trigger for the AI priority escalation engine."""
+    count = escalate_overdue_complaints()
+    return JsonResponse({
+        'status': 'success',
+        'message': f"Evaluated open complaints. {count} ticket(s) escalated due to SLA expiration.",
+        'escalated_count': count
+    })
+

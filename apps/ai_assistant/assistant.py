@@ -263,8 +263,31 @@ class CampusAIAssistant:
                 f"You can view the full triage queue on the [Complaint Dashboard](/complaints/dashboard/)."
             )
 
-        # 3. Events Queries
+        # 3. Club Events & Clubs Queries
+        if ('club' in q and ('event' in q or 'upcoming' in q)) or 'which clubs' in q:
+            club_events = Event.objects.filter(club__isnull=False, status=Event.Status.UPCOMING).select_related('club').order_by('start_time')[:5]
+            if club_events.exists():
+                lines = ["✨ **Campus Clubs with Upcoming Events**:"]
+                for ev in club_events:
+                    lines.append(f"- **{ev.club.name}**: *{ev.title}* ({ev.get_event_type_display()}) on {ev.start_time.strftime('%b %d, %I:%M %p')} at {ev.location_name}")
+                lines.append("\nExplore full club schedules on the [Campus Clubs Portal](/clubs/).")
+                return "\n".join(lines)
+            else:
+                active_clubs = Club.objects.filter(is_active=True)[:5]
+                c_names = ", ".join([c.name for c in active_clubs]) if active_clubs.exists() else "Coding Club, Robotics Club, Cultural Society"
+                return f"✨ There are no club-specific events scheduled in the immediate forecast. Active clubs preparing new sessions include: {c_names}. Check the [Campus Clubs Portal](/clubs/) for updates."
+
+        # 4. Events Queries
         if any(w in q for w in ['event', 'workshop', 'hackathon', 'seminar', 'happening']):
+            if 'today' in q:
+                today = timezone.now().date()
+                today_events = Event.objects.filter(start_time__date=today, status__in=[Event.Status.UPCOMING, Event.Status.ONGOING]).order_by('start_time')
+                if today_events.exists():
+                    lines = [f"📅 **Events Scheduled Today ({today.strftime('%b %d, %Y')})**:"]
+                    for ev in today_events:
+                        lines.append(f"- **{ev.title}** ({ev.get_event_type_display()}) at {ev.start_time.strftime('%I:%M %p')} • Location: {ev.location_name}")
+                    return "\n".join(lines)
+
             upcoming = Event.objects.filter(status=Event.Status.UPCOMING).order_by('start_time')[:5]
             if not upcoming:
                 return "📅 No upcoming events found on the campus calendar at this moment."
@@ -274,7 +297,7 @@ class CampusAIAssistant:
                 lines.append(f"- **{ev.title}** ({ev.get_event_type_display()}) on {ev.start_time.strftime('%b %d, %I:%M %p')} at {ev.location_name}")
             return "\n".join(lines)
 
-        # 4. Clubs Queries
+        # 5. Clubs General Query
         if any(w in q for w in ['club', 'coding club', 'robotics', 'cultural']):
             clubs = Club.objects.filter(is_active=True)[:6]
             lines = ["✨ **Active Campus Student Clubs**:"]
@@ -282,31 +305,49 @@ class CampusAIAssistant:
                 lines.append(f"- **{c.name}** ({c.get_category_display()}): {c.skills_developed}")
             return "\n".join(lines)
 
-        # 5. Transport Queries
+        # 6. Transport Queries
         if any(w in q for w in ['bus', 'transport', 'route', 'fleet']):
             from apps.transport.simulation import TransportSimulationEngine
             telemetry = TransportSimulationEngine.get_live_bus_telemetry()
             if not telemetry:
                 return "🚌 All campus fleet buses are currently in depot."
 
-            busiest = max(telemetry, key=lambda b: b['occupancy_pct'])
-            return (
-                f"🚌 **Live Campus Bus Fleet Status**:\n\n"
-                f"- **Active Buses**: {len(telemetry)} operational on simulated routes\n"
-                f"- **Highest Occupancy**: **{busiest['bus_number']}** ({busiest['route_name']}) at **{busiest['occupancy_pct']}% capacity** ({busiest['current_passengers']}/{busiest['capacity']} passengers)\n"
-                f"- **Next Stop**: Approaching *{busiest['next_stop']}* (ETA: {busiest['eta_mins']} mins)\n\n"
-                f"Track live movement on the [Transport Live Map](/transport/dashboard/)."
-            )
+            lines = [
+                f"🚌 **Live Campus Bus Fleet Status & Locations**:\n",
+                f"There are **{len(telemetry)} active buses** operating across campus corridors:\n"
+            ]
+            for b in telemetry:
+                lines.append(
+                    f"- **{b['bus_number']}** ({b['route_name']}): Approaching **{b['next_stop']}** "
+                    f"(ETA: {b['eta_mins']} mins) • Coordinates: `{b['latitude']}, {b['longitude']}` • "
+                    f"Occupancy: **{b['occupancy_pct']}%** ({b['current_passengers']}/{b['capacity']} passengers)"
+                )
+            lines.append(f"\nTrack live vehicle movement on the [Transport Live Map](/transport/dashboard/).")
+            return "\n".join(lines)
 
-        # 6. Parking Queries
+        # 7. Parking Queries
         if any(w in q for w in ['parking', 'parking lot', 'slot', 'vacan']):
             lots = ParkingLot.objects.filter(is_active=True)
+            if any(term in q for term in ['block a', 'lot a', 'north']):
+                target_lot = lots.filter(name__icontains='Lot A').first() or lots.filter(code__icontains='NORTH').first()
+                if target_lot:
+                    other_lots = [f"- **{l.name}**: **{l.available_count()} vacant** ({l.occupancy_percentage()}% occupied)" for l in lots if l.id != target_lot.id]
+                    return (
+                        f"🚗 **Smart Parking Availability for Block A ({target_lot.name})**:\n\n"
+                        f"- **Available Slots**: **{target_lot.available_count()} vacant** out of {target_lot.total_slots} ({target_lot.occupancy_percentage()}% occupied)\n"
+                        f"- **Coordinates**: `{target_lot.latitude}, {target_lot.longitude}`\n\n"
+                        f"Other campus parking lots:\n" +
+                        ("\n".join(other_lots) if other_lots else "- No other active lots.") +
+                        f"\n\nView real-time bay status on the [Smart Parking Dashboard](/parking/dashboard/)."
+                    )
+
             lines = ["🚗 **Smart Parking Availability**:\n"]
             for lot in lots:
                 lines.append(f"- **{lot.name} ({lot.code})**: **{lot.available_count()} vacant slots** out of {lot.total_slots} ({lot.occupancy_percentage()}% occupied)")
+            lines.append("\nView real-time bay status on the [Smart Parking Dashboard](/parking/dashboard/).")
             return "\n".join(lines)
 
-        # 7. Canteen Food Demand Queries
+        # 8. Canteen Food Demand Queries
         if any(w in q for w in ['canteen', 'food', 'lunch', 'dinner', 'meal', 'waste']):
             today_weekday = timezone.now().date().weekday()
             pred = CanteenDemandPredictor.predict_meal_demand(today_weekday, 'LUNCH')
@@ -325,7 +366,7 @@ class CampusAIAssistant:
                 f"- **Kitchen Advisory**: {waste_pred.get('advice', 'Portioning within normal variance.')}"
             )
 
-        # 8. Energy Anomaly Queries
+        # 9. Energy Anomaly Queries
         if any(w in q for w in ['energy', 'power', 'anomaly', 'spike', 'leak', 'kwh']):
             anomalies = EnergyAnomaly.objects.filter(resolved=False)[:3]
             if anomalies:
@@ -336,16 +377,30 @@ class CampusAIAssistant:
             else:
                 return "⚡ **Campus Energy Status**: Normal baseline consumption across all buildings. No active nocturnal leaks or surges flagged."
 
-        # Default Helpful Response
+        # Default Helpful Response / Unsupported Query Handling
+        if len(q.split()) > 2 and not any(k in q for k in ['help', 'what can you do', 'hello', 'hi', 'hey']):
+            return (
+                f"ℹ️ I do not have active telemetry or records matching **\"{query_text}\"**.\n\n"
+                f"Currently integrated CIT subsystems:\n"
+                f"- 🛡️ **Academic Risk Assessment** (CSE & institutional retention)\n"
+                f"- 📅 **Campus Events & Clubs** (Workshops, hackathons, activities)\n"
+                f"- 🚌 **Fleet Transport Telemetry** (Bus GPS locations & ETAs)\n"
+                f"- 🚗 **Smart Parking Bays** (Lot A, B, C live occupancy)\n"
+                f"- 🏠 **Hostel & Residential** (Rooms, mess menus, facilities)\n"
+                f"- 🛠️ **Grievance Triage** (Departmental complaint workloads)\n"
+                f"- 🍽️ **Canteen & Energy** (Demand forecast & anomaly detection)\n\n"
+                f"Please try one of the suggested prompts or rephrase your inquiry."
+            )
+
         return (
-            f"Hello! I am the **CampusPulse AI Assistant for {CAMPUS_CONFIG['name']} (CIT)**. I can help you with real-time campus intelligence:\n\n"
+            f"Hello! I am the **CampusPulse AI Companion for {CAMPUS_CONFIG['name']} (CIT)**. I can help you with real-time campus intelligence:\n\n"
             f"- 🏛️ **Campus Geospatial**: *'Where is my college?'* or *'Where is the CSE department?'*\n"
             f"- 🚪 **Campus Gates & Facilities**: *'Where is the main gate?'* or *'Where is the canteen?'*\n"
-            f"- 📊 **Academic Risk**: *'How many high-risk students are in CSE?'*\n"
+            f"- 📊 **Academic Risk**: *'How many high-risk students are there in CSE?'*\n"
             f"- 🛠️ **Complaints**: *'Which department has the most open complaints?'*\n"
-            f"- 📅 **Events & Clubs**: *'What events are scheduled for this week?'*\n"
-            f"- 🚌 **Transport**: *'What is the live status of campus buses?'*\n"
-            f"- 🚗 **Parking**: *'Are slots available in Main Gate Parking?'*\n"
-            f"- 🍽️ **Canteen**: *'What is tomorrow's expected lunch demand?'*\n"
+            f"- 📅 **Events & Clubs**: *'What are today\\'s events?'* or *'Which clubs have upcoming events?'*\n"
+            f"- 🚌 **Transport**: *'Show bus locations.'*\n"
+            f"- 🚗 **Parking**: *'Is parking available near Block A?'*\n"
+            f"- 🍽️ **Canteen**: *'What is tomorrow\\'s expected lunch demand?'*\n"
             f"- ⚡ **Energy**: *'Show active energy anomalies.'*"
         )

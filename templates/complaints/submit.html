@@ -1,44 +1,161 @@
 {% extends 'base.html' %}
 {% load static campus_3d %}
 
-{% block title %}Lodge Complaint - CampusPulse AI{% endblock %}
+{% block title %}Lodge Complaint with AI Triage - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 720px; margin: 2rem auto;">
-    <div class="card-light" style="padding: 2.5rem; box-shadow: var(--shadow-md);">
-        <div class="card-header-clean">
-            <div>
-                <span class="ai-badge ai-prediction" style="margin-bottom:0.35rem;">⚡ Real-Time NLP Triage</span>
-                <h2 class="card-title-clean">Submit Grievance Ticket</h2>
+<div style="max-width: 1100px; margin: 2rem auto;">
+
+    <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 2rem; align-items: start;">
+
+        <!-- Left Column: Form -->
+        <div class="card-light" style="padding: 2.25rem; box-shadow: var(--shadow-sm);">
+            <div class="card-header-clean" style="margin-bottom: 1rem;">
+                <div>
+                    <span class="ai-badge ai-prediction" style="margin-bottom:0.35rem; display:inline-flex; align-items:center; gap:0.3rem;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Real-Time NLP Triage</span>
+                    <h2 class="card-title-clean" style="font-size: 1.6rem; font-weight: 800;">Submit Grievance Ticket</h2>
+                </div>
+                {% campus_3d_visual 'complaints' 75 55 %}
             </div>
-            {% campus_3d_visual 'complaints' 80 60 %}
+
+            <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+                Describe the issue in plain language. As you type, the NLP Triage Copilot on the right will predict the department, urgency level, and SLA targets.
+            </p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display:block; font-size:0.78rem; font-weight:700; color:#475569; margin-bottom:0.35rem; text-transform:uppercase;">
+                        Subject / Short Title *
+                    </label>
+                    <input type="text" id="complaintTitle" name="title" class="form-input" style="width: 100%; padding: 0.75rem 1rem; font-size: 0.92rem;" placeholder="e.g. Electrical sparks and smoke near distribution board in Block B Room 304" required>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display:block; font-size:0.78rem; font-weight:700; color:#475569; margin-bottom:0.35rem; text-transform:uppercase;">
+                        Detailed Description *
+                    </label>
+                    <textarea id="complaintDesc" name="description" class="form-input" rows="6" style="width: 100%; padding: 0.85rem 1rem; font-size: 0.92rem; font-family: inherit; line-height: 1.5;" placeholder="State full details. Mention block name, floor, or classroom..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-weight: 700; display: flex; justify-content: center; align-items: center; gap: 8px;">
+                    <span>Confirm & Submit Grievance Ticket</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+            </form>
         </div>
 
-        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 1.75rem; line-height: 1.6;">
-            Simply describe the issue in plain English (e.g. <i>"The WiFi router on 3rd floor Block B is offline and students cannot submit lab assignments"</i>). Our NLP engine will classify the department, assess emergency priority, and set statutory SLA targets.
-        </p>
-
-        <form method="POST">
-            {% csrf_token %}
-            <div style="margin-bottom: 1.25rem;">
-                <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
-                    Subject / Short Title
-                </label>
-                <input type="text" name="title" class="form-select-light" style="width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius-md); font-size: 0.92rem;" placeholder="e.g. Damaged power socket and ceiling light in Lab 204" required>
+        <!-- Right Column: Live AI Triage Copilot Preview Card -->
+        <div class="card-light" style="padding: 1.75rem; border: 1.5px solid #BFDBFE; background: linear-gradient(180deg, #FFFFFF 0%, #F0F9FF 100%); position: sticky; top: 90px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <div style="color: #1E3A8A; display:flex; align-items:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></div>
+                    <h3 style="margin: 0; font-size: 1rem; font-weight: 800; color: #1E3A8A;">AI Triage Copilot</h3>
+                </div>
+                <span id="aiStatusPill" class="ai-badge badge-ai-realtime">Listening</span>
             </div>
 
-            <div style="margin-bottom: 1.5rem;">
-                <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--text-muted); margin-bottom:0.35rem; text-transform:uppercase;">
-                    Full Complaint Description
-                </label>
-                <textarea name="description" class="form-select-light" rows="5" style="width: 100%; padding: 0.85rem 1rem; border-radius: var(--radius-md); font-size: 0.92rem; font-family: inherit;" placeholder="State the details, mentioning building block, floor, or room number..." required></textarea>
+            <p style="font-size: 0.78rem; color: #64748B; margin-bottom: 1.25rem;">
+                Real-time zero-shot text classification analyzing symptom keywords, urgency modifiers, and spatial entities.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                <!-- Target Department -->
+                <div style="background: white; border: 1px solid #E2E8F0; padding: 0.8rem 1rem; border-radius: 8px;">
+                    <div style="font-size: 0.72rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Automated Routing</div>
+                    <div id="previewDept" style="font-size: 0.95rem; font-weight: 800; color: #1D4ED8; margin-top: 2px;">General Maintenance</div>
+                </div>
+
+                <!-- Category & Confidence -->
+                <div style="background: white; border: 1px solid #E2E8F0; padding: 0.8rem 1rem; border-radius: 8px;">
+                    <div style="font-size: 0.72rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Detected Category</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+                        <span id="previewCategory" style="font-size: 0.92rem; font-weight: 700; color: #0F172A;">General Infrastructure</span>
+                        <span id="previewConf" class="role-badge" style="background: #EFF6FF; color: #2563EB;">85% Confidence</span>
+                    </div>
+                </div>
+
+                <!-- Priority & SLA -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                    <div style="background: white; border: 1px solid #E2E8F0; padding: 0.8rem; border-radius: 8px;">
+                        <div style="font-size: 0.72rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Assessed Priority</div>
+                        <div id="previewPriority" style="font-size: 0.95rem; font-weight: 800; color: #16A34A; margin-top: 2px;">MEDIUM</div>
+                    </div>
+                    <div style="background: white; border: 1px solid #E2E8F0; padding: 0.8rem; border-radius: 8px;">
+                        <div style="font-size: 0.72rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Target SLA</div>
+                        <div id="previewSla" style="font-size: 0.95rem; font-weight: 800; color: #D97706; margin-top: 2px;">24 Hours</div>
+                    </div>
+                </div>
+
+                <!-- Extracted Location -->
+                <div style="background: white; border: 1px solid #E2E8F0; padding: 0.8rem 1rem; border-radius: 8px;">
+                    <div style="font-size: 0.72rem; font-weight: 700; color: #64748B; text-transform: uppercase;">Extracted Landmark / Room</div>
+                    <div id="previewLocation" style="font-size: 0.88rem; font-weight: 700; color: #475569; margin-top: 2px;">Campus Premises</div>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem;">
-                <span>Process with AI & Submit Ticket</span>
-                <span>➔</span>
-            </button>
-        </form>
+            <div style="margin-top: 1rem; font-size: 0.72rem; color: #64748B; line-height: 1.4; display:flex; align-items:center; gap:0.4rem;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; color:#1E3A8A;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Statutory SLA enforcement active. Tickets exceeding resolution deadlines are auto-escalated to senior facility managers.</span>
+            </div>
+        </div>
+
     </div>
+
 </div>
+
+<script>
+let triageTimeout = null;
+
+function runLiveTriagePreview() {
+    const title = document.getElementById('complaintTitle').value.trim();
+    const desc = document.getElementById('complaintDesc').value.trim();
+    const combined = `${title}. ${desc}`.trim();
+
+    if (combined.length < 5) return;
+
+    const statusPill = document.getElementById('aiStatusPill');
+    statusPill.textContent = "Analyzing...";
+    statusPill.className = "ai-badge badge-ai-forecast";
+
+    fetch(`/complaints/api/triage-preview/?text=${encodeURIComponent(combined)}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.getElementById('previewDept').textContent = data.target_department || 'General Maintenance';
+                document.getElementById('previewCategory').textContent = data.category_display || data.category;
+                
+                const confPct = Math.round((data.confidence || 0.85) * 100);
+                document.getElementById('previewConf').textContent = `${confPct}% Confidence`;
+                
+                const prioEl = document.getElementById('previewPriority');
+                prioEl.textContent = data.priority;
+                if (data.priority === 'URGENT') prioEl.style.color = '#DC2626';
+                else if (data.priority === 'HIGH') prioEl.style.color = '#EA580C';
+                else if (data.priority === 'MEDIUM') prioEl.style.color = '#16A34A';
+                else prioEl.style.color = '#475569';
+
+                document.getElementById('previewSla').textContent = `${data.sla_hours} Hours`;
+                document.getElementById('previewLocation').textContent = data.location_extracted || 'Campus Premises';
+
+                statusPill.textContent = "Triaged";
+                statusPill.className = "ai-badge badge-ai-realtime";
+            }
+        })
+        .catch(err => {
+            statusPill.textContent = "Ready";
+            statusPill.className = "ai-badge badge-ai-realtime";
+        });
+}
+
+document.getElementById('complaintTitle').addEventListener('input', () => {
+    clearTimeout(triageTimeout);
+    triageTimeout = setTimeout(runLiveTriagePreview, 350);
+});
+
+document.getElementById('complaintDesc').addEventListener('input', () => {
+    clearTimeout(triageTimeout);
+    triageTimeout = setTimeout(runLiveTriagePreview, 350);
+});
+</script>
 {% endblock %}

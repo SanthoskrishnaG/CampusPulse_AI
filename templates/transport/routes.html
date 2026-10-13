@@ -5,12 +5,12 @@
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
     <div>
-        <h1 style="font-size: 2rem; margin-bottom: 0.25rem;">🚌 Campus Bus Routes & Stops</h1>
+        <h1 style="font-size: 2rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.6rem;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-electric);"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.6-.4-1-1-1H2c-.6 0-1 .4-1 1 0 .4.1.8.2 1.2.3 1.1.8 2.8.8 2.8h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>Campus Bus Routes & Stops</h1>
         <p style="color: var(--text-secondary); font-size: 0.95rem;">
             Designated routes, intermediate stops, distance metrics, and fleet allocations.
         </p>
     </div>
-    <a href="{% url 'transport:dashboard' %}" class="btn btn-primary">Live Tracking Map ➔</a>
+    <a href="{% url 'transport:dashboard' %}" class="btn btn-primary" style="display:flex; align-items:center; gap:0.4rem;">Live Tracking Map <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem;">

@@ -26,23 +26,35 @@
             </p>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem; color: var(--text-secondary); border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
-                <div>📍 <b>Venue:</b> {{ event.location_name }}</div>
-                <div>🎤 <b>Keynote Speaker:</b> {{ event.speaker|default:"Faculty Expert Panel" }}</div>
-                <div>⏰ <b>Starts:</b> {{ event.start_time|date:"M d, Y - h:i A" }}</div>
-                <div>🏁 <b>Ends:</b> {{ event.end_time|date:"M d, Y - h:i A" }}</div>
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <b>Venue:</b> {{ event.location_name }}
+                </div>
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+                    <b>Keynote Speaker:</b> {{ event.speaker|default:"Faculty Expert Panel" }}
+                </div>
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <b>Starts:</b> {{ event.start_time|date:"M d, Y - h:i A" }}
+                </div>
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                    <b>Ends:</b> {{ event.end_time|date:"M d, Y - h:i A" }}
+                </div>
             </div>
         </div>
 
         <!-- Student Feedback -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">💬 Attendee Feedback & Ratings</h3>
+                <h3 class="card-title" style="display:flex; align-items:center; gap:0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Attendee Feedback & Ratings</h3>
             </div>
             {% for f in feedbacks %}
             <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
                 <div style="display: flex; justify-content: space-between;">
                     <span style="font-weight: 600; font-size: 0.85rem;">{{ f.student.get_display_name }}</span>
-                    <span style="color: var(--accent-amber);">★ {{ f.rating }}/5</span>
+                    <span style="color: var(--accent-amber); display:flex; align-items:center; gap:0.25rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> {{ f.rating }}/5</span>
                 </div>
                 <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">{{ f.comments }}</div>
             </div>
@@ -56,12 +68,12 @@
     <div>
         <div class="card" style="margin-bottom: 1.5rem; border: 1px solid var(--border-glow);">
             <div class="card-header">
-                <h3 class="card-title">🎟️ Registration & Entry Pass</h3>
+                <h3 class="card-title" style="display:flex; align-items:center; gap:0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg> Registration & Entry Pass</h3>
             </div>
 
             {% if is_registered %}
             <div style="text-align: center; padding: 1.5rem 0;">
-                <div style="font-size: 3rem; margin-bottom: 0.5rem;">✅</div>
+                <div style="color: var(--accent-emerald); margin-bottom: 0.5rem; display:flex; justify-content:center;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div>
                 <h4 style="color: var(--accent-emerald); margin-bottom: 0.4rem;">You are Registered!</h4>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
                     Show your digital token at the entrance desk to mark verified attendance and receive your certificate.
@@ -72,7 +84,7 @@
                 {% if not user_registration.attended %}
                 <a href="{% url 'events:checkin' user_registration.qr_token %}" class="btn btn-secondary btn-sm" style="margin-top: 1rem; width: 100%;">Simulate QR Check-In Scan</a>
                 {% else %}
-                <div class="badge badge-low" style="margin-top: 1rem; width: 100%; justify-content: center; padding: 0.5rem;">✓ Attendance Confirmed & Certificate Generated</div>
+                <div class="badge badge-low" style="margin-top: 1rem; width: 100%; justify-content: center; padding: 0.5rem; display:flex; align-items:center; gap:0.35rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Attendance Confirmed & Certificate Generated</div>
                 {% endif %}
             </div>
             {% else %}
@@ -81,7 +93,7 @@
             </p>
             <form method="POST" action="{% url 'events:register' event.pk %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Confirm Event Registration ➔</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; display:flex; align-items:center; justify-content:center; gap:0.4rem;">Confirm Event Registration <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
             </form>
             {% endif %}
         </div>
@@ -89,7 +101,7 @@
         <!-- ML Turnout Forecast -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">🤖 AI Attendance Forecast</h3>
+                <h3 class="card-title" style="display:flex; align-items:center; gap:0.5rem;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg> AI Attendance Forecast</h3>
             </div>
             <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
                 <div>Predicted Turnout: <b style="color: var(--accent-cyan);">{{ prediction.predicted_attendance }} attendees</b></div>

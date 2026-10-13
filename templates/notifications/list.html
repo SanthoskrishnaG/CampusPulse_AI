@@ -4,53 +4,332 @@
 {% block title %}Notifications & Alerts - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 860px; margin: 0 auto;">
+{% csrf_token %}
+<div style="max-width: 920px; margin: 0 auto;">
 
     <!-- Notifications Header -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
         <div>
             <div class="hero-pill" style="margin-bottom: 0.4rem;">
-                <span>🔔</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
                 <span>Real-Time Campus Alert Hub</span>
             </div>
-            <h1 style="font-size: 2.15rem; font-weight: 800; margin-bottom: 0.25rem;">
+            <h1 style="font-size: 2.15rem; font-weight: 800; margin-bottom: 0.25rem; color: #0F172A;">
                 Notification Center
             </h1>
-            <p style="color: var(--text-muted); font-size: 0.92rem;">
+            <p style="color: var(--text-muted); font-size: 0.92rem; margin: 0;">
                 System alerts regarding academic interventions, bus transit schedules, and ticket resolutions.
             </p>
         </div>
-        <a href="{% url 'notifications:mark_all_read' %}" class="btn btn-secondary btn-sm">Mark All as Read</a>
-    </div>
-
-    <div class="card-light" style="padding: 1.5rem; margin-bottom: 2.5rem;">
-        {% for n in notifications %}
-        <div style="padding: 1rem 0; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; {% if not n.is_read %}background: #F0F9FF; margin: 0 -1.5rem; padding: 1rem 1.5rem; border-left: 3px solid var(--brand-cyan);{% endif %}">
-            <div>
-                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;">
-                    <span class="role-badge" style="background:#FFFFFF; border:1px solid var(--border-subtle); color:var(--text-primary);">
-                        {{ n.get_category_display }}
-                    </span>
-                    <strong style="font-size: 0.95rem; color: var(--text-primary);">{{ n.title }}</strong>
-                    {% if not n.is_read %}
-                    <span class="status-dot"></span>
-                    {% endif %}
-                </div>
-                <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">{{ n.message }}</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">{{ n.created_at|date:"M d, Y · h:i A" }}</div>
-            </div>
-
-            {% if not n.is_read %}
-            <a href="{% url 'notifications:mark_read' n.pk %}" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">Mark Read</a>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+            {% if unread_count > 0 %}
+            <button id="btnMarkAllRead" class="btn btn-primary btn-sm" style="font-weight: 700;">
+                Mark All as Read
+            </button>
+            {% else %}
+            <button id="btnMarkAllRead" class="btn btn-secondary btn-sm" disabled style="opacity: 0.6; cursor: not-allowed; font-weight: 600;">
+                All Marked as Read
+            </button>
             {% endif %}
         </div>
+    </div>
+
+    <!-- Feedback Toast Banner -->
+    <div id="notifStatusBanner" style="display: none; padding: 0.85rem 1.25rem; border-radius: 12px; margin-bottom: 1.25rem; background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; font-size: 0.88rem; font-weight: 600;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span id="notifStatusMsg">All notifications marked as read.</span>
+            <button type="button" onclick="document.getElementById('notifStatusBanner').style.display='none'" style="background:none; border:none; color:#065F46; font-weight:700; cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+    </div>
+
+    <!-- Filter Bar & Category Selector -->
+    <div class="card-light" style="padding: 1rem 1.25rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+            
+            <!-- Status Tabs -->
+            <div style="display: flex; gap: 0.35rem; align-items: center; flex-wrap: wrap;">
+                <a href="?filter=all{% if selected_category %}&category={{ selected_category }}{% endif %}" class="btn btn-sm {% if filter_type == 'all' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px; font-weight: 700;">
+                    All (<span id="tabCountAll">{{ total_count }}</span>)
+                </a>
+                <a href="?filter=unread{% if selected_category %}&category={{ selected_category }}{% endif %}" class="btn btn-sm {% if filter_type == 'unread' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px; font-weight: 700;">
+                    Unread (<span id="tabCountUnread">{{ unread_count }}</span>)
+                </a>
+                <a href="?filter=read{% if selected_category %}&category={{ selected_category }}{% endif %}" class="btn btn-sm {% if filter_type == 'read' %}btn-primary{% else %}btn-secondary{% endif %}" style="border-radius: 20px; font-weight: 700;">
+                    Read (<span id="tabCountRead">{{ read_count }}</span>)
+                </a>
+            </div>
+
+            <!-- Category Filter Dropdown -->
+            <form method="GET" style="display: flex; align-items: center; gap: 0.5rem;">
+                <input type="hidden" name="filter" value="{{ filter_type }}">
+                <select name="category" onchange="this.form.submit()" class="form-select-light" style="font-size: 0.82rem; padding: 0.35rem 0.75rem; border-radius: 8px;">
+                    <option value="">All Categories</option>
+                    {% for cat_val, cat_label in categories %}
+                    <option value="{{ cat_val }}" {% if selected_category == cat_val %}selected{% endif %}>{{ cat_label }}</option>
+                    {% endfor %}
+                </select>
+                {% if selected_category %}
+                <a href="?filter={{ filter_type }}" class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.65rem; font-size: 0.78rem;">Reset</a>
+                {% endif %}
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Notification Feed Container -->
+    <div class="card-light" id="notifListContainer" style="padding: 0.5rem 1.5rem; margin-bottom: 2.5rem;">
+        {% for n in notifications %}
+        <div class="notif-item-row" id="notif-row-{{ n.pk }}" data-id="{{ n.pk }}" style="padding: 1.15rem 0; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; gap: 1rem; transition: background 0.2s ease; {% if not n.is_read %}background: #F0F9FF; margin: 0 -1.5rem; padding: 1.15rem 1.5rem; border-left: 3px solid var(--brand-cyan);{% endif %}">
+            <div style="flex: 1;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
+                    <span class="role-badge" style="background:#FFFFFF; border:1px solid var(--border-subtle); color:var(--text-primary); font-size: 0.75rem;">
+                        {{ n.get_category_display }}
+                    </span>
+                    <strong class="notif-title" style="font-size: 0.96rem; color: #0F172A;">{{ n.title }}</strong>
+                    {% if not n.is_read %}
+                    <span class="status-dot notif-dot" style="background: #0284C7;" title="Unread notification"></span>
+                    <span class="ai-badge ai-alert notif-unread-badge" style="font-size: 0.7rem; padding: 1px 6px;">Unread</span>
+                    {% else %}
+                    <span class="ai-badge ai-confidence notif-read-badge" style="font-size: 0.7rem; padding: 1px 6px;">Read</span>
+                    {% endif %}
+                </div>
+                <div style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.35rem;">
+                    {{ n.message }}
+                </div>
+                <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; gap: 1rem; align-items: center;">
+                    <span style="display:inline-flex; align-items:center; gap:0.25rem;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> {{ n.created_at|date:"M d, Y · h:i A" }}</span>
+                    {% if n.link_url %}
+                    <a href="{{ n.link_url }}" style="color: var(--brand-electric); text-decoration: none; font-weight: 600; display:inline-flex; align-items:center; gap:0.25rem;"><span>Open Target Resource</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="notif-action-col" style="flex-shrink: 0;">
+                {% if not n.is_read %}
+                <button type="button" class="btn btn-secondary btn-sm btn-mark-read" data-id="{{ n.pk }}" style="font-size: 0.78rem; font-weight: 700; border-radius: 8px;">
+                    Mark Read
+                </button>
+                {% endif %}
+            </div>
+        </div>
         {% empty %}
-        <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
-            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📭</div>
-            <p style="font-weight: 600;">Your notification inbox is clean and up to date.</p>
+        <!-- Dynamic Empty State -->
+        <div style="text-align: center; padding: 3.5rem 1.5rem; color: var(--text-muted);">
+            <div style="margin-bottom: 0.75rem; color: var(--brand-electric); display:flex; justify-content:center;">
+                {% if filter_type == 'unread' %}
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                {% else %}
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                {% endif %}
+            </div>
+            <p style="font-weight: 700; font-size: 1.05rem; color: #1E293B; margin-bottom: 0.35rem;">
+                {% if filter_type == 'unread' %}
+                    All caught up! No unread notifications.
+                {% elif filter_type == 'read' %}
+                    No read notifications recorded yet.
+                {% else %}
+                    Your notification inbox is clean and up to date.
+                {% endif %}
+            </p>
+            <p style="font-size: 0.85rem; color: #64748B; margin: 0 0 1.25rem;">
+                {% if filter_type == 'unread' and total_count > 0 %}
+                    You have {{ total_count }} past notification{{ total_count|pluralize }} archived in your inbox.
+                {% else %}
+                    New academic alerts, bus delays, or complaint updates will appear here instantly.
+                {% endif %}
+            </p>
+            {% if filter_type == 'unread' and total_count > 0 %}
+            <a href="?filter=all" class="btn btn-secondary btn-sm" style="font-weight: 700; display:inline-flex; align-items:center; gap:0.35rem;">
+                <span>View All Notifications ({{ total_count }})</span> <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
 
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const banner = document.getElementById('notifStatusBanner');
+    const bannerMsg = document.getElementById('notifStatusMsg');
+    const btnMarkAll = document.getElementById('btnMarkAllRead');
+
+    function showStatus(msg, isSuccess = true) {
+        if (banner && bannerMsg) {
+            bannerMsg.textContent = msg;
+            banner.style.display = 'block';
+            banner.style.background = isSuccess ? '#ECFDF5' : '#FEF2F2';
+            banner.style.borderColor = isSuccess ? '#A7F3D0' : '#FECACA';
+            banner.style.color = isSuccess ? '#065F46' : '#991B1B';
+            setTimeout(() => { banner.style.display = 'none'; }, 4000);
+        }
+    }
+
+    // 1. Mark Individual Notification as Read (AJAX)
+    document.querySelectorAll('.btn-mark-read').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const notifId = btn.dataset.id;
+            btn.disabled = true;
+            btn.textContent = 'Updating...';
+
+            try {
+                const res = await fetch(`/notifications/${notifId}/read/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    
+                    // Update row UI
+                    const row = document.getElementById(`notif-row-${notifId}`);
+                    if (row) {
+                        row.style.background = 'transparent';
+                        row.style.borderLeft = 'none';
+                        row.style.margin = '0';
+                        row.style.padding = '1.15rem 0';
+                        
+                        // Remove unread indicators
+                        const dot = row.querySelector('.notif-dot');
+                        if (dot) dot.remove();
+                        const unreadBadge = row.querySelector('.notif-unread-badge');
+                        if (unreadBadge) {
+                            unreadBadge.className = 'ai-badge ai-confidence notif-read-badge';
+                            unreadBadge.textContent = 'Read';
+                        }
+                        
+                        // Remove button
+                        btn.remove();
+                    }
+
+                    // Synchronize Badges across page
+                    if (window.updateNotificationBadges) {
+                        window.updateNotificationBadges(data.unread_count);
+                    }
+
+                    // Update Tab numbers
+                    const unreadTab = document.getElementById('tabCountUnread');
+                    const readTab = document.getElementById('tabCountRead');
+                    if (unreadTab) {
+                        const current = parseInt(unreadTab.textContent, 10) || 1;
+                        unreadTab.textContent = Math.max(0, current - 1);
+                    }
+                    if (readTab) {
+                        const current = parseInt(readTab.textContent, 10) || 0;
+                        readTab.textContent = current + 1;
+                    }
+
+                    // If zero unread remaining, disable Mark All as Read button
+                    if (data.unread_count === 0 && btnMarkAll) {
+                        btnMarkAll.disabled = true;
+                        btnMarkAll.className = 'btn btn-secondary btn-sm';
+                        btnMarkAll.style.opacity = '0.6';
+                        btnMarkAll.style.cursor = 'not-allowed';
+                        btnMarkAll.textContent = 'All Marked as Read';
+                    }
+
+                    showStatus('Notification marked as read.');
+                }
+            } catch (err) {
+                console.error('Error marking notification as read:', err);
+                btn.disabled = false;
+                btn.textContent = 'Mark Read';
+            }
+        });
+    });
+
+    // 2. Mark All as Read (AJAX)
+    if (btnMarkAll && !btnMarkAll.disabled) {
+        btnMarkAll.addEventListener('click', async (e) => {
+            e.preventDefault();
+            btnMarkAll.disabled = true;
+            btnMarkAll.textContent = 'Marking all...';
+
+            try {
+                const res = await fetch('{% url "notifications:mark_all_read" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+
+                    // Convert all rows on page to read status
+                    document.querySelectorAll('.notif-item-row').forEach(row => {
+                        row.style.background = 'transparent';
+                        row.style.borderLeft = 'none';
+                        row.style.margin = '0';
+                        row.style.padding = '1.15rem 0';
+                        const dot = row.querySelector('.notif-dot');
+                        if (dot) dot.remove();
+                        const unreadBadge = row.querySelector('.notif-unread-badge');
+                        if (unreadBadge) {
+                            unreadBadge.className = 'ai-badge ai-confidence notif-read-badge';
+                            unreadBadge.textContent = 'Read';
+                        }
+                        const actionBtn = row.querySelector('.btn-mark-read');
+                        if (actionBtn) actionBtn.remove();
+                    });
+
+                    // Update Badges to 0
+                    if (window.updateNotificationBadges) {
+                        window.updateNotificationBadges(0);
+                    }
+
+                    // Update Tab numbers
+                    const unreadTab = document.getElementById('tabCountUnread');
+                    const readTab = document.getElementById('tabCountRead');
+                    const allTab = document.getElementById('tabCountAll');
+                    if (unreadTab) unreadTab.textContent = '0';
+                    if (readTab && allTab) readTab.textContent = allTab.textContent;
+
+                    btnMarkAll.className = 'btn btn-secondary btn-sm';
+                    btnMarkAll.style.opacity = '0.6';
+                    btnMarkAll.style.cursor = 'not-allowed';
+                    btnMarkAll.textContent = 'All Marked as Read';
+
+                    showStatus('All notifications marked as read.');
+                }
+            } catch (err) {
+                console.error('Error marking all notifications read:', err);
+                btnMarkAll.disabled = false;
+                btnMarkAll.textContent = 'Mark All as Read';
+            }
+        });
+    }
+});
+
+function getCookie(name) {
+    if (name === 'csrftoken') {
+        const tokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (tokenInput && tokenInput.value) {
+            return tokenInput.value;
+        }
+    }
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
 {% endblock %}

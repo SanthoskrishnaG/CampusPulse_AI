@@ -27,14 +27,16 @@
                     {{ ev.hostel.code }}
                 </span>
             </div>
-            <div style="font-size: 0.8rem; color: #16A34A; font-weight: 700; margin-bottom: 0.5rem;">
-                📅 {{ ev.event_date|date:"l, F d, Y • h:i A" }}
+            <div style="font-size: 0.8rem; color: #16A34A; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 4px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span>{{ ev.event_date|date:"l, F d, Y &bull; h:i A" }}</span>
             </div>
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 1rem; line-height: 1.4;">
                 {{ ev.description }}
             </p>
-            <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid #E2E8F0; padding-top: 0.6rem;">
-                📍 Venue: <strong>{{ ev.location }}</strong> • Organized by: {{ ev.organizer }}
+            <div style="font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid #E2E8F0; padding-top: 0.6rem; display: flex; align-items: center; gap: 4px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <span>Venue: <strong>{{ ev.location }}</strong> &bull; Organized by: {{ ev.organizer }}</span>
             </div>
         </div>
         {% empty %}

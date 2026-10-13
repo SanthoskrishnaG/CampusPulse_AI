@@ -47,7 +47,8 @@ class CampusPulseCorePlatformTests(TestCase):
             cgpa=8.2,
             attendance_percentage=88.0,
             skills="Python, PyTorch, React, SQL",
-            interests="Machine Learning, Robotics"
+            interests="Machine Learning, Robotics",
+            is_accommodation_configured=True
         )
 
     def test_authentication_and_rbac_redirect(self):

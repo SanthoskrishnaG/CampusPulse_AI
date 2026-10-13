@@ -10,7 +10,7 @@
     <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #FEF3C7 60%, #FEF9C3 100%);">
         <div style="max-width: 650px;">
             <div class="hero-pill" style="margin-bottom: 0.5rem;">
-                <span>⚡</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 <span>Sub-Meter Telemetry & Unsupervised Anomaly Detection</span>
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
@@ -34,7 +34,7 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Monitored Facilities</span>
-                <div class="kpi-icon-wrap">🏛️</div>
+                <div class="kpi-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg></div>
             </div>
             <div class="kpi-value">{{ meters|length|default:5 }}</div>
             <div class="kpi-trend neutral">
@@ -45,7 +45,7 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Campus Load</span>
-                <div class="kpi-icon-wrap" style="color:var(--brand-electric); background:#F0F9FF;">⚡</div>
+                <div class="kpi-icon-wrap" style="color:var(--brand-electric); background:#F0F9FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
             </div>
             <div class="kpi-value" style="color:var(--brand-electric);">
                 {{ total_current_kwh|default:184 }} <span style="font-size: 1rem; color: var(--text-muted); font-weight: 600;">kWh</span>
@@ -58,7 +58,7 @@
         <div class="kpi-card-light">
             <div class="kpi-header">
                 <span class="kpi-title">Anomaly Flags</span>
-                <div class="kpi-icon-wrap" style="color:{% if active_anomalies|length > 0 %}var(--danger){% else %}var(--success){% endif %}; background:{% if active_anomalies|length > 0 %}#FEF2F2{% else %}#F0FDF4{% endif %};">⚠️</div>
+                <div class="kpi-icon-wrap" style="color:{% if active_anomalies|length > 0 %}var(--danger){% else %}var(--success){% endif %}; background:{% if active_anomalies|length > 0 %}#FEF2F2{% else %}#F0FDF4{% endif %};"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
             </div>
             <div class="kpi-value" style="color:{% if active_anomalies|length > 0 %}var(--danger){% else %}var(--success){% endif %};">
                 {{ active_anomalies|length|default:0 }}
@@ -69,11 +69,79 @@
         </div>
     </div>
 
-    <!-- Active Anomalies Alerts Card -->
+    
+    <!-- Infrastructure Real-Time Telemetry Graphs -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        
+        <!-- Energy Consumption Graph -->
+        <div class="card-light">
+            <div class="card-header-clean">
+                <h3 class="card-title-clean">24h Energy Consumption</h3>
+                <span class="ai-badge ai-insight">Live</span>
+            </div>
+            <div style="height: 180px; display: flex; align-items: flex-end; gap: 4px; padding-top: 1rem; border-bottom: 1px solid var(--border-subtle);">
+                <div style="flex: 1; background: var(--bg-surface-subtle); height: 30%; border-radius: 4px 4px 0 0;" title="00:00 - 30kWh"></div>
+                <div style="flex: 1; background: var(--bg-surface-subtle); height: 25%; border-radius: 4px 4px 0 0;" title="04:00 - 25kWh"></div>
+                <div style="flex: 1; background: var(--brand-electric); height: 75%; border-radius: 4px 4px 0 0;" title="08:00 - 75kWh"></div>
+                <div style="flex: 1; background: var(--brand-electric); height: 95%; border-radius: 4px 4px 0 0;" title="12:00 - 95kWh"></div>
+                <div style="flex: 1; background: var(--danger); height: 100%; border-radius: 4px 4px 0 0;" title="16:00 - 105kWh (Peak)"></div>
+                <div style="flex: 1; background: var(--brand-electric); height: 60%; border-radius: 4px 4px 0 0;" title="20:00 - 60kWh"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">
+                <span>12 AM</span>
+                <span>8 AM</span>
+                <span>4 PM</span>
+                <span>10 PM</span>
+            </div>
+        </div>
+
+        <!-- Building Temperature Grid -->
+        <div class="card-light">
+            <div class="card-header-clean">
+                <h3 class="card-title-clean">HVAC & Temperature</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 1rem; padding-top: 0.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #FAFAFA; border: 1px solid #E2E8F0; border-radius: 8px;">
+                    <div style="font-weight: 600;">Block A (Admin)</div>
+                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--success);">23.5°C</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px;">
+                    <div style="font-weight: 600;">Data Center</div>
+                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--danger);">28.2°C <span style="font-size: 0.7rem; font-weight:700;">ALERT</span></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: #FAFAFA; border: 1px solid #E2E8F0; border-radius: 8px;">
+                    <div style="font-weight: 600;">Library Main</div>
+                    <div style="font-size: 1.1rem; font-weight: 800; color: var(--success);">22.1°C</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solar Yield Graph -->
+        <div class="card-light" style="background: linear-gradient(135deg, #1E293B, #0F172A); color: white;">
+            <div class="card-header-clean" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <h3 class="card-title-clean" style="color: white;">Solar Micro-Grid Yield</h3>
+                <span class="ai-badge ai-confidence" style="background: rgba(16,185,129,0.2); color: #34D399; border: none;">Optimal</span>
+            </div>
+            <div style="padding-top: 1.5rem; text-align: center;">
+                <div style="font-size: 3rem; font-weight: 800; font-family: 'Outfit'; color: #FBBF24;">48.2 <span style="font-size: 1.25rem; color: #94A3B8;">MWh</span></div>
+                <div style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 1.5rem;">Generated Today (CIT Rooftop Array)</div>
+                <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem;">
+                    <div style="width: 78%; height: 100%; background: #FBBF24;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748B; font-weight: 600;">
+                    <span>0 MWh</span>
+                    <span>78% Capacity Factor</span>
+                    <span>60 MWh Max</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<!-- Active Anomalies Alerts Card -->
     {% if active_anomalies %}
     <div class="card-light" style="border-left: 4px solid var(--danger); margin-bottom: 2rem; background: #FEF2F2;">
         <div class="card-header-clean">
-            <h3 class="card-title-clean" style="color: var(--danger);">⚠️ Active Unresolved Energy Anomalies</h3>
+            <h3 class="card-title-clean" style="color: var(--danger);">Active Unresolved Energy Anomalies</h3>
             <span class="ai-badge ai-alert">Nocturnal Baseline Spike</span>
         </div>
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
@@ -98,7 +166,7 @@
     <!-- Meter Fleet Table -->
     <div class="table-container-light" style="margin-bottom: 2.5rem;">
         <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-size: 1.1rem; font-weight: 800;">⚡ Campus Power Sub-Meters</h3>
+            <h3 style="font-size: 1.1rem; font-weight: 800;">Campus Power Sub-Meters</h3>
             <span class="ai-badge ai-confidence">Live Baseline: Healthy</span>
         </div>
         <table class="table-clean">

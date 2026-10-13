@@ -14,6 +14,9 @@ urlpatterns = [
     path('mess/', views.mess_view, name='mess'),
     path('announcements/', views.announcements_view, name='announcements'),
     path('attendance/', views.attendance_view, name='attendance'),
+    path('outpass/', views.outpass_view, name='outpass'),
+    path('outpass/<int:pass_id>/action/', views.outpass_action_view, name='outpass_action'),
+    path('rooms/allocate/', views.room_allocate_view, name='room_allocate'),
     path('route/', views.route_view, name='route'),
     path('routes/', views.route_view, name='routes'),
     path('events/', views.events_view, name='events'),
@@ -31,6 +34,7 @@ urlpatterns = [
     path('api/routes/', views.api_hostel_routes, name='api_routes'),
     path('api/complaints/', views.api_hostel_complaints, name='api_complaints'),
     path('api/maintenance/', views.api_hostel_maintenance, name='api_maintenance'),
+    path('api/mess/checkin/', views.api_mess_checkin, name='api_mess_checkin'),
     path('api/<str:hostel_code>/', views.api_hostel_details, name='api_details'),
     path('api/<str:hostel_code>/route/', views.api_hostel_route, name='api_route'),
 ]

@@ -7,5 +7,7 @@ urlpatterns = [
     path('courses/', views.course_list, name='courses'),
     path('risk-dashboard/', views.risk_dashboard, name='risk_dashboard'),
     path('api/run-assessment/', views.run_risk_assessment_api, name='api_run_assessment'),
+    path('api/auto-interventions/', views.api_auto_dispatch_interventions, name='api_auto_interventions'),
+    path('api/student-analytics/<str:student_id>/', views.api_student_academic_analytics, name='api_student_analytics'),
     path('intervention/create/<str:student_id>/', views.create_intervention, name='create_intervention'),
 ]

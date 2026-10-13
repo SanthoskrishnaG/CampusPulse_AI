@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.assistant_page, name='chat'),
     path('api/query/', views.assistant_query_api, name='api_query'),
     path('api/chat/', views.assistant_query_api, name='api_chat'),
+    path('api/status/', views.assistant_status_api, name='api_status'),
 ]

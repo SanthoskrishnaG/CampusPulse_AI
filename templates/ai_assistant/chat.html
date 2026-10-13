@@ -1,178 +1,1239 @@
 {% extends 'base.html' %}
 {% load static campus_3d %}
 
-{% block title %}Campus AI Assistant - CampusPulse AI{% endblock %}
+{% block title %}Campus AI Companion - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 960px; margin: 0 auto;">
+<div class="ai-companion-page-container">
 
-    <!-- Assistant Header with 3D AI Mascot -->
-    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 1.75rem 2.25rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #FAF5FF 100%);">
-        <div>
-            <div class="hero-pill" style="margin-bottom: 0.4rem;">
-                <span>🤖</span>
-                <span>Permission-Aware Conversational Intelligence</span>
+    <!-- ==========================================================================
+         1. COMPANION HEADER: Title, Subtitle, Real-Time Status & Controls
+         ========================================================================== -->
+    <div class="card-light companion-header-card">
+        <div class="companion-header-text">
+            <div class="companion-status-row">
+                <div class="hero-pill companion-engine-pill">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                    <span>CIT Autonomous Intelligence</span>
+                </div>
+                <!-- Real-Time AI Backend Status Indicator -->
+                <div class="live-pill companion-live-indicator" id="aiServiceStatusBadge" title="Live Health Telemetry">
+                    <span class="pulse-dot" id="aiStatusDot"></span>
+                    <span id="aiStatusText">Checking Service Status...</span>
+                </div>
             </div>
-            <h1 style="font-size: 2.15rem; font-weight: 800; margin-bottom: 0.25rem;">
-                Campus AI Assistant
+
+            <h1 class="companion-page-title">
+                Campus AI Companion
             </h1>
-            <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                Ask anything about your campus. Grounded strictly in real-time academic, operations, and facility databases.
+            <p class="companion-page-subtitle">
+                Your intelligent assistant for campus information and services.
             </p>
         </div>
-        <div style="flex-shrink: 0;">
-            {% campus_3d_visual 'ai_mascot' 90 90 %}
-        </div>
-    </div>
 
-    <!-- Suggested Inquiries Strip -->
-    <div style="margin-bottom: 1.25rem;">
-        <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem;">
-            Suggested Queries:
-        </span>
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
-                🎓 How many high-risk students are there?
-            </button>
-            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
-                📅 What events are happening today?
-            </button>
-            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
-                ✨ Which clubs have upcoming events?
-            </button>
-            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
-                🚌 Show current bus locations
-            </button>
-            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
-                🚗 Is parking available near Block A?
-            </button>
-            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
-                🛠️ Which department has the most complaints?
-            </button>
-            <button class="campus-pill quick-query-btn" style="cursor: pointer; background: #FFFFFF;">
-                🍽️ Predict tomorrow's canteen demand
-            </button>
-        </div>
-    </div>
-
-    <!-- Main Chat Window Card -->
-    <div class="card-light" style="height: 520px; display: flex; flex-direction: column; padding: 1.5rem; margin-bottom: 1.5rem;">
-        <!-- Chat Scroll Area -->
-        <div id="chatMessages" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; padding-right: 0.5rem;">
-            <!-- Welcome AI Message -->
-            <div class="chat-bubble ai" style="max-width: 90%;">
-                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
-                    <span class="ai-badge ai-insight">🤖 CampusPulse Core</span>
-                    <span style="font-size: 0.72rem; color: var(--text-muted);">Verified Session</span>
+        <div class="companion-header-actions">
+            <!-- 3D AI Mascot Visual -->
+            <div class="companion-mascot-box">
+                {% campus_3d_visual 'ai_mascot' 76 76 %}
+            </div>
+            
+            <div class="companion-controls-box">
+                <button type="button" class="btn btn-secondary btn-sm companion-action-btn" id="btnNewChat" onclick="confirmNewConversation()" title="Clear conversation history and start fresh">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+                    <span>New Chat</span>
+                </button>
+                <div class="companion-persistence-tag" id="persistenceIndicator" title="Conversation saved in browser session">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    <span>History Saved</span>
                 </div>
-                Hello <strong>{{ user.first_name|default:user.username }}</strong>! I am your real-time campus operating assistant. You can ask me about academic retention, facility complaints, bus fleet schedules, dining hall portions, or power grid telemetry. How can I assist you today?
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         2. SUGGESTED QUESTIONS: Clickable Prompt Suggestions
+         ========================================================================== -->
+    <div class="companion-prompts-wrapper">
+        <div class="companion-prompts-header">
+            <span class="companion-prompts-label">Suggested Inquiries</span>
+            <span class="companion-prompts-sub">Click any question to query real-time campus data:</span>
+        </div>
+        <div class="companion-prompts-grid">
+            <button type="button" class="companion-prompt-chip" onclick="handlePromptClick('How many high-risk students are there in CSE?')">
+                <span class="prompt-chip-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+                <span class="prompt-chip-text">How many high-risk students are there in CSE?</span>
+            </button>
+            <button type="button" class="companion-prompt-chip" onclick="handlePromptClick('What are today\'s events?')">
+                <span class="prompt-chip-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg></span>
+                <span class="prompt-chip-text">What are today's events?</span>
+            </button>
+            <button type="button" class="companion-prompt-chip" onclick="handlePromptClick('Show bus locations.')">
+                <span class="prompt-chip-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h20"/><path d="M4 18v3"/><path d="M20 18v3"/><rect width="20" height="15" x="2" y="3" rx="2"/><circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/></svg></span>
+                <span class="prompt-chip-text">Show bus locations.</span>
+            </button>
+            <button type="button" class="companion-prompt-chip" onclick="handlePromptClick('Which clubs have upcoming events?')">
+                <span class="prompt-chip-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></span>
+                <span class="prompt-chip-text">Which clubs have upcoming events?</span>
+            </button>
+            <button type="button" class="companion-prompt-chip" onclick="handlePromptClick('Is parking available near Block A?')">
+                <span class="prompt-chip-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg></span>
+                <span class="prompt-chip-text">Is parking available near Block A?</span>
+            </button>
+            <button type="button" class="companion-prompt-chip" onclick="handlePromptClick('Which department has the most open complaints?')">
+                <span class="prompt-chip-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/></svg></span>
+                <span class="prompt-chip-text">Which department has the most open complaints?</span>
+            </button>
+            <button type="button" class="companion-prompt-chip" onclick="handlePromptClick('What is tomorrow\'s expected lunch demand?')">
+                <span class="prompt-chip-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/><path d="M15 11v11"/><path d="M5 2v8a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V2"/><path d="M8 13v9"/></svg></span>
+                <span class="prompt-chip-text">What is tomorrow's expected lunch demand?</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         3. DEDICATED CONVERSATION LAYOUT
+         ========================================================================== -->
+    <div class="card-light companion-chat-card">
+        
+        <!-- Chat History Scroll Viewport -->
+        <div id="chatMessages" class="companion-messages-scroll" role="log" aria-live="polite">
+            <!-- Messages rendered dynamically via JavaScript (persisted in localStorage) -->
+        </div>
+
+        <!-- Jump to Latest Floating Button -->
+        <button type="button" id="btnScrollBottom" class="btn-scroll-bottom" onclick="scrollToLatest(true)" style="display:none;" title="Scroll to latest message">
+            <span>⬇ Jump to latest</span>
+        </button>
+
+        <!-- Message Input Form Area -->
+        <div class="companion-input-container">
+            <form id="chatForm" onsubmit="event.preventDefault(); submitChatMessage();" class="companion-input-form">
+                <div class="companion-textarea-wrapper">
+                    <textarea 
+                        id="queryInput" 
+                        class="companion-textarea" 
+                        rows="1" 
+                        placeholder="Type a question about campus academics, buses, events, hostels, parking..." 
+                        aria-label="Ask Campus AI Companion"
+                    ></textarea>
+                </div>
+                <button type="submit" id="btnSend" class="companion-send-button" title="Send Question">
+                    <span id="btnSendIcon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+                    <span class="companion-send-text">Send</span>
+                </button>
+            </form>
+            <div class="companion-input-hints">
+                <span>Tip: Press <strong>Enter</strong> to send, <strong>Shift + Enter</strong> for a new line.</span>
+                <span class="companion-boundary-note">Role-based security boundaries active.</span>
             </div>
         </div>
 
-        <!-- Chat Input Form -->
-        <div style="display: flex; gap: 0.75rem; margin-top: 1rem; border-top: 1px solid var(--border-light); padding-top: 1rem;">
-            <input type="text" id="queryInput" class="form-select-light" placeholder="Ask anything about your campus..." style="flex: 1; font-size: 0.92rem; padding: 0.75rem 1.25rem; border-radius: var(--radius-md);">
-            <button id="sendBtn" class="btn btn-primary">
-                <span>Ask AI</span>
-                <span>➔</span>
-            </button>
-        </div>
     </div>
 
 </div>
+
+<!-- Confirmation Modal for New Conversation -->
+<div class="companion-modal-backdrop" id="clearConfirmModal" style="display:none;" onclick="if(event.target===this) closeConfirmModal()">
+    <div class="companion-modal-box">
+        <div class="companion-modal-header">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+            <h4>Start a New Conversation?</h4>
+        </div>
+        <p class="companion-modal-desc">
+            This will clear your current conversation history from this browser. Your institutional data on the campus server remains unaffected.
+        </p>
+        <div class="companion-modal-actions">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="closeConfirmModal()">Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="resetConversationConfirmed()" style="background:#DC2626; border-color:#DC2626;">Yes, Clear & Start Fresh</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ==========================================================================
+   Campus AI Companion Dedicated Styling
+   ========================================================================== */
+.ai-companion-page-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 0.5rem 2rem 0.5rem;
+}
+
+/* Header */
+.companion-header-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.75rem 2.25rem;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 65%, #FAF5FF 100%);
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+    gap: 1.5rem;
+}
+
+.companion-header-text {
+    flex: 1;
+}
+
+.companion-status-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.companion-engine-pill {
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    color: #2563EB;
+    font-size: 0.74rem;
+    font-weight: 700;
+}
+
+.companion-live-indicator {
+    background: #ECFDF5;
+    color: #047857;
+    border: 1px solid #A7F3D0;
+    font-size: 0.74rem;
+    font-weight: 700;
+}
+
+.companion-page-title {
+    font-size: 2.15rem;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 1.15;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.02em;
+}
+
+.companion-page-subtitle {
+    color: #64748B;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    margin: 0;
+}
+
+.companion-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.companion-mascot-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.companion-controls-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+}
+
+.companion-action-btn {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+}
+
+.companion-action-btn:hover {
+    background: #F1F5F9;
+    color: #0F172A;
+    transform: translateY(-1px);
+}
+
+.companion-persistence-tag {
+    font-size: 0.7rem;
+    color: #64748B;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 500;
+}
+
+/* Suggested Prompts Strip */
+.companion-prompts-wrapper {
+    margin-bottom: 1.25rem;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02);
+}
+
+.companion-prompts-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.65rem;
+}
+
+.companion-prompts-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #2563EB;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.companion-prompts-sub {
+    font-size: 0.78rem;
+    color: #64748B;
+}
+
+.companion-prompts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.companion-prompt-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 9999px;
+    padding: 0.42rem 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.companion-prompt-chip:hover {
+    background: #EFF6FF;
+    border-color: #93C5FD;
+    color: #2563EB;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
+}
+
+.prompt-chip-icon {
+    font-size: 0.85rem;
+}
+
+/* Chat Card & Conversation Viewport */
+.companion-chat-card {
+    height: calc(100vh - 290px);
+    min-height: 540px;
+    max-height: 840px;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border: 1px solid #E2E8F0;
+    border-radius: 20px;
+    background: #FFFFFF;
+    box-shadow: 0 4px 25px -4px rgba(15, 23, 42, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.companion-messages-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    scroll-behavior: smooth;
+    background: #FAFAFB;
+}
+
+.companion-messages-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.companion-messages-scroll::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+}
+
+/* Jump to bottom button */
+.btn-scroll-bottom {
+    position: absolute;
+    bottom: 95px;
+    right: 25px;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 9999px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #2563EB;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s;
+}
+.btn-scroll-bottom:hover {
+    background: #EFF6FF;
+    border-color: #2563EB;
+    transform: translateY(-2px);
+}
+
+/* Message Bubbles */
+.chat-row {
+    display: flex;
+    width: 100%;
+}
+
+.chat-row.user {
+    justify-content: flex-end;
+}
+
+.chat-row.assistant {
+    justify-content: flex-start;
+}
+
+.user-bubble {
+    max-width: 75%;
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+    color: #FFFFFF;
+    border-radius: 18px;
+    border-bottom-right-radius: 4px;
+    padding: 0.85rem 1.25rem;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+}
+
+.user-bubble-text {
+    font-size: 0.92rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.user-bubble-meta {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: right;
+    margin-top: 0.35rem;
+}
+
+.assistant-bubble-card {
+    max-width: 85%;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    padding: 1.15rem 1.4rem;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.03);
+    position: relative;
+}
+
+.assistant-bubble-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.65rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.assistant-avatar-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.assistant-avatar-badge {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+}
+
+.assistant-author-name {
+    font-weight: 700;
+    font-size: 0.84rem;
+    color: #0F172A;
+}
+
+.assistant-bubble-body {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #1E293B;
+}
+
+.assistant-bubble-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.65rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid #F8FAFC;
+    font-size: 0.7rem;
+    color: #94A3B8;
+}
+
+/* Markdown formatting in assistant bubbles */
+.assistant-bubble-body p.chat-para {
+    margin: 0 0 0.55rem 0;
+}
+.assistant-bubble-body p.chat-para:last-child {
+    margin-bottom: 0;
+}
+
+.assistant-bubble-body ul.chat-bullet-list {
+    margin: 0.35rem 0 0.65rem 1.25rem;
+    padding: 0;
+}
+
+.assistant-bubble-body ul.chat-bullet-list li {
+    margin-bottom: 0.35rem;
+    line-height: 1.5;
+}
+
+.assistant-bubble-body strong {
+    color: #0F172A;
+    font-weight: 700;
+}
+
+.assistant-bubble-body code.chat-code {
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.82rem;
+    color: #2563EB;
+}
+
+.assistant-bubble-body a.chat-link {
+    color: #2563EB;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+}
+
+.assistant-bubble-body a.chat-link:hover {
+    color: #1D4ED8;
+    text-decoration: none;
+}
+
+.assistant-bubble-body .chat-spacer {
+    height: 0.4rem;
+}
+
+/* Loading Thinking Bubble */
+.thinking-bubble {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.25rem;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    width: fit-content;
+}
+
+.thinking-pulse-spinner {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.thinking-dot {
+    width: 7px;
+    height: 7px;
+    background: #2563EB;
+    border-radius: 50%;
+    animation: pulseDotAnim 1.2s infinite ease-in-out;
+}
+.thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes pulseDotAnim {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1.1); opacity: 1; }
+}
+
+.thinking-text {
+    font-size: 0.84rem;
+    color: #2563EB;
+    font-weight: 600;
+}
+
+/* Error Bubble & Retry Action */
+.error-bubble-card {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    max-width: 85%;
+}
+
+.error-bubble-title {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-weight: 700;
+    color: #DC2626;
+    font-size: 0.86rem;
+    margin-bottom: 0.35rem;
+}
+
+.error-bubble-desc {
+    font-size: 0.82rem;
+    color: #991B1B;
+    margin-bottom: 0.75rem;
+    line-height: 1.45;
+}
+
+.btn-retry-query {
+    background: #DC2626;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+}
+
+.btn-retry-query:hover {
+    background: #B91C1C;
+    transform: translateY(-1px);
+}
+
+/* Input Area */
+.companion-input-container {
+    padding: 1rem 1.75rem 1.25rem 1.75rem;
+    background: #FFFFFF;
+    border-top: 1px solid #E2E8F0;
+}
+
+.companion-input-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    background: #F8FAFC;
+    border: 1px solid #CBD5E1;
+    border-radius: 16px;
+    padding: 0.5rem 0.65rem 0.5rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.companion-input-form:focus-within {
+    background: #FFFFFF;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.companion-textarea-wrapper {
+    flex: 1;
+}
+
+.companion-textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.92rem;
+    color: #0F172A;
+    resize: none;
+    max-height: 120px;
+    line-height: 1.45;
+    padding: 0.35rem 0;
+    display: block;
+}
+
+.companion-textarea::placeholder {
+    color: #94A3B8;
+}
+
+.companion-send-button {
+    background: #2563EB;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    padding: 0.55rem 1.15rem;
+    font-weight: 700;
+    font-size: 0.86rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.companion-send-button:hover:not(:disabled) {
+    background: #1D4ED8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.companion-send-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.companion-input-hints {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.45rem;
+    font-size: 0.72rem;
+    color: #94A3B8;
+}
+
+.companion-boundary-note {
+    color: #059669;
+    font-weight: 600;
+}
+
+/* Confirmation Modal */
+.companion-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.companion-modal-box {
+    background: #FFFFFF;
+    border-radius: 18px;
+    padding: 1.5rem 1.75rem;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+    border: 1px solid #E2E8F0;
+    animation: modalPopIn 0.2s ease;
+}
+
+@keyframes modalPopIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.companion-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.6rem;
+}
+
+.companion-modal-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+.companion-modal-desc {
+    font-size: 0.85rem;
+    color: #64748B;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+}
+
+.companion-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.65rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .companion-header-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.25rem;
+    }
+    .companion-header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .companion-page-title {
+        font-size: 1.65rem;
+    }
+    .companion-chat-card {
+        height: calc(100vh - 240px);
+    }
+    .user-bubble, .assistant-bubble-card {
+        max-width: 92%;
+    }
+    .companion-send-text {
+        display: none;
+    }
+}
+</style>
 {% endblock %}
 
 {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('queryInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const chat = document.getElementById('chatMessages');
+/**
+ * Campus AI Companion Client Controller
+ * Manages live chat stream, persistence in localStorage, real-time backend telemetry status,
+ * markdown parsing, auto-scrolling with scroll-detection, and retry mechanisms.
+ */
+(function() {
+    const STORAGE_KEY = 'campuspulse_companion_chat_{{ user.username|default:"guest" }}';
+    const API_CHAT_ENDPOINT = '/ai-companion/api/chat/';
+    const API_STATUS_ENDPOINT = '/ai-companion/api/status/';
 
-    function appendUserMessage(text) {
-        const div = document.createElement('div');
-        div.className = 'chat-bubble user';
-        div.innerText = text;
-        chat.appendChild(div);
-        chat.scrollTop = chat.scrollHeight;
+    const chatContainer = document.getElementById('chatMessages');
+    const queryInput = document.getElementById('queryInput');
+    const btnSend = document.getElementById('btnSend');
+    const btnSendIcon = document.getElementById('btnSendIcon');
+    const btnScrollBottom = document.getElementById('btnScrollBottom');
+    const clearConfirmModal = document.getElementById('clearConfirmModal');
+
+    let conversation = [];
+    let isGenerating = false;
+    let userScrolledUp = false;
+    let lastFailedQuery = '';
+
+    // =========================================================================
+    // 1. Initial Welcome Message Template
+    // =========================================================================
+    function getWelcomeMessage() {
+        return {
+            id: 'msg_welcome',
+            sender: 'assistant',
+            text: `Hello **{{ user.first_name|default:user.username }}**! I am your **Campus AI Companion**.\n\nI can assist you with real-time institutional records:\n- **Academic Risk AI**: High-risk cohort counts, faculty mentor assignments, and early interventions.\n- **Events & Student Clubs**: Today's schedule, workshops, hackathons, and active club schedules.\n- **Smart Fleet GPS**: Live bus telemetry, route corridors, next stops, and arrival times.\n- **Smart Parking**: Real-time bay occupancy for Lot A (Main Gate), Lot B, and Visitor parking.\n- **Hostel & Facilities**: Room allocations, out-passes, mess timetables, and maintenance requests.\n- **Canteen & Energy**: Daily meal demand forecasting and power anomaly detection.\n\nHow can I help you today?`,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            isWelcome: true
+        };
     }
 
-    async function sendQuery(queryText) {
-        const q = (queryText || input.value).trim();
-        if (!q) return;
+    // =========================================================================
+    // 2. Formatting & Markdown Renderer
+    // =========================================================================
+    function escapeHtml(text) {
+        return (text || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
 
-        appendUserMessage(q);
-        input.value = '';
+    function formatMarkdown(rawText) {
+        if (!rawText) return '';
+        let escaped = escapeHtml(rawText);
 
-        // Multi-Step AI Thinking Animation
-        const thinkingId = 'thinking_' + Date.now();
-        const thinkingDiv = document.createElement('div');
-        thinkingDiv.className = 'chat-bubble ai';
-        thinkingDiv.id = thinkingId;
-        thinkingDiv.innerHTML = `
-            <span class="ai-thinking" id="${thinkingId}_text">
-                <span class="ai-thinking-dot"></span>
-                <span class="ai-thinking-dot"></span>
-                <span class="ai-thinking-dot"></span>
-                Analyzing campus data...
-            </span>
-        `;
-        chat.appendChild(thinkingDiv);
-        chat.scrollTop = chat.scrollHeight;
+        // Bold **text**
+        escaped = escaped.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        // Italic *text*
+        escaped = escaped.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+        // Inline code `code`
+        escaped = escaped.replace(/`([^`]+)`/g, '<code class="chat-code">$1</code>');
+        // Links [text](url)
+        escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="chat-link">$1 &rarr;</a>');
 
-        // Stage 2 thinking update
-        const timer1 = setTimeout(() => {
-            const el = document.getElementById(thinkingId + '_text');
-            if (el) el.innerHTML = `<span class="ai-thinking-dot"></span><span class="ai-thinking-dot"></span><span class="ai-thinking-dot"></span> Checking relevant records...`;
-        }, 350);
+        // Parse bullet lists
+        const lines = escaped.split('\n');
+        let inList = false;
+        const out = [];
 
-        // Stage 3 thinking update
-        const timer2 = setTimeout(() => {
-            const el = document.getElementById(thinkingId + '_text');
-            if (el) el.innerHTML = `<span class="ai-thinking-dot"></span><span class="ai-thinking-dot"></span><span class="ai-thinking-dot"></span> Generating insight...`;
-        }, 700);
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const bulletMatch = line.match(/^(\s*)[-•*]\s+(.*)$/);
+            if (bulletMatch) {
+                if (!inList) {
+                    out.push('<ul class="chat-bullet-list">');
+                    inList = true;
+                }
+                out.push(`<li>${bulletMatch[2]}</li>`);
+            } else {
+                if (inList) {
+                    out.push('</ul>');
+                    inList = false;
+                }
+                if (line.trim() === '') {
+                    out.push('<div class="chat-spacer"></div>');
+                } else {
+                    out.push(`<p class="chat-para">${line}</p>`);
+                }
+            }
+        }
+        if (inList) {
+            out.push('</ul>');
+        }
 
+        return out.join('');
+    }
+
+    // =========================================================================
+    // 3. Conversation Rendering & Persistence
+    // =========================================================================
+    function saveConversation() {
         try {
-            const resp = await fetch('/assistant/api/chat/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: q })
-            });
-            const data = await resp.json();
-            clearTimeout(timer1);
-            clearTimeout(timer2);
-
-            thinkingDiv.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
-                    <span class="ai-badge ai-insight">🤖 AI Insight</span>
-                    <span class="ai-badge ai-confidence">95% Confidence</span>
-                </div>
-                <div style="line-height: 1.55; color: var(--text-primary); font-size: 0.92rem;">
-                    ${data.response ? data.response.replace(/\n/g, '<br>') : "I could not find matching campus records."}
-                </div>
-            `;
-            chat.scrollTop = chat.scrollHeight;
-        } catch (err) {
-            clearTimeout(timer1);
-            clearTimeout(timer2);
-            thinkingDiv.innerHTML = `
-                <div class="ai-badge ai-alert" style="margin-bottom:0.35rem;">⚠️ System Notice</div>
-                <div>Campus assistant is running with local database fallback. Security boundaries remain strictly enforced.</div>
-            `;
-            chat.scrollTop = chat.scrollHeight;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(conversation));
+        } catch (e) {
+            console.warn('Unable to persist chat history to localStorage:', e);
         }
     }
 
-    sendBtn.addEventListener('click', () => sendQuery());
-    input.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendQuery();
+    function loadConversation() {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    conversation = parsed;
+                    return;
+                }
+            }
+        } catch (e) {
+            console.warn('Failed to parse saved chat history:', e);
+        }
+        conversation = [getWelcomeMessage()];
+    }
+
+    function renderConversation() {
+        chatContainer.innerHTML = '';
+        conversation.forEach(msg => {
+            if (msg.sender === 'user') {
+                renderUserMessageBubble(msg);
+            } else if (msg.isError) {
+                renderErrorBubble(msg);
+            } else {
+                renderAssistantMessageBubble(msg);
+            }
+        });
+        scrollToLatest(true);
+    }
+
+    function renderUserMessageBubble(msg) {
+        const row = document.createElement('div');
+        row.className = 'chat-row user';
+        row.innerHTML = `
+            <div class="user-bubble">
+                <div class="user-bubble-text">${escapeHtml(msg.text)}</div>
+                <div class="user-bubble-meta">${msg.timestamp || ''}</div>
+            </div>
+        `;
+        chatContainer.appendChild(row);
+    }
+
+    function renderAssistantMessageBubble(msg) {
+        const row = document.createElement('div');
+        row.className = 'chat-row assistant';
+        const formatted = formatMarkdown(msg.text);
+        row.innerHTML = `
+            <div class="assistant-bubble-card">
+                <div class="assistant-bubble-header">
+                    <div class="assistant-avatar-title">
+                        <div class="assistant-avatar-badge">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                        </div>
+                        <span class="assistant-author-name">Campus AI Companion</span>
+                    </div>
+                    <span class="ai-badge badge-ai-realtime" style="font-size:0.68rem;">Live Verified</span>
+                </div>
+                <div class="assistant-bubble-body">
+                    ${formatted}
+                </div>
+                <div class="assistant-bubble-meta">
+                    <span>CIT Telemetry Engine</span>
+                    <span>${msg.timestamp || ''}</span>
+                </div>
+            </div>
+        `;
+        chatContainer.appendChild(row);
+    }
+
+    function renderErrorBubble(msg) {
+        const row = document.createElement('div');
+        row.className = 'chat-row assistant';
+        row.innerHTML = `
+            <div class="error-bubble-card">
+                <div class="error-bubble-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    <span>Request Failed</span>
+                </div>
+                <div class="error-bubble-desc">${escapeHtml(msg.text)}</div>
+                <button type="button" class="btn-retry-query" onclick="retryLastQuestion('${escapeHtml(msg.rawQuery || lastFailedQuery)}')">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+                    <span>Retry Question</span>
+                </button>
+            </div>
+        `;
+        chatContainer.appendChild(row);
+    }
+
+    // =========================================================================
+    // 4. Auto-Scroll Controller
+    // =========================================================================
+    chatContainer.addEventListener('scroll', () => {
+        const threshold = 120;
+        const distanceFromBottom = chatContainer.scrollHeight - chatContainer.scrollTop - chatContainer.clientHeight;
+        userScrolledUp = distanceFromBottom > threshold;
+
+        if (btnScrollBottom) {
+            btnScrollBottom.style.display = userScrolledUp ? 'block' : 'none';
+        }
     });
 
-    document.querySelectorAll('.quick-query-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            sendQuery(btn.innerText.replace(/^[^\w]+/, '').trim());
-        });
+    window.scrollToLatest = function(force = false) {
+        if (force || !userScrolledUp) {
+            chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: force ? 'auto' : 'smooth'
+            });
+            userScrolledUp = false;
+            if (btnScrollBottom) btnScrollBottom.style.display = 'none';
+        }
+    };
+
+    // =========================================================================
+    // 5. Sending Messages & Backend Interaction
+    // =========================================================================
+    async function executeQuery(questionText) {
+        const query = (questionText || '').trim();
+        if (!query || isGenerating) return;
+
+        isGenerating = true;
+        btnSend.disabled = true;
+        btnSendIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>';
+
+        // 1. Add User Message
+        const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const userMsg = {
+            id: 'user_' + Date.now(),
+            sender: 'user',
+            text: query,
+            timestamp: nowTime
+        };
+        conversation.push(userMsg);
+        renderUserMessageBubble(userMsg);
+        saveConversation();
+        scrollToLatest(true);
+
+        // 2. Add Animated Loading Bubble
+        const thinkingId = 'thinking_' + Date.now();
+        const thinkingRow = document.createElement('div');
+        thinkingRow.className = 'chat-row assistant';
+        thinkingRow.id = thinkingId;
+        thinkingRow.innerHTML = `
+            <div class="thinking-bubble">
+                <div class="thinking-pulse-spinner">
+                    <span class="thinking-dot"></span>
+                    <span class="thinking-dot"></span>
+                    <span class="thinking-dot"></span>
+                </div>
+                <span class="thinking-text" id="${thinkingId}_text">Querying campus telemetry...</span>
+            </div>
+        `;
+        chatContainer.appendChild(thinkingRow);
+        scrollToLatest();
+
+        const stepTimer1 = setTimeout(() => {
+            const el = document.getElementById(thinkingId + '_text');
+            if (el) el.textContent = 'Scanning live database & sensor records...';
+        }, 400);
+
+        const stepTimer2 = setTimeout(() => {
+            const el = document.getElementById(thinkingId + '_text');
+            if (el) el.textContent = 'Formulating permission-verified response...';
+        }, 850);
+
+        try {
+            // Get CSRF Token if available
+            const csrfToken = (window.getCookie && window.getCookie('csrftoken')) || '';
+
+            const res = await fetch(API_CHAT_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ message: query, query: query })
+            });
+
+            clearTimeout(stepTimer1);
+            clearTimeout(stepTimer2);
+
+            const thinkingEl = document.getElementById(thinkingId);
+            if (thinkingEl) thinkingEl.remove();
+
+            if (!res.ok) {
+                throw new Error(`Server returned status HTTP ${res.status}`);
+            }
+
+            const data = await res.json();
+            const replyText = data.response || "No records returned from campus telemetry.";
+
+            const aiMsg = {
+                id: 'ai_' + Date.now(),
+                sender: 'assistant',
+                text: replyText,
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            conversation.push(aiMsg);
+            renderAssistantMessageBubble(aiMsg);
+            saveConversation();
+            scrollToLatest();
+
+        } catch (err) {
+            clearTimeout(stepTimer1);
+            clearTimeout(stepTimer2);
+
+            const thinkingEl = document.getElementById(thinkingId);
+            if (thinkingEl) thinkingEl.remove();
+
+            lastFailedQuery = query;
+            const errorMsg = {
+                id: 'err_' + Date.now(),
+                sender: 'assistant',
+                isError: true,
+                rawQuery: query,
+                text: `Could not reach the Campus AI service (${err.message || 'Network Timeout'}). Please verify connection and retry.`
+            };
+            conversation.push(errorMsg);
+            renderErrorBubble(errorMsg);
+            saveConversation();
+            scrollToLatest(true);
+        } finally {
+            isGenerating = false;
+            btnSend.disabled = false;
+            btnSendIcon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+            queryInput.focus();
+        }
+    }
+
+    // Submit form handler
+    window.submitChatMessage = function() {
+        const text = queryInput.value.trim();
+        if (!text) return;
+        queryInput.value = '';
+        autoResizeTextarea();
+        executeQuery(text);
+    };
+
+    // Suggested question click handler
+    window.handlePromptClick = function(promptText) {
+        if (!promptText || isGenerating) return;
+        executeQuery(promptText);
+    };
+
+    // Retry failed question handler
+    window.retryLastQuestion = function(failedText) {
+        const text = failedText || lastFailedQuery;
+        if (!text || isGenerating) return;
+        executeQuery(text);
+    };
+
+    // =========================================================================
+    // 6. Textarea Input Handling (Enter to send, Shift+Enter for newline)
+    // =========================================================================
+    function autoResizeTextarea() {
+        queryInput.style.height = 'auto';
+        queryInput.style.height = Math.min(queryInput.scrollHeight, 120) + 'px';
+    }
+
+    queryInput.addEventListener('input', autoResizeTextarea);
+
+    queryInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            if (!e.shiftKey) {
+                e.preventDefault();
+                submitChatMessage();
+            }
+        }
     });
-});
+
+    // =========================================================================
+    // 7. Conversation Controls (New Chat / Clear Conversation)
+    // =========================================================================
+    window.confirmNewConversation = function() {
+        clearConfirmModal.style.display = 'flex';
+    };
+
+    window.closeConfirmModal = function() {
+        clearConfirmModal.style.display = 'none';
+    };
+
+    window.resetConversationConfirmed = function() {
+        clearConfirmModal.style.display = 'none';
+        conversation = [getWelcomeMessage()];
+        saveConversation();
+        renderConversation();
+        queryInput.value = '';
+        autoResizeTextarea();
+        queryInput.focus();
+    };
+
+    // =========================================================================
+    // 8. Service Status Poller
+    // =========================================================================
+    async function checkServiceHealth() {
+        const dot = document.getElementById('aiStatusDot');
+        const text = document.getElementById('aiStatusText');
+        const badge = document.getElementById('aiServiceStatusBadge');
+
+        try {
+            const res = await fetch(API_STATUS_ENDPOINT);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.status === 'operational' || data.status === 'online') {
+                    if (dot) dot.style.background = '#10B981';
+                    if (text) text.textContent = 'System Operational • Live Telemetry';
+                    if (badge) {
+                        badge.style.background = '#ECFDF5';
+                        badge.style.color = '#047857';
+                        badge.style.borderColor = '#A7F3D0';
+                        badge.title = `${data.model || 'CampusPulse NLP Core'} (Connected)`;
+                    }
+                    return;
+                }
+            }
+            throw new Error('Service reporting degraded');
+        } catch (e) {
+            if (dot) dot.style.background = '#F59E0B';
+            if (text) text.textContent = 'Local Telemetry Active';
+            if (badge) {
+                badge.style.background = '#FFFBEB';
+                badge.style.color = '#B45309';
+                badge.style.borderColor = '#FDE68A';
+            }
+        }
+    }
+
+    // =========================================================================
+    // 9. Page Lifecycle Initialization
+    // =========================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        loadConversation();
+        renderConversation();
+        checkServiceHealth();
+        autoResizeTextarea();
+        queryInput.focus();
+    });
+
+})();
 </script>
 {% endblock %}

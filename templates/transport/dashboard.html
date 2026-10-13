@@ -1,25 +1,33 @@
 {% extends 'base.html' %}
 {% load static campus_3d %}
 
-{% block title %}Smart Campus Transport - CampusPulse AI{% endblock %}
+{% block title %}Smart Transport & Fleet Tracker - CampusPulse AI{% endblock %}
 
 {% block content %}
 <div style="max-width: 1300px; margin: 0 auto;">
 
     <!-- Compact Page Hero with 3D Visual -->
     <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #E0F2FE 100%);">
-        <div style="max-width: 650px;">
+        <div style="max-width: 700px;">
             <div class="hero-pill" style="margin-bottom: 0.5rem;">
-                <span>🚌</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.6-.4-1-1-1H2c-.6 0-1 .4-1 1 0 .4.1.8.2 1.2.3 1.1.8 2.8.8 2.8h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>
                 <span>Spatial Fleet Telemetry & Transit Simulation</span>
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
-                Smart Transport<br>
-                <span class="gradient-ai" style="font-size: 1.85rem;">Move smarter across campus.</span>
+                Smart Transport & Fleet Tracker<br>
+                <span class="gradient-ai" style="font-size: 1.85rem;">Continuous Coimbatore Corridor Simulation</span>
             </h1>
-            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
-                Continuous GPS vehicle movement simulation with controllable 1x-10x multipliers, real-time arrival ETAs, and passenger load gauges.
+            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5; margin-bottom: 1.25rem;">
+                Live multi-corridor bus tracking across Routes R-01 to R-04 connecting Gandhipuram, Coimbatore Railway Junction, Singanallur, and Airport with the CIT Main Gate Terminal.
             </p>
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <span class="live-pill"><span class="pulse-dot"></span> LIVE FLEET GPS</span>
+                <span style="font-size: 0.82rem; color: var(--text-secondary);">12 Buses Active · Real-Time Arrival ETA Regressor</span>
+                <a href="{% url 'transport:routes' %}" class="btn btn-secondary btn-sm" style="margin-left: auto; display: flex; align-items: center; gap: 0.35rem;">
+                    <span>Transit Route Catalog</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
         </div>
         <div style="flex-shrink: 0;">
             {% campus_3d_visual 'transport' 150 100 %}
@@ -29,61 +37,140 @@
     <!-- AI Data Flow Pipeline -->
     {% ai_data_flow "Live Fleet GPS Telemetry" "Time-Series Regressor" "Precise Stop ETAs" "Passenger Load Balancing" "Punctual Campus Transit" %}
 
-    <!-- Telemetry Control Bar -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span class="live-pill"><span class="pulse-dot"></span> LIVE FLEET GPS</span>
-            <span style="font-size: 0.82rem; color: var(--text-muted);">Auto-polling active vehicles every 2 seconds</span>
-        </div>
-        <div style="display: flex; gap: 0.75rem;">
-            <a href="{% url 'transport:routes' %}" class="btn btn-secondary btn-sm">Transit Route Catalog</a>
+    <!-- Simulation Controls & Corridor Selector HUD -->
+    <div class="card-light" style="padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            
+            <!-- Route Filter Buttons -->
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); margin-right: 0.25rem;">Corridors:</span>
+                <button type="button" class="btn btn-sm route-filter-btn active" data-route="ALL" style="border-radius: 20px; font-weight: 700; background: #0F172A; color: #FFFFFF; border: none;">
+                    All Routes (4)
+                </button>
+                <button type="button" class="btn btn-sm route-filter-btn" data-route="R-01" style="border-radius: 20px; font-weight: 700; background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE;">
+                    R-01 Gandhipuram
+                </button>
+                <button type="button" class="btn btn-sm route-filter-btn" data-route="R-02" style="border-radius: 20px; font-weight: 700; background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0;">
+                    R-02 Railway Jct
+                </button>
+                <button type="button" class="btn btn-sm route-filter-btn" data-route="R-03" style="border-radius: 20px; font-weight: 700; background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A;">
+                    R-03 Singanallur
+                </button>
+                <button type="button" class="btn btn-sm route-filter-btn" data-route="R-04" style="border-radius: 20px; font-weight: 700; background: #FAF5FF; color: #6D28D9; border: 1px solid #DDD6FE;">
+                    R-04 Airport & Sitra
+                </button>
+            </div>
+
+            <!-- Simulation Velocity & Play/Pause -->
+            <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary);">Simulation Clock:</span>
+                <button id="btnSimToggle" class="btn btn-secondary btn-sm" style="font-weight: 700; min-width: 85px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="4" height="16" x="6" y="4"/><rect width="4" height="16" x="14" y="4"/></svg>
+                    <span>Pause</span>
+                </button>
+                <div style="display: flex; gap: 0.25rem; background: #F1F5F9; padding: 3px; border-radius: 8px;">
+                    <button type="button" class="speed-btn active" data-speed="1.0" style="padding: 4px 10px; border: none; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: #FFFFFF; color: #0F172A; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">1x</button>
+                    <button type="button" class="speed-btn" data-speed="2.0" style="padding: 4px 10px; border: none; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: transparent; color: #64748B;">2x</button>
+                    <button type="button" class="speed-btn" data-speed="5.0" style="padding: 4px 10px; border: none; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: transparent; color: #64748B;">5x</button>
+                    <button type="button" class="speed-btn" data-speed="10.0" style="padding: 4px 10px; border: none; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; background: transparent; color: #64748B;">10x</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- Map Card (Clean Light Style) -->
-    <div class="card-light" style="padding: 0; overflow: hidden; margin-bottom: 2rem;">
-        <div id="transportMap" style="height: 480px; width: 100%;"></div>
+    <!-- Map Container Card -->
+    <div class="card-light" style="padding: 0; overflow: hidden; margin-bottom: 2rem; position: relative; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);">
+        <div id="transportMap" style="height: 520px; width: 100%;"></div>
+
+        <!-- Floating Map Legend -->
+        <div style="position: absolute; bottom: 1.25rem; left: 1.25rem; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); padding: 0.85rem 1.15rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1000; font-size: 0.78rem; max-width: 320px;">
+            <div style="font-weight: 800; margin-bottom: 0.4rem; color: #0F172A; display: flex; align-items: center; justify-content: space-between;">
+                <span>Transit Corridors</span>
+                <span id="activeBusCountBadge" class="ai-badge ai-confidence" style="font-size: 0.7rem;">12 Buses Active</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.35rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="display:inline-block; width:14px; height:4px; background:#2563EB; border-radius:2px;"></span>
+                    <span style="color:#1E293B;"><strong>R-01:</strong> Gandhipuram Central Express</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="display:inline-block; width:14px; height:4px; background:#059669; border-radius:2px;"></span>
+                    <span style="color:#1E293B;"><strong>R-02:</strong> Railway Junction Connector</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="display:inline-block; width:14px; height:4px; background:#D97706; border-radius:2px;"></span>
+                    <span style="color:#1E293B;"><strong>R-03:</strong> Singanallur & Trichy Road</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="display:inline-block; width:14px; height:4px; background:#7C3AED; border-radius:2px;"></span>
+                    <span style="color:#1E293B;"><strong>R-04:</strong> Airport & Sitra Link</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Bus Cards Grid Header -->
+    <div style="margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
+            <h3 style="font-size: 1.4rem; font-weight: 800; color: #0F172A; margin: 0;">Active Fleet Telemetry</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 2px 0 0;">Real-time GPS vehicle positions, passenger load gauges, and continuous ETA forecasts</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span class="ai-badge ai-prediction">ML Regressor: Kalman Calibrated</span>
+            <span id="lastUpdatedTick" style="font-size: 0.78rem; color: var(--text-muted);">Sync: Just now</span>
+        </div>
     </div>
 
     <!-- Live Bus Cards Grid -->
-    <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 1.35rem; font-weight: 800;">Active Fleet Telemetry</h3>
-        <span class="ai-badge ai-prediction">ML ETA Regressor Active</span>
-    </div>
-
-    <div id="busCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
+    <div id="busCardsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.25rem; margin-bottom: 3rem;">
         {% for b in live_buses %}
-        <div class="card-light">
+        <div class="card-light bus-card" data-route="{{ b.route_code }}" id="card-bus-{{ b.bus_id }}" style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
                 <div>
-                    <span class="role-badge" style="background: #F0F9FF; color: #0284C7; border: 1px solid #BAE6FD;">{{ b.route_code }}</span>
-                    <h4 style="font-size: 1.15rem; font-weight: 800; margin-top: 0.35rem;">Bus {{ b.bus_number }}</h4>
+                    <span class="role-badge" style="background: {% if b.route_code == 'R-01' %}#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE;{% elif b.route_code == 'R-02' %}#ECFDF5; color:#047857; border:1px solid #A7F3D0;{% elif b.route_code == 'R-03' %}#FFFBEB; color:#B45309; border:1px solid #FDE68A;{% else %}#FAF5FF; color:#6D28D9; border:1px solid #DDD6FE;{% endif %}">
+                        {{ b.route_code }}
+                    </span>
+                    <h4 style="font-size: 1.15rem; font-weight: 800; margin-top: 0.35rem; color: #0F172A;">Bus {{ b.bus_number }}</h4>
                 </div>
-                <span class="ai-badge {% if b.status == 'ON_TIME' %}ai-confidence{% else %}ai-alert{% endif %}">{{ b.status }}</span>
+                <span class="ai-badge {% if b.status == 'ON_TIME' %}ai-confidence{% else %}ai-alert{% endif %}" id="status-badge-{{ b.bus_id }}">{{ b.status }}</span>
             </div>
 
             <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.6;">
-                <div>📍 <strong>Approaching:</strong> {{ b.next_stop }}</div>
-                <div>⏱️ <strong>Estimated Arrival (ETA):</strong> <strong style="color: var(--brand-electric);">{{ b.eta_mins }} mins</strong></div>
-                <div>⚠️ <strong>Predicted Delay:</strong> {{ b.predicted_delay_mins }} mins</div>
-                <div>⚡ <strong>Speed:</strong> {{ b.speed_kmh }} km/h</div>
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.25rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <strong>Next Stop:</strong> <span id="next-stop-{{ b.bus_id }}" style="color:#0F172A; font-weight:600;">{{ b.next_stop }}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.25rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <strong>Estimated Arrival:</strong> <strong id="eta-{{ b.bus_id }}" style="color: var(--brand-electric); font-size: 0.95rem;">{{ b.eta_mins }} mins</strong>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.25rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    <strong>Speed:</strong> <span id="speed-{{ b.bus_id }}">{{ b.speed_kmh }} km/h</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.4rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    <strong>Delay Forecast:</strong> <span id="delay-{{ b.bus_id }}">{{ b.predicted_delay_mins }} mins</span>
+                </div>
             </div>
 
             <!-- Passenger Load Bar -->
-            <div>
+            <div style="margin-bottom: 1rem;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.35rem;">
-                    <span>Passenger Capacity</span>
-                    <strong>{{ b.current_passengers }}/{{ b.capacity }} ({{ b.occupancy_pct }}%)</strong>
+                    <span>Passenger Load</span>
+                    <strong id="load-text-{{ b.bus_id }}">{{ b.current_passengers }}/{{ b.capacity }} ({{ b.occupancy_pct }}%)</strong>
                 </div>
                 <div style="width: 100%; height: 7px; background: #E2E8F0; border-radius: 4px; overflow: hidden;">
-                    <div style="width: {{ b.occupancy_pct }}%; height: 100%; background: {% if b.occupancy_pct > 85 %}var(--danger){% elif b.occupancy_pct > 65 %}var(--warning){% else %}var(--success){% endif %};"></div>
+                    <div id="load-bar-{{ b.bus_id }}" style="width: {{ b.occupancy_pct }}%; height: 100%; background: {% if b.occupancy_pct > 85 %}var(--danger){% elif b.occupancy_pct > 65 %}var(--warning){% else %}var(--success){% endif %}; transition: width 0.4s ease;"></div>
                 </div>
             </div>
-        </div>
-        {% empty %}
-        <div class="card-light" style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem;">
-            {% campus_3d_visual 'transport' 80 60 %}
-            <p style="font-weight: 600; margin-top: 1rem;">Connecting to simulated campus bus telemetry...</p>
+
+            <!-- Focus Action Button -->
+            <button type="button" class="btn btn-secondary btn-sm" style="width: 100%; font-weight: 700; display:flex; align-items:center; justify-content:center; gap:0.4rem;" onclick="focusBusOnMap({{ b.bus_id }}, {{ b.latitude }}, {{ b.longitude }})">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                <span>Track Live on Map</span>
+            </button>
         </div>
         {% endfor %}
     </div>
@@ -94,57 +181,319 @@
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const defaultLat = {{ CAMPUS_LAT }};
-    const defaultLng = {{ CAMPUS_LNG }};
+    // 1. Initial coordinates: Coimbatore Regional Center covering all 4 corridors
+    const regionalLat = 11.0180;
+    const regionalLng = 77.0050;
+    const citLat = 11.0287;
+    const citLng = 77.0268;
 
-    const map = L.map('transportMap').setView([defaultLat, defaultLng], 15);
+    // 2. Initialize Leaflet Map
+    const map = L.map('transportMap', {
+        zoomControl: true
+    }).setView([regionalLat, regionalLng], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+    // Multiple Layer Options
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
     }).addTo(map);
 
-    // CIT Main Gate Destination Pin
-    const citMarker = L.marker([defaultLat, defaultLng]).addTo(map);
-    citMarker.bindPopup(`
+    const googleStreets = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        attribution: '&copy; Google Maps',
+        maxZoom: 20
+    });
+
+    const googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+        attribution: '&copy; Google Maps Hybrid',
+        maxZoom: 20
+    });
+
+    L.control.layers({
+        "OpenStreetMap": osmLayer,
+        "Google Streets": googleStreets,
+        "Google Hybrid (Satellite)": googleHybrid
+    }, null, { position: 'topright' }).addTo(map);
+
+    // 3. CIT Main Gate Terminal Pin
+    const citTerminalIcon = L.divIcon({
+        className: 'cit-terminal-pin',
+        html: `
+            <div style="background: #1E3A8A; color: #FFFFFF; padding: 6px 10px; border-radius: 20px; font-weight: 800; font-size: 11px; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid #FFFFFF; white-space: nowrap;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+                CIT Fleet Terminal
+            </div>
+        `,
+        iconSize: [140, 30],
+        iconAnchor: [70, 15]
+    });
+
+    L.marker([citLat, citLng], { icon: citTerminalIcon }).addTo(map).bindPopup(`
         <div style="color:#0F172A; font-family:'Inter', sans-serif;">
-            <h4 style="margin:0 0 4px; font-weight:800; color:#1E3A8A;">🏛️ CIT Main Gate Fleet Terminal</h4>
-            <p style="margin:0; font-size:0.8rem; color:#475569;">Avinashi Road, Hope College / Peelamedu, Coimbatore</p>
-            <p style="margin:4px 0 0; font-size:0.78rem; color:#16A34A;">● Central Fleet Destination & Shuttle Bay</p>
+            <h4 style="margin:0 0 4px; font-weight:800; color:#1E3A8A; display:flex; align-items:center; gap:5px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg> CIT Main Gate Central Terminal</h4>
+            <p style="margin:0; font-size:0.8rem; color:#475569;">Avinashi Road / Hope College, Coimbatore</p>
+            <p style="margin:4px 0 0; font-size:0.78rem; color:#16A34A; font-weight:700;">● Destination hub for Corridors R-01, R-02, R-03, and R-04</p>
         </div>
     `);
 
-    const busMarkers = {};
+    // 4. Color Palette for Routes
+    const routeColors = {
+        'R-01': '#2563EB', // Blue
+        'R-02': '#059669', // Emerald
+        'R-03': '#D97706', // Amber
+        'R-04': '#7C3AED'  // Purple
+    };
 
-    async function refreshTelemetry() {
-        try {
-            const resp = await fetch('{% url "transport:api_live_telemetry" %}');
-            const data = await resp.json();
-            
-            data.buses.forEach(b => {
-                const popupContent = `
-                    <div style="color:#0F172A; font-family:'Inter', sans-serif;">
-                        <h4 style="margin:0 0 4px; font-weight:700;">Bus ${b.bus_number} (${b.route_code})</h4>
-                        <p style="margin:0; font-size:0.8rem; color:#475569;">Approaching: <strong>${b.next_stop}</strong></p>
-                        <p style="margin:4px 0 0; font-size:0.8rem; color:#0284C7;">ETA: <strong>${b.eta_mins} mins</strong> | Occupancy: <strong>${b.occupancy_pct}%</strong></p>
+    // 5. Render Route Polylines and Stop Sequence Markers
+    const routesData = {{ routes_json|safe }};
+    const routeLayers = {};
+    const stopMarkers = [];
+
+    routesData.forEach(route => {
+        const color = routeColors[route.code] || '#3B82F6';
+        const latlngs = route.stops.map(s => [s.latitude, s.longitude]);
+
+        // Draw Route Line
+        const polyline = L.polyline(latlngs, {
+            color: color,
+            weight: 5,
+            opacity: 0.85,
+            smoothFactor: 1
+        }).addTo(map);
+
+        polyline.bindPopup(`
+            <div style="font-family:'Inter', sans-serif;">
+                <h4 style="margin:0; font-weight:800; color:${color};">${route.code}: ${route.name}</h4>
+                <p style="margin:4px 0 0; font-size:0.8rem; color:#475569;">Distance: <strong>${route.distance_km} km</strong> · Approx Duration: <strong>${route.estimated_duration_mins} mins</strong></p>
+            </div>
+        `);
+
+        routeLayers[route.code] = {
+            polyline: polyline,
+            bounds: polyline.getBounds(),
+            color: color
+        };
+
+        // Render Stop Sequence Markers
+        route.stops.forEach(s => {
+            const stopIcon = L.divIcon({
+                className: `stop-marker-${route.code}`,
+                html: `
+                    <div style="width: 22px; height: 22px; border-radius: 50%; background: #FFFFFF; border: 3px solid ${color}; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; color: ${color}; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                        ${s.sequence}
                     </div>
-                `;
-
-                if (busMarkers[b.bus_id]) {
-                    busMarkers[b.bus_id].setLatLng([b.latitude, b.longitude]);
-                    busMarkers[b.bus_id].setPopupContent(popupContent);
-                } else {
-                    const marker = L.marker([b.latitude, b.longitude]).addTo(map);
-                    marker.bindPopup(popupContent);
-                    busMarkers[b.bus_id] = marker;
-                }
+                `,
+                iconSize: [22, 22],
+                iconAnchor: [11, 11]
             });
+
+            const marker = L.marker([s.latitude, s.longitude], { icon: stopIcon }).addTo(map);
+            marker.bindPopup(`
+                <div style="font-family:'Inter', sans-serif;">
+                    <div style="font-size:0.7rem; font-weight:700; color:${color};">${route.code} Stop #${s.sequence}</div>
+                    <h4 style="margin:2px 0 4px; font-weight:800;">${s.name}</h4>
+                    <p style="margin:0; font-size:0.78rem; color:#64748B;">Schedule Offset: +${s.offset_mins} mins from start</p>
+                </div>
+            `);
+            stopMarkers.push({ marker: marker, routeCode: route.code });
+        });
+    });
+
+    // 6. Bus Live Markers Tracking
+    const busMarkers = {};
+    let selectedRouteFilter = 'ALL';
+
+    function createBusIcon(routeCode, busNum, color) {
+        return L.divIcon({
+            className: `bus-marker-${routeCode}`,
+            html: `
+                <div style="background: ${color}; color: #FFFFFF; padding: 4px 8px; border-radius: 14px; font-weight: 800; font-size: 10px; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border: 2px solid #FFFFFF; white-space: nowrap;">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.6-.4-1-1-1H2c-.6 0-1 .4-1 1 0 .4.1.8.2 1.2.3 1.1.8 2.8.8 2.8h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>
+                    ${routeCode}
+                </div>
+            `,
+            iconSize: [68, 26],
+            iconAnchor: [34, 13]
+        });
+    }
+
+    async function pollLiveTelemetry() {
+        try {
+            const url = selectedRouteFilter === 'ALL' 
+                ? '{% url "transport:api_live_telemetry" %}' 
+                : `{% url "transport:api_live_telemetry" %}?route=${selectedRouteFilter}`;
+
+            const res = await fetch(url);
+            const data = await res.json();
+
+            if (data.status === 'ok' && data.buses) {
+                // Update tick label
+                const now = new Date();
+                document.getElementById('lastUpdatedTick').textContent = `Sync: ${now.toLocaleTimeString()}`;
+                document.getElementById('activeBusCountBadge').textContent = `${data.buses.length} Buses Live`;
+
+                data.buses.forEach(b => {
+                    const color = routeColors[b.route_code] || '#2563EB';
+                    const popupContent = `
+                        <div style="color:#0F172A; font-family:'Inter', sans-serif; min-width: 200px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <span style="font-size:0.75rem; font-weight:800; color:${color};">${b.route_code}</span>
+                                <span style="font-size:0.7rem; font-weight:700; color:${b.status === 'ON_TIME' ? '#16A34A' : '#DC2626'};">${b.status}</span>
+                            </div>
+                            <h4 style="margin:0 0 6px; font-weight:800;">Bus ${b.bus_number}</h4>
+                            <div style="font-size:0.8rem; color:#475569; line-height:1.5;">
+                                <div>Next Stop: <strong>${b.next_stop}</strong></div>
+                                <div>ETA: <strong style="color:#2563EB;">${b.eta_mins} mins</strong></div>
+                                <div>Speed: <strong>${b.speed_kmh} km/h</strong></div>
+                                <div>Load: <strong>${b.current_passengers}/${b.capacity} (${b.occupancy_pct}%)</strong></div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Update or create marker on map
+                    if (busMarkers[b.bus_id]) {
+                        busMarkers[b.bus_id].setLatLng([b.latitude, b.longitude]);
+                        busMarkers[b.bus_id].setPopupContent(popupContent);
+                    } else {
+                        const marker = L.marker([b.latitude, b.longitude], {
+                            icon: createBusIcon(b.route_code, b.bus_number, color)
+                        }).addTo(map);
+                        marker.bindPopup(popupContent);
+                        busMarkers[b.bus_id] = marker;
+                    }
+
+                    // Update Card in HTML grid
+                    const etaEl = document.getElementById(`eta-${b.bus_id}`);
+                    const stopEl = document.getElementById(`next-stop-${b.bus_id}`);
+                    const speedEl = document.getElementById(`speed-${b.bus_id}`);
+                    const delayEl = document.getElementById(`delay-${b.bus_id}`);
+                    const badgeEl = document.getElementById(`status-badge-${b.bus_id}`);
+                    const loadTextEl = document.getElementById(`load-text-${b.bus_id}`);
+                    const loadBarEl = document.getElementById(`load-bar-${b.bus_id}`);
+
+                    if (etaEl) etaEl.textContent = `${b.eta_mins} mins`;
+                    if (stopEl) stopEl.textContent = b.next_stop;
+                    if (speedEl) speedEl.textContent = `${b.speed_kmh} km/h`;
+                    if (delayEl) delayEl.textContent = `${b.predicted_delay_mins} mins`;
+                    if (badgeEl) {
+                        badgeEl.textContent = b.status;
+                        badgeEl.className = b.status === 'ON_TIME' ? 'ai-badge ai-confidence' : 'ai-badge ai-alert';
+                    }
+                    if (loadTextEl) loadTextEl.textContent = `${b.current_passengers}/${b.capacity} (${b.occupancy_pct}%)`;
+                    if (loadBarEl) {
+                        loadBarEl.style.width = `${b.occupancy_pct}%`;
+                        loadBarEl.style.background = b.occupancy_pct > 85 ? 'var(--danger)' : (b.occupancy_pct > 65 ? 'var(--warning)' : 'var(--success)');
+                    }
+                });
+            }
         } catch (err) {
-            console.error("Telemetry update error:", err);
+            console.error("Telemetry error:", err);
         }
     }
 
-    setInterval(refreshTelemetry, 2000);
-    refreshTelemetry();
+    // Polling interval: every 1.5s
+    const pollInterval = setInterval(pollLiveTelemetry, 1500);
+    pollLiveTelemetry();
+
+    // 7. Route Filtering Handlers
+    document.querySelectorAll('.route-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.route-filter-btn').forEach(b => {
+                b.classList.remove('active');
+                b.style.background = '#F8FAFC';
+                b.style.color = '#475569';
+                b.style.border = '1px solid #CBD5E1';
+            });
+            btn.classList.add('active');
+            btn.style.background = '#0F172A';
+            btn.style.color = '#FFFFFF';
+            btn.style.border = 'none';
+
+            selectedRouteFilter = btn.dataset.route;
+
+            // Filter Map Elements
+            if (selectedRouteFilter === 'ALL') {
+                Object.keys(routeLayers).forEach(code => {
+                    routeLayers[code].polyline.setStyle({ opacity: 0.85, weight: 5 });
+                });
+                map.setView([regionalLat, regionalLng], 13);
+                // Show all cards
+                document.querySelectorAll('.bus-card').forEach(c => c.style.display = 'block');
+                // Show all bus markers
+                Object.values(busMarkers).forEach(m => map.addLayer(m));
+            } else {
+                Object.keys(routeLayers).forEach(code => {
+                    if (code === selectedRouteFilter) {
+                        routeLayers[code].polyline.setStyle({ opacity: 1.0, weight: 6 });
+                        map.fitBounds(routeLayers[code].bounds, { padding: [40, 40] });
+                    } else {
+                        routeLayers[code].polyline.setStyle({ opacity: 0.2, weight: 2 });
+                    }
+                });
+                // Filter cards in grid
+                document.querySelectorAll('.bus-card').forEach(c => {
+                    if (c.dataset.route === selectedRouteFilter) {
+                        c.style.display = 'block';
+                    } else {
+                        c.style.display = 'none';
+                    }
+                });
+            }
+
+            pollLiveTelemetry();
+        });
+    });
+
+    // 8. Focus Bus on Map
+    window.focusBusOnMap = function(busId, lat, lng) {
+        if (busMarkers[busId]) {
+            const m = busMarkers[busId];
+            map.setView(m.getLatLng(), 15, { animate: true });
+            m.openPopup();
+        } else {
+            map.setView([lat, lng], 15, { animate: true });
+        }
+        window.scrollTo({ top: document.getElementById('transportMap').offsetTop - 80, behavior: 'smooth' });
+    };
+
+    // 9. Simulation Velocity and Play/Pause Controls
+    let isRunning = true;
+    const btnSimToggle = document.getElementById('btnSimToggle');
+
+    btnSimToggle.addEventListener('click', async () => {
+        isRunning = !isRunning;
+        btnSimToggle.innerHTML = isRunning 
+            ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="4" height="16" x="6" y="4"/><rect width="4" height="16" x="14" y="4"/></svg> <span>Pause</span>' 
+            : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg> <span>Resume</span>';
+        btnSimToggle.style.background = isRunning ? '#FFFFFF' : '#ECFDF5';
+
+        await fetch('{% url "common:api_simulation_control" %}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: isRunning ? 'start' : 'pause' })
+        });
+    });
+
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            document.querySelectorAll('.speed-btn').forEach(b => {
+                b.classList.remove('active');
+                b.style.background = 'transparent';
+                b.style.color = '#64748B';
+                b.style.boxShadow = 'none';
+            });
+            btn.classList.add('active');
+            btn.style.background = '#FFFFFF';
+            btn.style.color = '#0F172A';
+            btn.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
+
+            const speed = parseFloat(btn.dataset.speed);
+            await fetch('{% url "common:api_simulation_control" %}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ speed: speed })
+            });
+        });
+    });
 });
 </script>
 {% endblock %}

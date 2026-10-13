@@ -402,36 +402,43 @@ def ai_data_flow(data_label="Campus Data", model_label="ML/DL Model", pred_label
     """
     Renders the standardized 5-step AI Data Flow stepper:
     DATA -> ML/DL MODEL -> PREDICTION -> RECOMMENDATION -> ACTION
-    with animated pulses along connection paths.
+    with clean professional SVG icons and animated pulses along connection paths.
     """
+    svg_telemetry = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>'
+    svg_engine = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 21v-2"/><path d="M9 3v2"/></svg>'
+    svg_inference = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>'
+    svg_guidance = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>'
+    svg_action = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>'
+    svg_arrow = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>'
+
     html = f'''
     <div class="ai-data-flow-stepper" title="AI Intelligence Pipeline">
         <div class="flow-step">
-            <span class="flow-step-icon">📊</span>
+            <span class="flow-step-icon">{svg_telemetry}</span>
             <span class="flow-step-title">{data_label}</span>
             <span class="flow-step-sub">Telemetry</span>
         </div>
-        <div class="flow-connector"><span class="flow-pulse"></span>➔</div>
+        <div class="flow-connector"><span class="flow-pulse"></span>{svg_arrow}</div>
         <div class="flow-step highlight-model">
-            <span class="flow-step-icon">🧠</span>
+            <span class="flow-step-icon">{svg_engine}</span>
             <span class="flow-step-title">{model_label}</span>
             <span class="flow-step-sub">AI Engine</span>
         </div>
-        <div class="flow-connector"><span class="flow-pulse"></span>➔</div>
+        <div class="flow-connector"><span class="flow-pulse"></span>{svg_arrow}</div>
         <div class="flow-step">
-            <span class="flow-step-icon">🎯</span>
+            <span class="flow-step-icon">{svg_inference}</span>
             <span class="flow-step-title">{pred_label}</span>
             <span class="flow-step-sub">Inference</span>
         </div>
-        <div class="flow-connector"><span class="flow-pulse"></span>➔</div>
+        <div class="flow-connector"><span class="flow-pulse"></span>{svg_arrow}</div>
         <div class="flow-step">
-            <span class="flow-step-icon">💡</span>
+            <span class="flow-step-icon">{svg_guidance}</span>
             <span class="flow-step-title">{rec_label}</span>
             <span class="flow-step-sub">Guidance</span>
         </div>
-        <div class="flow-connector"><span class="flow-pulse"></span>➔</div>
+        <div class="flow-connector"><span class="flow-pulse"></span>{svg_arrow}</div>
         <div class="flow-step highlight-action">
-            <span class="flow-step-icon">⚡</span>
+            <span class="flow-step-icon">{svg_action}</span>
             <span class="flow-step-title">{action_label}</span>
             <span class="flow-step-sub">Intervention</span>
         </div>
@@ -443,21 +450,21 @@ def ai_data_flow(data_label="Campus Data", model_label="ML/DL Model", pred_label
 @register.simple_tag
 def ai_badge(badge_type="prediction", custom_text=None):
     """
-    Renders unified AI visual badges:
+    Renders unified AI visual badges without emojis:
     prediction, insight, recommendation, detected, forecast, classification, confidence, realtime, monitoring
     """
     bt = badge_type.lower().strip()
     badges = {
-        'prediction': ('badge-ai-prediction', '✨ AI Prediction'),
-        'insight': ('badge-ai-insight', '💡 AI Insight'),
-        'recommendation': ('badge-ai-recommendation', '🎯 AI Recommendation'),
-        'detected': ('badge-ai-detected', '👁️ AI Detected'),
-        'forecast': ('badge-ai-forecast', '📈 AI Forecast'),
-        'classification': ('badge-ai-classification', '🏷️ AI Classification'),
-        'confidence': ('badge-ai-confidence', '⚡ AI Confidence'),
-        'realtime': ('badge-ai-realtime', '● Real-Time AI'),
-        'monitoring': ('badge-ai-monitoring', '🛡️ AI Monitoring'),
+        'prediction': ('badge-ai-prediction', 'AI Prediction'),
+        'insight': ('badge-ai-insight', 'AI Insight'),
+        'recommendation': ('badge-ai-recommendation', 'AI Recommendation'),
+        'detected': ('badge-ai-detected', 'AI Detected'),
+        'forecast': ('badge-ai-forecast', 'AI Forecast'),
+        'classification': ('badge-ai-classification', 'AI Classification'),
+        'confidence': ('badge-ai-confidence', 'AI Confidence'),
+        'realtime': ('badge-ai-realtime', 'Real-Time AI'),
+        'monitoring': ('badge-ai-monitoring', 'AI Monitoring'),
     }
-    cls, default_text = badges.get(bt, ('badge-ai-prediction', '✨ AI'))
+    cls, default_text = badges.get(bt, ('badge-ai-prediction', 'AI'))
     text = custom_text if custom_text else default_text
     return mark_safe(f'<span class="ai-badge {cls}">{text}</span>')

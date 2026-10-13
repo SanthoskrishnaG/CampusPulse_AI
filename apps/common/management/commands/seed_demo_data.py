@@ -180,7 +180,7 @@ class Command(BaseCommand):
         )
         faculty_list.append(fac_obj)
 
-        for i in range(52):
+        for i in range(175):
             emp_idx += 1
             username = f"faculty_{emp_idx}"
             dept = random.choice(departments)
@@ -284,7 +284,7 @@ class Command(BaseCommand):
         students.append(s_obj)
 
         random.seed(42)
-        for i in range(2, 520):
+        for i in range(2, 1551):
             sid = f"STU2026-{i:04d}"
             dept = random.choice(departments)
             first = random.choice(first_names)
@@ -529,7 +529,7 @@ class Command(BaseCommand):
 
         admin_user = User.objects.filter(role=User.Role.MAINTENANCE_STAFF).first()
 
-        for i in range(510):
+        for i in range(40):
             sample = random.choice(complaint_samples)
             s = random.choice(students[:200])
             title = f"{sample[0]} (Ticket #{i+1})"

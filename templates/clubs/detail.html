@@ -15,9 +15,9 @@
     </div>
     <div style="display: flex; gap: 0.75rem;">
         {% if is_member %}
-        <span class="badge badge-low" style="padding: 0.6rem 1rem;">✓ Enrolled Member</span>
+        <span class="badge badge-low" style="padding: 0.6rem 1rem; display:inline-flex; align-items:center; gap:0.35rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Enrolled Member</span>
         {% else %}
-        <a href="{% url 'clubs:join' club.code %}" class="btn btn-primary">Join Club ➔</a>
+        <a href="{% url 'clubs:join' club.code %}" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.4rem;">Join Club <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
         {% endif %}
         <a href="{% url 'clubs:list' %}" class="btn btn-secondary">« Back to Clubs</a>
     </div>
@@ -37,7 +37,7 @@
     <!-- Announcements -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">📢 Club Announcements</h3>
+            <h3 class="card-title" style="display:flex; align-items:center; gap:0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>Club Announcements</h3>
         </div>
         {% for a in announcements %}
         <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
@@ -52,7 +52,7 @@
     <!-- Achievements -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">🏆 Competitions & Awards</h3>
+            <h3 class="card-title" style="display:flex; align-items:center; gap:0.5rem;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-amber);"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Competitions & Awards</h3>
         </div>
         {% for ach in achievements %}
         <div style="padding: 0.75rem 0; border-bottom: 1px solid var(--border-subtle);">
