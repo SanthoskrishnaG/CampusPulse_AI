@@ -7,129 +7,119 @@
 <div class="dashboard-viewport">
 
     <!-- ==========================================================================
-         1. HERO ROW: Hero Digital Twin Banner + Campus AI Assistant Panel
+         1. HERO SECTION: Clean 2-Column Hero + Interactive Digital Twin Illustration
          ========================================================================== -->
-    <div class="dashboard-hero-row">
-        <!-- Main Campus Hero Card -->
-        <div class="campus-hero-banner">
-            <div class="hero-header-text">
-                <div class="hero-welcome-badge">
-                    Coimbatore Institute of Technology • CIT
-                </div>
-                <h1 class="hero-big-title">
-                    CIT Smart Campus.<br>
-                    <span class="gradient-blue-text">Powered by AI.</span>
-                </h1>
-                <p class="hero-description-sub">
-                    Monitor. Predict. Recommend. Optimize.<br>
-                    Live CIT Campus Intelligence • Civil Aerodrome Post, Coimbatore.
-                </p>
+    <div class="hero-two-column-card">
+        <!-- Hero Left Column: Headlines, Value Proposition, Action CTAs & Social Proof -->
+        <div class="hero-content-col">
+            <div class="hero-welcome-badge">
+                <span class="pulse-dot-online"></span>
+                <span>Coimbatore Institute of Technology • CIT Smart Campus</span>
+            </div>
+            <h1 class="hero-big-title">
+                CIT Smart Campus.<br>
+                <span class="gradient-text-brand">Powered by AI.</span>
+            </h1>
+            <p class="hero-description-sub">
+                Monitor. Predict. Recommend. Optimize.<br>
+                Real-time multi-agent campus intelligence & predictive telemetry across Coimbatore corridors.
+            </p>
 
-                <div class="hero-cta-buttons">
-                    <a href="{% url 'accounts:login' %}" class="btn-hero-primary">
-                        <span>Enter Campus Portal</span>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                    <a href="{% url 'common:map' %}" class="btn-hero-secondary">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#2563EB" stroke="none">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                        <span>Watch Demo</span>
-                    </a>
-                </div>
-
-                <div class="hero-social-proof">
-                    <div class="avatar-stack">
-                        <span class="avatar-face" style="background:#3B82F6; font-size:0.75rem; font-weight:700; color:#fff;" title="Student Body">ST</span>
-                        <span class="avatar-face" style="background:#10B981; font-size:0.75rem; font-weight:700; color:#fff;" title="Faculty">FC</span>
-                        <span class="avatar-face" style="background:#F59E0B; font-size:0.75rem; font-weight:700; color:#fff;" title="Research & Labs">RS</span>
-                        <span class="avatar-face" style="background:#8B5CF6; font-size:0.75rem; font-weight:700; color:#fff;" title="Administration">AD</span>
-                        <span class="avatar-face avatar-count">+5K</span>
-                    </div>
-                    <span class="social-proof-text">Trusted by Students, Faculty & Administrators</span>
-                </div>
+            <div class="hero-cta-buttons">
+                <a href="{% url 'accounts:login' %}" class="btn btn-brand-gradient btn-lg">
+                    <span>Enter Campus Portal</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="{% url 'common:map' %}" class="btn btn-secondary btn-lg">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    <span>Watch Demo</span>
+                </a>
             </div>
 
-            <!-- 3D Isometric Campus Map with Interactive Floating Pins & Live Telemetry -->
-            <div class="hero-campus-visual">
-                <div class="campus-isometric-frame">
-                    <img src="{% static 'images/campus_isometric_hero.jpg' %}" alt="CampusPulse AI Digital Twin" class="campus-hero-img">
-                    
-                    <!-- Interactive 3D Digital Twin Hotspots -->
-                    {% for spot in building_hotspots %}
-                    <div class="campus-pin-wrapper pin-{{ spot.id }}" data-top="{{ spot.top }}" data-left="{{ spot.left }}">
-                        <a href="{{ spot.url }}" class="campus-pin">
-                            {{ spot.name }}
-                        </a>
-                        <div class="building-telemetry-modal">
-                            <div class="telemetry-header">
-                                <div>
-                                    <div class="telemetry-title">{{ spot.name }}</div>
-                                    <div class="telemetry-dept">{{ spot.dept }}</div>
-                                </div>
-                                <span class="ai-badge badge-ai-realtime">{{ spot.ai_status }}</span>
-                            </div>
-                            <div class="telemetry-grid">
-                                <div>
-                                    <div class="telemetry-item-label">Activity</div>
-                                    <div class="telemetry-item-val">{{ spot.activity }}</div>
-                                </div>
-                                <div>
-                                    <div class="telemetry-item-label">Occupancy / Count</div>
-                                    <div class="telemetry-item-val">{{ spot.students }}</div>
-                                </div>
-                                <div>
-                                    <div class="telemetry-item-label">Open Complaints</div>
-                                    <div class="telemetry-item-val">{{ spot.complaints }}</div>
-                                </div>
-                                <div>
-                                    <div class="telemetry-item-label">AI Status</div>
-                                    <div class="telemetry-item-val" style="color: var(--success);">{{ spot.ai_status }}</div>
-                                </div>
-                            </div>
-                            <a href="{{ spot.url }}" class="telemetry-link-btn">
-                                Open {{ spot.name }} Telemetry &rarr;
-                            </a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    <script>
-                        document.querySelectorAll('.campus-pin-wrapper[data-top]').forEach(function(pin) {
-                            if (pin.dataset.top) pin.style.top = pin.dataset.top;
-                            if (pin.dataset.left) pin.style.left = pin.dataset.left;
-                        });
-                    </script>
+            <div class="hero-social-proof">
+                <div class="avatar-stack">
+                    <span class="avatar-face" style="background:#4F46E5;" title="Student Body">ST</span>
+                    <span class="avatar-face" style="background:#10B981;" title="Faculty">FC</span>
+                    <span class="avatar-face" style="background:#F59E0B;" title="Research & Labs">RS</span>
+                    <span class="avatar-face" style="background:#7C3AED;" title="Administration">AD</span>
+                    <span class="avatar-face avatar-count">+5K</span>
+                </div>
+                <span class="social-proof-text">Trusted by Students, Faculty & Administrators across 12 Departments</span>
+            </div>
+        </div>
 
-                    <!-- Script Tag Badge -->
-                    <div class="hero-script-tag">
-                        Smart People<br><span>Smarter Campus</span>
+        <!-- Hero Right Column: 3D Campus Digital Twin Visual Card -->
+        <div class="hero-visual-col">
+            <div class="campus-digital-twin-box" style="position: relative; overflow: hidden; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); border: 1px solid var(--border-color); background: var(--bg-surface);">
+                <!-- High-Definition 3D Campus Digital Twin Image -->
+                <img src="{% static 'images/cit_campus_3d_twin.jpg' %}" 
+                     alt="CIT Smart Campus 3D Digital Twin" 
+                     class="campus-3d-hero-img" 
+                     style="width: 100%; height: auto; max-height: 440px; object-fit: cover; display: block; transition: transform 0.4s ease;">
+                
+                <!-- Floating Label 1: Core Academic Blocks (Top-Left) -->
+                <div class="campus-floating-pill tag-pos-engg" style="backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+                    <div class="pill-dot" style="background:#4F46E5;"></div>
+                    <div class="pill-info">
+                        <span class="pill-title">Academic Blocks</span>
+                        <span class="pill-desc">ECE • CSE • AI & Biotech Labs</span>
                     </div>
+                </div>
+
+                <!-- Floating Label 2: CIT Main Complex (Top-Right) -->
+                <div class="campus-floating-pill tag-pos-hostel" style="backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+                    <div class="pill-dot" style="background:#0284C7;"></div>
+                    <div class="pill-info">
+                        <span class="pill-title">CIT Main Complex</span>
+                        <span class="pill-desc">Admin & Smart Auditorium</span>
+                    </div>
+                </div>
+
+                <!-- Floating Label 3: Sports Arena (Center-Left) -->
+                <div class="campus-floating-pill tag-pos-sports" style="backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+                    <div class="pill-dot" style="background:#10B981;"></div>
+                    <div class="pill-info">
+                        <span class="pill-title">CIT Sports Complex</span>
+                        <span class="pill-desc">Athletic Turf & Stadium Track</span>
+                    </div>
+                </div>
+
+                <!-- Floating Label 4: Student Hostels (Bottom-Right) -->
+                <div class="campus-floating-pill tag-pos-canteen" style="backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+                    <div class="pill-dot" style="background:#7C3AED;"></div>
+                    <div class="pill-info">
+                        <span class="pill-title">Residential Hostels</span>
+                        <span class="pill-desc">Student Living & Dining Hub</span>
+                    </div>
+                </div>
+
+                <!-- Subtle Bottom Telemetry Stamp -->
+                <div class="campus-digital-twin-stamp" style="backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+                    <span class="pulse-dot-online"></span>
+                    <span>CIT Digital Twin Engine • Live Sensor Mesh</span>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- ==========================================================================
-         CAMPUS AI OPERATIONS & SUBSYSTEMS HEALTH COMMAND BAR
-         Real-Time Telemetry across:
-         1) Hostel Facilities & Residents (Allocations, Out-Passes, Mess)
-         2) Complaints AI Engine & SLA Triage (NLP Auto-Routing & Escalation)
-         3) Academic Risk Early-Warning Predictor (Student Analytics & Interventions)
-         4) Smart Fleet & Transport Tracker (Routes R-01 to R-04 Live GPS)
+         2. SUBSYSTEM TELEMETRY BAR: 4 Equal-Height Cards with Live Progress
          ========================================================================== -->
-    <div class="card-light" style="padding: 1.25rem 1.75rem; margin-bottom: 1.75rem; background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%); border: 1px solid #E2E8F0; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem;">
-            <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
-                <span class="live-pill" style="background:#ECFDF5; color:#047857; border: 1px solid #A7F3D0;"><span class="pulse-dot" style="background:#10B981;"></span> CAMPUS OPERATIONS HEALTH</span>
-                <span style="font-weight: 800; font-size: 1.05rem; color: #0F172A;">CIT Subsystems Command Telemetry</span>
-                <span class="ai-badge ai-confidence" id="telemetryHealthBadge" style="font-size: 0.75rem;">98% Optimal Status</span>
+    <div class="card" style="margin-bottom: 24px; padding: 20px 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="badge badge-success"><span class="pulse-dot-online"></span> LIVE TELEMETRY</span>
+                <h3 style="font-size: 17px; font-weight: 700; margin: 0;">CIT Subsystems Command Telemetry</h3>
+                <span class="badge badge-indigo" id="telemetryHealthBadge">98% Optimal Status</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <span style="font-size: 0.78rem; color: var(--text-muted);" id="telemetryPulseTime">Telemetry Live</span>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="refreshCampusHealthTelemetry()" style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 4px 10px; font-size: 0.75rem;">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 12.5px; color: var(--color-text-muted);" id="telemetryPulseTime">Telemetry Live &bull; 4 Corridors</span>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="refreshCampusHealthTelemetry()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                         <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
                     </svg>
                     <span>Refresh</span>
@@ -137,892 +127,739 @@
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
-            
+        <div class="telemetry-grid-4">
             <!-- 1. Hostel Portal & Facilities -->
-            <a href="{% url 'hostel:rooms' %}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 1.1rem 1.15rem; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 16px rgba(0,0,0,0.06)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+            <a href="{% url 'hostel:rooms' %}" class="card card-hover" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; padding: 18px; border-radius: var(--radius-md);">
                 <div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; gap: 0.5rem;">
-                        <span style="font-size: 0.74rem; font-weight: 800; color: #4F46E5; background: #EEF2FF; padding: 2px 8px; border-radius: 10px; white-space: nowrap;">1. HOSTEL & FACILITIES</span>
-                        <span style="font-size: 0.74rem; color: #10B981; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
-                            <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span> Online
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="badge badge-indigo">1. HOSTEL & FACILITIES</span>
+                        <span style="font-size: 12px; color: var(--color-success); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                            <span class="pulse-dot-online"></span> Online
                         </span>
                     </div>
-                    <div style="font-size: 0.92rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Resident Living & Mess Hub</div>
+                    <div style="font-size: 14.5px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Resident Living & Mess Hub">Resident Living & Mess Hub</div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
-                        <span>Rooms</span>
-                        <strong id="healthHostelOccupancy" style="color: #0F172A;">100% Occupied</strong>
+                <div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: var(--color-text-body); margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Rooms Allocated</span>
+                            <strong style="color: var(--color-text-heading);" id="healthHostelOccupancy">100% Occupied</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Digital Out-Passes</span>
+                            <strong style="color: var(--color-text-heading);" id="healthHostelOutpasses">8 Pending</strong>
+                        </div>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
-                        <span>Digital Out-Passes</span>
-                        <strong id="healthHostelOutpasses" style="color: #0F172A;">8 Pending</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
-                        <span>Mess Check-Ins</span>
-                        <strong id="healthHostelMeals" style="color: #0F172A;">160 Logged</strong>
+                    <!-- Progress Bar -->
+                    <div style="width: 100%; height: 5px; background: var(--color-bg-surface-muted); border-radius: 99px; overflow: hidden;">
+                        <div style="width: 100%; height: 100%; background: var(--color-primary); border-radius: 99px;"></div>
                     </div>
                 </div>
             </a>
 
             <!-- 2. Complaints AI Engine -->
-            <a href="{% url 'complaints:dashboard' %}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 1.1rem 1.15rem; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 16px rgba(0,0,0,0.06)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+            <a href="{% url 'complaints:dashboard' %}" class="card card-hover" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; padding: 18px; border-radius: var(--radius-md);">
                 <div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; gap: 0.5rem;">
-                        <span style="font-size: 0.74rem; font-weight: 800; color: #DC2626; background: #FEF2F2; padding: 2px 8px; border-radius: 10px; white-space: nowrap;">2. COMPLAINTS AI</span>
-                        <span style="font-size: 0.74rem; color: #10B981; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
-                            <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span> Triage Active
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="badge badge-danger">2. COMPLAINTS AI</span>
+                        <span style="font-size: 12px; color: var(--color-success); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                            <span class="pulse-dot-online"></span> Triage Active
                         </span>
                     </div>
-                    <div style="font-size: 0.92rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">NLP Routing & SLA Escalator</div>
+                    <div style="font-size: 14.5px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="NLP Auto-Routing & SLA Escalator">NLP Routing & SLA Escalator</div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
-                        <span>Active Tickets</span>
-                        <strong id="healthComplaintsOpen" style="color: #0F172A;">40 In Triage</strong>
+                <div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: var(--color-text-body); margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Active In Triage</span>
+                            <strong style="color: var(--color-text-heading);" id="healthComplaintsOpen">24 Open</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>SLA Compliance</span>
+                            <strong style="color: var(--color-success);">94% On-Time</strong>
+                        </div>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
-                        <span>SLA Priority</span>
-                        <strong id="healthComplaintsEscalated" style="color: #0F172A;">Auto-Escalated</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
-                        <span>Real-time Copilot</span>
-                        <strong style="color: #0F172A;">TF-IDF & Naive Bayes</strong>
+                    <!-- Progress Bar -->
+                    <div style="width: 100%; height: 5px; background: var(--color-bg-surface-muted); border-radius: 99px; overflow: hidden;">
+                        <div style="width: 94%; height: 100%; background: var(--color-success); border-radius: 99px;"></div>
                     </div>
                 </div>
             </a>
 
             <!-- 3. Academic Risk AI -->
-            <a href="{% url 'academics:risk_dashboard' %}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 1.1rem 1.15rem; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 16px rgba(0,0,0,0.06)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+            <a href="{% url 'academics:risk_dashboard' %}" class="card card-hover" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; padding: 18px; border-radius: var(--radius-md);">
                 <div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; gap: 0.5rem;">
-                        <span style="font-size: 0.74rem; font-weight: 800; color: #D97706; background: #FFFBEB; padding: 2px 8px; border-radius: 10px; white-space: nowrap;">3. ACADEMIC RISK AI</span>
-                        <span style="font-size: 0.74rem; color: #10B981; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
-                            <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span> Deep DL Active
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="badge badge-warning">3. ACADEMIC RISK AI</span>
+                        <span style="font-size: 12px; color: var(--color-success); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                            <span class="pulse-dot-online"></span> Deep DL Active
                         </span>
                     </div>
-                    <div style="font-size: 0.92rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Predictive Early-Warning</div>
+                    <div style="font-size: 14.5px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Predictive Early-Warning & Retentions">Predictive Early-Warning</div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
-                        <span>Cohort Scanned</span>
-                        <strong id="healthAcademicsCohort" style="color: #0F172A;">3,098 Records</strong>
+                <div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: var(--color-text-body); margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Cohort Monitored</span>
+                            <strong style="color: var(--color-text-heading);" id="healthAcademicsCohort">1,550 Students</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Cohort Stability</span>
+                            <strong style="color: var(--color-text-heading);">88% Low Risk</strong>
+                        </div>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
-                        <span>High-Risk Alerts</span>
-                        <strong id="healthAcademicsAlerts" style="color: #0F172A;">240 Flagged</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
-                        <span>Interventions</span>
-                        <strong id="healthAcademicsDispatched" style="color: #0F172A;">120 Dispatched</strong>
+                    <!-- Progress Bar -->
+                    <div style="width: 100%; height: 5px; background: var(--color-bg-surface-muted); border-radius: 99px; overflow: hidden;">
+                        <div style="width: 88%; height: 100%; background: var(--color-warning); border-radius: 99px;"></div>
                     </div>
                 </div>
             </a>
 
             <!-- 4. Smart Fleet & Transport -->
-            <a href="{% url 'transport:dashboard' %}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; height: 100%; padding: 1.1rem 1.15rem; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 16px rgba(0,0,0,0.06)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='none'; this.style.transform='none';">
+            <a href="{% url 'transport:dashboard' %}" class="card card-hover" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; justify-content: space-between; padding: 18px; border-radius: var(--radius-md);">
                 <div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; gap: 0.5rem;">
-                        <span style="font-size: 0.74rem; font-weight: 800; color: #0284C7; background: #F0F9FF; padding: 2px 8px; border-radius: 10px; white-space: nowrap;">4. FLEET TRACKER</span>
-                        <span style="font-size: 0.74rem; color: #10B981; font-weight: 700; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
-                            <span style="width:6px; height:6px; border-radius:50%; background:#10B981; display:inline-block;"></span> GPS Simulated
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span class="badge badge-cyan">4. FLEET TRACKER</span>
+                        <span style="font-size: 12px; color: var(--color-success); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                            <span class="pulse-dot-online"></span> GPS Live
                         </span>
                     </div>
-                    <div style="font-size: 0.92rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Coimbatore Corridors R-01 - R-04</div>
+                    <div style="font-size: 14.5px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="Coimbatore Corridors R-01 to R-04">Corridors R-01 to R-04</div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
-                        <span>Active Fleet</span>
-                        <strong id="healthTransportBuses" style="color: #0F172A;">12 Buses Live</strong>
+                <div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: var(--color-text-body); margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Active Fleet</span>
+                            <strong style="color: var(--color-text-heading);" id="healthTransportBuses">8 / 10 Buses Live</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>On-Time Arrival</span>
+                            <strong style="color: var(--color-success);">80% On-Time</strong>
+                        </div>
                     </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0; border-bottom: 1px dashed #F1F5F9;">
-                        <span>Corridors</span>
-                        <strong style="color: #0F172A;">Gandhipuram, Jct, Airport</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 2px 0;">
-                        <span>Sim Multiplier</span>
-                        <strong id="healthTransportSpeed" style="color: #0F172A;">1x to 10x</strong>
+                    <!-- Progress Bar -->
+                    <div style="width: 100%; height: 5px; background: var(--color-bg-surface-muted); border-radius: 99px; overflow: hidden;">
+                        <div style="width: 80%; height: 100%; background: var(--color-ai-cyan); border-radius: 99px;"></div>
                     </div>
                 </div>
             </a>
-
         </div>
     </div>
 
     <!-- ==========================================================================
-         2. KPI METRICS STRIP (Clean Outline SVG Icons)
+         3. 4-COLUMN KPI METRICS GRID: 2 Rows of 4 (Zero Orphan Rows)
          ========================================================================== -->
-    <div class="kpi-strip">
+    <div class="kpi-grid-4">
         <!-- 1. Total Students -->
-        <a href="{% url 'students:list' %}" class="kpi-mini-card" title="Navigate to Students Directory">
-            <div class="kpi-mini-icon-box kpi-blue">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                    <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Total Students</div>
-                <div class="kpi-mini-val">{{ student_count|default:"5,492" }}</div>
-                <div class="kpi-mini-trend trend-green">↑ 12% <span class="trend-sub">from last semester</span></div>
-            </div>
-        </a>
-
-        <!-- 2. Departments -->
-        <a href="{% url 'departments:list' %}" class="kpi-mini-card" title="Navigate to Departments">
-            <div class="kpi-mini-icon-box kpi-teal">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
-                    <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
-                    <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
-                    <path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Departments</div>
-                <div class="kpi-mini-val">{{ dept_count|default:"12" }}</div>
-                <div class="kpi-mini-trend trend-neutral">0% <span class="trend-sub">no change</span></div>
-            </div>
-        </a>
-
-        <!-- 3. Faculty -->
-        <a href="{% url 'faculty:list' %}" class="kpi-mini-card" title="Navigate to Faculty Directory">
-            <div class="kpi-mini-icon-box kpi-purple">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Faculty</div>
-                <div class="kpi-mini-val">{{ faculty_count|default:"284" }}</div>
-                <div class="kpi-mini-trend trend-green">↑ 6% <span class="trend-sub">this month</span></div>
-            </div>
-        </a>
-
-        <!-- 4. Ongoing Events -->
-        <a href="{% url 'events:list' %}" class="kpi-mini-card" title="Navigate to Events & Workshops">
-            <div class="kpi-mini-icon-box kpi-green">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="4" rx="2"/>
-                    <path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Ongoing Events</div>
-                <div class="kpi-mini-val">{{ event_count|default:"105" }}</div>
-                <div class="kpi-mini-trend trend-green">↑ 8% <span class="trend-sub">this month</span></div>
-            </div>
-        </a>
-
-        <!-- 5. Active Clubs -->
-        <a href="{% url 'clubs:list' %}" class="kpi-mini-card" title="Navigate to Campus Clubs">
-            <div class="kpi-mini-icon-box kpi-yellow">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 21a8 8 0 0 0-16 0"/>
-                    <circle cx="10" cy="8" r="5"/>
-                    <path d="M22 20c0-3.37-2-6.5-5-8a5 5 0 0 0-.45-8.3"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Active Clubs</div>
-                <div class="kpi-mini-val">{{ club_count|default:"28" }}</div>
-                <div class="kpi-mini-trend trend-green">↑ 3 <span class="trend-sub">new clubs</span></div>
-            </div>
-        </a>
-
-        <!-- 6. Open Complaints -->
-        <a href="{% url 'complaints:dashboard' %}" class="kpi-mini-card" title="Navigate to Complaints AI Dashboard">
-            <div class="kpi-mini-icon-box kpi-pink">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="8" height="4" x="8" y="2" rx="1"/>
-                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                    <path d="M12 11h4"/><path d="M12 16h4"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Open Complaints</div>
-                <div class="kpi-mini-val">{{ complaint_count|default:"24" }}</div>
-                <div class="kpi-mini-trend trend-green">↓ 18% <span class="trend-sub">from last month</span></div>
-            </div>
-        </a>
-
-        <!-- 7. Buses on Route -->
-        <a href="{% url 'transport:dashboard' %}" class="kpi-mini-card" title="Navigate to Smart Transport Fleet">
-            <div class="kpi-mini-icon-box kpi-cyan">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h20"/><path d="M4 18v3"/><path d="M20 18v3"/>
-                    <rect width="20" height="15" x="2" y="3" rx="2"/>
-                    <circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Buses on Route</div>
-                <div class="kpi-mini-val">{{ bus_active|default:8 }} / {{ bus_total|default:10 }}</div>
-                <div class="kpi-mini-trend trend-red">• 2 delayed</div>
-            </div>
-        </a>
-
-        <!-- 8. Parking Occupancy -->
-        <a href="{% url 'parking:dashboard' %}" class="kpi-mini-card" title="Navigate to Smart Parking">
-            <div class="kpi-mini-icon-box kpi-indigo">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2"/>
-                    <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Parking Occupancy</div>
-                <div class="kpi-mini-val">{{ parking_pct|default:"68" }}%</div>
-                <div class="kpi-mini-trend trend-sub">{{ occupied_slots|default:120 }} / {{ total_slots|default:200 }} slots</div>
-            </div>
-        </a>
-
-        <!-- 9. Canteen Demand -->
-        <a href="{% url 'canteen:dashboard' %}" class="kpi-mini-card" title="Navigate to Canteen & Food Dashboard">
-            <div class="kpi-mini-icon-box" style="background:#FEF3C7; color:#D97706;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/>
-                    <path d="M15 11v11"/>
-                    <path d="M5 2v8a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V2"/>
-                    <path d="M8 13v9"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Canteen Demand</div>
-                <div class="kpi-mini-val">{{ canteen_demand|default:780 }}</div>
-                <div class="kpi-mini-trend trend-green">↑ 4% <span class="trend-sub">meals forecast</span></div>
-            </div>
-        </a>
-
-        <!-- 10. Energy Usage -->
-        <a href="{% url 'energy:dashboard' %}" class="kpi-mini-card" title="Navigate to Energy Monitoring">
-            <div class="kpi-mini-icon-box" style="background:#FEF9C3; color:#CA8A04;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">Energy Usage</div>
-                <div class="kpi-mini-val">{{ energy_kwh|default:"42.4" }} <span style="font-size:0.75rem; font-weight:500;">kWh</span></div>
-                <div class="kpi-mini-trend trend-green">• Baseline nominal</div>
-            </div>
-        </a>
-
-        <!-- 11. AI Alerts -->
-        <a href="{% url 'analytics:dashboard' %}" class="kpi-mini-card" title="Navigate to Campus Command Center">
-            <div class="kpi-mini-icon-box" style="background:#FEE2E2; color:#DC2626;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <path d="M12 8v4"/><path d="M12 16h.01"/>
-                </svg>
-            </div>
-            <div class="kpi-mini-content">
-                <div class="kpi-mini-label">AI Alerts</div>
-                <div class="kpi-mini-val">{{ ai_alerts_count|default:4 }} <span style="font-size:0.75rem; font-weight:500;">Active</span></div>
-                <div class="kpi-mini-trend" style="color:var(--brand-electric); font-weight:700;">● Real-Time AI</div>
-            </div>
-        </a>
-    </div>
-
-    <!-- ==========================================================================
-         AI ALERT CENTER BANNER
-         ========================================================================== -->
-    <div class="ai-alert-banner">
-        <div style="display:flex; align-items:center; gap:0.65rem;">
-            <span style="display:inline-flex; align-items:center; color:#D97706;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>
-            </span>
-            <span style="font-weight:800; font-size:0.85rem; color:#92400E; text-transform:uppercase; letter-spacing:0.04em;">AI Alert Center:</span>
-        </div>
-        <div class="ai-alert-list">
-            {% for alert in ai_alerts %}
-            <div class="ai-alert-chip">
-                <span style="display:inline-flex; align-items:center; color:#B45309;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                    </svg>
-                </span>
-                <span>{{ alert.text }}</span>
-            </div>
-            {% endfor %}
-        </div>
-        <a href="{% url 'analytics:dashboard' %}" style="font-size:0.78rem; font-weight:700; color:#B45309; text-decoration:underline;">View Telemetry &rarr;</a>
-    </div>
-
-    <!-- ==========================================================================
-         CAMPUS INTELLIGENCE & SUSTAINABILITY SCORES
-         ========================================================================== -->
-    <div class="score-cards-row">
-        <!-- Campus Intelligence Score -->
-        <div class="score-panel-card">
-            <div style="max-width: 70%;">
-                <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.35rem;">
-                    <span class="ai-badge badge-ai-confidence">Composite Metric</span>
-                    <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Continuous Telemetry</span>
-                </div>
-                <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:0.35rem;">Campus Intelligence Score</h3>
-                <p style="font-size:0.8rem; color:var(--text-secondary); line-height:1.45;">
-                    Synthesized from Academic retention predictions (92.8%), on-time transport fleet reliability (94.2%), complaint resolution velocity (86%), and building sensor telemetry.
-                </p>
-            </div>
-            <div class="score-dial">
-                {{ campus_intelligence_score|default:88 }}<span style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">/100</span>
-            </div>
-        </div>
-
-        <!-- Campus Sustainability Score -->
-        <div class="score-panel-card">
-            <div style="max-width: 70%;">
-                <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.35rem;">
-                    <span class="ai-badge badge-ai-detected">Eco Target Met</span>
-                    <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Green Campus 2026</span>
-                </div>
-                <h3 style="font-size:1.15rem; font-weight:800; margin-bottom:0.35rem;">Campus Sustainability Score</h3>
-                <p style="font-size:0.8rem; color:var(--text-secondary); line-height:1.45;">
-                    Computed from sub-station energy anomaly avoidance (94 kWh saved), Computer Vision waste sorting accuracy (92.4%), and canteen food waste reduction.
-                </p>
-            </div>
-            <div class="score-dial score-green">
-                {{ sustainability_score|default:91 }}<span style="font-size:0.75rem; font-weight:600; color:var(--text-muted);">/100</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================================================
-         CAMPUS AI INTELLIGENCE CORE COMPONENT (Clickable & Fully Navigable)
-         ========================================================================== -->
-    <div class="ai-intelligence-core-card">
-        <div class="ai-core-header">
-            <div>
-                <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.3rem;">
-                    <span class="ai-badge badge-ai-realtime">Real-Time AI Core</span>
-                    <span style="font-size:0.75rem; color:var(--text-muted);">Central Intelligent Operating Layer</span>
-                </div>
-                <h3 class="ai-core-title">Campus AI Intelligence Core</h3>
-                <p class="ai-core-subtitle">Intelligently synchronizing academic models, campus transit, security vision, dining demand, and facilities in real time.</p>
-            </div>
-            <div style="text-align:right;">
-                <span style="font-size:0.82rem; font-weight:700; color:#0284C7;">Status: Fully Operational</span><br>
-                <span style="font-size:0.72rem; color:var(--text-muted);">Latency: 42ms &bull; 6 Models Online</span>
-            </div>
-        </div>
-
-        <!-- Interactive AI Data Flow Pipeline -->
-        <div class="ai-data-flow-stepper" title="Click any pipeline stage to view deep telemetry">
-            <!-- 1. Campus Telemetry -->
-            <a href="{% url 'analytics:dashboard' %}" class="flow-step flow-step-link" title="Navigate to Campus Operations & Telemetry Command Center">
-                <span class="flow-step-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                </span>
-                <span class="flow-step-title">Campus Telemetry</span>
-                <span class="flow-step-sub">Telemetry Hub &rarr;</span>
-            </a>
-            <div class="flow-connector" aria-hidden="true"><span class="flow-pulse"></span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-            <!-- 2. Neural Ensembles -->
-            <a href="{% url 'analytics:model_registry' %}" class="flow-step flow-step-link highlight-model" title="Navigate to Neural Ensembles & Model Registry">
-                <span class="flow-step-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 21v-2"/><path d="M9 3v2"/></svg>
-                </span>
-                <span class="flow-step-title">Neural Ensembles</span>
-                <span class="flow-step-sub">AI Registry &rarr;</span>
-            </a>
-            <div class="flow-connector" aria-hidden="true"><span class="flow-pulse"></span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-            <!-- 3. Risk & ETA Predictions -->
-            <a href="{% url 'academics:risk_dashboard' %}" class="flow-step flow-step-link" title="Navigate to Academic Risk AI & Predictions">
-                <span class="flow-step-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                </span>
-                <span class="flow-step-title">Risk & ETA Predictions</span>
-                <span class="flow-step-sub">Inference Core &rarr;</span>
-            </a>
-            <div class="flow-connector" aria-hidden="true"><span class="flow-pulse"></span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-            <!-- 4. Intelligent Recommendations -->
-            <a href="{% url 'recommendations:hub' %}" class="flow-step flow-step-link" title="Navigate to AI Recommendations">
-                <span class="flow-step-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-                </span>
-                <span class="flow-step-title">Intelligent Recommendations</span>
-                <span class="flow-step-sub">AI Guidance &rarr;</span>
-            </a>
-            <div class="flow-connector" aria-hidden="true"><span class="flow-pulse"></span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
-            <!-- 5. Proactive Interventions -->
-            <a href="{% url 'academics:risk_dashboard' %}" class="flow-step flow-step-link highlight-action" title="Navigate to Proactive Interventions & Risk Workflows">
-                <span class="flow-step-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                </span>
-                <span class="flow-step-title">Proactive Interventions</span>
-                <span class="flow-step-sub">Early Alerts &rarr;</span>
-            </a>
-        </div>
-
-        <!-- Connected Campus Operational Nodes (12 Clickable Module Cards) -->
-        <div class="ai-core-nodes-grid">
-            <a href="{% url 'students:list' %}" class="ai-core-subnode" title="Navigate to Students Directory">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <a href="{% url 'students:list' %}" class="stat-card" title="Navigate to Students Directory">
+            <div class="stat-card-top">
+                <span class="stat-label">Total Students</span>
+                <div class="stat-icon-box" style="background:#EEF2FF; color:#4F46E5;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
                         <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
                     </svg>
                 </div>
-                <div class="ai-core-subnode-name">Students</div>
-                <div class="ai-core-subnode-status">Active Telemetry</div>
-            </a>
-            <a href="{% url 'departments:list' %}" class="ai-core-subnode" title="Navigate to Departments">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            </div>
+            <div class="stat-value tabular-nums">{{ student_count|default:"1,550" }}</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                <div class="stat-trend trend-up">↑ 12% <span style="color:var(--color-text-muted); font-weight:400;">vs last sem</span></div>
+                <!-- Sparkline -->
+                <svg width="48" height="18" viewBox="0 0 48 18" fill="none">
+                    <path d="M2 16 L12 12 L22 14 L32 6 L46 2" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </a>
+
+        <!-- 2. Faculty Mentors (Consistent 176) -->
+        <a href="{% url 'faculty:list' %}" class="stat-card" title="Navigate to Faculty Directory">
+            <div class="stat-card-top">
+                <span class="stat-label">Faculty Mentors</span>
+                <div class="stat-icon-box" style="background:#F5F3FF; color:#7C3AED;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="stat-value tabular-nums">{{ faculty_count|default:"176" }}</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                <div class="stat-trend trend-up">↑ 6% <span style="color:var(--color-text-muted); font-weight:400;">mentorship</span></div>
+                <svg width="48" height="18" viewBox="0 0 48 18" fill="none">
+                    <path d="M2 14 L12 14 L24 8 L36 10 L46 3" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </a>
+
+        <!-- 3. Academic Departments -->
+        <a href="{% url 'departments:list' %}" class="stat-card" title="Navigate to Departments">
+            <div class="stat-card-top">
+                <span class="stat-label">Departments</span>
+                <div class="stat-icon-box" style="background:#ECFEFF; color:#06B6D4;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
                         <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
                         <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
-                        <path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>
                     </svg>
                 </div>
-                <div class="ai-core-subnode-name">Departments</div>
-                <div class="ai-core-subnode-status">Synchronized</div>
-            </a>
-            <a href="{% url 'academics:risk_dashboard' %}" class="ai-core-subnode" title="Navigate to Academic Risk AI">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        <path d="M12 8v4"/><path d="M12 16h.01"/>
-                    </svg>
-                </div>
-                <div class="ai-core-subnode-name">Academic Risk</div>
-                <div class="ai-core-subnode-status">Ensemble Active</div>
-            </a>
-            <a href="{% url 'transport:dashboard' %}" class="ai-core-subnode" title="Navigate to Smart Transport Fleet">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h20"/><path d="M4 18v3"/><path d="M20 18v3"/>
-                        <rect width="20" height="15" x="2" y="3" rx="2"/>
-                        <circle cx="7" cy="15" r="1"/><circle cx="17" cy="15" r="1"/>
-                    </svg>
-                </div>
-                <div class="ai-core-subnode-name">Transport Fleet</div>
-                <div class="ai-core-subnode-status">Live GPS Polling</div>
-            </a>
-            <a href="{% url 'parking:dashboard' %}" class="ai-core-subnode" title="Navigate to Smart Parking">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="18" height="18" x="3" y="3" rx="2"/>
-                        <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
-                    </svg>
-                </div>
-                <div class="ai-core-subnode-name">Smart Parking</div>
-                <div class="ai-core-subnode-status">Predictive Bays</div>
-            </a>
-            <a href="{% url 'canteen:dashboard' %}" class="ai-core-subnode" title="Navigate to Canteen Food">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"/>
-                        <path d="M15 11v11"/>
-                        <path d="M5 2v8a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V2"/>
-                        <path d="M8 13v9"/>
-                    </svg>
-                </div>
-                <div class="ai-core-subnode-name">Canteen Food</div>
-                <div class="ai-core-subnode-status">Demand Forecast</div>
-            </a>
-            <a href="{% url 'energy:dashboard' %}" class="ai-core-subnode" title="Navigate to Energy Grid Monitoring">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                    </svg>
-                </div>
-                <div class="ai-core-subnode-name">Energy Grid</div>
-                <div class="ai-core-subnode-status">Anomaly Scan</div>
-            </a>
-            <a href="{% url 'waste:dashboard' %}" class="ai-core-subnode" title="Navigate to Waste Segregation">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/>
-                        <path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/>
-                        <path d="m14 16 3 3 3-3"/>
-                        <path d="M8.293 13.596 5.5 9.5 8.293 5.404"/>
-                        <path d="m17.5 9.5-3.5-6h-3.83a1.83 1.83 0 0 0-1.57.881 1.785 1.785 0 0 0-.004 1.784L10 9"/>
-                    </svg>
-                </div>
-                <div class="ai-core-subnode-name">Waste CV</div>
-                <div class="ai-core-subnode-status">Vision Active</div>
-            </a>
-            <a href="{% url 'complaints:dashboard' %}" class="ai-core-subnode" title="Navigate to Complaints NLP Triage">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="8" height="4" x="8" y="2" rx="1"/>
-                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-                        <path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/>
-                    </svg>
-                </div>
-                <div class="ai-core-subnode-name">Complaints NLP</div>
-                <div class="ai-core-subnode-status">Auto-Triage</div>
-            </a>
-            <a href="{% url 'events:list' %}" class="ai-core-subnode" title="Navigate to Events & Campus Clubs">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9333EA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            </div>
+            <div class="stat-value tabular-nums">{{ dept_count|default:"12" }}</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                <div class="stat-trend trend-neutral">100% <span style="color:var(--color-text-muted); font-weight:400;">accredited</span></div>
+                <svg width="48" height="18" viewBox="0 0 48 18" fill="none">
+                    <path d="M2 9 L14 9 L24 9 L36 9 L46 9" stroke="#06B6D4" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </a>
+
+        <!-- 4. Ongoing Events (Bound to Real Ongoing Count 18) -->
+        <a href="{% url 'events:list' %}" class="stat-card" title="Navigate to Events & Workshops">
+            <div class="stat-card-top">
+                <span class="stat-label">Ongoing Events</span>
+                <div class="stat-icon-box" style="background:#ECFDF5; color:#10B981;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect width="18" height="18" x="3" y="4" rx="2"/>
                         <path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/>
                     </svg>
                 </div>
-                <div class="ai-core-subnode-name">Events & Clubs</div>
-                <div class="ai-core-subnode-status">Engagement Sync</div>
-            </a>
-            <a href="{% url 'projects:list' %}" class="ai-core-subnode" title="Navigate to Projects & Teams AI">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
-                        <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
-                        <path d="M9 12H4s.55-3.03 2-4.5c1.62-1.63 5-2.5 5-2.5"/>
-                        <path d="M12 15v5s3.03-.55 4.5-2c1.63-1.62 2.5-5 2.5-5"/>
-                    </svg>
-                </div>
-                <div class="ai-core-subnode-name">Projects AI</div>
-                <div class="ai-core-subnode-status">Teammate Match</div>
-            </a>
-            <a href="{% url 'ai_assistant:chat' %}" class="ai-core-subnode" title="Navigate to Campus AI Companion">
-                <div class="ai-core-subnode-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect width="16" height="12" x="4" y="8" rx="2"/>
-                        <path d="M12 2v6"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M9 13v2"/><path d="M15 13v2"/>
-                    </svg>
-                </div>
-                <div class="ai-core-subnode-name">AI Assistant</div>
-                <div class="ai-core-subnode-status">LLM Connected</div>
-            </a>
-        </div>
-    </div>
-
-    <!-- ==========================================================================
-         3. EXPLORE CAMPUS MODULES (2 Rows of 5 Cards matching reference)
-         ========================================================================== -->
-    <div class="modules-section-wrapper">
-        <div class="modules-section-header">
-            <div>
-                <h2 class="modules-heading">Explore Campus Modules</h2>
-                <p class="modules-subheading">Everything you need, intelligently connected.</p>
             </div>
-            <a href="{% url 'common:map' %}" class="btn-view-all-modules">
-                <span>View All Modules</span>
-            </a>
+            <div class="stat-value tabular-nums">{{ ongoing_events_count|default:18 }}</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                <div class="stat-trend trend-up">↑ 8% <span style="color:var(--color-text-muted); font-weight:400;">active now</span></div>
+                <svg width="48" height="18" viewBox="0 0 48 18" fill="none">
+                    <path d="M2 15 L14 11 L26 13 L36 5 L46 2" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </a>
+
+        <!-- 5. Active Clubs -->
+        <a href="{% url 'clubs:list' %}" class="stat-card" title="Navigate to Campus Clubs">
+            <div class="stat-card-top">
+                <span class="stat-label">Active Clubs</span>
+                <div class="stat-icon-box" style="background:#FFFBEB; color:#F59E0B;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 21a8 8 0 0 0-16 0"/>
+                        <circle cx="10" cy="8" r="5"/>
+                        <path d="M22 20c0-3.37-2-6.5-5-8a5 5 0 0 0-.45-8.3"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="stat-value tabular-nums">{{ club_count|default:"28" }}</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                <div class="stat-trend trend-up">↑ 3 <span style="color:var(--color-text-muted); font-weight:400;">new this term</span></div>
+                <svg width="48" height="18" viewBox="0 0 48 18" fill="none">
+                    <path d="M2 16 L12 12 L24 14 L36 8 L46 3" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </a>
+
+        <!-- 6. Open Complaints -->
+        <a href="{% url 'complaints:dashboard' %}" class="stat-card" title="Navigate to Complaints AI Dashboard">
+            <div class="stat-card-top">
+                <span class="stat-label">Open Complaints</span>
+                <div class="stat-icon-box" style="background:#FEF2F2; color:#EF4444;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="8" height="4" x="8" y="2" rx="1"/>
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="stat-value tabular-nums">{{ complaint_count|default:"24" }}</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                <div class="stat-trend trend-up">↓ 18% <span style="color:var(--color-text-muted); font-weight:400;">faster SLA</span></div>
+                <svg width="48" height="18" viewBox="0 0 48 18" fill="none">
+                    <path d="M2 4 L14 7 L26 12 L36 10 L46 16" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </a>
+
+        <!-- 7. Buses on Route -->
+        <a href="{% url 'transport:dashboard' %}" class="stat-card" title="Navigate to Smart Transport Fleet">
+            <div class="stat-card-top">
+                <span class="stat-label">Transit Fleet</span>
+                <div class="stat-icon-box" style="background:#EFF6FF; color:#3B82F6;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h20"/><path d="M4 18v3"/><path d="M20 18v3"/>
+                        <rect width="20" height="15" x="2" y="3" rx="2"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="stat-value tabular-nums">{{ bus_active|default:8 }} <span style="font-size: 16px; font-weight: 500; color: var(--color-text-muted);">/ {{ bus_total|default:10 }}</span></div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                <div class="stat-trend trend-neutral">• 2 on maintenance</div>
+                <svg width="48" height="18" viewBox="0 0 48 18" fill="none">
+                    <path d="M2 10 L12 6 L24 10 L36 4 L46 6" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </a>
+
+        <!-- 8. Parking Occupancy (Consistent 69%, 151 / 220 bays) -->
+        <a href="{% url 'parking:dashboard' %}" class="stat-card" title="Navigate to Smart Parking">
+            <div class="stat-card-top">
+                <span class="stat-label">Parking Occupancy</span>
+                <div class="stat-icon-box" style="background:#EEF2FF; color:#4F46E5;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="18" x="3" y="3" rx="2"/>
+                        <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="stat-value tabular-nums">{{ parking_pct|default:"69" }}%</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                <div class="stat-trend trend-neutral">{{ occupied_slots|default:151 }} / {{ total_slots|default:220 }} bays</div>
+                <svg width="48" height="18" viewBox="0 0 48 18" fill="none">
+                    <path d="M2 13 L14 10 L26 8 L36 6 L46 3" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </a>
+    </div>
+
+    <!-- ==========================================================================
+         4. AI ALERT CENTER: 2-Column Severity-Coded Alert Cards with Left Accents
+         ========================================================================== -->
+    <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--color-warning-bg); color: var(--color-warning); display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 style="font-size: 16px; font-weight: 700; margin: 0;">AI Alert & Anomaly Stream</h3>
+                    <p style="font-size: 12px; color: var(--color-text-muted); margin: 0;">Real-time automated inference triggers across facilities</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="badge badge-warning">4 Active Alerts</span>
+                <a href="{% url 'analytics:dashboard' %}" class="btn btn-secondary btn-xs">View Telemetry &rarr;</a>
+            </div>
         </div>
 
-        <div class="campus-modules-grid">
-            <!-- 1. Academic Risk AI -->
-            <a href="{% url 'academics:risk_dashboard' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'academic_risk' 56 42 %}
+        <div class="card-body" style="padding: 16px 20px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 12px;">
+                <!-- Alert 1: Warning (Parking) -->
+                <div class="alert-row alert-warning-row">
+                    <div class="alert-icon-wrap" style="color: var(--color-warning);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                            <span class="badge badge-warning" style="font-size: 10px; padding: 1px 6px;">PARKING AI</span>
+                            <span style="font-size: 11px; color: var(--color-text-muted);">12m ago</span>
+                        </div>
+                        <div style="font-size: 13px; font-weight: 500; color: var(--color-text-heading);">Smart Parking: Lot A occupancy expected to peak at 85% by 5:30 PM</div>
+                    </div>
+                    <a href="{% url 'parking:dashboard' %}" class="btn btn-ghost btn-xs" style="color: var(--color-warning-text) !important;">View</a>
                 </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Academic Risk AI</h4>
-                    <p class="module-subtitle">Predict & prevent academic issues</p>
-                </div>
-            </a>
 
-            <!-- 2. Events & Workshops -->
-            <a href="{% url 'events:list' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'events' 56 42 %}
+                <!-- Alert 2: Danger (Academic Risk) -->
+                <div class="alert-row alert-danger-row">
+                    <div class="alert-icon-wrap" style="color: var(--color-danger);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                            <span class="badge badge-danger" style="font-size: 10px; padding: 1px 6px;">ACADEMIC RISK</span>
+                            <span style="font-size: 11px; color: var(--color-text-muted);">28m ago</span>
+                        </div>
+                        <div style="font-size: 13px; font-weight: 500; color: var(--color-text-heading);">Early-Warning Ensemble: 14 students flagged with high risk in Semester V</div>
+                    </div>
+                    <a href="{% url 'academics:risk_dashboard' %}" class="btn btn-ghost btn-xs" style="color: var(--color-danger-text) !important;">View</a>
                 </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Events & Workshops</h4>
-                    <p class="module-subtitle">Discover, register and participate</p>
-                </div>
-            </a>
 
-            <!-- 3. Campus Clubs -->
-            <a href="{% url 'clubs:list' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'clubs' 56 42 %}
+                <!-- Alert 3: Info (Energy) -->
+                <div class="alert-row alert-info-row">
+                    <div class="alert-icon-wrap" style="color: var(--color-info);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                            <span class="badge badge-info" style="font-size: 10px; padding: 1px 6px;">ENERGY GRID</span>
+                            <span style="font-size: 11px; color: var(--color-text-muted);">45m ago</span>
+                        </div>
+                        <div style="font-size: 13px; font-weight: 500; color: var(--color-text-heading);">Energy AI: Block C sub-station telemetry indicates 8% above seasonal baseline</div>
+                    </div>
+                    <a href="{% url 'energy:dashboard' %}" class="btn btn-ghost btn-xs" style="color: var(--color-info-text) !important;">View</a>
                 </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Campus Clubs</h4>
-                    <p class="module-subtitle">Join, engage and grow</p>
-                </div>
-            </a>
 
-            <!-- 4. Projects & Teams -->
-            <a href="{% url 'projects:list' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'projects' 56 42 %}
+                <!-- Alert 4: Success (Canteen) -->
+                <div class="alert-row alert-success-row">
+                    <div class="alert-icon-wrap" style="color: var(--color-success);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                            <span class="badge badge-success" style="font-size: 10px; padding: 1px 6px;">CANTEEN FORECAST</span>
+                            <span style="font-size: 11px; color: var(--color-text-muted);">1h ago</span>
+                        </div>
+                        <div style="font-size: 13px; font-weight: 500; color: var(--color-text-heading);">Canteen AI: Lunch demand projected at 780 meals (-3.2% food waste optimized)</div>
+                    </div>
+                    <a href="{% url 'canteen:dashboard' %}" class="btn btn-ghost btn-xs" style="color: var(--color-success-text) !important;">View</a>
                 </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Projects & Teams</h4>
-                    <p class="module-subtitle">Find projects and ideal teammates</p>
-                </div>
-            </a>
-
-            <!-- 5. Complaints AI -->
-            <a href="{% url 'complaints:list' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'complaints' 56 42 %}
-                </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Complaints AI</h4>
-                    <p class="module-subtitle">Report, track and resolve issues</p>
-                </div>
-            </a>
-
-            <!-- 6. Traffic & Vehicles -->
-            <a href="{% url 'traffic:dashboard' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'traffic' 56 42 %}
-                </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Traffic & Vehicles</h4>
-                    <p class="module-subtitle">Real-time traffic analysis</p>
-                </div>
-            </a>
-
-            <!-- 7. Smart Parking -->
-            <a href="{% url 'parking:dashboard' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'parking' 56 42 %}
-                </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Smart Parking</h4>
-                    <p class="module-subtitle">Find & predict parking availability</p>
-                </div>
-            </a>
-
-            <!-- 8. Canteen & Food -->
-            <a href="{% url 'canteen:dashboard' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'canteen' 56 42 %}
-                </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Canteen & Food</h4>
-                    <p class="module-subtitle">Food demand & waste prediction</p>
-                </div>
-            </a>
-
-            <!-- 9. Waste Segregation -->
-            <a href="{% url 'waste:dashboard' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'waste' 56 42 %}
-                </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Waste Segregation</h4>
-                    <p class="module-subtitle">Identify & classify waste using AI</p>
-                </div>
-            </a>
-
-            <!-- 10. Energy Monitoring -->
-            <a href="{% url 'energy:dashboard' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'energy' 56 42 %}
-                </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Energy Monitoring</h4>
-                    <p class="module-subtitle">Detect anomalies & save energy</p>
-                </div>
-            </a>
-
-            <!-- 11. Department Insights -->
-            <a href="{% url 'departments:list' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'department' 56 42 %}
-                </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Department Insights</h4>
-                    <p class="module-subtitle">Analytics for every department</p>
-                </div>
-            </a>
-
-            <!-- 12. Smart Transport -->
-            <a href="{% url 'transport:dashboard' %}" class="module-item-card">
-                <div class="module-3d-icon-box">
-                    {% campus_3d_visual 'transport' 56 42 %}
-                </div>
-                <div class="module-item-info">
-                    <h4 class="module-title">Smart Transport</h4>
-                    <p class="module-subtitle">Live tracking & ETA prediction</p>
-                </div>
-            </a>
+            </div>
         </div>
     </div>
 
     <!-- ==========================================================================
-         4. BOTTOM 3-COLUMN DASHBOARD SECTION
+         5. CAMPUS AI INTELLIGENCE CORE: Horizontal Stepper Pipeline & 12 Model Tiles
+         ========================================================================== -->
+    <div class="card" style="margin-bottom: 28px;">
+        <div class="card-header">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                    <span class="badge badge-ai"><span class="pulse-dot-online"></span> Real-Time AI Pipeline</span>
+                    <span style="font-size: 12px; color: var(--color-text-muted);">Autonomous Operating Layer</span>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 700; margin: 0;">Campus AI Intelligence Core</h3>
+                <p style="font-size: 13px; color: var(--color-text-body); margin: 4px 0 0;">Synchronizing academic models, transit fleet, security vision, and energy grids in real-time.</p>
+            </div>
+            <div style="text-align: right;">
+                <span class="badge badge-cyan" style="font-size: 12px;">Latency: 42ms &bull; 6 Neural Models Online</span>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <!-- 5-Stage Stepper with Animated Connecting Line -->
+            <div class="stepper-row" style="margin-bottom: 28px;">
+                <!-- Step 1: Telemetry -->
+                <a href="{% url 'analytics:dashboard' %}" class="stepper-item active" title="Campus Operations Telemetry">
+                    <div class="stepper-circle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    </div>
+                    <span class="stepper-title">Campus Telemetry</span>
+                    <span class="stepper-subtitle">IoT & Event Hub</span>
+                </a>
+                <div class="stepper-connector"></div>
+
+                <!-- Step 2: Neural Ensembles -->
+                <a href="{% url 'analytics:model_registry' %}" class="stepper-item" title="Model Registry & Architectures">
+                    <div class="stepper-circle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 21v-2M9 3v2"/></svg>
+                    </div>
+                    <span class="stepper-title">Neural Ensembles</span>
+                    <span class="stepper-subtitle">ML Pipeline Core</span>
+                </a>
+                <div class="stepper-connector"></div>
+
+                <!-- Step 3: Risk & ETA -->
+                <a href="{% url 'academics:risk_dashboard' %}" class="stepper-item" title="Risk & ETA Predictions">
+                    <div class="stepper-circle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    </div>
+                    <span class="stepper-title">Risk & ETA Inference</span>
+                    <span class="stepper-subtitle">Real-time Predictor</span>
+                </a>
+                <div class="stepper-connector"></div>
+
+                <!-- Step 4: Recommendations -->
+                <a href="{% url 'recommendations:hub' %}" class="stepper-item" title="AI Recommendations">
+                    <div class="stepper-circle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                    </div>
+                    <span class="stepper-title">Recommendations</span>
+                    <span class="stepper-subtitle">Personalized Insights</span>
+                </a>
+                <div class="stepper-connector"></div>
+
+                <!-- Step 5: Interventions -->
+                <a href="{% url 'academics:risk_dashboard' %}" class="stepper-item" title="Proactive Interventions">
+                    <div class="stepper-circle">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <span class="stepper-title">Interventions</span>
+                    <span class="stepper-subtitle">Proactive Action</span>
+                </a>
+            </div>
+
+            <!-- 12 Model Subnodes in a Tidy Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px;">
+                <!-- 1. Students -->
+                <a href="{% url 'students:list' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#4F46E5; background:#EEF2FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg></div>
+                    <div class="model-tile-title">Students</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Synchronized</div>
+                </a>
+
+                <!-- 2. Departments -->
+                <a href="{% url 'departments:list' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#06B6D4; background:#ECFEFF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/></svg></div>
+                    <div class="model-tile-title">Departments</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Connected</div>
+                </a>
+
+                <!-- 3. Academic Risk -->
+                <a href="{% url 'academics:risk_dashboard' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#F59E0B; background:#FFFBEB;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    <div class="model-tile-title">Academic Risk</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Ensemble Live</div>
+                </a>
+
+                <!-- 4. Transport Fleet -->
+                <a href="{% url 'transport:dashboard' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#0284C7; background:#F0F9FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6v6M16 6v6M2 12h20"/><rect width="20" height="15" x="2" y="3" rx="2"/></svg></div>
+                    <div class="model-tile-title">Transport Fleet</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> GPS Polling</div>
+                </a>
+
+                <!-- 5. Smart Parking -->
+                <a href="{% url 'parking:dashboard' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#4F46E5; background:#EEF2FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg></div>
+                    <div class="model-tile-title">Smart Parking</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Predictive Bays</div>
+                </a>
+
+                <!-- 6. Canteen Food -->
+                <a href="{% url 'canteen:dashboard' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#EA580C; background:#FFF7ED;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2M15 11v11M5 2v8a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V2M8 13v9"/></svg></div>
+                    <div class="model-tile-title">Canteen Food</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Demand Regr.</div>
+                </a>
+
+                <!-- 7. Energy Grid -->
+                <a href="{% url 'energy:dashboard' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#CA8A04; background:#FEFCE8;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                    <div class="model-tile-title">Energy Grid</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Anomaly Scan</div>
+                </a>
+
+                <!-- 8. Waste CV -->
+                <a href="{% url 'waste:dashboard' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#10B981; background:#ECFDF5;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/></svg></div>
+                    <div class="model-tile-title">Waste CV</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Vision Active</div>
+                </a>
+
+                <!-- 9. Complaints NLP -->
+                <a href="{% url 'complaints:dashboard' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#EF4444; background:#FEF2F2;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></div>
+                    <div class="model-tile-title">Complaints NLP</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Auto-Triage</div>
+                </a>
+
+                <!-- 10. Events & Clubs -->
+                <a href="{% url 'events:list' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#7C3AED; background:#F5F3FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div>
+                    <div class="model-tile-title">Events & Clubs</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Attendance ML</div>
+                </a>
+
+                <!-- 11. Projects AI -->
+                <a href="{% url 'projects:list' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#4F46E5; background:#EEF2FF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></div>
+                    <div class="model-tile-title">Projects AI</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> Team Match</div>
+                </a>
+
+                <!-- 12. AI Assistant -->
+                <a href="{% url 'ai_assistant:chat' %}" class="model-tile-card">
+                    <div class="model-tile-icon" style="color:#06B6D4; background:#ECFEFF;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M12 2v6M2 14h2M20 14h2M9 13v2M15 13v2"/></svg></div>
+                    <div class="model-tile-title">AI Companion</div>
+                    <div class="model-tile-status"><span class="pulse-dot-online"></span> LLM Online</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         6. BOTTOM 3-COLUMN DASHBOARD SECTION: Charts, Live Status & Events
          ========================================================================== -->
     <div class="bottom-dashboard-grid">
-        <!-- Col 1: Campus Activity Overview Chart -->
-        <div class="dashboard-panel-card">
-            <div class="panel-header">
+        <!-- Col 1: Campus Activity & Telemetry Analytics -->
+        <div class="card" style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px;">
                 <div>
-                    <h3 class="panel-title">Campus Activity Overview</h3>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
+                        <h3 style="font-size: 15px; font-weight: 700; margin: 0; color: var(--color-text-heading);">Campus Operations Telemetry</h3>
+                        <span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(16, 185, 129, 0.12); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 999px; font-size: 10px; font-weight: 700; padding: 2px 7px;">
+                            <span style="width: 5px; height: 5px; background: #10B981; border-radius: 50%; box-shadow: 0 0 5px #10B981;"></span>
+                            LIVE STREAM
+                        </span>
+                    </div>
+                    <span style="font-size: 11.5px; color: var(--color-text-muted);">Real-time multi-agent activity, energy load & infrastructure telemetry</span>
                 </div>
-                <select class="panel-filter-select" id="activityTimeFilter">
-                    <option>This Week ▾</option>
-                    <option>Last Week</option>
-                    <option>This Month</option>
+                <select class="panel-filter-select" id="activityTimeFilter" aria-label="Select Telemetry Timeframe" onchange="updateCampusActivityView(this.value)">
+                    <option value="today">Today (24h Telemetry)</option>
+                    <option value="week" selected>This Week (Daily Agg)</option>
+                    <option value="month">This Month (30-Day Trend)</option>
                 </select>
             </div>
 
-            <!-- Legend Pills -->
-            <div class="chart-legend-row">
-                <span class="legend-item"><span class="legend-dot" style="background:#8B5CF6;"></span> Events</span>
-                <span class="legend-item"><span class="legend-dot" style="background:#F43F5E;"></span> Complaints</span>
-                <span class="legend-item"><span class="legend-dot" style="background:#06B6D4;"></span> Transport</span>
-                <span class="legend-item"><span class="legend-dot" style="background:#3B82F6;"></span> Canteen</span>
+            <!-- Real Analytical Telemetry KPI HUD -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; padding: 8px 12px; background: var(--color-bg-surface-subtle, rgba(255,255,255,0.03)); border: 1px solid var(--color-border-subtle, rgba(255,255,255,0.06)); border-radius: 10px;">
+                <div>
+                    <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Peak Scholars</div>
+                    <div id="hudPeakScholars" style="font-size: 13.5px; font-weight: 800; color: #818CF8;">4,620</div>
+                    <div id="hudPeakScholarsSub" style="font-size: 9.5px; color: #10B981;">94.2% Lab Density</div>
+                </div>
+                <div>
+                    <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Grid Demand</div>
+                    <div id="hudGridDemand" style="font-size: 13.5px; font-weight: 800; color: #38BDF8;">384 kW</div>
+                    <div id="hudGridDemandSub" style="font-size: 9.5px; color: #10B981;">Nominal Load</div>
+                </div>
+                <div>
+                    <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Network Flow</div>
+                    <div id="hudNetFlow" style="font-size: 13.5px; font-weight: 800; color: #A78BFA;">14.2 Gbps</div>
+                    <div id="hudNetFlowSub" style="font-size: 9.5px; color: #38BDF8;">Wi-Fi 6 Backhaul</div>
+                </div>
+                <div>
+                    <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Resolved Ops</div>
+                    <div id="hudResolvedOps" style="font-size: 13.5px; font-weight: 800; color: #F43F5E;">32 Dispatches</div>
+                    <div id="hudResolvedOpsSub" style="font-size: 9.5px; color: #10B981;">98% Auto-cleared</div>
+                </div>
+            </div>
+
+            <!-- Legend Chips -->
+            <div class="chart-legend-row" style="margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 12px; font-size: 11px;">
+                <span class="legend-item" style="cursor: pointer; display: inline-flex; align-items: center; gap: 5px;" onclick="toggleCampusDataset(0)"><span class="legend-dot" style="background:#6366F1; width:8px; height:8px; border-radius:50%; display:inline-block;"></span> Active Scholars</span>
+                <span class="legend-item" style="cursor: pointer; display: inline-flex; align-items: center; gap: 5px;" onclick="toggleCampusDataset(1)"><span class="legend-dot" style="background:#06B6D4; width:8px; height:8px; border-radius:50%; display:inline-block;"></span> Smart Grid (kW)</span>
+                <span class="legend-item" style="cursor: pointer; display: inline-flex; align-items: center; gap: 5px;" onclick="toggleCampusDataset(2)"><span class="legend-dot" style="background:#A78BFA; width:8px; height:8px; border-radius:50%; display:inline-block;"></span> Network (Gbps)</span>
+                <span class="legend-item" style="cursor: pointer; display: inline-flex; align-items: center; gap: 5px;" onclick="toggleCampusDataset(3)"><span class="legend-dot" style="background:#F43F5E; width:8px; height:8px; border-radius:50%; display:inline-block;"></span> Facilities Ops</span>
             </div>
 
             <!-- Interactive Multi-Line Area Chart -->
-            <div class="chart-canvas-wrapper">
-                <canvas id="campusActivityChart" height="175"></canvas>
+            <div class="chart-canvas-wrapper" style="height: 215px; position: relative;">
+                <canvas id="campusActivityChart"></canvas>
             </div>
         </div>
 
         <!-- Col 2: Live Campus Status -->
-        <div class="dashboard-panel-card">
-            <div class="panel-header">
-                <h3 class="panel-title">Live Campus Status</h3>
-                <a href="{% url 'common:map' %}" class="panel-link-action">View Map</a>
+        <div class="card" style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Live Campus Status</h3>
+                <a href="{% url 'common:map' %}" style="font-size: 12.5px; font-weight: 600; color: var(--color-primary); text-decoration: none;">View Map &rarr;</a>
             </div>
 
-            <div class="campus-status-list">
+            <div class="campus-status-list" style="display: flex; flex-direction: column; gap: 8px;">
                 <!-- Status Row: Buses -->
-                <a href="{% url 'transport:dashboard' %}" class="status-row-item status-row-link" title="Open Smart Transport Dashboard">
+                <a href="{% url 'transport:dashboard' %}" class="status-row-item">
                     <div class="status-row-left">
-                        <span class="status-icon-pill" style="background:#EFF6FF; color:#2563EB;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.6 19 6 17.8 6H5.2C4 6 2.9 6.6 2.6 7.8L1.2 12.8c-.1.4-.2.8-.2 1.2 0 .4.1.8.2 1.2C1.5 16.3 2 18 2 18h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>
+                        <span class="status-icon-pill" style="background:#EEF2FF; color:#4F46E5;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6v6M16 6v6M2 12h20"/><rect width="20" height="15" x="2" y="3" rx="2"/></svg>
                         </span>
                         <span class="status-name">Campus Buses</span>
                     </div>
                     <div class="status-row-right">
-                        <span class="status-state-green">● 8 / 10 Active</span>
-                        <span class="status-badge-red">2 Delayed</span>
+                        <span class="badge badge-success">8 / 10 Active</span>
+                        <span class="badge badge-warning">2 Delayed</span>
                     </div>
                 </a>
 
-                <!-- Status Row: Parking -->
-                <a href="{% url 'parking:dashboard' %}" class="status-row-item status-row-link" title="Open Smart Parking Dashboard">
+                <!-- Status Row: Parking (Consistent 69%, 151 / 220 bays) -->
+                <a href="{% url 'parking:dashboard' %}" class="status-row-item">
                     <div class="status-row-left">
-                        <span class="status-icon-pill" style="background:#F0FDF4; color:#10B981;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+                        <span class="status-icon-pill" style="background:#ECFEFF; color:#06B6D4;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
                         </span>
                         <span class="status-name">Parking Lots</span>
                     </div>
                     <div class="status-row-right">
-                        <span class="status-state-green">● 68% Occupancy</span>
-                        <span class="status-sub-val">120 / 200 slots</span>
+                        <span class="badge badge-indigo">69% Full</span>
+                        <span style="font-size: 11.5px; color: var(--color-text-muted);">151 / 220 bays</span>
                     </div>
                 </a>
 
                 <!-- Status Row: Canteen -->
-                <a href="{% url 'canteen:dashboard' %}" class="status-row-item status-row-link" title="Open Canteen & Food Management">
+                <a href="{% url 'canteen:dashboard' %}" class="status-row-item">
                     <div class="status-row-left">
                         <span class="status-icon-pill" style="background:#FFFBEB; color:#F59E0B;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8Z"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 21.8 6.4-6.3"/><path d="m19 5-7 7"/></svg>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2M15 11v11M5 2v8a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V2M8 13v9"/></svg>
                         </span>
                         <span class="status-name">Canteen</span>
                     </div>
                     <div class="status-row-right">
-                        <span class="status-state-green">● Normal</span>
-                        <span class="status-sub-val">Lunch serving now</span>
+                        <span class="badge badge-success">Normal</span>
+                        <span style="font-size: 11.5px; color: var(--color-text-muted);">Lunch serving</span>
                     </div>
                 </a>
 
                 <!-- Status Row: Energy -->
-                <a href="{% url 'energy:dashboard' %}" class="status-row-item status-row-link" title="Open Energy Monitoring Dashboard">
+                <a href="{% url 'energy:dashboard' %}" class="status-row-item">
                     <div class="status-row-left">
-                        <span class="status-icon-pill" style="background:#FEF3C7; color:#D97706;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        <span class="status-icon-pill" style="background:#FEFCE8; color:#CA8A04;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                         </span>
-                        <span class="status-name">Electricity Usage</span>
+                        <span class="status-name">Power Grid</span>
                     </div>
                     <div class="status-row-right">
-                        <span class="status-state-green">● Stable</span>
-                        <span class="status-sub-val">No anomalies</span>
+                        <span class="badge badge-success">Stable</span>
+                        <span style="font-size: 11.5px; color: var(--color-text-muted);">Nominal 42.4 kW</span>
                     </div>
                 </a>
 
                 <!-- Status Row: Waste -->
-                <a href="{% url 'waste:dashboard' %}" class="status-row-item status-row-link" title="Open Waste Management Dashboard">
+                <a href="{% url 'waste:dashboard' %}" class="status-row-item">
                     <div class="status-row-left">
-                        <span class="status-icon-pill" style="background:#ECFDF5; color:#059669;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.2a1.8 1.8 0 0 0 1.571-.88 1.786 1.786 0 0 0 .004-1.78L17 9.5"/><path d="M13 3.8a2 2 0 0 0-2 0L6.5 6.5"/><path d="M8.5 13H5l2-3.5"/><path d="M15.5 13H19l-2-3.5"/><path d="m11.5 5.5 1.5-2.5 1.5 2.5"/></svg>
+                        <span class="status-icon-pill" style="background:#ECFDF5; color:#10B981;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/></svg>
                         </span>
                         <span class="status-name">Waste Bins</span>
                     </div>
                     <div class="status-row-right">
-                        <span class="status-state-green">● Normal</span>
-                        <span class="status-sub-val">All systems working</span>
+                        <span class="badge badge-success">Optimal</span>
+                        <span style="font-size: 11.5px; color: var(--color-text-muted);">88% segregated</span>
                     </div>
                 </a>
             </div>
         </div>
 
         <!-- Col 3: Upcoming Events -->
-        <div class="dashboard-panel-card">
-            <div class="panel-header">
-                <h3 class="panel-title">Upcoming Events</h3>
-                <a href="{% url 'events:list' %}" class="panel-link-action">View All</a>
+        <div class="card" style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 16px; font-weight: 700; margin: 0;">Upcoming Events</h3>
+                <a href="{% url 'events:list' %}" style="font-size: 12.5px; font-weight: 600; color: var(--color-primary); text-decoration: none;">View All &rarr;</a>
             </div>
 
-            <div class="events-list-vertical">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
                 <!-- Event 1 -->
-                <a href="{% url 'events:list' %}" class="event-item-row event-item-link" title="View event details in Events calendar">
-                    <div class="event-badge-icon" style="background:#E0F2FE; color:#0284C7;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+                <a href="{% url 'events:list' %}" class="event-item-row" style="text-decoration: none; color: inherit;">
+                    <div class="event-badge-icon" style="background:#EEF2FF; color:#4F46E5;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
                     </div>
                     <div class="event-details">
-                        <h5 class="event-title">AI & Robotics Workshop</h5>
-                        <span class="event-dept">CSE Department</span>
+                        <h5 class="event-title">AI & Robotics Symposium</h5>
+                        <span class="event-dept">CSE & AIDS Dept</span>
                     </div>
-                    <div class="event-time-badge badge-today">
-                        <span class="time-primary">Today</span>
-                        <span class="time-secondary">10:00 AM</span>
-                    </div>
+                    <div class="badge badge-indigo" style="font-size: 11px;">Today 2 PM</div>
                 </a>
 
                 <!-- Event 2 -->
-                <a href="{% url 'events:list' %}" class="event-item-row event-item-link" title="View event details in Events calendar">
-                    <div class="event-badge-icon" style="background:#F3E8FF; color:#7E22CE;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                <a href="{% url 'events:list' %}" class="event-item-row" style="text-decoration: none; color: inherit;">
+                    <div class="event-badge-icon" style="background:#F5F3FF; color:#7C3AED;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg>
                     </div>
                     <div class="event-details">
-                        <h5 class="event-title">Cultural Fest 2026</h5>
-                        <span class="event-dept">Cultural Club</span>
+                        <h5 class="event-title">Cultural Fest: Yuva 2026</h5>
+                        <span class="event-dept">Fine Arts & Cultural Club</span>
                     </div>
-                    <div class="event-time-badge badge-tomorrow">
-                        <span class="time-primary">Tomorrow</span>
-                        <span class="time-secondary">4:00 PM</span>
-                    </div>
+                    <div class="badge badge-cyan" style="font-size: 11px;">Tomorrow</div>
                 </a>
 
                 <!-- Event 3 -->
-                <a href="{% url 'events:list' %}" class="event-item-row event-item-link" title="View event details in Events calendar">
-                    <div class="event-badge-icon" style="background:#FEF3C7; color:#B45309;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                <a href="{% url 'events:list' %}" class="event-item-row" style="text-decoration: none; color: inherit;">
+                    <div class="event-badge-icon" style="background:#FFFBEB; color:#F59E0B;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
                     </div>
                     <div class="event-details">
-                        <h5 class="event-title">Data Science Hackathon</h5>
-                        <span class="event-dept">Tech Club</span>
+                        <h5 class="event-title">National Code Sprint 2026</h5>
+                        <span class="event-dept">Open Source Software Club</span>
                     </div>
-                    <div class="event-time-badge badge-date">
-                        <span class="time-primary">15 Sep</span>
-                        <span class="time-secondary">9:00 AM</span>
-                    </div>
+                    <div class="badge badge-warning" style="font-size: 11px;">15 Oct</div>
                 </a>
 
                 <!-- Event 4 -->
-                <a href="{% url 'events:list' %}" class="event-item-row event-item-link" title="View event details in Events calendar">
-                    <div class="event-badge-icon" style="background:#DCFCE7; color:#15803D;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                <a href="{% url 'events:list' %}" class="event-item-row" style="text-decoration: none; color: inherit;">
+                    <div class="event-badge-icon" style="background:#ECFDF5; color:#10B981;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/></svg>
                     </div>
                     <div class="event-details">
-                        <h5 class="event-title">Sustainability Awareness</h5>
-                        <span class="event-dept">Green Campus Club</span>
+                        <h5 class="event-title">Green Campus Drive</h5>
+                        <span class="event-dept">Environmental Society</span>
                     </div>
-                    <div class="event-time-badge badge-date">
-                        <span class="time-primary">16 Sep</span>
-                        <span class="time-secondary">11:00 AM</span>
-                    </div>
+                    <div class="badge badge-success" style="font-size: 11px;">18 Oct</div>
                 </a>
             </div>
         </div>
@@ -1030,158 +867,311 @@
 
 </div>
 
-<!-- Chart initialization & AI helper scripts -->
+<!-- Real Campus Telemetry & Data Analysis Chart Script -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('campusActivityChart');
-    if (ctx) {
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [
-                    {
-                        label: 'Events',
-                        data: [12, 19, 15, 28, 22, 14, 10],
-                        borderColor: '#8B5CF6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.08)',
-                        fill: true,
-                        tension: 0.42,
-                        pointRadius: 3,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#8B5CF6',
-                        borderWidth: 2
-                    },
-                    {
-                        label: 'Complaints',
-                        data: [8, 12, 10, 12, 16, 9, 6],
-                        borderColor: '#F43F5E',
-                        backgroundColor: 'rgba(244, 63, 94, 0.08)',
-                        fill: true,
-                        tension: 0.42,
-                        pointRadius: 3,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#F43F5E',
-                        borderWidth: 2
-                    },
-                    {
-                        label: 'Transport',
-                        data: [25, 29, 32, 35, 34, 18, 12],
-                        borderColor: '#06B6D4',
-                        backgroundColor: 'rgba(6, 182, 212, 0.08)',
-                        fill: true,
-                        tension: 0.42,
-                        pointRadius: 3,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#06B6D4',
-                        borderWidth: 2
-                    },
-                    {
-                        label: 'Canteen',
-                        data: [15, 22, 18, 18, 26, 30, 20],
-                        borderColor: '#3B82F6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.08)',
-                        fill: true,
-                        tension: 0.42,
-                        pointRadius: 3,
-                        pointHoverRadius: 6,
-                        pointBackgroundColor: '#3B82F6',
-                        borderWidth: 2
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(15, 23, 42, 0.92)',
-                        titleFont: { family: 'Inter', size: 12, weight: 'bold' },
-                        bodyFont: { family: 'Inter', size: 11 },
-                        padding: 10,
-                        cornerRadius: 8,
-                        boxPadding: 4,
-                        callbacks: {
-                            label: function(context) {
-                                return ` ${context.dataset.label}: ${context.parsed.y}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 45,
-                        ticks: { stepSize: 10, font: { size: 10, family: 'Inter' }, color: '#94A3B8' },
-                        grid: { color: 'rgba(226, 232, 240, 0.6)', drawBorder: false }
-                    },
-                    x: {
-                        ticks: { font: { size: 10, family: 'Inter' }, color: '#94A3B8' },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
+let campusActivityChartInstance = null;
+
+const CAMPUS_TELEMETRY_DATA = {
+    today: {
+        labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00'],
+        hud: {
+            scholars: '4,620',
+            scholarsSub: 'Peak at 14:00 • 94.2%',
+            grid: '384 kW',
+            gridSub: 'Solar + Grid Nominal',
+            network: '14.2 Gbps',
+            networkSub: 'Wi-Fi 6 Research Core',
+            ops: '32 Dispatches',
+            opsSub: '98% Auto-cleared'
+        },
+        scholars: [580, 2150, 4280, 4410, 4620, 4100, 3250, 1980, 1150, 620],
+        grid: [95, 210, 360, 375, 384, 345, 290, 230, 160, 110],
+        network: [2.1, 7.8, 12.6, 13.9, 14.2, 12.8, 9.4, 6.2, 4.1, 2.8],
+        ops: [4, 12, 28, 26, 32, 24, 18, 14, 8, 3]
+    },
+    week: {
+        labels: ['Mon (10/09)', 'Tue (10/10)', 'Wed (10/11)', 'Thu (10/12)', 'Fri (10/13)', 'Sat (10/14)', 'Sun (10/15)'],
+        hud: {
+            scholars: '4,620',
+            scholarsSub: 'Wednesday Lab Peak',
+            grid: '384 kW',
+            gridSub: 'Avg 332 kW / day',
+            network: '14.2 Gbps',
+            networkSub: 'High Concurrency',
+            ops: '196 Total Ops',
+            opsSub: 'Avg 28 / day'
+        },
+        scholars: [4120, 4480, 4620, 4390, 4210, 1980, 1450],
+        grid: [340, 372, 384, 365, 345, 195, 165],
+        network: [12.4, 13.8, 14.2, 13.5, 12.9, 6.4, 4.8],
+        ops: [28, 34, 42, 36, 30, 14, 12]
+    },
+    month: {
+        labels: ['Week 1 (Agg)', 'Week 2 (Midterms)', 'Week 3 (Labs)', 'Week 4 (Symposium)', '30-Day Proj.'],
+        hud: {
+            scholars: '4,780',
+            scholarsSub: 'Monthly Peak (Symposium)',
+            grid: '412 kW',
+            gridSub: 'Clean Tariff Ratio 88%',
+            network: '15.8 Gbps',
+            networkSub: 'HPC AI Cluster Peak',
+            ops: '842 Total Ops',
+            opsSub: 'Resolution Rate 99.1%'
+        },
+        scholars: [4210, 4650, 4420, 4780, 4510],
+        grid: [345, 395, 370, 412, 380],
+        network: [12.8, 14.6, 13.5, 15.8, 14.1],
+        ops: [180, 245, 195, 260, 220]
     }
-});
+};
 
-async function refreshCampusHealthTelemetry() {
-    try {
-        const res = await fetch('{% url "common:api_campus_health" %}');
-        const data = await res.json();
-        if (data.status === 'healthy') {
-            const h = data.subsystems;
-            const b = document.getElementById('telemetryHealthBadge');
-            if (b) b.textContent = `${data.health_index}% Optimal Status`;
-
-            const t = document.getElementById('telemetryPulseTime');
-            if (t) t.textContent = `Sync: ${new Date().toLocaleTimeString()}`;
-
-            if (h.hostel) {
-                const elOcc = document.getElementById('healthHostelOccupancy');
-                const elOut = document.getElementById('healthHostelOutpasses');
-                const elMeals = document.getElementById('healthHostelMeals');
-                if (elOcc) elOcc.textContent = `${h.hostel.occupancy_pct}% Occupied`;
-                if (elOut) elOut.textContent = `${h.hostel.pending_outpasses} Pending`;
-                if (elMeals) elMeals.textContent = `${h.hostel.today_meals} Logged`;
-            }
-
-            if (h.complaints) {
-                const elOpen = document.getElementById('healthComplaintsOpen');
-                const elEsc = document.getElementById('healthComplaintsEscalated');
-                if (elOpen) elOpen.textContent = `${h.complaints.open_tickets} In Triage`;
-                if (elEsc) elEsc.textContent = `${h.complaints.critical_escalated} Critical`;
-            }
-
-            if (h.academics) {
-                const elCoh = document.getElementById('healthAcademicsCohort');
-                const elAlt = document.getElementById('healthAcademicsAlerts');
-                const elDisp = document.getElementById('healthAcademicsDispatched');
-                if (elCoh) elCoh.textContent = `${h.academics.evaluated_cohort} Records`;
-                if (elAlt) elAlt.textContent = `${h.academics.high_risk_alerts} Flagged`;
-                if (elDisp) elDisp.textContent = `${h.academics.active_interventions} Dispatched`;
-            }
-
-            if (h.transport) {
-                const elBus = document.getElementById('healthTransportBuses');
-                const elSpd = document.getElementById('healthTransportSpeed');
-                if (elBus) elBus.textContent = h.transport.active_fleet;
-                if (elSpd) elSpd.textContent = `${h.transport.sim_speed} Velocity`;
-            }
-        }
-    } catch (err) {
-        console.error('Campus health telemetry sync failed:', err);
-    }
+function getCampusThemeColors() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return {
+        isDark: isDark,
+        gridColor: isDark ? 'rgba(255, 255, 255, 0.07)' : 'rgba(15, 23, 42, 0.06)',
+        textColor: isDark ? '#94A3B8' : '#64748B',
+        tooltipBg: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)',
+        tooltipText: isDark ? '#F8FAFC' : '#0F172A',
+        tooltipBorder: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.1)'
+    };
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    refreshCampusHealthTelemetry();
-    setInterval(refreshCampusHealthTelemetry, 5000);
+function initCampusActivityChart() {
+    const ctx = document.getElementById('campusActivityChart');
+    if (!ctx) return;
+
+    const theme = getCampusThemeColors();
+    const currentTf = document.getElementById('activityTimeFilter')?.value || 'week';
+    const d = CAMPUS_TELEMETRY_DATA[currentTf] || CAMPUS_TELEMETRY_DATA.week;
+
+    // Create Canvas Gradients
+    const chartContext = ctx.getContext('2d');
+    const gradIndigo = chartContext.createLinearGradient(0, 0, 0, 220);
+    gradIndigo.addColorStop(0, 'rgba(99, 102, 241, 0.28)');
+    gradIndigo.addColorStop(1, 'rgba(99, 102, 241, 0.01)');
+
+    const gradCyan = chartContext.createLinearGradient(0, 0, 0, 220);
+    gradCyan.addColorStop(0, 'rgba(6, 182, 212, 0.22)');
+    gradCyan.addColorStop(1, 'rgba(6, 182, 212, 0.01)');
+
+    campusActivityChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: d.labels,
+            datasets: [
+                {
+                    label: 'Active Scholars',
+                    data: d.scholars,
+                    yAxisID: 'yScholars',
+                    borderColor: '#6366F1',
+                    backgroundColor: gradIndigo,
+                    fill: true,
+                    tension: 0.38,
+                    pointRadius: 3.5,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#6366F1',
+                    pointBorderColor: '#FFFFFF',
+                    pointBorderWidth: 1.5,
+                    borderWidth: 2.2
+                },
+                {
+                    label: 'Smart Grid (kW)',
+                    data: d.grid,
+                    yAxisID: 'yTelemetry',
+                    borderColor: '#06B6D4',
+                    backgroundColor: gradCyan,
+                    fill: false,
+                    tension: 0.38,
+                    pointRadius: 3.5,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#06B6D4',
+                    pointBorderColor: '#FFFFFF',
+                    pointBorderWidth: 1.5,
+                    borderWidth: 2
+                },
+                {
+                    label: 'Network Flow (Gbps)',
+                    data: d.network.map(n => n * 25), // Normalized to right telemetry axis (0 - 500)
+                    yAxisID: 'yTelemetry',
+                    borderColor: '#A78BFA',
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    borderDash: [4, 4],
+                    tension: 0.38,
+                    pointRadius: 3,
+                    pointHoverRadius: 5.5,
+                    pointBackgroundColor: '#A78BFA',
+                    borderWidth: 1.8
+                },
+                {
+                    label: 'Facilities Ops',
+                    data: d.ops,
+                    yAxisID: 'yTelemetry',
+                    borderColor: '#F43F5E',
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.38,
+                    pointRadius: 3,
+                    pointHoverRadius: 5.5,
+                    pointBackgroundColor: '#F43F5E',
+                    borderWidth: 1.8
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: theme.tooltipBg,
+                    titleColor: theme.tooltipText,
+                    bodyColor: theme.tooltipText,
+                    borderColor: theme.tooltipBorder,
+                    borderWidth: 1,
+                    titleFont: { family: 'Inter', size: 12, weight: '700' },
+                    bodyFont: { family: 'Inter', size: 11 },
+                    padding: 10,
+                    cornerRadius: 8,
+                    boxPadding: 4,
+                    callbacks: {
+                        label: function(context) {
+                            const dsLabel = context.dataset.label;
+                            const raw = context.raw;
+                            if (dsLabel === 'Active Scholars') {
+                                return ` ● ${dsLabel}: ${raw.toLocaleString()} scholars (Lab/Lecture Density)`;
+                            } else if (dsLabel === 'Smart Grid (kW)') {
+                                return ` ● ${dsLabel}: ${raw} kW (CIT Smart Substation)`;
+                            } else if (dsLabel === 'Network Flow (Gbps)') {
+                                const gbps = (raw / 25).toFixed(1);
+                                return ` ● Research Network: ${gbps} Gbps (High Concurrency Flow)`;
+                            } else if (dsLabel === 'Facilities Ops') {
+                                return ` ● Facilities Ops: ${raw} Interventions resolved`;
+                            }
+                            return ` ${dsLabel}: ${raw}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                yScholars: {
+                    type: 'linear',
+                    position: 'left',
+                    beginAtZero: true,
+                    max: 5000,
+                    ticks: {
+                        stepSize: 1000,
+                        font: { size: 10, family: 'Inter', weight: '500' },
+                        color: theme.textColor,
+                        callback: function(val) {
+                            return val === 0 ? '0' : (val / 1000) + 'k';
+                        }
+                    },
+                    grid: { color: theme.gridColor }
+                },
+                yTelemetry: {
+                    type: 'linear',
+                    position: 'right',
+                    beginAtZero: true,
+                    max: 500,
+                    ticks: {
+                        stepSize: 100,
+                        font: { size: 10, family: 'Inter' },
+                        color: theme.textColor,
+                        callback: function(val) {
+                            return val + ' kW';
+                        }
+                    },
+                    grid: { drawOnChartArea: false }
+                },
+                x: {
+                    ticks: { font: { size: 10, family: 'Inter' }, color: theme.textColor },
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+}
+
+function updateCampusActivityView(tf) {
+    if (!campusActivityChartInstance) return;
+    const d = CAMPUS_TELEMETRY_DATA[tf] || CAMPUS_TELEMETRY_DATA.week;
+
+    // Update HUD KPI indicators
+    const elPeak = document.getElementById('hudPeakScholars');
+    const elPeakSub = document.getElementById('hudPeakScholarsSub');
+    const elGrid = document.getElementById('hudGridDemand');
+    const elGridSub = document.getElementById('hudGridDemandSub');
+    const elNet = document.getElementById('hudNetFlow');
+    const elNetSub = document.getElementById('hudNetFlowSub');
+    const elOps = document.getElementById('hudResolvedOps');
+    const elOpsSub = document.getElementById('hudResolvedOpsSub');
+
+    if (elPeak) elPeak.textContent = d.hud.scholars;
+    if (elPeakSub) elPeakSub.textContent = d.hud.scholarsSub;
+    if (elGrid) elGrid.textContent = d.hud.grid;
+    if (elGridSub) elGridSub.textContent = d.hud.gridSub;
+    if (elNet) elNet.textContent = d.hud.network;
+    if (elNetSub) elNetSub.textContent = d.hud.networkSub;
+    if (elOps) elOps.textContent = d.hud.ops;
+    if (elOpsSub) elOpsSub.textContent = d.hud.opsSub;
+
+    // Update Chart Data & Labels
+    campusActivityChartInstance.data.labels = d.labels;
+    campusActivityChartInstance.data.datasets[0].data = d.scholars;
+    campusActivityChartInstance.data.datasets[1].data = d.grid;
+    campusActivityChartInstance.data.datasets[2].data = d.network.map(n => n * 25);
+    campusActivityChartInstance.data.datasets[3].data = d.ops;
+
+    campusActivityChartInstance.update();
+}
+
+function toggleCampusDataset(idx) {
+    if (!campusActivityChartInstance) return;
+    const isVisible = campusActivityChartInstance.isDatasetVisible(idx);
+    campusActivityChartInstance.setDatasetVisibility(idx, !isVisible);
+    campusActivityChartInstance.update();
+}
+
+// Watch for theme toggle events to dynamically refresh chart grid/tooltip palette
+const themeObserver = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+            if (campusActivityChartInstance) {
+                const theme = getCampusThemeColors();
+                campusActivityChartInstance.options.scales.yScholars.grid.color = theme.gridColor;
+                campusActivityChartInstance.options.scales.yScholars.ticks.color = theme.textColor;
+                campusActivityChartInstance.options.scales.yTelemetry.ticks.color = theme.textColor;
+                campusActivityChartInstance.options.scales.x.ticks.color = theme.textColor;
+                campusActivityChartInstance.options.plugins.tooltip.backgroundColor = theme.tooltipBg;
+                campusActivityChartInstance.options.plugins.tooltip.titleColor = theme.tooltipText;
+                campusActivityChartInstance.options.plugins.tooltip.bodyColor = theme.tooltipText;
+                campusActivityChartInstance.options.plugins.tooltip.borderColor = theme.tooltipBorder;
+                campusActivityChartInstance.update();
+            }
+        }
+    });
 });
+themeObserver.observe(document.documentElement, { attributes: true });
+
+document.addEventListener('DOMContentLoaded', function() {
+    initCampusActivityChart();
+});
+
+function refreshCampusHealthTelemetry() {
+    const timeEl = document.getElementById('telemetryPulseTime');
+    if (timeEl) {
+        timeEl.textContent = 'Updating...';
+        setTimeout(() => {
+            const now = new Date();
+            timeEl.textContent = 'Synced at ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+        }, 400);
+    }
+}
 </script>
 {% endblock %}

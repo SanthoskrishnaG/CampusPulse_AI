@@ -155,6 +155,9 @@ def demo_login(request, role_name):
     if matching_user:
         login(request, matching_user)
         messages.success(request, f"Switched perspective to {matching_user.username} ({matching_user.get_role_display()})")
+        next_url = request.GET.get('next')
+        if next_url:
+            return redirect(next_url)
         return redirect('accounts:role_redirect')
     else:
         messages.warning(request, f"No demo user found with role {role_name}. Please seed demo data.")

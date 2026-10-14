@@ -7,7 +7,7 @@
 <div style="max-width: 1320px; margin: 0 auto;">
 
     <!-- Page Hero with CIT Context & 3D Visual -->
-    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 1.5rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #E0F2FE 100%);">
+    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 1.5rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
         <div style="max-width: 720px;">
             <div class="hero-pill" style="margin-bottom: 0.5rem;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px;"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
@@ -30,7 +30,7 @@
     <!-- Mode Toggle, Search, Navigation Bar & Route Toggles -->
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.75rem;">
         <!-- 2D / 3D Mode Selector -->
-        <div style="display:flex; gap:0.5rem; background:#FFFFFF; border:1px solid var(--border-subtle); padding:0.35rem; border-radius:var(--radius-sm); box-shadow:var(--shadow-xs);">
+        <div style="display:flex; gap:0.5rem; background:var(--bg-card); border:1px solid var(--border-subtle); padding:0.35rem; border-radius:var(--radius-sm); box-shadow:var(--shadow-xs);">
             <button id="btn2dView" class="btn btn-primary btn-sm" onclick="switchMapView('2d')">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:4px;"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg> 2D Campus Map & Routes
             </button>
@@ -40,7 +40,7 @@
         <!-- Campus Search Bar -->
         <div style="display:flex; align-items:center; gap:0.5rem; flex-grow:1; max-width:440px; margin:0 0.5rem;">
             <div style="position:relative; width:100%;">
-                <input type="text" id="mapSearchInput" class="form-input" placeholder="Search CIT, CSE, Library, Canteen, Parking..." style="width:100%; padding:0.45rem 2rem 0.45rem 0.85rem; font-size:0.85rem; border-radius:8px;">
+                <input type="text" id="mapSearchInput" class="form-input" placeholder="Search CIT, CSE, Library, Canteen, Parking..." style="width:100%; padding:0.45rem 2rem 0.45rem 0.85rem; font-size:0.85rem; border-radius:8px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-subtle);">
                 <span style="position:absolute; right:10px; top:50%; transform:translateY(-50%); color:var(--text-muted); cursor:pointer;" onclick="executeMapSearch()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
             </div>
             <button class="btn btn-secondary btn-sm" style="white-space:nowrap; padding:0.45rem 0.75rem;" onclick="focusCITCampus()">
@@ -58,13 +58,13 @@
     </div>
 
     <!-- Building-to-Building Route Planning Bar -->
-    <div class="card-light" style="padding: 0.75rem 1.25rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; background: #FFFFFF; border-left: 4px solid #2563EB;">
+    <div class="card-light" style="padding: 0.75rem 1.25rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; background: var(--bg-card); border: 1px solid var(--border-subtle); border-left: 4px solid var(--color-primary);">
         <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; flex-grow: 1;">
-            <span style="font-size: 0.82rem; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: 0.04em;">Campus Route Navigator:</span>
+            <span style="font-size: 0.82rem; font-weight: 800; color: var(--text-heading); text-transform: uppercase; letter-spacing: 0.04em;">Campus Route Navigator:</span>
             
             <div style="display: flex; align-items: center; gap: 0.4rem;">
                 <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">From:</span>
-                <select id="routeStartSelect" class="form-input" style="padding: 0.35rem 0.65rem; font-size: 0.82rem; min-width: 190px;">
+                <select id="routeStartSelect" class="form-input" style="padding: 0.35rem 0.65rem; font-size: 0.82rem; min-width: 190px; background:var(--bg-surface); color:var(--text-primary); border:1px solid var(--border-subtle);">
                     <!-- Populated dynamically via JS -->
                 </select>
             </div>
@@ -73,7 +73,7 @@
 
             <div style="display: flex; align-items: center; gap: 0.4rem;">
                 <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">To:</span>
-                <select id="routeDestSelect" class="form-input" style="padding: 0.35rem 0.65rem; font-size: 0.82rem; min-width: 190px;">
+                <select id="routeDestSelect" class="form-input" style="padding: 0.35rem 0.65rem; font-size: 0.82rem; min-width: 190px; background:var(--bg-surface); color:var(--text-primary); border:1px solid var(--border-subtle);">
                     <!-- Populated dynamically via JS -->
                 </select>
             </div>
@@ -402,11 +402,11 @@
         <span class="flow-arrow">&rarr;</span>
         <div class="flow-node">WASTE</div>
         <span class="flow-arrow">&rarr;</span>
-        <div class="flow-node" style="background:#EFF6FF; border-color:#93C5FD; color:#1D4ED8;">AI ENGINE</div>
+        <div class="flow-node flow-node-ai">AI ENGINE</div>
     </div>
 
     <!-- Map Legend -->
-    <div class="card-light" style="padding: 1rem 1.5rem; display: flex; gap: 1.8rem; flex-wrap: wrap; align-items: center; margin-top: 1rem;">
+    <div class="card-light" style="padding: 1rem 1.5rem; display: flex; gap: 1.8rem; flex-wrap: wrap; align-items: center; margin-top: 1rem; background: var(--bg-card); border: 1px solid var(--border-subtle);">
         <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Map Legend:</span>
         <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
             <span style="width: 14px; height: 14px; border: 2px dashed #0284C7; background: rgba(56, 189, 248, 0.18); border-radius: 2px;"></span> CIT Campus Boundary

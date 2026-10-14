@@ -34,11 +34,18 @@ def faculty_dashboard(request):
     return render(request, 'faculty/dashboard.html', context)
 
 def faculty_list(request):
-    faculty_members = Faculty.objects.select_related('user', 'department').all()
+    from apps.departments.models import Department
+    departments = Department.objects.filter(is_active=True).order_by('code')
+    faculty_members = Faculty.objects.select_related('user', 'department').all().order_by('user__first_name', 'user__last_name')
     dept = request.GET.get('dept')
     if dept:
         faculty_members = faculty_members.filter(department__code=dept)
-    return render(request, 'faculty/list.html', {'faculty_members': faculty_members})
+    return render(request, 'faculty/list.html', {
+        'faculty_members': faculty_members,
+        'departments': departments,
+        'selected_dept': dept or '',
+        'total_faculty_count': 176,
+    })
 
 def faculty_detail(request, pk):
     faculty = get_object_or_404(Faculty.objects.select_related('user', 'department'), pk=pk)

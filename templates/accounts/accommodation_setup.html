@@ -4,88 +4,146 @@
 {% block title %}Campus Accommodation Setup - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 760px; margin: 2rem auto; padding: 0 1rem;">
+<div class="onboarding-container" style="max-width: 820px; margin: 2rem auto; padding: 0 1rem; display: flex; flex-direction: column; gap: 1.5rem;">
+    
     <!-- Header Hero -->
-    <div style="text-align: center; margin-bottom: 2rem;">
-        <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 20px; background: linear-gradient(135deg, #0284C7, #2563EB); color: white; margin-bottom: 1rem; box-shadow: 0 10px 25px rgba(37,99,235,0.25);">
+    <div style="text-align: center;">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: var(--radius-xl); background: var(--color-primary-soft); color: var(--color-primary); margin-bottom: 1rem; border: 1px solid rgba(79, 70, 229, 0.2); box-shadow: var(--shadow-sm);">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </div>
-        <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem;">
-            Campus Accommodation Onboarding
+        <h1 style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: var(--text-heading); margin: 0 0 0.5rem 0; letter-spacing: -0.02em;">
+            Campus Accommodation <span class="gradient-text">Onboarding</span>
         </h1>
-        <p style="color: var(--text-secondary); font-size: 0.95rem; max-width: 540px; margin: 0 auto;">
-            Configure your residential status for <strong>Coimbatore Institute of Technology (CIT)</strong>. This activates tailored campus services, living facilities, and map routing.
+        <p style="font-size: 0.92rem; color: var(--text-body); max-width: 580px; margin: 0 auto; line-height: 1.6;">
+            Configure your residential status for <strong>Coimbatore Institute of Technology (CIT)</strong>. This activates tailored smart facilities, mess scheduling, and campus routing.
         </p>
     </div>
 
-    <!-- Main Card -->
-    <div class="card" style="padding: 2.2rem; border-radius: 18px; box-shadow: 0 12px 30px rgba(0,0,0,0.06); border: 1px solid var(--border-color);">
+    <!-- Multi-Step Wizard Progress Stepper -->
+    <div class="panel-card" style="padding: 1.25rem 2rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+        <div style="display: flex; align-items: center; justify-content: space-between; position: relative;">
+            
+            <!-- Step 1 -->
+            <div id="stepIndicator1" style="display: flex; flex-direction: column; align-items: center; gap: 0.35rem; position: relative; z-index: 2;">
+                <div class="step-num-pill" style="width: 32px; height: 32px; border-radius: 50%; background: var(--color-primary); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; box-shadow: 0 0 0 4px var(--color-primary-soft);">
+                    1
+                </div>
+                <span style="font-size: 0.78rem; font-weight: 700; color: var(--color-primary);">Residency</span>
+            </div>
+
+            <div id="stepLine1" style="flex: 1; height: 2px; background: var(--border-color); margin: 0 0.75rem; transform: translateY(-10px); transition: background var(--transition-fast);"></div>
+
+            <!-- Step 2 -->
+            <div id="stepIndicator2" style="display: flex; flex-direction: column; align-items: center; gap: 0.35rem; position: relative; z-index: 2;">
+                <div class="step-num-pill" style="width: 32px; height: 32px; border-radius: 50%; background: var(--bg-surface-subtle); color: var(--text-muted); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
+                    2
+                </div>
+                <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);">Category</span>
+            </div>
+
+            <div id="stepLine2" style="flex: 1; height: 2px; background: var(--border-color); margin: 0 0.75rem; transform: translateY(-10px); transition: background var(--transition-fast);"></div>
+
+            <!-- Step 3 -->
+            <div id="stepIndicator3" style="display: flex; flex-direction: column; align-items: center; gap: 0.35rem; position: relative; z-index: 2;">
+                <div class="step-num-pill" style="width: 32px; height: 32px; border-radius: 50%; background: var(--bg-surface-subtle); color: var(--text-muted); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem;">
+                    3
+                </div>
+                <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted);">Building & Room</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Wizard Form Card -->
+    <div class="panel-card" style="padding: 2.25rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm);">
         <form method="POST" id="accommodationForm">
             {% csrf_token %}
 
-            <!-- STEP 1: Main Type Question -->
+            <!-- STEP 1: Residency Status Question -->
             <div style="margin-bottom: 2rem;">
-                <label style="display: block; font-weight: 700; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.8rem;">
-                    1. What is your campus accommodation type?
-                </label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+                    <label style="font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; color: var(--text-heading); margin: 0;">
+                        1. Select Campus Accommodation Status:
+                    </label>
+                    <span style="font-size: 0.75rem; color: var(--color-primary); font-weight: 600;">Required</span>
+                </div>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+                    
                     <!-- Option A: Hostel Student -->
-                    <label id="cardHostel" class="accom-card" style="border: 2px solid var(--border-color); border-radius: 14px; padding: 1.4rem; cursor: pointer; transition: all 0.25s ease; text-align: center; display: block; position: relative;">
+                    <label id="cardHostel" class="accom-card" style="border: 2px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.4rem; cursor: pointer; transition: all var(--transition-fast); text-align: left; display: flex; flex-direction: column; position: relative; background: var(--bg-surface-subtle);">
                         <input type="radio" name="accommodation_type" value="hostel" id="radioHostel" style="display: none;" onchange="handleTypeChange('hostel')">
-                        <div style="color: var(--brand-electric); margin-bottom: 0.5rem; display:flex; justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg></div>
-                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.3rem;">Hostel Student</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
-                            Living in CIT Campus Residential Hostels (Boys / Girls Blocks)
+                        <div id="checkHostel" style="display: none; position: absolute; top: 1rem; right: 1rem; width: 22px; height: 22px; border-radius: 50%; background: var(--color-primary); color: #fff; align-items: center; justify-content: center;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <div style="width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--color-primary-soft); color: var(--color-primary); display: flex; align-items: center; justify-content: center; margin-bottom: 0.85rem;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
+                        </div>
+                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-heading); margin-bottom: 0.35rem;">Hostel Resident</div>
+                        <div style="font-size: 0.82rem; color: var(--text-body); line-height: 1.5;">
+                            Living in CIT Campus Residential Hostels (Boys / Girls Blocks with Mess & Facilities).
                         </div>
                     </label>
 
                     <!-- Option B: Day Scholar -->
-                    <label id="cardDayScholar" class="accom-card" style="border: 2px solid var(--border-color); border-radius: 14px; padding: 1.4rem; cursor: pointer; transition: all 0.25s ease; text-align: center; display: block; position: relative;">
+                    <label id="cardDayScholar" class="accom-card" style="border: 2px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.4rem; cursor: pointer; transition: all var(--transition-fast); text-align: left; display: flex; flex-direction: column; position: relative; background: var(--bg-surface-subtle);">
                         <input type="radio" name="accommodation_type" value="day_scholar" id="radioDayScholar" style="display: none;" onchange="handleTypeChange('day_scholar')">
-                        <div style="color: var(--brand-cyan); margin-bottom: 0.5rem; display:flex; justify-content:center;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg></div>
-                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.3rem;">Day Scholar</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.4;">
-                            Commuting from home via bus, personal vehicle, or city transit
+                        <div id="checkDayScholar" style="display: none; position: absolute; top: 1rem; right: 1rem; width: 22px; height: 22px; border-radius: 50%; background: var(--color-success); color: #fff; align-items: center; justify-content: center;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <div style="width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--color-success-soft); color: var(--color-success); display: flex; align-items: center; justify-content: center; margin-bottom: 0.85rem;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+                        </div>
+                        <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-heading); margin-bottom: 0.35rem;">Day Scholar</div>
+                        <div style="font-size: 0.82rem; color: var(--text-body); line-height: 1.5;">
+                            Commuting from home via college bus, personal two-wheeler/car, or city transit.
                         </div>
                     </label>
+
                 </div>
             </div>
 
-            <!-- STEP 2: Hostel Specifics (Hidden by default, shown if hostel selected) -->
-            <div id="hostelStepSection" style="display: none; border-top: 1px dashed var(--border-color); padding-top: 1.8rem; margin-top: 1.5rem;">
-                <!-- Gender Category -->
+            <!-- STEP 2: Hostel Category Section (Revealed when Hostel is selected) -->
+            <div id="hostelStepSection" style="display: none; border-top: 1px dashed var(--border-color); padding-top: 1.75rem; margin-top: 1.5rem;">
+                
+                <!-- Category Selectable Cards -->
                 <div style="margin-bottom: 1.8rem;">
-                    <label style="display: block; font-weight: 700; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.8rem;">
-                        2. Which hostel category are you assigned to?
+                    <label style="font-family: var(--font-heading); display: block; font-weight: 700; font-size: 1.05rem; color: var(--text-heading); margin-bottom: 0.85rem;">
+                        2. Which residential wing are you assigned to?
                     </label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <label id="cardBoys" class="gender-card" style="border: 2px solid var(--border-color); border-radius: 12px; padding: 1.1rem; cursor: pointer; transition: all 0.2s ease; text-align: center;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                        
+                        <label id="cardBoys" class="gender-card" style="border: 2px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.2rem; cursor: pointer; transition: all var(--transition-fast); text-align: left; position: relative; background: var(--bg-surface-subtle); display: flex; flex-direction: column;">
                             <input type="radio" name="hostel_category" value="boys" id="radioBoys" style="display: none;" onchange="handleCategoryChange('boys')">
-                            <div style="color: var(--brand-electric); margin-bottom: 4px; display:flex; justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-                            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-top: 4px;">Boys Hostel</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">Blocks 1 & 2</div>
+                            <div id="checkBoys" style="display: none; position: absolute; top: 1rem; right: 1rem; width: 20px; height: 20px; border-radius: 50%; background: var(--color-primary); color: #fff; align-items: center; justify-content: center;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1rem; color: var(--text-heading); margin-bottom: 0.25rem;">Boys Residential Wings</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted);">Blocks 1, 2, and 3</div>
                         </label>
 
-                        <label id="cardGirls" class="gender-card" style="border: 2px solid var(--border-color); border-radius: 12px; padding: 1.1rem; cursor: pointer; transition: all 0.2s ease; text-align: center;">
+                        <label id="cardGirls" class="gender-card" style="border: 2px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.2rem; cursor: pointer; transition: all var(--transition-fast); text-align: left; position: relative; background: var(--bg-surface-subtle); display: flex; flex-direction: column;">
                             <input type="radio" name="hostel_category" value="girls" id="radioGirls" style="display: none;" onchange="handleCategoryChange('girls')">
-                            <div style="color: var(--brand-rose, #F43F5E); margin-bottom: 4px; display:flex; justify-content:center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-                            <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-top: 4px;">Girls Hostel</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">Blocks 1 & 2</div>
+                            <div id="checkGirls" style="display: none; position: absolute; top: 1rem; right: 1rem; width: 20px; height: 20px; border-radius: 50%; background: var(--color-primary); color: #fff; align-items: center; justify-content: center;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1rem; color: var(--text-heading); margin-bottom: 0.25rem;">Girls Residential Wings</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted);">Blocks 1 and 2</div>
                         </label>
+
                     </div>
                 </div>
 
-                <!-- Specific Hostel Building Selection -->
+                <!-- STEP 3: Building & Room Selection -->
                 <div id="hostelBuildingSection" style="display: none; margin-bottom: 1.8rem;">
-                    <label style="display: block; font-weight: 700; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.8rem;">
-                        3. Select your assigned CIT Hostel Building:
+                    <label style="font-family: var(--font-heading); display: block; font-weight: 700; font-size: 1.05rem; color: var(--text-heading); margin-bottom: 0.65rem;">
+                        3. Choose your assigned CIT Hostel Building:
                     </label>
 
                     <!-- Boys Hostels Dropdown -->
                     <div id="boysHostelList" style="display: none;">
-                        <select name="assigned_hostel" id="selectBoysHostel" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.95rem; font-weight: 600;">
-                            <option value="">-- Choose Assigned Boys Hostel --</option>
+                        <select name="assigned_hostel" id="selectBoysHostel" style="width: 100%; height: 44px; padding: 0 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface-subtle); color: var(--text-heading); font-size: 0.92rem; font-weight: 600; outline: none;">
+                            <option value="">-- Choose Assigned Boys Building --</option>
                             {% for h in boys_hostels %}
                             <option value="{{ h.id }}" {% if student.assigned_hostel_id == h.id %}selected{% endif %}>
                                 {{ h.name }} ({{ h.code }}) • Capacity: {{ h.capacity }}
@@ -96,8 +154,8 @@
 
                     <!-- Girls Hostels Dropdown -->
                     <div id="girlsHostelList" style="display: none;">
-                        <select name="assigned_hostel" id="selectGirlsHostel" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.95rem; font-weight: 600;" disabled>
-                            <option value="">-- Choose Assigned Girls Hostel --</option>
+                        <select name="assigned_hostel" id="selectGirlsHostel" style="width: 100%; height: 44px; padding: 0 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface-subtle); color: var(--text-heading); font-size: 0.92rem; font-weight: 600; outline: none;" disabled>
+                            <option value="">-- Choose Assigned Girls Building --</option>
                             {% for h in girls_hostels %}
                             <option value="{{ h.id }}" {% if student.assigned_hostel_id == h.id %}selected{% endif %}>
                                 {{ h.name }} ({{ h.code }}) • Capacity: {{ h.capacity }}
@@ -107,25 +165,34 @@
                     </div>
                 </div>
 
-                <!-- Room Number (Optional / Configurable) -->
+                <!-- Room Number Input -->
                 <div id="roomNumberSection" style="display: none; margin-bottom: 1.8rem;">
-                    <label style="display: block; font-weight: 700; font-size: 0.95rem; color: var(--text-primary); margin-bottom: 0.4rem;">
-                        Assigned Room Number:
+                    <label style="font-family: var(--font-heading); display: block; font-weight: 700; font-size: 0.95rem; color: var(--text-heading); margin-bottom: 0.4rem;">
+                        Assigned Room Identifier:
                     </label>
-                    <input type="text" name="room_number" value="{{ student.room_number|default:'' }}" placeholder="e.g. B-204, G-102" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1px solid var(--border-color); font-size: 0.95rem;">
-                    <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 4px;">
-                        Room details are private to you and authorized hostel authorities.
+                    <input type="text" name="room_number" value="{{ student.room_number|default:'' }}" placeholder="e.g. B-204, G-102" 
+                           style="width: 100%; height: 44px; padding: 0 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg-surface-subtle); color: var(--text-heading); font-size: 0.92rem; outline: none;">
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+                        Allocated room data will unlock IoT power monitoring and mess attendance for your unit.
                     </div>
                 </div>
+
             </div>
 
-            <!-- Submit Button -->
-            <div style="display: flex; gap: 1rem; margin-top: 2rem; justify-content: flex-end;">
-                <a href="{% url 'students:dashboard' %}" class="btn btn-secondary" style="padding: 0.75rem 1.4rem; border-radius: 10px;">
+            <!-- Inline Validation Status Pill -->
+            <div id="validationHint" style="padding: 0.65rem 1rem; border-radius: var(--radius-md); font-size: 0.8rem; margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; background: var(--bg-surface-subtle); border: 1px solid var(--border-color); color: var(--text-muted);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <span id="validationText">Please select your accommodation type above.</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 0.85rem; margin-top: 1.75rem; justify-content: flex-end; align-items: center;">
+                <a href="{% url 'students:dashboard' %}" class="btn btn-secondary btn-sm" style="font-weight: 600; padding: 0.6rem 1.25rem;">
                     Skip for now
                 </a>
-                <button type="submit" id="btnSubmit" class="btn btn-primary" style="padding: 0.75rem 2rem; border-radius: 10px; font-weight: 700; background: linear-gradient(135deg, #0284C7, #2563EB); border: none; color: white;" disabled>
-                    Save & Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-left:4px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                <button type="submit" id="btnSubmit" class="btn btn-primary btn-sm" style="padding: 0.6rem 1.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.45rem;" disabled>
+                    <span>Save & Complete Setup</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </button>
             </div>
         </form>
@@ -133,36 +200,89 @@
 </div>
 
 <script>
+function updateStepper(step) {
+    const s1 = document.getElementById('stepIndicator1').querySelector('.step-num-pill');
+    const s2 = document.getElementById('stepIndicator2').querySelector('.step-num-pill');
+    const s3 = document.getElementById('stepIndicator3').querySelector('.step-num-pill');
+    const l1 = document.getElementById('stepLine1');
+    const l2 = document.getElementById('stepLine2');
+
+    if (step >= 1) {
+        s1.style.background = 'var(--color-primary)';
+        s1.style.color = '#FFFFFF';
+        s1.style.boxShadow = '0 0 0 4px var(--color-primary-soft)';
+    }
+    if (step >= 2) {
+        s2.style.background = 'var(--color-primary)';
+        s2.style.color = '#FFFFFF';
+        s2.style.boxShadow = '0 0 0 4px var(--color-primary-soft)';
+        l1.style.background = 'var(--color-primary)';
+    } else {
+        s2.style.background = 'var(--bg-surface-subtle)';
+        s2.style.color = 'var(--text-muted)';
+        s2.style.boxShadow = 'none';
+        l1.style.background = 'var(--border-color)';
+    }
+    if (step >= 3) {
+        s3.style.background = 'var(--color-primary)';
+        s3.style.color = '#FFFFFF';
+        s3.style.boxShadow = '0 0 0 4px var(--color-primary-soft)';
+        l2.style.background = 'var(--color-primary)';
+    } else {
+        s3.style.background = 'var(--bg-surface-subtle)';
+        s3.style.color = 'var(--text-muted)';
+        s3.style.boxShadow = 'none';
+        l2.style.background = 'var(--border-color)';
+    }
+}
+
 function handleTypeChange(type) {
     const cardHostel = document.getElementById('cardHostel');
     const cardDay = document.getElementById('cardDayScholar');
+    const checkHostel = document.getElementById('checkHostel');
+    const checkDay = document.getElementById('checkDayScholar');
     const hostelSection = document.getElementById('hostelStepSection');
-    const btnSubmit = document.getElementById('btnSubmit');
+    const hint = document.getElementById('validationHint');
+    const text = document.getElementById('validationText');
 
     if (type === 'hostel') {
-        cardHostel.style.borderColor = '#2563EB';
-        cardHostel.style.background = 'rgba(37, 99, 235, 0.05)';
-        cardDay.style.borderColor = 'var(--border-color)';
-        cardDay.style.background = 'transparent';
-        hostelSection.style.display = 'block';
+        cardHostel.style.border = '2px solid var(--color-primary)';
+        cardHostel.style.background = 'var(--color-primary-soft)';
+        checkHostel.style.display = 'flex';
 
-        // Check if subfields valid
+        cardDay.style.border = '2px solid var(--border-color)';
+        cardDay.style.background = 'var(--bg-surface-subtle)';
+        checkDay.style.display = 'none';
+
+        hostelSection.style.display = 'block';
+        updateStepper(2);
         validateForm();
     } else {
-        cardDay.style.borderColor = '#16A34A';
-        cardDay.style.background = 'rgba(22, 163, 74, 0.05)';
-        cardHostel.style.borderColor = 'var(--border-color)';
-        cardHostel.style.background = 'transparent';
-        hostelSection.style.display = 'none';
+        cardDay.style.border = '2px solid var(--color-success)';
+        cardDay.style.background = 'var(--color-success-soft)';
+        checkDay.style.display = 'flex';
 
-        // Day scholar is immediately submittable
+        cardHostel.style.border = '2px solid var(--border-color)';
+        cardHostel.style.background = 'var(--bg-surface-subtle)';
+        checkHostel.style.display = 'none';
+
+        hostelSection.style.display = 'none';
+        updateStepper(3);
+
+        const btnSubmit = document.getElementById('btnSubmit');
         btnSubmit.disabled = false;
+        hint.style.background = 'var(--color-success-soft)';
+        hint.style.color = 'var(--color-success)';
+        hint.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        text.textContent = 'Day Scholar profile ready to save.';
     }
 }
 
 function handleCategoryChange(cat) {
     const cardBoys = document.getElementById('cardBoys');
     const cardGirls = document.getElementById('cardGirls');
+    const checkBoys = document.getElementById('checkBoys');
+    const checkGirls = document.getElementById('checkGirls');
     const buildingSec = document.getElementById('hostelBuildingSection');
     const boysList = document.getElementById('boysHostelList');
     const girlsList = document.getElementById('girlsHostelList');
@@ -172,22 +292,29 @@ function handleCategoryChange(cat) {
 
     buildingSec.style.display = 'block';
     roomSec.style.display = 'block';
+    updateStepper(3);
 
     if (cat === 'boys') {
-        cardBoys.style.borderColor = '#2563EB';
-        cardBoys.style.background = 'rgba(37, 99, 235, 0.06)';
-        cardGirls.style.borderColor = 'var(--border-color)';
-        cardGirls.style.background = 'transparent';
+        cardBoys.style.border = '2px solid var(--color-primary)';
+        cardBoys.style.background = 'var(--color-primary-soft)';
+        checkBoys.style.display = 'flex';
+
+        cardGirls.style.border = '2px solid var(--border-color)';
+        cardGirls.style.background = 'var(--bg-surface-subtle)';
+        checkGirls.style.display = 'none';
 
         boysList.style.display = 'block';
         girlsList.style.display = 'none';
         selectBoys.disabled = false;
         selectGirls.disabled = true;
     } else {
-        cardGirls.style.borderColor = '#EC4899';
-        cardGirls.style.background = 'rgba(236, 72, 153, 0.06)';
-        cardBoys.style.borderColor = 'var(--border-color)';
-        cardBoys.style.background = 'transparent';
+        cardGirls.style.border = '2px solid var(--color-primary)';
+        cardGirls.style.background = 'var(--color-primary-soft)';
+        checkGirls.style.display = 'flex';
+
+        cardBoys.style.border = '2px solid var(--border-color)';
+        cardBoys.style.background = 'var(--bg-surface-subtle)';
+        checkBoys.style.display = 'none';
 
         girlsList.style.display = 'block';
         boysList.style.display = 'none';
@@ -202,9 +329,14 @@ function validateForm() {
     const isHostel = document.getElementById('radioHostel').checked;
     const isDay = document.getElementById('radioDayScholar').checked;
     const btn = document.getElementById('btnSubmit');
+    const hint = document.getElementById('validationHint');
+    const text = document.getElementById('validationText');
 
     if (isDay) {
         btn.disabled = false;
+        hint.style.background = 'var(--color-success-soft)';
+        hint.style.color = 'var(--color-success)';
+        text.textContent = 'Day Scholar profile ready to save.';
         return;
     }
 
@@ -214,14 +346,35 @@ function validateForm() {
         const selectBoys = document.getElementById('selectBoysHostel');
         const selectGirls = document.getElementById('selectGirlsHostel');
 
-        if (isBoys && selectBoys.value) {
-            btn.disabled = false;
+        if (!isBoys && !isGirls) {
+            btn.disabled = true;
+            hint.style.background = 'var(--bg-surface-subtle)';
+            hint.style.color = 'var(--text-muted)';
+            text.textContent = 'Please choose Boys or Girls Residential Wings (Step 2).';
             return;
         }
-        if (isGirls && selectGirls.value) {
-            btn.disabled = false;
+
+        if (isBoys && !selectBoys.value) {
+            btn.disabled = true;
+            hint.style.background = 'var(--color-warning-soft)';
+            hint.style.color = 'var(--color-warning)';
+            text.textContent = 'Please select your specific Boys building from the dropdown.';
             return;
         }
+
+        if (isGirls && !selectGirls.value) {
+            btn.disabled = true;
+            hint.style.background = 'var(--color-warning-soft)';
+            hint.style.color = 'var(--color-warning)';
+            text.textContent = 'Please select your specific Girls building from the dropdown.';
+            return;
+        }
+
+        btn.disabled = false;
+        hint.style.background = 'var(--color-success-soft)';
+        hint.style.color = 'var(--color-success)';
+        text.textContent = 'All accommodation details verified. Ready to save.';
+        return;
     }
 
     btn.disabled = true;
@@ -230,7 +383,6 @@ function validateForm() {
 document.getElementById('selectBoysHostel').addEventListener('change', validateForm);
 document.getElementById('selectGirlsHostel').addEventListener('change', validateForm);
 
-// Pre-select existing state if editing
 window.addEventListener('DOMContentLoaded', () => {
     const accommodationType = "{{ student.accommodation_type|default:'' }}";
     const hostelCategory = "{{ student.hostel_category|default:'' }}";

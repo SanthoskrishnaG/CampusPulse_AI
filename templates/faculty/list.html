@@ -1,66 +1,217 @@
 {% extends 'base.html' %}
-{% load static campus_3d %}
+{% load static %}
 
 {% block title %}Faculty Directory - CampusPulse AI{% endblock %}
 
 {% block content %}
-<div style="max-width: 1300px; margin: 0 auto;">
+<div class="faculty-container" style="max-width: 1360px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
 
-    <!-- Compact Page Hero with 3D Visual -->
-    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #EFF6FF 60%, #F0FDF4 100%);">
-        <div style="max-width: 650px;">
-            <div class="hero-pill" style="margin-bottom: 0.5rem;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                <span>Academic Leadership & Student Mentorship</span>
+    <!-- Faculty Hero Banner -->
+    <div class="panel-card" style="padding: 2rem 2.25rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+        <div style="position: absolute; right: -30px; top: -30px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 70%); pointer-events: none; border-radius: 50%;"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem; position: relative; z-index: 1;">
+            <div style="max-width: 780px;">
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.85rem; border-radius: var(--radius-full); background: var(--color-primary-soft); color: var(--color-primary); font-size: 0.78rem; font-weight: 600; margin-bottom: 0.75rem; border: 1px solid rgba(79, 70, 229, 0.15);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>Academic Mentorship & Research Directory</span>
+                </div>
+                <h1 style="font-family: var(--font-heading); font-size: 2.1rem; font-weight: 800; color: var(--text-heading); margin: 0 0 0.5rem 0; letter-spacing: -0.025em; line-height: 1.2;">
+                    Distinguished Faculty <span class="gradient-text">& Research Mentors</span>
+                </h1>
+                <p style="font-size: 0.92rem; color: var(--text-body); margin: 0; line-height: 1.6; max-width: 700px;">
+                    176 departmental professors, academic advisors, and laboratory directors guiding scholar interventions, research publications, and capstone innovation cohorts across Coimbatore Institute of Technology.
+                </p>
             </div>
-            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
-                Faculty Directory<br>
-                <span class="gradient-ai" style="font-size: 1.85rem;">Professors & Research Mentors.</span>
-            </h1>
-            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;">
-                52 departmental professors, academic advisors, and laboratory directors guiding student interventions and capstone innovations.
-            </p>
-        </div>
-        <div style="flex-shrink: 0;">
-            {% campus_3d_visual 'academic_risk' 150 100 %}
+
+            <!-- Stats Row -->
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+                <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 0.75rem 1.1rem; text-align: center; min-width: 110px;">
+                    <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">Faculty Total</div>
+                    <div style="font-size: 1.35rem; font-weight: 700; color: var(--color-primary); font-variant-numeric: tabular-nums;">176</div>
+                </div>
+                <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 0.75rem 1.1rem; text-align: center; min-width: 110px;">
+                    <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">Departments</div>
+                    <div style="font-size: 1.35rem; font-weight: 700; color: var(--text-heading); font-variant-numeric: tabular-nums;">9 Units</div>
+                </div>
+                <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 0.75rem 1.1rem; text-align: center; min-width: 110px;">
+                    <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">Mentorship</div>
+                    <div style="font-size: 1.35rem; font-weight: 700; color: var(--color-success); font-variant-numeric: tabular-nums;">100%</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Faculty Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+    <!-- Search & Filter Bar -->
+    <div class="panel-card" style="padding: 1rem 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+        
+        <!-- Search Input -->
+        <div style="position: relative; flex: 1; min-width: 260px; max-width: 440px;">
+            <svg style="position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-muted); pointer-events: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="facultySearchInput" placeholder="Filter by faculty name, specialization, or office..." 
+                   style="width: 100%; height: 40px; padding: 0 1rem 0 2.5rem; background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.88rem; color: var(--text-heading); outline: none; transition: border-color var(--transition-fast);">
+        </div>
+
+        <!-- Department Filter Chips -->
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center;">
+            <button type="button" class="faculty-dept-chip {% if not selected_dept %}active{% endif %}" data-dept="ALL" style="padding: 0.35rem 0.75rem; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid {% if not selected_dept %}var(--color-primary){% else %}var(--border-color){% endif %}; background: {% if not selected_dept %}var(--color-primary-soft){% else %}var(--bg-surface-subtle){% endif %}; color: {% if not selected_dept %}var(--color-primary){% else %}var(--text-body){% endif %};">All</button>
+            {% for d in departments %}
+            <button type="button" class="faculty-dept-chip {% if selected_dept == d.code %}active{% endif %}" data-dept="{{ d.code }}" style="padding: 0.35rem 0.75rem; border-radius: var(--radius-full); font-size: 0.78rem; font-weight: 500; cursor: pointer; border: 1px solid {% if selected_dept == d.code %}var(--color-primary){% else %}var(--border-color){% endif %}; background: {% if selected_dept == d.code %}var(--color-primary-soft){% else %}var(--bg-surface-subtle){% endif %}; color: {% if selected_dept == d.code %}var(--color-primary){% else %}var(--text-body){% endif %};">{{ d.code }}</button>
+            {% endfor %}
+        </div>
+
+        <div id="facultyCountLabel" style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">
+            Showing {{ faculty_members|length }} of 176 mentors
+        </div>
+    </div>
+
+    <!-- Faculty Cards Grid -->
+    <div id="facultyGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
         {% for f in faculty_members %}
-        <div class="card-light" style="display: flex; flex-direction: column;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-                <span class="role-badge" style="background:#EFF6FF; color:#1D4ED8; border:1px solid #BFDBFE;">
-                    {{ f.department.code|default:"ENG" }}
-                </span>
-                <span class="ai-badge ai-confidence">Mentorship Active</span>
+        <div class="faculty-card panel-card" 
+             data-name="{{ f.user.get_full_name|default:f.user.username }}" 
+             data-dept="{{ f.department.code }}" 
+             data-specialization="{{ f.specialization }}"
+             data-office="{{ f.cabin_location }}"
+             style="display: flex; flex-direction: column; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 1.35rem; transition: transform var(--transition-fast), box-shadow var(--transition-fast);">
+            
+            <!-- Top Avatar & Name Row -->
+            <div style="display: flex; align-items: flex-start; gap: 0.9rem; margin-bottom: 0.9rem;">
+                
+                <!-- Circular Avatar with Initials Fallback -->
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.05rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);">
+                    {{ f.user.first_name|slice:":1"|default:"F" }}{{ f.user.last_name|slice:":1"|default:"M" }}
+                </div>
+
+                <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.12rem; font-weight: 700; color: var(--text-heading); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            {{ f.user.get_full_name|default:f.user.username }}
+                        </h3>
+                        <span style="font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.55rem; border-radius: var(--radius-full); background: var(--color-primary-soft); color: var(--color-primary); border: 1px solid rgba(79, 70, 229, 0.2);">
+                            {{ f.department.code }}
+                        </span>
+                    </div>
+
+                    <div style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.76rem; font-weight: 600; color: var(--color-ai);">
+                        <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--color-ai);"></span>
+                        {{ f.get_designation_display }}
+                    </div>
+                </div>
             </div>
 
-            <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.2rem;">
-                {{ f.user.get_full_name|default:f.user.username }}
-            </h3>
-            <div style="font-size: 0.8rem; color: var(--brand-electric); font-weight: 600; margin-bottom: 0.85rem;">
-                {{ f.get_designation_display }}
+            <!-- Research Specialization Tags as Chips -->
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 0.4rem; letter-spacing: 0.04em;">Research Focus</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
+                    <span style="font-size: 0.78rem; font-weight: 500; padding: 0.25rem 0.65rem; border-radius: var(--radius-full); background: var(--bg-surface-subtle); color: var(--text-body); border: 1px solid var(--border-color);">
+                        {{ f.specialization|default:"Applied AI & Machine Learning" }}
+                    </span>
+                    <span style="font-size: 0.74rem; font-weight: 600; padding: 0.25rem 0.55rem; border-radius: var(--radius-full); background: rgba(16, 185, 129, 0.08); color: var(--color-success); border: 1px solid rgba(16, 185, 129, 0.2);">
+                        Active Advisor
+                    </span>
+                </div>
             </div>
 
-            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.6; background: var(--bg-surface-subtle); padding: 0.85rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); flex: 1;">
-                <div><strong>Research:</strong> {{ f.specialization|default:"Computer Science & AI" }}</div>
-                <div><strong>Office:</strong> {{ f.cabin_location|default:"Faculty Block C" }}</div>
-                <div><strong>Office Hours:</strong> {{ f.office_hours|default:"Mon - Thu (2 PM - 4 PM)" }}</div>
+            <!-- Cabin & Office Hours with Icons -->
+            <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.75rem 0.85rem; font-size: 0.8rem; color: var(--text-body); display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.15rem; line-height: 1.4;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); flex-shrink: 0;"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                    <span><strong style="color: var(--text-heading);">Office:</strong> {{ f.cabin_location|default:"Room 304, Academic Complex" }}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); flex-shrink: 0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span><strong style="color: var(--text-heading);">Hours:</strong> {{ f.office_hours|default:"Mon - Thu (2:00 PM - 4:00 PM)" }}</span>
+                </div>
             </div>
 
-            <a href="{% url 'faculty:detail' f.pk %}" class="btn btn-secondary btn-sm" style="width: 100%; display:flex; align-items:center; justify-content:center; gap:0.35rem;">
-                <span>View Mentor Profile</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
+            <!-- Action Button -->
+            <div style="margin-top: auto;">
+                <a href="{% url 'faculty:detail' f.pk %}" class="btn btn-secondary btn-sm" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.45rem; font-weight: 600; font-size: 0.82rem; padding: 0.55rem 1rem;">
+                    <span>View Mentor Profile</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </a>
+            </div>
+
         </div>
         {% empty %}
-        <div class="card-light" style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem;">
-            <p style="font-weight: 600;">No faculty profiles found.</p>
+        <div class="panel-card" style="grid-column: 1 / -1; text-align: center; padding: 3rem 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg);">
+            <p style="font-weight: 600; color: var(--text-muted); margin: 0;">No faculty mentors found matching the criteria.</p>
         </div>
         {% endfor %}
     </div>
 
+    <!-- Empty State for Search Filter -->
+    <div id="noFacultyMatch" style="display: none; padding: 3rem 1rem; text-align: center; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); margin-bottom: 0.75rem;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <h4 style="font-size: 1.05rem; font-weight: 600; color: var(--text-heading); margin-bottom: 0.25rem;">No matching faculty mentors</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Try adjusting your search query or department filter.</p>
+    </div>
+
 </div>
+
+<!-- Realtime Client-Side Search and Filter Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('facultySearchInput');
+    const deptChips = document.querySelectorAll('.faculty-dept-chip');
+    const cards = document.querySelectorAll('.faculty-card');
+    const countLabel = document.getElementById('facultyCountLabel');
+    const noMatch = document.getElementById('noFacultyMatch');
+
+    let currentDept = 'ALL';
+    let currentSearch = '';
+
+    function filterFaculty() {
+        let visibleCount = 0;
+        cards.forEach(card => {
+            const name = (card.dataset.name || '').toLowerCase();
+            const spec = (card.dataset.specialization || '').toLowerCase();
+            const office = (card.dataset.office || '').toLowerCase();
+            const dept = card.dataset.dept || '';
+
+            const matchesSearch = !currentSearch || 
+                name.includes(currentSearch) || 
+                spec.includes(currentSearch) || 
+                office.includes(currentSearch);
+
+            const matchesDept = currentDept === 'ALL' || dept === currentDept;
+
+            if (matchesSearch && matchesDept) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        countLabel.textContent = `Showing ${visibleCount} of 176 mentors`;
+        noMatch.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            currentSearch = e.target.value.trim().toLowerCase();
+            filterFaculty();
+        });
+    }
+
+    deptChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            deptChips.forEach(c => {
+                c.classList.remove('active');
+                c.style.border = '1px solid var(--border-color)';
+                c.style.background = 'var(--bg-surface-subtle)';
+                c.style.color = 'var(--text-body)';
+            });
+            this.classList.add('active');
+            this.style.border = '1px solid var(--color-primary)';
+            this.style.background = 'var(--color-primary-soft)';
+            this.style.color = 'var(--color-primary)';
+            currentDept = this.dataset.dept;
+            filterFaculty();
+        });
+    });
+});
+</script>
 {% endblock %}

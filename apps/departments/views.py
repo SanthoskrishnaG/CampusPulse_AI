@@ -64,7 +64,33 @@ def department_dashboard(request):
     return render(request, 'departments/dashboard.html', context)
 
 def department_list(request):
-    departments = Department.objects.filter(is_active=True)
+    from apps.academics.models import AcademicRiskAssessment
+    from apps.common.models import CampusLocation
+
+    departments = list(Department.objects.filter(is_active=True))
+    dept_meta = {
+        'CSE': {'accent': '#4F46E5', 'block': 'Block A • Level 2', 'category': 'Computing', 'labs': 8},
+        'AIDS': {'accent': '#06B6D4', 'block': 'Block E • Tech Park', 'category': 'Computing', 'labs': 6},
+        'IT': {'accent': '#6366F1', 'block': 'Block A • Level 3', 'category': 'Computing', 'labs': 6},
+        'ECE': {'accent': '#7C3AED', 'block': 'Block B • Circuits Wing', 'category': 'Circuits', 'labs': 7},
+        'EEE': {'accent': '#F59E0B', 'block': 'Block B • Power Lab Wing', 'category': 'Circuits', 'labs': 5},
+        'MECH': {'accent': '#EF4444', 'block': 'Block C • Central Workshop', 'category': 'Core', 'labs': 9},
+        'CIVIL': {'accent': '#10B981', 'block': 'Block C • Structures Lab', 'category': 'Core', 'labs': 6},
+        'AERO': {'accent': '#3B82F6', 'block': 'Block D • Propulsion Lab', 'category': 'Core', 'labs': 5},
+        'BIOTECH': {'accent': '#14B8A6', 'block': 'Block F • Genomics Complex', 'category': 'Bio', 'labs': 6},
+    }
+
+    for dept in departments:
+        meta = dept_meta.get(dept.code, {'accent': '#4F46E5', 'block': 'Block A', 'category': 'Engineering', 'labs': 4})
+        dept.accent_color = meta['accent']
+        dept.block_label = meta['block']
+        dept.category_label = meta['category']
+        dept.stu_count = dept.students.count()
+        dept.fac_count = dept.faculty_members.count()
+        dept.lab_count = meta['labs']
+        high_risk = AcademicRiskAssessment.objects.filter(student__department=dept, risk_level='HIGH').count()
+        dept.risk_rate = round((high_risk / max(1, dept.stu_count)) * 100, 1)
+
     return render(request, 'departments/list.html', {'departments': departments})
 
 def department_detail(request, code):

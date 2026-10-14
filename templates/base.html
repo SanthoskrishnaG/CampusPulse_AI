@@ -9,7 +9,21 @@
     <!-- Design System Fonts (Inter & Outfit) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const themeParam = urlParams.get('theme');
+                const savedTheme = themeParam || localStorage.getItem('campuspulse_theme') || 'light';
+                if (savedTheme === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                }
+            } catch (e) {}
+        })();
+    </script>
     
     <!-- Chart.js & Google Maps -->
     <!-- Google Maps API -->
@@ -21,6 +35,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Lucide Outline Icon Library -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/static/css/tokens.css">
     <link rel="stylesheet" href="/static/css/style.css">
     {% block extra_head %}{% endblock %}
 </head>
@@ -38,7 +53,7 @@
                 </div>
                 <div class="brand-info">
                     <a href="{% url 'common:home' %}" class="brand-title">
-                        CampusPulse <span style="color:#2563EB;">AI</span>
+                        CampusPulse <span class="brand-title-ai">AI</span>
                     </a>
                     <span class="brand-tagline">CIT Smart Campus • Coimbatore</span>
                 </div>
@@ -285,12 +300,37 @@
                 {% endif %}
             </nav>
 
-            <!-- Bottom Eco Card -->
-            <div class="sidebar-eco-card">
-                <div class="sidebar-eco-content">
-                    <div class="sidebar-eco-title">Together for a<br><span style="color:#2563EB;">Greener & Smarter</span><br>Campus</div>
+            <!-- Subtle Gradient Eco Telemetry Card -->
+            <div class="sidebar-eco-card-new">
+                <div class="eco-card-header">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span class="pulse-dot-online"></span>
+                        <span class="eco-card-tag">CIT ECO-PULSE</span>
+                    </div>
+                    <span class="eco-card-val tabular-nums">91%</span>
                 </div>
-                <img src="{% static 'images/green_campus_sprout.png' %}" alt="Green Sprout" class="sidebar-eco-img">
+                <div class="eco-card-title">Campus Sustainability</div>
+                <div class="eco-card-progress-track">
+                    <div class="eco-card-progress-bar" style="width: 91%;"></div>
+                </div>
+                <div class="eco-card-caption">Smart Grid & Water Recycled</div>
+            </div>
+
+            <!-- User Card at Bottom of Sidebar -->
+            <div class="sidebar-user-footer">
+                <div class="sidebar-user-avatar">
+                    {{ user.first_name|default:user.username|slice:":1"|upper }}
+                </div>
+                <div class="sidebar-user-meta">
+                    <span class="sidebar-user-name">{{ user.get_full_name|default:user.username|default:'Admin' }}</span>
+                    <span class="sidebar-user-role">{{ user.get_role_display|default:'Super Admin' }}</span>
+                </div>
+                <a href="{% url 'accounts:profile' %}" class="sidebar-user-profile-btn" title="Account Profile">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </a>
             </div>
         </aside>
 
@@ -334,7 +374,7 @@
                     </div>
 
                     <!-- AI Engine Status Indicator -->
-                    <div class="ai-engine-status-wrap">
+                    <div class="ai-engine-status-wrap" onclick="this.querySelector('.ai-engine-dropdown').classList.toggle('open')">
                         <div class="ai-engine-pill" title="Campus AI Engine Telemetry">
                             <span class="pulse-dot-live"></span>
                             <span>AI Engine &bull; Online</span>
@@ -373,38 +413,48 @@
                         </div>
                     </div>
 
+                    <!-- Dark Mode Toggle Button -->
+                    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleCampusTheme()" title="Switch Light/Dark Mode">
+                        <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="4"/>
+                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                        </svg>
+                        <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                        </svg>
+                    </button>
+
                     <!-- Notifications Icon with Dynamic Badge -->
                     <a href="{% url 'notifications:list' %}" class="notif-btn-modern" title="Notifications" style="display:inline-flex; align-items:center; justify-content:center;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#475569;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-text-body);">
                             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
                             <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
                         </svg>
                         <span class="notif-badge-pill" id="navNotificationBadge" style="{% if unread_notifications_count == 0 %}display:none;{% endif %}">{{ unread_notifications_count }}</span>
                     </a>
 
-                    <!-- Fast Demo Role Switcher -->
+                    <!-- Fast Demo Role Switcher (Reflects Active Logged-in Role) -->
                     <select onchange="if(this.value) window.location.href='/accounts/demo-login/' + this.value + '/';" class="role-select-pill" title="Switch Demo Role Instantly">
-                        <option value="">Role ▾</option>
-                        <option value="SUPER_ADMIN">Super Admin</option>
-                        <option value="FACULTY">Faculty</option>
-                        <option value="STUDENT">Student</option>
-                        <option value="DEPARTMENT_ADMIN">Dept Admin (HOD)</option>
-                        <option value="CLUB_ADMIN">Club Lead</option>
-                        <option value="TRANSPORT_MANAGER">Transport Mgr</option>
-                        <option value="CANTEEN_MANAGER">Canteen Mgr</option>
-                        <option value="MAINTENANCE_STAFF">Maintenance</option>
+                        <option value="SUPER_ADMIN" {% if user.role == 'SUPER_ADMIN' or user.is_superuser %}selected{% endif %}>Role: Super Admin</option>
+                        <option value="FACULTY" {% if user.role == 'FACULTY' %}selected{% endif %}>Role: Faculty</option>
+                        <option value="STUDENT" {% if user.role == 'STUDENT' %}selected{% endif %}>Role: Student</option>
+                        <option value="DEPARTMENT_ADMIN" {% if user.role == 'DEPARTMENT_ADMIN' %}selected{% endif %}>Role: Dept HOD</option>
+                        <option value="CLUB_ADMIN" {% if user.role == 'CLUB_ADMIN' %}selected{% endif %}>Role: Club Lead</option>
+                        <option value="TRANSPORT_MANAGER" {% if user.role == 'TRANSPORT_MANAGER' %}selected{% endif %}>Role: Transport Mgr</option>
+                        <option value="CANTEEN_MANAGER" {% if user.role == 'CANTEEN_MANAGER' %}selected{% endif %}>Role: Canteen Mgr</option>
+                        <option value="MAINTENANCE_STAFF" {% if user.role == 'MAINTENANCE_STAFF' %}selected{% endif %}>Role: Maintenance</option>
                     </select>
 
                     <!-- User Profile Avatar & Dropdown -->
                     <div class="user-profile-modern" data-url="{% url 'accounts:profile' %}" onclick="window.location.href=this.dataset.url;">
                         <div class="user-avatar-blue">
-                            {{ user.first_name|default:'A'|slice:":1"|upper }}
+                            {{ user.first_name|default:user.username|slice:":1"|upper }}
                         </div>
                         <div class="user-info-text">
-                            <span class="user-title-bold">{{ user.first_name|default:'Admin' }}</span>
+                            <span class="user-title-bold">{{ user.first_name|default:user.username|default:'Admin' }}</span>
                             <span class="user-sub-label">{{ user.get_role_display|default:'Super Admin' }}</span>
                         </div>
-                        <span style="color:#94A3B8; font-size:0.75rem; margin-left:0.25rem;">▾</span>
+                        <span style="color:var(--color-text-muted); font-size:0.75rem; margin-left:0.25rem;">▾</span>
                     </div>
                 </div>
             </header>
@@ -581,7 +631,38 @@
             }
         };
 
+        // Theme Toggle Handling
+        function toggleCampusTheme() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('campuspulse_theme', 'light');
+                updateThemeIcons('light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('campuspulse_theme', 'dark');
+                updateThemeIcons('dark');
+            }
+        }
+
+        function updateThemeIcons(theme) {
+            const sun = document.querySelector('.sun-icon');
+            const moon = document.querySelector('.moon-icon');
+            if (sun && moon) {
+                if (theme === 'dark') {
+                    sun.style.display = 'none';
+                    moon.style.display = 'block';
+                } else {
+                    sun.style.display = 'block';
+                    moon.style.display = 'none';
+                }
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            const currentTheme = localStorage.getItem('campuspulse_theme') || 'light';
+            updateThemeIcons(currentTheme);
+
             if (window.lucide) {
                 lucide.createIcons();
             }

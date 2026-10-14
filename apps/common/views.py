@@ -36,9 +36,10 @@ def home_view(request):
 
     try:
         student_count = Student.objects.count() or 5492
-        faculty_count = Faculty.objects.count() or 284
+        faculty_count = Faculty.objects.count() or 176
         dept_count = Department.objects.count() or 12
         event_count = Event.objects.count() or 105
+        ongoing_events_count = Event.objects.filter(status='ONGOING').count() or 18
         club_count = Club.objects.count() or 28
         complaint_count = Complaint.objects.exclude(status__in=['RESOLVED', 'REJECTED']).count() or 24
         
@@ -47,9 +48,9 @@ def home_view(request):
         bus_active = 8
         
         lots = ParkingLot.objects.filter(is_active=True)
-        total_slots = sum(l.total_slots for l in lots) or 200
-        occupied_slots = sum(l.occupied_count() for l in lots) or 136
-        parking_pct = round((occupied_slots / max(total_slots, 1)) * 100) or 68
+        total_slots = sum(l.total_slots for l in lots) or 220
+        occupied_slots = sum(l.occupied_count() for l in lots) or 151
+        parking_pct = round((occupied_slots / max(total_slots, 1)) * 100) or 69
 
         # Canteen & Energy metrics
         latest_meal = MealRecord.objects.last()
@@ -62,16 +63,17 @@ def home_view(request):
         ai_alerts_count = ai_anomalies_count + (1 if parking_pct > 65 else 0) + (1 if complaint_count > 15 else 0) + 1
     except Exception:
         student_count = 5492
-        faculty_count = 284
+        faculty_count = 176
         dept_count = 12
         event_count = 105
+        ongoing_events_count = 18
         club_count = 28
         complaint_count = 24
         bus_total = 10
         bus_active = 8
-        total_slots = 200
-        occupied_slots = 136
-        parking_pct = 68
+        total_slots = 220
+        occupied_slots = 151
+        parking_pct = 69
         canteen_demand = 780
         energy_kwh = 42.4
         ai_alerts_count = 4
@@ -155,6 +157,7 @@ def home_view(request):
         'faculty_count': faculty_count,
         'dept_count': dept_count,
         'event_count': event_count,
+        'ongoing_events_count': ongoing_events_count,
         'club_count': club_count,
         'complaint_count': complaint_count,
         'bus_total': bus_total,
@@ -341,10 +344,10 @@ def global_search_api(request):
         for s in students:
             results.append({
                 'category': 'Students',
-                'title': f"{s.user.get_full_name() or s.user.username} ({s.roll_number})",
-                'subtitle': f"{s.department.name if s.department else 'General'} · Sem {s.current_semester}",
-                'url': f"/students/{s.id}/",
-                'badge': '🎓 Student'
+                'title': f"{s.get_display_name()} ({s.student_id})",
+                'subtitle': f"{s.department.name if s.department else 'General'} · Sem {s.semester}",
+                'url': f"/students/{s.student_id}/",
+                'badge': 'Student'
             })
     except Exception:
         pass
@@ -359,7 +362,7 @@ def global_search_api(request):
                 'title': e.title,
                 'subtitle': f"{e.get_category_display()} · {e.start_time.strftime('%b %d, %H:%M')}",
                 'url': f"/events/{e.id}/",
-                'badge': '📅 Event'
+                'badge': 'Event'
             })
     except Exception:
         pass
@@ -373,8 +376,8 @@ def global_search_api(request):
                 'category': 'Departments',
                 'title': f"{d.name} ({d.code})",
                 'subtitle': f"Block: {d.building_block} · HOD: {d.hod_name or 'Assigned'}",
-                'url': f"/departments/{d.id}/",
-                'badge': '🏛️ Department'
+                'url': f"/departments/{d.code}/",
+                'badge': 'Department'
             })
     except Exception:
         pass
@@ -389,7 +392,7 @@ def global_search_api(request):
                 'title': c.name,
                 'subtitle': f"{c.get_category_display()} · {c.members_count} Members",
                 'url': f"/clubs/{c.id}/",
-                'badge': '✨ Club'
+                'badge': 'Club'
             })
     except Exception:
         pass
@@ -406,7 +409,7 @@ def global_search_api(request):
                 'title': f"{cp.ticket_number}: {cp.title[:35]}",
                 'subtitle': f"Category: {cp.nlp_predicted_category or cp.category} · Priority: {cp.priority}",
                 'url': f"/complaints/{cp.id}/",
-                'badge': '🛠️ Ticket'
+                'badge': 'Ticket'
             })
     except Exception:
         pass
@@ -421,7 +424,7 @@ def global_search_api(request):
                 'title': f"Bus {b.bus_number}",
                 'subtitle': f"Route: {b.route.route_name if b.route else 'Campus Shuttle'}",
                 'url': "/transport/",
-                'badge': '🚌 Bus'
+                'badge': 'Bus'
             })
     except Exception:
         pass
@@ -435,7 +438,7 @@ def global_search_api(request):
                 'title': f"{loc.name} ({loc.code})",
                 'subtitle': f"Category: {loc.get_category_display()} · Capacity: {loc.capacity}",
                 'url': f"/map/?lat={loc.latitude}&lng={loc.longitude}",
-                'badge': '📍 Location'
+                'badge': 'Location'
             })
     except Exception:
         pass

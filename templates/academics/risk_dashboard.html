@@ -5,237 +5,322 @@
 
 {% block content %}
 {% csrf_token %}
-<div style="max-width: 1300px; margin: 0 auto;">
+<div class="academic-risk-container" style="max-width: 1360px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
 
-    <!-- Compact Page Hero with 3D Visual -->
-    <div class="card-light" style="display: flex; align-items: center; justify-content: space-between; padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, #FFFFFF 0%, #F0F9FF 60%, #EEF2FF 100%);">
-        <div style="max-width: 700px;">
-            <div class="hero-pill" style="margin-bottom: 0.5rem;">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
-                <span>Dual-Tier Predictive Learning Analytics</span>
+    <!-- Academic Risk Hero Banner -->
+    <div class="panel-card" style="padding: 2rem 2.25rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); box-shadow: var(--shadow-sm); position: relative; overflow: hidden;">
+        <div style="position: absolute; right: -30px; top: -30px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(239, 68, 68, 0.08) 0%, transparent 70%); pointer-events: none; border-radius: 50%;"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem; position: relative; z-index: 1;">
+            <div style="max-width: 780px;">
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.85rem; border-radius: var(--radius-full); background: var(--color-danger-soft); color: var(--color-danger); font-size: 0.78rem; font-weight: 600; margin-bottom: 0.75rem; border: 1px solid rgba(239, 68, 68, 0.2);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                    <span>Dual-Tier Predictive Learning Analytics & Early Intervention</span>
+                </div>
+                <h1 style="font-family: var(--font-heading); font-size: 2.1rem; font-weight: 800; color: var(--text-heading); margin: 0 0 0.5rem 0; letter-spacing: -0.025em; line-height: 1.2;">
+                    Academic Risk AI <span class="gradient-text">Telemetry & Interventions</span>
+                </h1>
+                <p style="font-size: 0.92rem; color: var(--text-body); margin: 0 0 1.25rem 0; line-height: 1.6; max-width: 720px;">
+                    Ensemble Random Forest & 5-week sequential trajectory neural networks forecasting course failure risks prior to midterms, orchestrating proactive faculty mentoring.
+                </p>
+
+                <!-- Actions Row -->
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+                    <!-- Prominent Red Auto-Dispatch Button -->
+                    <button type="button" id="btnOpenDispatchConfirm" class="btn btn-sm" style="background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); color: #FFFFFF; border: none; font-weight: 600; padding: 0.55rem 1.15rem; border-radius: var(--radius-md); box-shadow: 0 2px 10px rgba(239, 68, 68, 0.35); display: inline-flex; align-items: center; gap: 0.45rem; cursor: pointer; transition: transform var(--transition-fast);">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        <span>Auto-Dispatch High-Risk Interventions</span>
+                    </button>
+
+                    <button type="button" id="btnRunInference" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 600;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4.5c1.62-1.63 5-2.5 5-2.5"/><path d="M12 15v5s3.03-.55 4.5-2c1.63-1.62 2.5-5 2.5-5"/></svg>
+                        <span>Run ML Cohort Pipeline</span>
+                    </button>
+                </div>
             </div>
-            <h1 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2;">
-                Academic Risk AI<br>
-                <span class="gradient-ai" style="font-size: 1.85rem;">Predict. Understand. Intervene.</span>
-            </h1>
-            <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5; margin-bottom: 1.25rem;">
-                Ensemble Random Forest & 5-Week sequential trajectory deep neural networks flagging early course failure risks before midterm examinations.
-            </p>
-            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                <button id="btnAutoDispatch" class="btn btn-primary btn-sm" style="background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%); border: none; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25); display: inline-flex; align-items: center; gap: 0.4rem;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                    <span>Auto-Dispatch High-Risk Interventions</span>
-                </button>
-                <button id="btnRunInference" class="btn btn-secondary btn-sm" style="border: 1px solid #CBD5E1; display: inline-flex; align-items: center; gap: 0.4rem;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4.5c1.62-1.63 5-2.5 5-2.5"/><path d="M12 15v5s3.03-.55 4.5-2c1.63-1.62 2.5-5 2.5-5"/></svg>
-                    <span>Run ML Cohort Assessment</span>
-                </button>
+
+            <!-- Mini AI Badge Pill Stack -->
+            <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; min-width: 220px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem;">
+                    <span style="color: var(--text-muted); font-weight: 600;">Model Calibration</span>
+                    <span style="font-weight: 700; color: var(--color-success);">91.4% AUC</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem;">
+                    <span style="color: var(--text-muted); font-weight: 600;">Ensemble Architecture</span>
+                    <span style="font-weight: 700; color: var(--color-primary);">RF + Deep MLP</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem;">
+                    <span style="color: var(--text-muted); font-weight: 600;">Telemetry Window</span>
+                    <span style="font-weight: 700; color: var(--color-ai);">5-Week Horizon</span>
+                </div>
             </div>
-        </div>
-        <div style="flex-shrink: 0;">
-            {% campus_3d_visual 'academic_risk' 160 110 %}
         </div>
     </div>
 
-    <!-- Live Status Banner -->
-    <div id="dispatchAlertBanner" style="display: none; padding: 1rem 1.25rem; border-radius: 12px; margin-bottom: 1.5rem; background: #FEF2F2; border: 1px solid #FCA5A5; color: #991B1B;">
+    <!-- Alert / Toast Banner -->
+    <div id="dispatchAlertBanner" style="display: none; padding: 1rem 1.25rem; border-radius: var(--radius-md); background: var(--color-success-soft); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--color-success); font-weight: 600; font-size: 0.9rem;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center; gap: 0.6rem;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                <strong id="dispatchAlertMsg">Automated interventions successfully triggered.</strong>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span id="dispatchAlertMsg">Automated interventions successfully dispatched.</span>
             </div>
-            <button onclick="this.parentElement.parentElement.style.display='none'" style="background:none; border:none; color:#991B1B; cursor:pointer; font-weight:700; font-size:1rem;">&times;</button>
+            <button onclick="this.parentElement.parentElement.style.display='none'" style="background:none; border:none; color:inherit; cursor:pointer; font-weight:700; font-size:1.1rem;">&times;</button>
         </div>
     </div>
 
-    <!-- AI Data Flow Pipeline -->
-    {% ai_data_flow "Student Attendance & Marks" "Ensemble Random Forest" "Course Failure Risk" "Faculty Mentoring" "Timely Intervention" %}
-
-    <!-- Risk Metrics KPI Grid -->
-    <div class="kpi-grid" style="margin-bottom: 1.5rem;">
-        <div class="kpi-card-light">
-            <div class="kpi-header">
-                <span class="kpi-title">Evaluated Cohort</span>
-                <div class="kpi-icon-wrap">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg>
+    <!-- Risk KPI Cards with Semantic Colors -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+        
+        <!-- Total Assessed -->
+        <div class="panel-card" style="padding: 1.25rem 1.4rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em;">Evaluated Cohort</span>
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--color-primary-soft); color: var(--color-primary); display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg>
                 </div>
             </div>
-            <div class="kpi-value">{{ total_assessed|default:1550 }}</div>
-            <div class="kpi-trend positive">
-                <span>Active Semesters 1-8</span>
+            <div style="font-size: 1.75rem; font-weight: 800; color: var(--text-heading); font-variant-numeric: tabular-nums; margin-bottom: 0.35rem;">
+                {{ total_assessed|default:1550 }}
+            </div>
+            <div style="font-size: 0.76rem; color: var(--color-primary); font-weight: 600; display: flex; align-items: center; gap: 0.3rem;">
+                <span>Semesters 1 through 8</span>
             </div>
         </div>
 
-        <div class="kpi-card-light">
-            <div class="kpi-header">
-                <span class="kpi-title">High Risk Alert</span>
-                <div class="kpi-icon-wrap" style="color:var(--danger); background:#FEF2F2;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <!-- High Risk Alert (Red) -->
+        <div class="panel-card" style="padding: 1.25rem 1.4rem; background: var(--bg-surface); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border-top: 3px solid var(--color-danger);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.78rem; font-weight: 600; color: var(--color-danger); text-transform: uppercase; letter-spacing: 0.04em;">High Risk Critical</span>
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--color-danger-soft); color: var(--color-danger); display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                 </div>
             </div>
-            <div class="kpi-value" style="color:var(--danger);">{{ high_risk_count|default:0 }}</div>
-            <div class="kpi-trend negative">
-                <span>Critical Interventions Needed</span>
+            <div style="font-size: 1.75rem; font-weight: 800; color: var(--color-danger); font-variant-numeric: tabular-nums; margin-bottom: 0.35rem;">
+                {{ high_risk_count|default:0 }}
+            </div>
+            <div style="font-size: 0.76rem; color: var(--color-danger); font-weight: 600;">
+                Interventions Flagged
             </div>
         </div>
 
-        <div class="kpi-card-light">
-            <div class="kpi-header">
-                <span class="kpi-title">Moderate Risk</span>
-                <div class="kpi-icon-wrap" style="color:var(--warning); background:#FFFBEB;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <!-- Moderate Risk (Amber) -->
+        <div class="panel-card" style="padding: 1.25rem 1.4rem; background: var(--bg-surface); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border-top: 3px solid var(--color-warning);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.78rem; font-weight: 600; color: var(--color-warning); text-transform: uppercase; letter-spacing: 0.04em;">Moderate Risk</span>
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--color-warning-soft); color: var(--color-warning); display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 </div>
             </div>
-            <div class="kpi-value" style="color:var(--warning);">{{ med_risk_count|default:0 }}</div>
-            <div class="kpi-trend neutral">
-                <span>Attendance Monitoring</span>
+            <div style="font-size: 1.75rem; font-weight: 800; color: var(--color-warning); font-variant-numeric: tabular-nums; margin-bottom: 0.35rem;">
+                {{ med_risk_count|default:0 }}
+            </div>
+            <div style="font-size: 0.76rem; color: var(--color-warning); font-weight: 600;">
+                Attendance Watch
             </div>
         </div>
 
-        <div class="kpi-card-light">
-            <div class="kpi-header">
-                <span class="kpi-title">Healthy Progression</span>
-                <div class="kpi-icon-wrap" style="color:var(--success); background:#F0FDF4;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <!-- Healthy Progression (Green) -->
+        <div class="panel-card" style="padding: 1.25rem 1.4rem; background: var(--bg-surface); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border-top: 3px solid var(--color-success);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.78rem; font-weight: 600; color: var(--color-success); text-transform: uppercase; letter-spacing: 0.04em;">Healthy Progression</span>
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--color-success-soft); color: var(--color-success); display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
             </div>
-            <div class="kpi-value" style="color:var(--success);">{{ low_risk_count|default:0 }}</div>
-            <div class="kpi-trend positive">
-                <span>Standard Trajectory</span>
+            <div style="font-size: 1.75rem; font-weight: 800; color: var(--color-success); font-variant-numeric: tabular-nums; margin-bottom: 0.35rem;">
+                {{ low_risk_count|default:0 }}
+            </div>
+            <div style="font-size: 0.76rem; color: var(--color-success); font-weight: 600;">
+                On-Track Standard
             </div>
         </div>
 
-        <div class="kpi-card-light">
-            <div class="kpi-header">
-                <span class="kpi-title">Active Interventions</span>
-                <div class="kpi-icon-wrap" style="color:#6366F1; background:#EEF2FF;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/></svg>
+        <!-- Active Interventions -->
+        <div class="panel-card" style="padding: 1.25rem 1.4rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em;">In-Flight Interventions</span>
+                <div style="width: 36px; height: 36px; border-radius: var(--radius-md); background: var(--color-ai-soft); color: var(--color-ai); display: flex; align-items: center; justify-content: center;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/></svg>
                 </div>
             </div>
-            <div class="kpi-value" style="color:#4F46E5;">{{ active_interventions_count|default:0 }}</div>
-            <div class="kpi-trend positive">
-                <span>In-Flight Mentoring</span>
+            <div style="font-size: 1.75rem; font-weight: 800; color: var(--color-ai); font-variant-numeric: tabular-nums; margin-bottom: 0.35rem;">
+                {{ active_interventions_count|default:0 }}
             </div>
+            <div style="font-size: 0.76rem; color: var(--color-ai); font-weight: 600;">
+                Assigned Faculty Mentors
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Cohort Distribution Segmented Bar & Proportions -->
+    <div class="panel-card" style="padding: 1.25rem 1.5rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-heading); display: flex; align-items: center; gap: 0.5rem;">
+                <span>Cohort Risk Distribution Overview</span>
+                <span style="font-size: 0.75rem; font-weight: 500; color: var(--text-muted);">({{ total_assessed }} Assessed Students)</span>
+            </div>
+
+            <!-- Distribution Legend Chips -->
+            <div style="display: flex; gap: 1rem; align-items: center; font-size: 0.8rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-danger);"></span>
+                    <span style="color: var(--text-body);">High Risk: <strong>{{ high_risk_count }}</strong></span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-warning);"></span>
+                    <span style="color: var(--text-body);">Moderate: <strong>{{ med_risk_count }}</strong></span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-success);"></span>
+                    <span style="color: var(--text-body);">Healthy: <strong>{{ low_risk_count }}</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segmented Horizontal Bar -->
+        <div style="height: 12px; width: 100%; border-radius: var(--radius-full); overflow: hidden; display: flex; background: var(--bg-surface-subtle); border: 1px solid var(--border-color);">
+            <div style="height: 100%; background: var(--color-danger); width: calc(({{ high_risk_count }} / {{ total_assessed|default:1 }}) * 100%); transition: width 0.6s ease;" title="High Risk"></div>
+            <div style="height: 100%; background: var(--color-warning); width: calc(({{ med_risk_count }} / {{ total_assessed|default:1 }}) * 100%); transition: width 0.6s ease;" title="Moderate Risk"></div>
+            <div style="height: 100%; background: var(--color-success); width: calc(({{ low_risk_count }} / {{ total_assessed|default:1 }}) * 100%); transition: width 0.6s ease;" title="Healthy"></div>
         </div>
     </div>
 
-    <!-- Clean Filter Bar -->
-    <div class="card-light" style="padding: 1.1rem 1.5rem; margin-bottom: 1.5rem;">
-        <form method="GET" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-            <select name="dept" class="form-select-light" style="min-width: 200px;">
+    <!-- Filter & Sort Toolbar -->
+    <div class="panel-card" style="padding: 1rem 1.25rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+        <form method="GET" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; flex: 1;">
+            <select name="dept" class="form-select-light" style="min-width: 190px; height: 38px; padding: 0 0.75rem; background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-heading); outline: none;">
                 <option value="">All Departments</option>
                 {% for d in departments %}
                 <option value="{{ d.code }}" {% if selected_dept == d.code %}selected{% endif %}>{{ d.name }}</option>
                 {% endfor %}
             </select>
 
-            <select name="risk" class="form-select-light" style="min-width: 170px;">
+            <select name="risk" class="form-select-light" style="min-width: 160px; height: 38px; padding: 0 0.75rem; background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.85rem; color: var(--text-heading); outline: none;">
                 <option value="">All Risk Tiers</option>
                 <option value="HIGH" {% if selected_risk == 'HIGH' %}selected{% endif %}>High Risk Only</option>
                 <option value="MEDIUM" {% if selected_risk == 'MEDIUM' %}selected{% endif %}>Moderate Risk</option>
-                <option value="LOW" {% if selected_risk == 'LOW' %}selected{% endif %}>Low Risk</option>
+                <option value="LOW" {% if selected_risk == 'LOW' %}selected{% endif %}>Healthy / Low Risk</option>
             </select>
 
-            <button type="submit" class="btn btn-primary btn-sm">Filter Cohort</button>
+            <button type="submit" class="btn btn-primary btn-sm" style="font-weight: 600;">Filter Cohort</button>
             {% if selected_dept or selected_risk %}
-            <a href="{% url 'academics:risk_dashboard' %}" class="btn btn-secondary btn-sm">Reset</a>
+            <a href="{% url 'academics:risk_dashboard' %}" class="btn btn-secondary btn-sm" style="font-weight: 600;">Reset Filters</a>
             {% endif %}
-
-            <div style="margin-left: auto; display: flex; align-items: center; gap: 0.5rem;">
-                <span class="ai-badge ai-confidence">Confidence: 91.2%</span>
-                <span class="ai-badge ai-insight">RF + MLP Calibrated</span>
-            </div>
         </form>
+
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">
+            <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--color-success);"></span>
+            <span>Real-time Inference Active</span>
+        </div>
     </div>
 
-    <!-- Risk Assessment Table -->
-    <div class="table-container-light">
-        <table class="table-clean">
-            <thead>
-                <tr>
-                    <th>Student Details</th>
-                    <th>Risk Classification</th>
-                    <th>Risk Score</th>
-                    <th>Explainable AI Contributing Factors</th>
-                    <th style="text-align: right;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in assessments %}
-                <tr>
-                    <td>
-                        <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary);">
-                            {{ item.student.user.get_full_name|default:item.student.student_id }}
-                        </div>
-                        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
-                            ID: <code>{{ item.student.student_id }}</code> · {{ item.student.department.code }} (Sem {{ item.student.semester }})
-                        </div>
-                        <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">
-                            CGPA: <strong>{{ item.student.cgpa }}</strong> · Att: <strong>{{ item.student.attendance_percentage }}%</strong>
-                        </div>
-                    </td>
-                    <td>
-                        {% if item.risk_level == 'HIGH' %}
-                        <span class="ai-badge ai-alert" style="font-weight: 800;">High Risk</span>
-                        {% elif item.risk_level == 'MEDIUM' %}
-                        <span class="ai-badge" style="background:#FFFBEB; border-color:#FDE68A; color:#B45309; font-weight: 700;">Moderate Risk</span>
-                        {% else %}
-                        <span class="ai-badge ai-confidence" style="font-weight: 700;">Low Risk</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <div style="font-weight: 800; font-size: 1.05rem; color: {% if item.risk_level == 'HIGH' %}var(--danger){% elif item.risk_level == 'MEDIUM' %}var(--warning){% else %}var(--success){% endif %};">
-                            {{ item.risk_score|floatformat:1 }}%
-                        </div>
-                        <div style="width: 70px; height: 5px; background: #E2E8F0; border-radius: 3px; overflow: hidden; margin-top: 4px;">
-                            <div style="width: {{ item.risk_score }}%; height: 100%; background: {% if item.risk_level == 'HIGH' %}var(--danger){% elif item.risk_level == 'MEDIUM' %}var(--warning){% else %}var(--success){% endif %};"></div>
-                        </div>
-                    </td>
-                    <td>
-                        <div style="font-size: 0.82rem; color: var(--text-secondary); max-width: 480px; line-height: 1.45;">
-                            {% if item.get_factors %}
-                            <ul style="padding-left: 1.15rem; margin: 0;">
-                                {% for factor in item.get_factors %}
-                                <li style="margin-bottom: 2px;">{{ factor }}</li>
-                                {% endfor %}
-                            </ul>
+    <!-- Sortable Risk Assessment Table -->
+    <div class="panel-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden;">
+        <div style="overflow-x: auto;">
+            <table class="table-clean" id="riskTable" style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background: var(--bg-surface-subtle); border-bottom: 1px solid var(--border-color);">
+                        <th style="padding: 0.85rem 1.25rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600;">Student Scholar</th>
+                        <th style="padding: 0.85rem 1rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600;">Risk Classification</th>
+                        <th style="padding: 0.85rem 1rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600;">Probability / Score</th>
+                        <th style="padding: 0.85rem 1.25rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600;">Explainable AI Contributing Factors</th>
+                        <th style="padding: 0.85rem 1.25rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); font-weight: 600; text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in assessments %}
+                    <tr style="border-bottom: 1px solid var(--border-color); transition: background var(--transition-fast);">
+                        <td style="padding: 1rem 1.25rem; vertical-align: top;">
+                            <div style="font-weight: 700; font-size: 0.92rem; color: var(--text-heading);">
+                                {{ item.student.user.get_full_name|default:item.student.student_id }}
+                            </div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+                                ID: <code style="font-family: var(--font-mono); color: var(--color-primary); font-weight: 600;">{{ item.student.student_id }}</code> · {{ item.student.department.code }} (Sem {{ item.student.semester }})
+                            </div>
+                            <div style="font-size: 0.78rem; color: var(--text-body); margin-top: 3px;">
+                                CGPA: <strong>{{ item.student.cgpa }}</strong> · Attendance: <strong>{{ item.student.attendance_percentage }}%</strong>
+                            </div>
+                        </td>
+
+                        <!-- Risk Classification Badge -->
+                        <td style="padding: 1rem 1rem; vertical-align: top;">
+                            {% if item.risk_level == 'HIGH' %}
+                            <span class="badge" style="background: var(--color-danger-soft); color: var(--color-danger); border: 1px solid rgba(239, 68, 68, 0.3); font-weight: 700; font-size: 0.76rem; padding: 0.25rem 0.65rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--color-danger);"></span>
+                                High Risk
+                            </span>
+                            {% elif item.risk_level == 'MEDIUM' %}
+                            <span class="badge" style="background: var(--color-warning-soft); color: var(--color-warning); border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 700; font-size: 0.76rem; padding: 0.25rem 0.65rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--color-warning);"></span>
+                                Moderate Risk
+                            </span>
                             {% else %}
-                            <span style="color: var(--text-muted);">Routine monitoring - no critical adverse markers detected.</span>
+                            <span class="badge" style="background: var(--color-success-soft); color: var(--color-success); border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; font-size: 0.76rem; padding: 0.25rem 0.65rem; border-radius: var(--radius-full); display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--color-success);"></span>
+                                Low Risk
+                            </span>
                             {% endif %}
-                        </div>
-                    </td>
-                    <td style="text-align: right; white-space: nowrap;">
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="openStudentAnalyticsModal('{{ item.student.student_id }}')" style="display: inline-flex; align-items: center; gap: 0.35rem;">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                            <span>Analytics Deep Dive</span>
-                        </button>
-                        <a href="{% url 'students:detail' item.student.student_id %}" class="btn btn-primary btn-sm" style="margin-left: 0.35rem; display: inline-flex; align-items: center; gap: 0.35rem;">
-                            <span>Profile</span>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" style="text-align: center; padding: 3rem 1rem;">
-                        {% campus_3d_visual 'academic_risk' 80 60 %}
-                        <p style="font-weight: 600; color: var(--text-primary); margin-top: 1rem;">No student risk assessments found matching filters.</p>
-                        <p style="color: var(--text-muted); font-size: 0.85rem;">Run inference or clear selected departmental filters.</p>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        </td>
+
+                        <!-- Risk Score & Probability Bar -->
+                        <td style="padding: 1rem 1rem; vertical-align: top;">
+                            <div style="font-weight: 800; font-size: 1.05rem; font-variant-numeric: tabular-nums; color: {% if item.risk_level == 'HIGH' %}var(--color-danger){% elif item.risk_level == 'MEDIUM' %}var(--color-warning){% else %}var(--color-success){% endif %};">
+                                {{ item.risk_score|floatformat:1 }}%
+                            </div>
+                            <div style="width: 85px; height: 6px; background: var(--bg-surface-subtle); border-radius: 3px; overflow: hidden; margin-top: 5px; border: 1px solid var(--border-color);">
+                                <div style="width: {{ item.risk_score }}%; height: 100%; background: {% if item.risk_level == 'HIGH' %}var(--color-danger){% elif item.risk_level == 'MEDIUM' %}var(--color-warning){% else %}var(--color-success){% endif %}; border-radius: 3px;"></div>
+                            </div>
+                        </td>
+
+                        <!-- Explainable AI Factors -->
+                        <td style="padding: 1rem 1.25rem; vertical-align: top;">
+                            <div style="font-size: 0.82rem; color: var(--text-body); max-width: 480px; line-height: 1.5;">
+                                {% if item.get_factors %}
+                                <ul style="padding-left: 1.15rem; margin: 0;">
+                                    {% for factor in item.get_factors %}
+                                    <li style="margin-bottom: 2px;">{{ factor }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% else %}
+                                <span style="color: var(--text-muted);">Routine monitoring - no critical adverse markers detected.</span>
+                                {% endif %}
+                            </div>
+                        </td>
+
+                        <!-- Actions -->
+                        <td style="padding: 1rem 1.25rem; vertical-align: top; text-align: right; white-space: nowrap;">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="openStudentAnalyticsModal('{{ item.student.student_id }}')" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 600;">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                                <span>Deep Dive</span>
+                            </button>
+                            <a href="{% url 'students:detail' item.student.student_id %}" class="btn btn-primary btn-sm" style="margin-left: 0.35rem; display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 600;">
+                                <span>Profile</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 3rem 1rem;">
+                            <p style="font-weight: 600; color: var(--text-heading); margin: 0 0 0.25rem 0;">No student risk assessments found matching filters.</p>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0;">Run inference or clear selected departmental filters.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Clean Pagination -->
     {% if page_obj.has_other_pages %}
-    <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1.5rem; margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 0.5rem; margin-bottom: 1.5rem;">
         {% if page_obj.has_previous %}
         <a href="?page={{ page_obj.previous_page_number }}{% if selected_dept %}&dept={{ selected_dept }}{% endif %}{% if selected_risk %}&risk={{ selected_risk }}{% endif %}" class="btn btn-secondary btn-sm">◀ Previous</a>
         {% endif %}
 
-        <span style="font-size: 0.85rem; color: var(--text-secondary); padding: 0 0.5rem;">
+        <span style="font-size: 0.85rem; color: var(--text-body); padding: 0 0.75rem;">
             Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong> ({{ total_assessed }} students)
         </span>
 
@@ -247,83 +332,106 @@
 
 </div>
 
+<!-- High-Risk Intervention Confirmation Modal -->
+<div id="dispatchConfirmModal" style="display: none; position: fixed; inset: 0; background: rgba(11, 18, 32, 0.7); backdrop-filter: blur(5px); z-index: 10000; align-items: center; justify-content: center; padding: 1rem;">
+    <div class="panel-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); max-width: 520px; width: 100%; padding: 2rem; box-shadow: var(--shadow-xl); position: relative;">
+        <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem;">
+            <div style="width: 44px; height: 44px; border-radius: var(--radius-full); background: var(--color-danger-soft); color: var(--color-danger); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; color: var(--text-heading); margin: 0 0 0.35rem 0;">Confirm High-Risk Auto-Dispatch</h3>
+                <p style="font-size: 0.88rem; color: var(--text-body); margin: 0; line-height: 1.5;">
+                    This will immediately generate academic intervention tickets, notify departmental faculty mentors, and schedule tutoring sessions for all <strong>{{ high_risk_count }}</strong> high-risk students.
+                </p>
+            </div>
+        </div>
+
+        <div style="background: var(--bg-surface-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1.5rem; font-size: 0.82rem; color: var(--text-body); line-height: 1.45;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                <span style="color: var(--text-muted);">Target Cohort:</span>
+                <strong>High-Risk Tier (Probability &gt; 50%)</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Execution Protocol:</span>
+                <span style="color: var(--color-ai); font-weight: 600;">Faculty Advisor Alert + SMS / Portal Queue</span>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <button type="button" id="btnCancelDispatch" class="btn btn-secondary btn-sm" style="font-weight: 600; padding: 0.5rem 1.1rem;">
+                Cancel
+            </button>
+            <button type="button" id="btnConfirmDispatch" class="btn btn-sm" style="background: var(--color-danger); color: #FFFFFF; border: none; font-weight: 600; padding: 0.5rem 1.2rem; border-radius: var(--radius-md); display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Confirm & Dispatch Interventions</span>
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Interactive Student Analytics & Trajectory Modal -->
-<div id="analyticsModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 9999; justify-content: center; align-items: center;">
-    <div style="background: #FFFFFF; border-radius: 16px; width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 2rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); position: relative;">
-        <button onclick="closeStudentAnalyticsModal()" style="position: absolute; top: 1.25rem; right: 1.25rem; background: none; border: none; font-size: 1.5rem; color: #64748B; cursor: pointer;">&times;</button>
+<div id="analyticsModal" style="display: none; position: fixed; inset: 0; background: rgba(11, 18, 32, 0.7); backdrop-filter: blur(5px); z-index: 10000; align-items: center; justify-content: center; padding: 1rem;">
+    <div class="panel-card" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-xl); width: 100%; max-width: 820px; max-height: 90vh; overflow-y: auto; padding: 2rem; box-shadow: var(--shadow-xl); position: relative;">
+        <button onclick="closeStudentAnalyticsModal()" style="position: absolute; top: 1.25rem; right: 1.25rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
 
         <div id="analyticsModalLoading" style="text-align: center; padding: 3rem 1rem;">
             <div style="font-size: 2rem; margin-bottom: 0.5rem; display: flex; justify-content: center;">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
             </div>
-            <p style="font-weight: 600; color: var(--text-primary);">Loading student ML risk trajectory...</p>
+            <p style="font-weight: 600; color: var(--text-heading);">Loading student ML risk trajectory...</p>
         </div>
 
         <div id="analyticsModalContent" style="display: none;">
-            <!-- Modal Header -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #E2E8F0; padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
                 <div>
-                    <span id="modalDeptBadge" class="role-badge" style="background: #EEF2FF; color: #4F46E5; border: 1px solid #C7D2FE;">CSE</span>
-                    <h3 id="modalStudentName" style="font-size: 1.4rem; font-weight: 800; margin-top: 0.35rem; color: #0F172A;">Aarav Patel</h3>
-                    <div id="modalStudentMeta" style="font-size: 0.85rem; color: #64748B;">ID: STU2026-0001 · Semester 5 · CGPA 7.8</div>
+                    <span id="modalDeptBadge" class="badge" style="background: var(--color-primary-soft); color: var(--color-primary); font-weight: 700; margin-bottom: 0.35rem; display: inline-block;">CSE</span>
+                    <h2 id="modalStudentName" style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: var(--text-heading); margin: 0;">Student Name</h2>
+                    <div id="modalStudentMeta" style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem;">Meta</div>
                 </div>
                 <div style="text-align: right;">
-                    <div id="modalRiskBadge" class="ai-badge ai-alert" style="font-size: 0.9rem; padding: 0.35rem 0.85rem;">High Risk</div>
-                    <div id="modalRiskScore" style="font-size: 1.5rem; font-weight: 900; color: var(--danger); margin-top: 4px;">88.5%</div>
+                    <div style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Failure Risk Probability</div>
+                    <div id="modalRiskScore" style="font-size: 1.85rem; font-weight: 800; font-variant-numeric: tabular-nums;">--%</div>
+                    <span id="modalRiskBadge" class="badge">--</span>
                 </div>
             </div>
 
-            <!-- Explainable AI Drivers -->
-            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1E293B; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    <span>Explainable AI Primary Drivers</span>
-                </h4>
-                <ul id="modalFactorsList" style="padding-left: 1.2rem; margin: 0; font-size: 0.85rem; color: #475569; line-height: 1.6;">
-                </ul>
-                <div id="modalRecommendation" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed #CBD5E1; font-size: 0.82rem; color: #0284C7; font-weight: 600;">
-                </div>
+            <!-- Explainable AI Factors -->
+            <div style="margin-bottom: 1.25rem; background: var(--bg-surface-subtle); padding: 1rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+                <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-heading); margin-bottom: 0.4rem;">Model Feature Attribution (Explainable AI)</div>
+                <ul id="modalFactorsList" style="margin: 0; padding-left: 1.2rem; font-size: 0.82rem; color: var(--text-body); line-height: 1.5;"></ul>
+                <div id="modalRecommendation" style="margin-top: 0.6rem; font-size: 0.82rem; font-weight: 600; color: var(--color-ai);"></div>
             </div>
 
-            <!-- 5-Week Temporal Trajectory -->
-            <div style="margin-bottom: 1.5rem;">
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1E293B; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                    <span>5-Week Sequential Learning Trajectory (Deep LSTM/GRU)</span>
-                </h4>
-                <div class="table-container-light" style="margin-bottom: 0;">
-                    <table class="table-clean" style="font-size: 0.82rem;">
-                        <thead>
-                            <tr>
-                                <th>Week</th>
-                                <th>Attendance Rate</th>
-                                <th>Quiz Score</th>
-                                <th>Assignment Score</th>
-                                <th>LMS Engagement</th>
-                            </tr>
-                        </thead>
-                        <tbody id="modalTrajectoryTbody">
-                        </tbody>
-                    </table>
-                </div>
+            <!-- Multi-Week Trajectory -->
+            <div style="margin-bottom: 1.25rem;">
+                <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-heading); margin-bottom: 0.5rem;">5-Week Longitudinal Performance Trajectory</div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left; border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden;">
+                    <thead style="background: var(--bg-surface-subtle); border-bottom: 1px solid var(--border-color);">
+                        <tr>
+                            <th style="padding: 0.5rem 0.75rem;">Timeline</th>
+                            <th style="padding: 0.5rem 0.75rem;">Attendance</th>
+                            <th style="padding: 0.5rem 0.75rem;">Quiz Score</th>
+                            <th style="padding: 0.5rem 0.75rem;">Assignment</th>
+                            <th style="padding: 0.5rem 0.75rem;">LMS Engagement</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modalTrajectoryTbody"></tbody>
+                </table>
             </div>
 
             <!-- Interventions History -->
             <div style="margin-bottom: 1.5rem;">
-                <h4 style="font-size: 0.95rem; font-weight: 700; color: #1E293B; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/></svg>
-                    <span>Assigned Interventions</span>
-                </h4>
-                <div id="modalInterventionsList" style="font-size: 0.85rem; color: #64748B;">
-                </div>
+                <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-heading); margin-bottom: 0.5rem;">Assigned Interventions</div>
+                <div id="modalInterventionsList"></div>
             </div>
 
-            <!-- Quick Action Form -->
-            <div style="border-top: 1px solid #E2E8F0; padding-top: 1.25rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+            <!-- Footer Action -->
+            <div style="border-top: 1px solid var(--border-color); padding-top: 1rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
                 <button type="button" class="btn btn-secondary btn-sm" onclick="closeStudentAnalyticsModal()">Close</button>
                 <a id="modalFullProfileBtn" href="#" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
-                    <span>Open Full Student Dossier</span>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    <span>Open Student Dossier</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </a>
             </div>
         </div>
@@ -334,15 +442,30 @@
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const btnAutoDispatch = document.getElementById('btnAutoDispatch');
+    const btnOpenConfirm = document.getElementById('btnOpenDispatchConfirm');
+    const confirmModal = document.getElementById('dispatchConfirmModal');
+    const btnCancelDispatch = document.getElementById('btnCancelDispatch');
+    const btnConfirmDispatch = document.getElementById('btnConfirmDispatch');
     const btnRunInference = document.getElementById('btnRunInference');
     const alertBanner = document.getElementById('dispatchAlertBanner');
     const alertMsg = document.getElementById('dispatchAlertMsg');
 
-    if (btnAutoDispatch) {
-        btnAutoDispatch.addEventListener('click', async () => {
-            btnAutoDispatch.disabled = true;
-            btnAutoDispatch.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Dispatching alerts & mentors...';
+    if (btnOpenConfirm && confirmModal) {
+        btnOpenConfirm.addEventListener('click', () => {
+            confirmModal.style.display = 'flex';
+        });
+    }
+
+    if (btnCancelDispatch && confirmModal) {
+        btnCancelDispatch.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+        });
+    }
+
+    if (btnConfirmDispatch) {
+        btnConfirmDispatch.addEventListener('click', async () => {
+            btnConfirmDispatch.disabled = true;
+            btnConfirmDispatch.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Dispatching...';
 
             try {
                 const res = await fetch('{% url "academics:api_auto_interventions" %}', {
@@ -353,12 +476,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
                 const data = await res.json();
+                confirmModal.style.display = 'none';
+                
                 if (data.status === 'success') {
                     alertMsg.textContent = data.message;
                     alertBanner.style.display = 'block';
-                    alertBanner.style.background = '#ECFDF5';
-                    alertBanner.style.borderColor = '#6EE7B7';
-                    alertBanner.style.color = '#065F46';
+                    alertBanner.style.background = 'var(--color-success-soft)';
+                    alertBanner.style.color = 'var(--color-success)';
                     setTimeout(() => window.location.reload(), 1500);
                 } else {
                     alertMsg.textContent = data.message || 'Error executing automated interventions.';
@@ -366,11 +490,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (err) {
                 console.error(err);
+                confirmModal.style.display = 'none';
                 alertMsg.textContent = 'Server communication error.';
                 alertBanner.style.display = 'block';
             } finally {
-                btnAutoDispatch.disabled = false;
-                btnAutoDispatch.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> <span>Auto-Dispatch High-Risk Interventions</span>';
+                btnConfirmDispatch.disabled = false;
+                btnConfirmDispatch.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> <span>Confirm & Dispatch Interventions</span>';
             }
         });
     }
@@ -378,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnRunInference) {
         btnRunInference.addEventListener('click', async () => {
             btnRunInference.disabled = true;
-            btnRunInference.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Running ML Model Pipeline...';
+            btnRunInference.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Running ML Pipeline...';
 
             try {
                 const res = await fetch('{% url "academics:api_run_assessment" %}');
@@ -386,16 +511,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.status === 'success') {
                     alertMsg.textContent = data.message;
                     alertBanner.style.display = 'block';
-                    alertBanner.style.background = '#EFF6FF';
-                    alertBanner.style.borderColor = '#93C5FD';
-                    alertBanner.style.color = '#1E40AF';
+                    alertBanner.style.background = 'var(--color-primary-soft)';
+                    alertBanner.style.color = 'var(--color-primary)';
                     setTimeout(() => window.location.reload(), 1800);
                 }
             } catch (err) {
                 console.error(err);
             } finally {
                 btnRunInference.disabled = false;
-                btnRunInference.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4.5c1.62-1.63 5-2.5 5-2.5"/><path d="M12 15v5s3.03-.55 4.5-2c1.63-1.62 2.5-5 2.5-5"/></svg> <span>Run ML Cohort Assessment</span>';
+                btnRunInference.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4.5c1.62-1.63 5-2.5 5-2.5"/><path d="M12 15v5s3.03-.55 4.5-2c1.63-1.62 2.5-5 2.5-5"/></svg> <span>Run ML Cohort Pipeline</span>';
             }
         });
     }
@@ -448,15 +572,16 @@ window.openStudentAnalyticsModal = async function(studentId) {
                 document.getElementById('modalRiskScore').textContent = `${a.risk_score}%`;
                 const badge = document.getElementById('modalRiskBadge');
                 if (a.risk_level === 'HIGH') {
-                    badge.className = 'ai-badge ai-alert';
+                    badge.style.background = 'var(--color-danger-soft)';
+                    badge.style.color = 'var(--color-danger)';
                     badge.textContent = 'High Risk';
                 } else if (a.risk_level === 'MEDIUM') {
-                    badge.className = 'ai-badge';
-                    badge.style.background = '#FFFBEB';
-                    badge.style.color = '#B45309';
+                    badge.style.background = 'var(--color-warning-soft)';
+                    badge.style.color = 'var(--color-warning)';
                     badge.textContent = 'Moderate Risk';
                 } else {
-                    badge.className = 'ai-badge ai-confidence';
+                    badge.style.background = 'var(--color-success-soft)';
+                    badge.style.color = 'var(--color-success)';
                     badge.textContent = 'Low Risk';
                 }
 
@@ -471,40 +596,40 @@ window.openStudentAnalyticsModal = async function(studentId) {
                 document.getElementById('modalRecommendation').textContent = `Recommendation: ${a.recommended_action}`;
             }
 
-            // Trajectory
             const tbody = document.getElementById('modalTrajectoryTbody');
             tbody.innerHTML = '';
             if (data.weekly_records && data.weekly_records.length > 0) {
                 data.weekly_records.forEach(w => {
                     const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid var(--border-color)';
                     tr.innerHTML = `
-                        <td><strong>Week ${w.week}</strong></td>
-                        <td>${w.attendance}%</td>
-                        <td>${w.quiz}/100</td>
-                        <td>${w.assignment}/100</td>
-                        <td>${w.lms_hours} hrs</td>
+                        <td style="padding:0.45rem 0.75rem;"><strong>Week ${w.week}</strong></td>
+                        <td style="padding:0.45rem 0.75rem;">${w.attendance}%</td>
+                        <td style="padding:0.45rem 0.75rem;">${w.quiz}/100</td>
+                        <td style="padding:0.45rem 0.75rem;">${w.assignment}/100</td>
+                        <td style="padding:0.45rem 0.75rem;">${w.lms_hours} hrs</td>
                     `;
                     tbody.appendChild(tr);
                 });
             } else {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#94A3B8;">No multi-week sequential records logged for this cohort.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:1rem; color:var(--text-muted);">No multi-week sequential records logged for this cohort.</td></tr>';
             }
 
-            // Interventions
             const iList = document.getElementById('modalInterventionsList');
             iList.innerHTML = '';
             if (data.interventions && data.interventions.length > 0) {
                 data.interventions.forEach(i => {
                     const d = document.createElement('div');
-                    d.style.padding = '0.5rem 0.75rem';
-                    d.style.background = '#F8FAFC';
-                    d.style.borderRadius = '8px';
+                    d.style.padding = '0.55rem 0.85rem';
+                    d.style.background = 'var(--bg-surface-subtle)';
+                    d.style.borderRadius = 'var(--radius-md)';
+                    d.style.border = '1px solid var(--border-color)';
                     d.style.marginBottom = '0.5rem';
-                    d.innerHTML = `<strong>${i.type}</strong> (${i.status}) - <span style="color:#64748B;">${i.date}</span><br><span style="font-size:0.8rem; color:#475569;">${i.notes}</span>`;
+                    d.innerHTML = `<strong>${i.type}</strong> (${i.status}) - <span style="color:var(--text-muted);">${i.date}</span><br><span style="font-size:0.8rem; color:var(--text-body);">${i.notes}</span>`;
                     iList.appendChild(d);
                 });
             } else {
-                iList.innerHTML = '<span style="color:#94A3B8;">No prior interventions assigned.</span>';
+                iList.innerHTML = '<span style="color:var(--text-muted); font-size:0.82rem;">No prior interventions assigned.</span>';
             }
 
             loading.style.display = 'none';
@@ -512,7 +637,7 @@ window.openStudentAnalyticsModal = async function(studentId) {
         }
     } catch (err) {
         console.error(err);
-        loading.innerHTML = '<p style="color:var(--danger);">Error loading student analytics.</p>';
+        loading.innerHTML = '<p style="color:var(--color-danger);">Error loading student analytics.</p>';
     }
 };
 
